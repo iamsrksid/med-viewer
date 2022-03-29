@@ -1,0 +1,38 @@
+import { Button } from "@chakra-ui/react";
+import React from "react";
+import { useSelector } from "react-redux";
+
+const SaveAnnotations = ({ viewerId, saveAnnotationsHandler }) => {
+  const { viewerWindow } = useSelector((state) => state.fabricOverlayState);
+  const { fabricOverlay } = viewerWindow[viewerId];
+
+  const handleSaveAnnotations = async () => {
+    const canvas = fabricOverlay.fabricCanvas();
+    const annotations = canvas.toJSON();
+    if (annotations.objects.length === 0) return;
+    saveAnnotationsHandler(annotations);
+  };
+
+  return (
+    <Button
+      variant="solid"
+      h="32px"
+      w="100px"
+      borderRadius="0px"
+      backgroundColor="#ECECEC"
+      border="1px solid #00153F"
+      _focus={{
+        border: "none",
+      }}
+      color="#00153F"
+      fontFamily="inter"
+      fontSize="14px"
+      fontWeight="600"
+      onClick={handleSaveAnnotations}
+    >
+      Save
+    </Button>
+  );
+};
+
+export default SaveAnnotations;

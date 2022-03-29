@@ -1,0 +1,102 @@
+@media all and (min-width: 2560px) {
+  .typetools_toolbar_box {
+    margin-left: 4em;
+    position: absolute;
+    transform: scale(1.5) !important;
+  }
+  .user_toolbar_box {
+    margin-left: 4em !important;
+    transform: scale(1.2);
+    position: absolute;
+  }
+}
+
+@media all and (max-width: 1440px) {
+  .slide_details {
+    font-size: small;
+  }
+  .case_toolbar_box {
+    transform: scale(0.8);
+    margin-left: -20px !important;
+    margin-right: 0px !important;
+  }
+  .user_toolbar_box {
+    transform: scale(0.8);
+    margin-left: 0px !important;
+    margin-right: 4px !important;
+  }
+  .color_toolbar_box {
+    transform: scale(0.8);
+    margin-left: -20px;
+    margin-right: 0px !important;
+    margin-top: -5px !important;
+  }
+  .typetools_toolbar_box {
+    transform: scale(0.8);
+    margin-left: -35px !important;
+  }
+  .move_toolbar_box {
+    transform: scale(0.8);
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .slidesdetails_toolbar_box {
+    transform: scale(0.9);
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .slidenumber {
+    margin-left: 170px !important;
+  }
+  .slidetotal {
+    margin-left: 190px !important;
+  }
+}
+
+@media all and (max-width: 1280px) {
+  .sidebar_tools {
+    transform: scale(0.8);
+    margin-top: -40px;
+    margin-left: -20px;
+  }
+
+  /* .adjustmentbar {
+    margin-left: -118px;
+    width: 1520px;
+    margin-top: -8px;
+    height: 103px;
+  } */
+  .file_fixed_button {
+    position: fixed;
+    z-index: 3;
+    margin-left: 300px;
+  }
+}
+
+.close_button_navbar {
+  color: black;
+  position: fixed;
+  right: 5px;
+  top: 20px;
+  cursor: pointer;
+  background-color: rgba(248, 248, 245, 1);
+  border-radius: 3px 3px 0px 0px;
+  padding: 1px 1px 1px 1px;
+  transform: scale(1.5);
+}
+.file_menu_option {
+  width: 100%;
+  text-align: center;
+  padding: 0px 2px 0px 2px;
+}
+
+.file_menu_option:hover {
+  border-radius: 5px;
+  background-color: #3965c5;
+  cursor: pointer;
+  color: white;
+  transition: all 0.1s;
+}
+.header__nav {
+  padding: 7.5px 16px;
+} 
