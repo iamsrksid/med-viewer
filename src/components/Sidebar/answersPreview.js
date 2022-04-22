@@ -38,7 +38,7 @@ const AnswersPreview = ({
   return (
     <>
       <Box bgColor="rgba(236, 236, 236, 1)">
-        {userInfo?.user?.sub !== project?.owner?.subClaim ? (
+        {userInfo?.user?.subClaim !== project?.owner?.subClaim ? (
           <Button
             my={5}
             backgroundColor="#00153F"
