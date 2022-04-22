@@ -3,8 +3,6 @@ import { BsArrowsMove, BsCircleHalf, BsLayoutSplit } from "react-icons/bs";
 import { RiNavigationFill, RiPencilRulerLine } from "react-icons/ri";
 import { AiOutlineSliders } from "react-icons/ai";
 import ToolbarButton from "../ViewerToolbar/button";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTool } from "../../reducers/fabricOverlayReducer";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import Rotate from "../Rotate/Rotate";
@@ -13,18 +11,20 @@ import ColorOptionsPanel from "../Color/optionsPanel";
 import ToolbarPointerControl from "../ViewerToolbar/pointerControl";
 import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
+import { useFabricOverlayState } from "../../state/store";
+import { updateTool } from "../../state/actions/fabricOverlayActions";
 
 const Move = ({ viewerId }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [typeToolsToggle, setTypeToolsToggle] = useState(false);
   const [colorBar, setColorBar] = useState(false);
   const [popup, setPopup] = useState(false);
-  const { activeTool } = useSelector((state) => state.fabricOverlayState);
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { activeTool } = fabricOverlayState;
   const isActive = activeTool === "Move";
-  const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(updateTool({ tool: isActive ? "" : "Move" }));
+    setFabricOverlayState(updateTool({ tool: isActive ? "" : "Move" }));
   };
   const handleAnnotationsClick = () => {
     setTypeToolsToggle((typeToolsToggle) => !typeToolsToggle);
@@ -40,7 +40,7 @@ const Move = ({ viewerId }) => {
   return (
     <Flex direction="column">
       <Flex alignItems="center" ml="16px" mr="7px">
-        <ToolbarPointerControl viewerId={viewerId} />
+        {/* <ToolbarPointerControl viewerId={viewerId} /> */}
         <ToolbarButton
           icon={<BsArrowsMove size={iconSize} color="#151C25" />}
           label="Move"
@@ -49,13 +49,14 @@ const Move = ({ viewerId }) => {
           onClick={handleClick}
         />
         <Rotate viewerId={viewerId} />
-        <ToolbarButton
+
+        {/* <ToolbarButton
           icon={<HiOutlinePencilAlt size={iconSize} color="#151C25" />}
           backgroundColor={typeToolsToggle ? "#E4E5E8" : ""}
           outline={typeToolsToggle ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
           label="Annotations"
           onClick={handleAnnotationsClick}
-        />
+        /> */}
         {/* <MultiView viewerId={viewerId}/> */}
         {/* <ToolbarButton
           icon={<BsLayoutSplit size={18} color="#151C25" />}

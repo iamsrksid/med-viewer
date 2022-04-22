@@ -4,10 +4,10 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import Loading from "../Loading/loading";
 
-const StudyAction = ({ project }) => {
+const StudyAction = ({ projects }) => {
   return (
     <>
-      {isLoading ? (
+      {!projects ? (
         <Loading />
       ) : (
         <Box backgroundColor="#ECECEC" p="0px">

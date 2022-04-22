@@ -1,47 +1,40 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 // import PropTypes from 'prop-types';
-import ToolbarButton from "../ViewerToolbar/button";
 import { FiType } from "react-icons/fi";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTool } from "../../reducers/fabricOverlayReducer";
-import TypeTextFontPicker from "./fontPicker";
-import ToolbarOptionsPanel from "../ViewerToolbar/optionsPanel";
 import { fonts } from "./fontPicker";
 import FontFaceObserver from "fontfaceobserver";
 import useFabricHelpers from "../../hooks/use-fabric-helpers";
-import {
-  updateColorActive,
-  editing,
-  selectionCleared,
-  selected,
-  fontChange,
-} from "../../reducers/textReducer";
 import TypeButton from "../typeButton";
+import { useFabricOverlayState } from "../../state/store";
+import { updateTool } from "../../state/actions/fabricOverlayActions";
 
 const TypeText = ({ viewerId }) => {
-  const dispatch = useDispatch();
-  const { color, viewerWindow, activeTool } = useSelector(
-    (state) => state.fabricOverlayState
-  );
-
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { color, viewerWindow, activeTool } = fabricOverlayState;
   const { fabricOverlay, viewer, zoomValue, activityFeed } =
     viewerWindow[viewerId];
 
   const { deselectAll } = useFabricHelpers();
   const isActive = activeTool === "TYPE";
 
-  const myState = useSelector((state) => state.textState);
+  const [myState, setState] = useState({
+    activeFont: fonts[0],
+    color: null,
+    isActive: false,
+    isEditing: false,
+    selectedCoords: { top: 0, left: 0 },
+  });
   const myStateRef = useRef(myState);
-  const setMyState = (action, data) => {
+  const setMyState = (data) => {
     myStateRef.current = { ...myState, ...data };
-    dispatch(action(data));
+    setState((state) => ({ ...state, ...data }));
   };
   /**
    * Handle main tool change
    */
   useEffect(() => {
-    setMyState(updateColorActive, { color: color, isActive: isActive });
+    setMyState({ color: color, isActive: isActive });
 
     if (!fabricOverlay) return;
     fabricOverlay.fabricCanvas().defaultCursor = isActive ? "text" : "auto";
@@ -95,7 +88,7 @@ const TypeText = ({ viewerId }) => {
       // Was user previously editing text?
       if (myStateRef.current.isEditing) {
         deselectAll();
-        setMyState(editing, { ...myStateRef.current, isEditing: false });
+        setMyState({ ...myStateRef.current, isEditing: false });
         return;
       }
 
@@ -112,7 +105,7 @@ const TypeText = ({ viewerId }) => {
       canvas.setActiveObject(textbox);
       textbox.enterEditing();
 
-      setMyState(editing, {
+      setMyState({
         ...myStateRef.current,
         isEditing: true,
       });
@@ -121,7 +114,7 @@ const TypeText = ({ viewerId }) => {
     function handleSelectionCleared(options) {
       if (!myStateRef.current.isSelectedOnCanvas) return;
 
-      setMyState(selectionCleared, {
+      setMyState({
         ...myStateRef.current,
         selectedCoords: { top: 0, left: 0 },
       });
@@ -130,7 +123,7 @@ const TypeText = ({ viewerId }) => {
     function handleSelected(options) {
       if (options.target.get("type") !== "textbox") return;
 
-      setMyState(selected, {
+      setMyState({
         ...myStateRef.current,
       });
     }
@@ -151,12 +144,12 @@ const TypeText = ({ viewerId }) => {
   }, [fabricOverlay]);
 
   const handleFontChange = (font) => {
-    setMyState(fontChange, { activeFont: font });
+    setMyState({ activeFont: font });
     //loadAndUse(font.fontFamily);
   };
 
   const handleToolbarButtonClick = (e) => {
-    dispatch(updateTool({ tool: "TYPE" }));
+    setFabricOverlayState(updateTool({ tool: "TYPE" }));
   };
 
   const loadAndUse = (font) => {

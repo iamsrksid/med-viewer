@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import ToolbarButton from "../ViewerToolbar/button";
 import { FiRotateCw } from "react-icons/fi";
 import IconSize from "../ViewerToolbar/IconSize";
+import { useFabricOverlayState } from "../../state/store";
 
 const Rotate = ({ viewerId }) => {
-  const { viewerWindow } = useSelector((state) => state.fabricOverlayState);
-  const { viewer } = viewerWindow[viewerId];
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { viewer } = fabricOverlayState?.viewerWindow[viewerId];
 
   const handleRotate = (e) => {
     try {

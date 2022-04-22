@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Flex,
@@ -19,16 +18,15 @@ import { BiDotsVertical } from "react-icons/bi";
 import { MdModeEditOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditText from "./editText";
-import { updateActivityFeed } from "../../reducers/fabricOverlayReducer";
+import { useFabricOverlayState } from "../../state/store";
+import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 
 const ActivityFeed = ({ userInfo, viewerId }) => {
-  const { fabricOverlay, activityFeed } = useSelector(
-    (state) => state.fabricOverlayState
-  ).viewerWindow[viewerId];
-  const { update } = useSelector((state) => state.feedState);
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay, activityFeed } =
+    fabricOverlayState?.viewerWindow[viewerId];
   const scrollbar = useRef(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const dispatch = useDispatch();
   const [annotationObject, setAnnotationObject] = useState(null);
 
   useEffect(() => {
@@ -61,7 +59,7 @@ const ActivityFeed = ({ userInfo, viewerId }) => {
     );
     canvas.remove(activity.object);
     canvas.renderAll();
-    dispatch(updateActivityFeed({ id: viewerId, feed }));
+    setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
   };
 
   const EditTextButton = ({ activity }) => {

@@ -1,16 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { HStack } from "@chakra-ui/react";
-import ToolbarBorderBox from "../ViewerToolbar/borderBox";
 import ToolbarBorderBoxInner from "../ViewerToolbar/borderBoxInner";
-import { useSelector, useDispatch } from "react-redux";
-import { updateWidth } from "../../reducers/drawReducer";
 import { widths } from "./width";
+import { useFabricOverlayState } from "../../state/store";
 
-const DrawWidthPicker = () => {
-  const { width } = useSelector((state) => state.drawState);
-  const { color } = useSelector((state) => state.fabricOverlayState);
-  const dispatch = useDispatch();
+const DrawWidthPicker = ({ width, setWidth }) => {
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { color } = fabricOverlayState;
 
   return (
     <HStack spacing={2} ml="30px" px={1} py={2} my={3}>
@@ -27,7 +24,7 @@ const DrawWidthPicker = () => {
             }
             bgSize="cover"
             display="block"
-            onClick={() => dispatch(updateWidth(widthObj))}
+            onClick={() => setWidth(widthObj)}
           />
         );
       })}

@@ -2,8 +2,6 @@ import {
   Textarea,
   ButtonGroup,
   Button,
-  Icon,
-  useDisclosure,
   Modal,
   ModalContent,
   ModalHeader,
@@ -12,14 +10,10 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { MdModeEditOutline } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import { updateFeedAnnotation } from "../../reducers/feedReducer";
 
 const EditText = ({ isOpen, onClose, handleClose, handleSave }) => {
   const [text, setText] = useState("");
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
-  const dispatch = useDispatch();
 
   const handleTextChange = (e) => {
     setText(e.target.value);

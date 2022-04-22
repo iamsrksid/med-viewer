@@ -1,12 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import ToolbarButton from "../ViewerToolbar/button";
 import { RiFullscreenFill } from "react-icons/ri";
 import IconSize from "../ViewerToolbar/IconSize";
+import { useFabricOverlayState } from "../../state/store";
 
 const Fullscreen = ({ viewerId }) => {
-  const { viewerWindow } = useSelector((state) => state.fabricOverlayState);
-  const { viewer } = viewerWindow[viewerId];
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { viewer } = fabricOverlayState?.viewerWindow[viewerId];
 
   const handleFullScreen = () => {
     if (viewer.isFullPage() && !viewer.isFullScreen()) {
@@ -19,6 +19,12 @@ const Fullscreen = ({ viewerId }) => {
   return (
     <ToolbarButton
       icon={<RiFullscreenFill size={IconSize()} color="#151C25" />}
+      backgroundColor="#E4E5E8"
+      _hover={{ bgColor: "#ECECEC" }}
+      _active={{
+        outline: "none",
+      }}
+      mr="0px"
       label="Full screen"
       onClick={handleFullScreen}
     />

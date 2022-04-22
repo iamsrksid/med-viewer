@@ -1,10 +1,10 @@
 import { Button } from "@chakra-ui/react";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useFabricOverlayState } from "../../state/store";
 
 const SaveAnnotations = ({ viewerId, saveAnnotationsHandler }) => {
-  const { viewerWindow } = useSelector((state) => state.fabricOverlayState);
-  const { fabricOverlay } = viewerWindow[viewerId];
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay } = fabricOverlayState?.viewerWindow[viewerId];
 
   const handleSaveAnnotations = async () => {
     const canvas = fabricOverlay.fabricCanvas();

@@ -17,12 +17,22 @@ export const heQuestions = [
   {
     questionText: "Lobular inflammation",
     questionType: "radio",
-    choices: ["(0)None", "(1)< 2 / 20x mag", "(2)2-4 / 20x mag", "(3)4/ 20x mag"],
+    choices: [
+      "(0)None",
+      "(1)< 2 / 20x mag",
+      "(2)2-4 / 20x mag",
+      "(3)4/ 20x mag",
+    ],
   },
   {
     questionText: "Hepatocellular ballooning",
     questionType: "radio",
     choices: ["(0)None", "(1)Few", "(2)Many"],
+  },
+  {
+    questionText: "Hepatocellular ballooning",
+    questionType: "text",
+    choices: [],
   },
 ];
 

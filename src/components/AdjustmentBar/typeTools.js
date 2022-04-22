@@ -4,18 +4,17 @@ import Draw from "../Draw/draw";
 import Square from "../Shape/square";
 import Line from "../Shape/line";
 import Circle from "../Shape/circle";
-import { useSelector } from "react-redux";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import Typebutton from "../typeButton";
 import { SiTarget } from "react-icons/si";
 import { BsEraser } from "react-icons/bs";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import Polygon from "../Shape/polygon";
+import { useFabricOverlayState } from "../../state/store";
 
 const TypeTools = ({ viewerId, typeToolsButtonHandler }) => {
-  const { fabricOverlay } = useSelector(
-    (state) => state.fabricOverlayState.viewerWindow[viewerId]
-  );
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
 
   fabric.IText.prototype.onKeyDown = (e) => {
     if (e.ctrlKey === true && e.key === "Enter") {

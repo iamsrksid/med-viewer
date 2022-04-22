@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import {
   Link,
   Heading,
@@ -10,6 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import FontFaceObserver from "fontfaceobserver";
+import { useFabricOverlayState } from "../../state/store";
 
 export const fonts = [
   {
@@ -25,7 +25,7 @@ export const fonts = [
     fontFamily: "Georgia",
   },
   {
-    id:"courierNew",
+    id: "courierNew",
     fontFamily: "Courier New",
   },
   {
@@ -38,9 +38,9 @@ export const fonts = [
   },
 ];
 
-const TypeTextFontPicker = ({ handleFontChange }) => {
-  const { fabricOverlay } = useSelector((state) => state.fabricOverlayState);
-  const { activeFont } = useSelector((state) => state.textState);
+const TypeTextFontPicker = ({ viewerId, activeFont, handleFontChange }) => {
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay } = fabricOverlayState?.viewerWindow[viewerId];
 
   const activeClasses = {
     borderColor: useColorModeValue("gray.300", "white"),
@@ -107,6 +107,7 @@ const TypeTextFontPicker = ({ handleFontChange }) => {
 };
 
 TypeTextFontPicker.propTypes = {
+  activeFont: PropTypes.object,
   handleFontChange: PropTypes.func,
 };
 

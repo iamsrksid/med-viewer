@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { updateActivityFeed } from "../reducers/fabricOverlayReducer";
-import { getCanvasImage, getTimestamp } from "../utility/utility";
 import TypeButton from "./typeButton";
 import IconSize from "./ViewerToolbar/IconSize";
+import { useFabricOverlayState } from "../state/store";
+import { updateActivityFeed } from "../state/actions/fabricOverlayActions";
 
 const RemoveObject = ({ viewerId }) => {
-  const { fabricOverlay, activityFeed } = useSelector(
-    (state) => state.fabricOverlayState.viewerWindow[viewerId]
-  );
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay, activityFeed } =
+    fabricOverlayState.viewerWindow[viewerId];
   const [isActiveObject, setIsActiveObject] = useState();
-  const dispatch = useDispatch();
-  const { username, roomName, socket, alias } = useSelector(
-    (state) => state.socketState
-  );
 
   useEffect(() => {
     if (!fabricOverlay) return;
@@ -71,7 +66,7 @@ const RemoveObject = ({ viewerId }) => {
     canvas.remove(activeObject);
     canvas.renderAll();
 
-    dispatch(updateActivityFeed({ id: viewerId, feed }));
+    setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
 
     // socket.emit(
     //   "send_annotations",

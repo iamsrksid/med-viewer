@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import TypeButton from "../typeButton";
 import { FaDrawPolygon } from "react-icons/fa";
-import {
-  updateActivityFeed,
-  updateTool,
-} from "../../reducers/fabricOverlayReducer";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import {
@@ -15,21 +10,21 @@ import {
 } from "../../utility/utility";
 import { useDisclosure } from "@chakra-ui/react";
 import EditText from "../Feed/editText";
+import { useFabricOverlayState } from "../../state/store";
+import {
+  updateActivityFeed,
+  updateTool,
+} from "../../state/actions/fabricOverlayActions";
 
 const MAX = 999999;
 const MIN = 99;
 
 const Polygon = ({ viewerId }) => {
-  const { color, viewerWindow, activeTool } = useSelector(
-    (state) => state.fabricOverlayState
-  );
-  const { username, roomName, alias, socket } = useSelector(
-    (state) => state.socketState
-  );
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { color, viewerWindow, activeTool } = fabricOverlayState;
 
   const { fabricOverlay, viewer, zoomValue, activityFeed } =
     viewerWindow[viewerId];
-  const dispatch = useDispatch();
   const { deselectAll } = useFabricHelpers();
 
   const isActive = activeTool === "Polygon";
@@ -269,7 +264,7 @@ const Polygon = ({ viewerId }) => {
 
     const addToFeed = async (shape) => {
       let message = {
-        username: alias,
+        username: "",
         color: myStateRef.current.color,
         action: "added",
         text: textbox,
@@ -282,7 +277,7 @@ const Polygon = ({ viewerId }) => {
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
 
-      dispatch(
+      setFabricOverlayState(
         updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
       );
 
@@ -294,7 +289,7 @@ const Polygon = ({ viewerId }) => {
   }, [textbox]);
 
   const handleClick = () => {
-    dispatch(updateTool({ tool: "Polygon" }));
+    setFabricOverlayState(updateTool({ tool: "Polygon" }));
   };
 
   const handleSave = (text) => {

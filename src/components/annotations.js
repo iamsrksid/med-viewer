@@ -15,20 +15,18 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { FaSave } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUserCanvases } from "../reducers/fabricOverlayReducer";
 import { useParams } from "react-router-dom";
 import AltButton from "./altButton";
+import { useFabricOverlayState } from "../state/store";
+import { updateOverlay } from "../state/actions/fabricOverlayActions";
 
 const MyAnnotationsSave = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const params = useParams;
   const [title, setTitle] = useState("");
 
-  const { activeUserCanvas, fabricOverlay, userCanvases } = useSelector(
-    (state) => state.fabricOverlayState
-  );
-  const dispatch = useDispatch();
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { activeUserCanvas, fabricOverlay, userCanvases } = fabricOverlayState;
 
   useEffect(() => {
     setTitle(activeUserCanvas);
@@ -43,12 +41,13 @@ const MyAnnotationsSave = () => {
       },
     };
 
-    dispatch(
-      updateUserCanvases({
+    setFabricOverlayState(
+      updateOverlay({
         userCanvases: newCanvases,
         activeUserCanvas: title,
       })
     );
+
     onClose();
   };
 

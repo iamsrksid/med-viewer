@@ -18,16 +18,12 @@ import {
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { BiSend } from "react-icons/bi";
-import { useDispatch, useSelector } from "react-redux";
-import { updateMessages } from "../../reducers/chatReducer";
 import { getTimestamp } from "../../utility/utility";
 import { Scrollbars } from "react-custom-scrollbars";
 import "../../styles/scrollBar.css";
 
-const MessageBox = ({ isOpen, onClose }) => {
-  const { roomName, alias, socket } = useSelector((state) => state.socketState);
-  const { messages } = useSelector((state) => state.chatState);
-  const dispatch = useDispatch();
+const MessageBox = ({ isOpen, onClose, roomName, alias, socket }) => {
+  const [messages, setMessages] = useState([]);
 
   const [value, setValue] = useState("");
   const scrollbar = useRef(null);
@@ -51,7 +47,7 @@ const MessageBox = ({ isOpen, onClose }) => {
       username: alias,
       time: getTimestamp(),
     };
-    dispatch(updateMessages([...messages, message]));
+    setMessages((messages) => [...messages, message]);
     socket.emit(
       "send_message",
       JSON.stringify({

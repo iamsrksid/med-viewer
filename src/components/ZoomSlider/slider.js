@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
-import { updateZoomValue } from "../../reducers/fabricOverlayReducer";
 import { Box, Text } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { getFontSize } from "../../utility/utility";
+import { useFabricOverlayState } from "../../state/store";
+import { updateZoomValue } from "../../state/actions/fabricOverlayActions";
 
 const ZoomSlider = ({ viewerId }) => {
-  const { viewer, zoomValue, fabricOverlay } = useSelector(
-    (state) => state.fabricOverlayState.viewerWindow[viewerId]
-  );
-  const dispatch = useDispatch();
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { viewer, zoomValue, fabricOverlay } =
+    fabricOverlayState?.viewerWindow[viewerId];
+  console.log({ fabricOverlayState });
 
   const screenSize = useMediaQuery([
     "(max-width: 1280px)",
@@ -21,12 +21,12 @@ const ZoomSlider = ({ viewerId }) => {
 
   const handleSlider = (val) => {
     viewer.viewport.zoomTo(viewer.viewport.getMaxZoom() * val * 2.5 * 0.01);
-    dispatch(updateZoomValue({ id: viewerId, value: val }));
+    setFabricOverlayState(updateZoomValue({ id: viewerId, value: val }));
   };
 
   const handleLabel = (val) => {
     viewer.viewport.zoomTo(viewer.viewport.getMaxZoom() * val * 2.5 * 0.01);
-    dispatch(updateZoomValue({ id: viewerId, value: val }));
+    setFabricOverlayState(updateZoomValue({ id: viewerId, value: val }));
   };
 
   const adjustAnnotations = (value) => {
@@ -49,7 +49,7 @@ const ZoomSlider = ({ viewerId }) => {
     if (!viewer) return;
     viewer.addHandler("zoom", (e) => {
       const value = parseInt((e.zoom * 40) / viewer.viewport.getMaxZoom());
-      dispatch(updateZoomValue({ id: viewerId, value: value }));
+      setFabricOverlayState(updateZoomValue({ id: viewerId, value: value }));
       adjustAnnotations(value);
     });
   }, [viewer]);

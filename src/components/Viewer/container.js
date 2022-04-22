@@ -8,15 +8,14 @@ import {
   AlertDescription,
   Box,
 } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useFabricOverlayState } from "../../state/store";
 
-const ViewerContainer = ({ viewerId }) => {
+const ViewerContainer = ({ viewerId, slideName, slideType }) => {
   const location = useLocation();
 
-  //get fabricOverlay state from redux store
-  const { fabricOverlay, userCanvases, tile } = useSelector(
-    (state) => state.fabricOverlayState.viewerWindow[viewerId]
-  );
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay, userCanvases, tile } =
+    fabricOverlayState?.viewerWindow[viewerId];
   const [tileSource, setTileSource] = useState({});
 
   const newCanvasTitle =
@@ -56,7 +55,14 @@ const ViewerContainer = ({ viewerId }) => {
   // Success
   // return <Viewer tile={tileSource} />;
 
-  return <Viewer viewerId={viewerId} tile={tile} />;
+  return (
+    <Viewer
+      viewerId={viewerId}
+      tile={tile}
+      slideName={slideName}
+      slideType={slideType}
+    />
+  );
 };
 
 export default ViewerContainer;

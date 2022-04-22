@@ -57,9 +57,7 @@ const ChangeCase = ({ project, caseId, changeCaseHandler, closeToggle }) => {
             />
           </Tooltip>
 
-          <Text mr="24px">
-            {project?.cases[currentCaseIndex]?.slides[0]?.slideName}
-          </Text>
+          <Text mr="24px">{project?.cases[currentCaseIndex]?.name}</Text>
           <Tooltip
             label="Next Slide"
             placement="bottom"

@@ -28,6 +28,7 @@ const LayoutApp = ({
   const [sidebar, setSidebar] = useState(true);
   const [navbar, setNavbar] = useState(true);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
+  const [currentViewer, setCurrentViewer] = useState(viewerIds?.[0]?._id);
 
   const showSidebar = () => {
     setSidebar(!sidebar);
@@ -45,6 +46,7 @@ const LayoutApp = ({
           project={project}
           caseId={projectCase?._id}
           changeCaseHandler={changeCaseHandler}
+          currentViewer={currentViewer}
           goToHomeHandler={goToHomeHandler}
           showSidebar={() => showSidebar()}
           sidebar={sidebar}
@@ -59,12 +61,16 @@ const LayoutApp = ({
               userInfo={userInfo}
               finalSubmitHandler={finalSubmitHandler}
               response={response}
+              currentViewer={currentViewer}
               saveAnnotationsHandler={saveAnnotationsHandler}
               loadAnnotationsHandler={loadAnnotationsHandler}
             />
           ) : null}
           <LayoutAppBody>
-            <ViewerFactory />
+            <ViewerFactory
+              viewerIds={viewerIds}
+              slideType={project?.slideType}
+            />
           </LayoutAppBody>
         </LayoutInnerBody>
       </LayoutOuterBody>

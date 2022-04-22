@@ -1,36 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import ToolbarButton from "../ViewerToolbar/button";
-import ToolbarOptionsPanel from "../ViewerToolbar/optionsPanel";
-import { FaShapes } from "react-icons/fa";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTool } from "../../reducers/fabricOverlayReducer";
 import ShapePicker from "./picker";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
-import {
-  updateActive,
-  updateShapeColor,
-  updateShape,
-  updateActiveShape,
-} from "../../state/reducers/shapeReducer";
-import { fonts } from "../Text/fontPicker";
-import { updateActivityFeed } from "../../state/reducers/feedReducer";
 
+import { fonts } from "../Text/fontPicker";
 import { getCanvasImage, getFontSize, getTimestamp } from "../../hooks/utility";
 import { useMediaQuery } from "@chakra-ui/react";
+import { useFabricOverlayState } from "../../state/store";
+import {
+  updateActivityFeed,
+  updateTool,
+} from "../../state/actions/fabricOverlayActions";
 
 const FABRIC_SHAPE_TYPES = ["circle", "rect"];
 
-const Shape = () => {
-  const dispatch = useDispatch();
-  const { color, fabricOverlay, viewer, activeTool } = useSelector(
-    (state) => state.fabricOverlayState
-  );
-  const { username, roomName, alias, socket } = useSelector(
-    (state) => state.socketState
-  );
-  const { activityFeed } = useSelector((state) => state.feedState);
+const Shape = ({ viewerId }) => {
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { color, viewerWindow, activeTool } = fabricOverlayState;
+
+  const { fabricOverlay, viewer, zoomValue, activityFeed } =
+    viewerWindow[viewerId];
 
   const { deselectAll } = useFabricHelpers();
   const isActive = activeTool === "SHAPE";
@@ -38,11 +28,19 @@ const Shape = () => {
   const [shape, setShape] = useState(null);
   const [textbox, setTextbox] = useState(null);
 
-  const myState = useSelector((state) => state.shapeState);
+  const [myState, setState] = useState({
+    activeShape: null, // active shape in Options Panel
+    color: null,
+    currentDragShape: null,
+    isActive: false, // Is the Shape tool itself active
+    isMouseDown: false,
+    origX: null, // starting X point for drag creating an object
+    origY: null,
+  });
   const myStateRef = useRef(myState);
-  const setMyState = (action, data) => {
+  const setMyState = (data) => {
     myStateRef.current = { ...myState, ...data };
-    dispatch(action(data));
+    setState((state) => ({ ...state, ...data }));
   };
 
   const screenSize = useMediaQuery([
@@ -56,14 +54,14 @@ const Shape = () => {
    * Handle primary tool change
    */
   useEffect(() => {
-    setMyState(updateActive, { activeShape: null, isActive: isActive });
+    setMyState({ activeShape: null, isActive: isActive });
   }, [isActive]);
 
   /**
    * Handle color change
    */
   useEffect(() => {
-    setMyState(updateShapeColor, { color: color });
+    setMyState({ color: color });
   }, [color.hex]);
 
   /**
@@ -169,7 +167,7 @@ const Shape = () => {
           break;
       }
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
         currentDragShape: newShape,
         isMouseDown: true,
@@ -299,7 +297,7 @@ const Shape = () => {
         height: height,
       });
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
         currentDragShape: null,
         isMouseDown: false,
@@ -317,7 +315,7 @@ const Shape = () => {
 
       if (!myStateRef.current.isActive) return;
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
       });
     }
@@ -342,7 +340,7 @@ const Shape = () => {
       )
         return;
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
       });
     }
@@ -373,7 +371,7 @@ const Shape = () => {
     const canvas = fabricOverlay.fabricCanvas();
 
     let message = {
-      username: alias,
+      username: "",
       color: shape.stroke,
       action: "added",
       text: "",
@@ -402,7 +400,7 @@ const Shape = () => {
     setShape(null);
     setTextbox(null);
 
-    dispatch(updateActivityFeed([...activityFeed, message]));
+    setFabricOverlayState(updateActivityFeed([...activityFeed, message]));
 
     // send annotation
     socket.emit(
@@ -417,15 +415,21 @@ const Shape = () => {
   }, [textbox]);
 
   const handleShapeSelect = (shape) => {
-    dispatch(updateTool({ tool: isActive ? "" : "SHAPE" }));
-    setMyState(updateActiveShape, { activeShape: shape });
+    setFabricOverlayState(updateTool({ tool: isActive ? "" : "SHAPE" }));
+    setMyState({ activeShape: shape });
   };
 
   const handleToolbarClick = () => {
-    dispatch(updateTool({ tool: isActive ? "" : "SHAPE" }));
+    setFabricOverlayState(updateTool({ tool: isActive ? "" : "SHAPE" }));
   };
 
-  return <ShapePicker handleShapeSelect={handleShapeSelect} />;
+  return (
+    <ShapePicker
+      activeTool={myState.activeTool}
+      activeShape={myState.activeShape}
+      handleShapeSelect={handleShapeSelect}
+    />
+  );
 };
 
 export default Shape;

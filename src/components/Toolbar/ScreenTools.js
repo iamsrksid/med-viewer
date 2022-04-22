@@ -5,7 +5,6 @@ import { MdOutbox } from "react-icons/md";
 import ToolbarButton from "../ViewerToolbar/button";
 import SlideChat from "../Chat/chat";
 import ShareLink from "../Share/shareLink";
-import Fullscreen from "../Fullscreen/Fullscreen";
 import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
 import DownloadImage from "../downloadImage";
@@ -31,7 +30,7 @@ function ScreenTools({ viewerId }) {
           onClick={handlePopup}
         />
         <DownloadImage />
-        <Fullscreen viewerId={viewerId} />
+        {/* <Fullscreen viewerId={viewerId} /> */}
         <SlideChat />
         <ShareLink />
         <Popup

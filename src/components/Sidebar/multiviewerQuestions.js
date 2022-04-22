@@ -6,38 +6,33 @@ import { Scrollbars } from "react-custom-scrollbars";
 import "../../styles/scrollBar.css";
 import _ from "lodash";
 
-const MultiViewerQuestions = ({ questionnaire, response }) => {
+const MultiViewerQuestions = ({
+  questionnaire,
+  response,
+  slideType,
+  slideQna,
+  setSlideQna,
+}) => {
   return (
-    <>
-      <Scrollbars
-        style={{ width: "100%", height: "68vh" }}
-        renderThumbVertical={(props) => (
-          <div {...props} className="thumb-vertical-messageBox" />
-        )}
-      >
-        <Text mb={3} fontSize="lg">
-          {location.state?.slideType}
-        </Text>
-        <Divider />
-        {isLoading ? (
-          <Text>...</Text>
-        ) : (
-          <>
-            <Questionnaire
-              direction="column"
-              questions={location?.state.questionnaire?.questions}
-              response={response}
-            />
-          </>
-        )}
-      </Scrollbars>
-      {_.isEmpty(response) && (
-        <AnswersPreview
-          questionnaire={questionnaire}
-          SlideId={location?.state.viewerIds[1]._id}
-        />
+    <Scrollbars
+      style={{ width: "100%", height: "79vh" }}
+      renderThumbVertical={(props) => (
+        <div {...props} className="thumb-vertical-messageBox" />
       )}
-    </>
+    >
+      <Text mb={3} fontSize="lg">
+        {slideType}
+      </Text>
+      <Divider />
+      <Questionnaire
+        direction="column"
+        questions={questionnaire?.questions}
+        response={response}
+        slideQna={slideQna}
+        slideType={slideType}
+        setSlideQna={setSlideQna}
+      />
+    </Scrollbars>
   );
 };
 

@@ -10,6 +10,7 @@ const LayoutAppSidebar = ({
   userIdToQuery,
   userInfo,
   response,
+  currentViewer,
   finalSubmitHandler,
   saveAnnotationsHandler,
   loadAnnotationsHandler,
@@ -35,6 +36,7 @@ const LayoutAppSidebar = ({
         userIdToQuery={userIdToQuery}
         userInfo={userInfo}
         response={response}
+        currentViewer={currentViewer}
         finalSubmitHandler={finalSubmitHandler}
         saveAnnotationsHandler={saveAnnotationsHandler}
         loadAnnotationsHandler={loadAnnotationsHandler}

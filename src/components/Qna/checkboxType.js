@@ -1,25 +1,35 @@
 import { Stack, Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import React from "react";
 import _ from "lodash";
-import { useDispatch } from "react-redux";
-import { updateResponse } from "../../reducers/slideQnaReducer";
 
-const CheckboxType = ({ question, direction, response }) => {
-  const dispatch = useDispatch();
-
+const CheckboxType = ({
+  question,
+  direction,
+  response,
+  setQnaResponse,
+  slideQna,
+}) => {
   const handleChange = (value = []) => {
     const choiceText = [];
     if (value.length > 0)
       question?.choices.forEach((choice) => {
         if (value.includes(choice._id)) choiceText.push(choice?.choiceText);
       });
-    dispatch(updateResponse({ id: question?._id, value: value, choiceText }));
+    setQnaResponse({
+      questionId: question?._id,
+      choiceId: value,
+      choiceType: "id",
+    });
   };
 
   return (
     <CheckboxGroup
       name={question?._id}
-      defaultValue={!_.isEmpty(response) ? response[question?._id] : ""}
+      defaultValue={
+        !_.isEmpty(response)
+          ? response[question?._id]?.choiceId
+          : slideQna?.response[question?._id] ?? ""
+      }
       isDisabled={!_.isEmpty(response)}
       ml="10px"
       onChange={handleChange}

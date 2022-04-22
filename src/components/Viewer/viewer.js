@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useOpenSeadragon, OpenSeadragon } from "use-open-seadragon";
 import { fabric, initFabricJSOverlay } from "openseadragon-fabricjs-overlay";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  updateOverlay,
-  updateUserCanvases,
-} from "../../reducers/fabricOverlayReducer";
 import { isBrowser } from "react-device-detect";
 import { Box } from "@chakra-ui/react";
 import ViewerControls from "./controls";
 import PropTypes from "prop-types";
+import { useFabricOverlayState } from "../../state/store";
+import { updateOverlay } from "../../state/actions/fabricOverlayActions";
 
 const minZoomLevel = isBrowser ? 0.4 : 0.8;
 
@@ -43,9 +40,8 @@ const osdOptions = {
   crossOriginPolicy: "Anonymous",
 };
 
-const Viewer = ({ viewerId, tile }) => {
-  const dispatch = useDispatch();
-  const { isMultiView } = useSelector((state) => state.viewerState);
+const Viewer = ({ viewerId, tile, slideName, slideType }) => {
+  const { setFabricOverlayState } = useFabricOverlayState();
   const [viewer, setViewer] = useState(null);
 
   // Customize Fabric selection handles
@@ -82,7 +78,7 @@ const Viewer = ({ viewerId, tile }) => {
 
     // Create the fabric.js overlay, and set it on a sharable context
     // viewer.open(tile.source);
-    dispatch(
+    setFabricOverlayState(
       updateOverlay({
         id: viewerId,
         fabricOverlay: viewer.fabricjsOverlay({ scale: 1 }),
@@ -90,22 +86,25 @@ const Viewer = ({ viewerId, tile }) => {
       })
     );
     return () => {
-      updateOverlay({
-        id: viewerId,
-        fabricOverlay: null,
-        viewer: null,
-      });
+      setFabricOverlayState(
+        updateOverlay({
+          id: viewerId,
+          fabricOverlay: null,
+          viewer: null,
+        })
+      );
     };
-  }, [dispatch, viewer]);
+  }, [viewer]);
 
   return (
-    <Box
-      id={"viewer" + viewerId}
-      border={isMultiView && viewerId === "viewer1" ? "2px solid #000" : "none"}
-      position="relative"
-      w="100%"
-    >
-      {isBrowser && <ViewerControls viewerId={viewerId} />}
+    <Box id={"viewer" + viewerId} position="relative" w="100%">
+      {isBrowser && (
+        <ViewerControls
+          viewerId={viewerId}
+          slideName={slideName}
+          slideType={slideType}
+        />
+      )}
     </Box>
   );
 };

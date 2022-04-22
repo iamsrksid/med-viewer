@@ -4,17 +4,17 @@ import { Box, Divider, IconButton, Text, HStack } from "@chakra-ui/react";
 import { BsCircle, BsSquare } from "react-icons/bs";
 import { useWindowHeight } from "@react-hook/window-size";
 import { isMobile, isTablet } from "react-device-detect";
-import { useSelector } from "react-redux";
 import TypeButton from "../typeButton";
+import { useFabricOverlayState } from "../../state/store";
 
 export const shapes = [
   { name: "rect", icon: <BsSquare /> },
   { name: "circle", icon: <BsCircle /> },
 ];
 
-const ShapePicker = ({ handleShapeSelect }) => {
-  const { activeShape, activeTool } = useSelector((state) => state.shapeState);
-  const { color } = useSelector((state) => state.fabricOverlayState);
+const ShapePicker = ({ activeShape, activeTool, handleShapeSelect }) => {
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { color } = fabricOverlayState;
   const windowHeight = useWindowHeight();
   let btnSize = "lg";
 

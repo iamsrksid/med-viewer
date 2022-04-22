@@ -1,16 +1,16 @@
 import React from "react";
 import { BsArrowUpRight } from "react-icons/bs";
 import TypeButton from "../typeButton";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTool } from "../../reducers/fabricOverlayReducer";
+import { useFabricOverlayState } from "../../state/store";
+import { updateTool } from "../../state/actions/fabricOverlayActions";
 
 const Arrow = () => {
-  const { activeTool } = useSelector((state) => state.fabricOverlayState);
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { activeTool } = fabricOverlayState;
   const isActive = activeTool === "Arrow";
-  const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(updateTool({ tool: isActive ? "" : "Arrow" }));
+    setFabricOverlayState(updateTool({ tool: isActive ? "" : "Arrow" }));
   };
 
   return (

@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { RiNavigationFill } from "react-icons/ri";
 import ToolbarButton from "./button";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTool } from "../../reducers/fabricOverlayReducer";
 import IconSize from "../ViewerToolbar/IconSize";
+import { useFabricOverlayState } from "../../state/store";
 
 const ToolbarPointerControl = ({ viewerId }) => {
-  const { viewerWindow, activeTool } = useSelector(
-    (state) => state.fabricOverlayState
-  );
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { viewerWindow, activeTool } = fabricOverlayState;
   const { fabricOverlay } = viewerWindow[viewerId];
   const [isActiveObject, setIsActiveObject] = useState();
 

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { IconButton, Flex } from "@chakra-ui/react";
 import { RiArrowGoBackFill, RiArrowGoForwardLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import "fabric-history/src/index";
 import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
+import { useFabricOverlayState } from "../../state/store";
 
 const UndoRedo = ({ viewerId }) => {
-  const { fabricOverlay } = useSelector(
-    (state) => state.fabricOverlayState.viewerWindow[viewerId]
-  );
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay } = fabricOverlayState?.viewerWindow[viewerId];
   const [canvas, setCanvas] = useState();
   const params = useParams();
 

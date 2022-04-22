@@ -4,31 +4,20 @@ import { ChatIcon } from "@chakra-ui/icons";
 import { useDisclosure } from "@chakra-ui/react";
 import { BsChatLeftText } from "react-icons/bs";
 import ToolbarButton from "../ViewerToolbar/button";
-import { useSelector, useDispatch } from "react-redux";
-import { updateActiveDrawerTool } from "../../reducers/drawerReducer";
 import TypeButton from "../typeButton";
 import MessageBox from "./messageBox";
 import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
 
 const SlideChat = () => {
-  const { activeDrawerTool } = useSelector((state) => state.drawerState);
-  const isActive = activeDrawerTool === "CHAT";
-  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [popup, setPopup] = useState(false);
   const handlePopup = () => {
     setPopup(!popup);
   };
 
-  const handleToolbarClick = () => {
-    dispatch(updateActiveDrawerTool({ tool: isActive ? "" : "CHAT" }));
-    onOpen();
-  };
-
   const close = () => {
     onClose();
-    dispatch(updateActiveDrawerTool({ tool: isActive ? "" : "CHAT" }));
   };
 
   return (

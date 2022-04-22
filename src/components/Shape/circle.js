@@ -1,16 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTool } from "../../reducers/fabricOverlayReducer";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
-import {
-  updateActive,
-  updateShapeColor,
-  updateShape,
-} from "../../reducers/shapeReducer";
 import { fonts } from "../Text/fontPicker";
-import { updateActivityFeed } from "../../reducers/fabricOverlayReducer";
 import {
   getCanvasImage,
   getFontSize,
@@ -20,15 +12,15 @@ import TypeButton from "../typeButton";
 import { BsCircle } from "react-icons/bs";
 import EditText from "../Feed/editText";
 import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { useFabricOverlayState } from "../../state/store";
+import {
+  updateActivityFeed,
+  updateTool,
+} from "../../state/actions/fabricOverlayActions";
 
 const Circle = ({ viewerId }) => {
-  const dispatch = useDispatch();
-  const { color, viewerWindow, activeTool } = useSelector(
-    (state) => state.fabricOverlayState
-  );
-  const { username, roomName, alias, socket } = useSelector(
-    (state) => state.socketState
-  );
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { color, viewerWindow, activeTool } = fabricOverlayState;
 
   const { fabricOverlay, viewer, zoomValue, activityFeed } =
     viewerWindow[viewerId];
@@ -39,11 +31,19 @@ const Circle = ({ viewerId }) => {
   const [shape, setShape] = useState(null);
   const [textbox, setTextbox] = useState(false);
 
-  const myState = useSelector((state) => state.shapeState);
+  const [myState, setState] = useState({
+    activeShape: null, // active shape in Options Panel
+    color: null,
+    currentDragShape: null,
+    isActive: false, // Is the Shape tool itself active
+    isMouseDown: false,
+    origX: null, // starting X point for drag creating an object
+    origY: null,
+  });
   const myStateRef = useRef(myState);
-  const setMyState = (action, data) => {
+  const setMyState = (data) => {
     myStateRef.current = { ...myState, ...data };
-    dispatch(action(data));
+    setState((state) => ({ ...state, ...data }));
   };
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -58,14 +58,14 @@ const Circle = ({ viewerId }) => {
    * Handle primary tool change
    */
   useEffect(() => {
-    setMyState(updateActive, { activeShape: null, isActive: isActive });
+    setMyState({ activeShape: null, isActive: isActive });
   }, [isActive]);
 
   /**
    * Handle color change
    */
   useEffect(() => {
-    setMyState(updateShapeColor, { color: color });
+    setMyState({ color: color });
   }, [color.hex]);
 
   /**
@@ -147,7 +147,7 @@ const Circle = ({ viewerId }) => {
       });
       fabricOverlay.fabricCanvas().add(newShape);
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
         currentDragShape: newShape,
         isMouseDown: true,
@@ -250,7 +250,7 @@ const Circle = ({ viewerId }) => {
         if (currShape.originY === "bottom") height = 0;
       }
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
         currentDragShape: null,
         isMouseDown: false,
@@ -270,7 +270,7 @@ const Circle = ({ viewerId }) => {
 
       if (!myStateRef.current.isActive) return;
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
       });
     }
@@ -292,7 +292,7 @@ const Circle = ({ viewerId }) => {
       const optionsTargetType = options.target.get("type");
       if ("circle" === optionsTargetType) return;
 
-      setMyState(updateShape, {
+      setMyState({
         ...myStateRef.current,
       });
     }
@@ -323,7 +323,7 @@ const Circle = ({ viewerId }) => {
     const canvas = fabricOverlay.fabricCanvas();
 
     let message = {
-      username: alias,
+      username: "",
       color: shape.stroke,
       action: "added",
       text: textbox,
@@ -339,24 +339,24 @@ const Circle = ({ viewerId }) => {
     setShape(null);
     setTextbox(false);
 
-    dispatch(
+    setFabricOverlayState(
       updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
     );
 
     // send annotation
-    socket.emit(
-      "send_annotations",
-      JSON.stringify({
-        roomName,
-        username,
-        content: canvas,
-        feed: [...activityFeed, message],
-      })
-    );
+    // socket.emit(
+    //   "send_annotations",
+    //   JSON.stringify({
+    //     roomName,
+    //     username,
+    //     content: canvas,
+    //     feed: [...activityFeed, message],
+    //   })
+    // );
   }, [textbox]);
 
   const handleClick = () => {
-    dispatch(updateTool({ tool: "Circle" }));
+    setFabricOverlayState(updateTool({ tool: "Circle" }));
   };
 
   const handleSave = (text) => {

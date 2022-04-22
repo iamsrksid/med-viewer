@@ -1,31 +1,24 @@
 import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { FaPaintBrush } from "react-icons/fa";
 import { Box, HStack, Text } from "@chakra-ui/react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  updateIsActiveTool,
-  updateIsObjectSelected,
-} from "../../state/reducers/colorReducer";
 import DrawWidthPicker from "../Draw/widthPicker";
-import TypeTools from "../AdjustmentBar/typeTools";
 import ColorOptionsPanel from "./optionsPanel";
-import ToolbarButton from "../ViewerToolbar/button";
-import ToolbarOptionsPanel from "../ViewerToolbar/optionsPanel";
 import { CloseIcon } from "@chakra-ui/icons";
 import "../../styles/viewer.css";
+import { useFabricOverlayState } from "../../state/store";
 
 const Color = ({ viewerId, colorsButtonHandler }) => {
-  const dispatch = useDispatch();
-  const { activeTool, viewerWindow } = useSelector(
-    (state) => state.fabricOverlayState
-  );
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { activeTool, viewerWindow } = fabricOverlayState;
 
-  const myState = useSelector((state) => state.colorState);
+  const [myState, setState] = useState({
+    isObjectSelected: false,
+    isActiveTool: false,
+  });
   const myStateRef = useRef(myState);
-  const setMyState = (action, data) => {
+  const setMyState = (data) => {
     myStateRef.current = { ...myState, ...data };
-    dispatch(action(data));
+    setState((state) => ({ ...state, ...data }));
   };
   const [closeButton, setCloseButton] = useState(true);
   const handleCloseButtonClick = () => {
@@ -34,7 +27,7 @@ const Color = ({ viewerId, colorsButtonHandler }) => {
   };
 
   useEffect(() => {
-    setMyState(updateIsActiveTool, {
+    setMyState({
       isActiveTool: Boolean(activeTool && activeTool !== "POINTER"),
     });
   }, [activeTool]);
@@ -46,13 +39,13 @@ const Color = ({ viewerId, colorsButtonHandler }) => {
     if (!viewerWindow) return;
 
     const handleSelectionCleared = (e) => {
-      setMyState(updateIsObjectSelected, {
+      setMyState({
         ...myStateRef.current,
         isObjectSelected: false,
       });
     };
     const handleSelectionCreated = (e) => {
-      setMyState(updateIsObjectSelected, {
+      setMyState({
         ...myStateRef.current,
         isObjectSelected: true,
       });
@@ -105,7 +98,10 @@ const Color = ({ viewerId, colorsButtonHandler }) => {
           <Box width="100%" marginTop="-2.5em">
             <Text paddingLeft="2em">Color</Text>
             <Box px={10} my={4}>
-              <ColorOptionsPanel />
+              <ColorOptionsPanel
+                isActiveTool={isActiveTool}
+                isObjectSelected={isObjectSelected}
+              />
             </Box>
           </Box>
           <Box width="10em" height="6em">

@@ -14,20 +14,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
 import ZoomSlider from "../ZoomSlider/slider";
-import { updateCurrentViewer } from "../../reducers/viewerReducer";
-import { updateTool } from "../../reducers/fabricOverlayReducer";
 import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
+import FullScreen from "../Fullscreen/Fullscreen";
+import { useFabricOverlayState } from "../../state/store";
 
-const ViewerControls = ({ viewerId }) => {
-  const { viewerWindow } = useSelector((state) => state.fabricOverlayState);
-  const { currentViewer, isMultiView } = useSelector(
-    (state) => state.viewerState
-  );
-  const { viewer } = viewerWindow[viewerId];
-  const dispatch = useDispatch();
+const ViewerControls = ({ viewerId, slideName, slideType }) => {
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { viewer } = fabricOverlayState?.viewerWindow[viewerId];
   const [scalebar, setScalebar] = useState(null);
   const iconSize = IconSize();
 
@@ -86,14 +81,9 @@ const ViewerControls = ({ viewerId }) => {
     );
   };
 
-  const handleSelectSlide = () => {
-    if (currentViewer === viewerId) return;
-    dispatch(updateCurrentViewer(viewerId));
-  };
-
   return (
     <>
-      {isMultiView && (
+      {/* {isMultiView && (
         <Box position="absolute" left="20px" top="20px" zIndex="1">
           <HStack color="blue.400" fontSize={10}>
             <Text as="button">View Details</Text>
@@ -103,7 +93,26 @@ const ViewerControls = ({ viewerId }) => {
           </HStack>
           <Text fontWeight="bold">Slide {viewerId.slice(-1)}: Name/info</Text>
         </Box>
-      )}
+        
+      )} */}
+      <Box
+        position="absolute"
+        left="1.01vh"
+        top="0.937vw"
+        zIndex="1"
+        minW="7.65vw"
+        minH="3.88vh"
+      >
+        <Box minW="7.65vw" minH="0.370vh" bgColor="#ECECEC"></Box>
+
+        <HStack bgColor="#F8F8F5" fontSize="1.25vw">
+          <Text
+            fontFamily="fira sans"
+            fontWeight="500"
+            px="0.820vw"
+          >{`${slideName}-${slideType}`}</Text>
+        </HStack>
+      </Box>
       {/* <Box zIndex="1000">
         <ButtonGroup spacing="3" size="lg">
         <Tooltip label="Zoom in" aria-label="Zoom in">
@@ -146,11 +155,26 @@ const ViewerControls = ({ viewerId }) => {
         backgroundColor="#F8F8F5"
         border="1px solid #00153F"
         // borderRadius="5px"
-        p={2}
+        py={2}
+        px={1.5}
         zIndex="1"
         position="absolute"
         right="20px"
         top="20px"
+      >
+        <FullScreen viewerId={viewerId} />
+      </VStack>
+      <VStack
+        // w="fit-content"
+        backgroundColor="#F8F8F5"
+        border="1px solid #00153F"
+        // borderRadius="5px"
+        py={2}
+        px={1.5}
+        zIndex="1"
+        position="absolute"
+        right="20px"
+        top="10.48vh"
       >
         <ToolbarButton
           icon={<AiOutlinePlus color="#00153F" size={iconSize} />}

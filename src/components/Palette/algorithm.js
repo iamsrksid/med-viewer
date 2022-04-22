@@ -1,18 +1,8 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuList, Button } from "@chakra-ui/react";
-import { updateActiveDrawerTool } from "../../reducers/drawerReducer";
 import { MenuAltButton, MenuAltItem } from "../altButton";
 
 const Algorithm = () => {
-  const { activeDrawerTool } = useSelector((state) => state.drawerState);
-  const isActive = activeDrawerTool === "Algorithm";
-  const dispatch = useDispatch();
-
-  const handleBasicPalette = () => {
-    dispatch(updateActiveDrawerTool({ tool: "Algorithm" }));
-  };
-
   return (
     <>
       <Menu>
@@ -27,7 +17,7 @@ const Algorithm = () => {
           minW={0}
           color="#3965C6"
         >
-          <MenuAltItem label="Basic Palette" onClick={handleBasicPalette} />
+          <MenuAltItem label="Basic Palette" />
         </MenuList>
       </Menu>
     </>

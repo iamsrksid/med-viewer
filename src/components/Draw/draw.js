@@ -1,17 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaPaintBrush } from "react-icons/fa";
 import { useMediaQuery, useDisclosure } from "@chakra-ui/react";
-import {
-  updateTool,
-  updateActivityFeed,
-} from "../../reducers/fabricOverlayReducer";
-import { useSelector, useDispatch } from "react-redux";
-import DrawWidthPicker from "./widthPicker";
-import ToolbarButton from "../ViewerToolbar/button";
-import ToolbarOptionsPanel from "../ViewerToolbar/optionsPanel";
-import { widths } from "./widthPicker";
 import useHexRGB from "../../utility/use-hex-rgb";
-import { updateActive } from "../../reducers/drawReducer";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { fonts } from "../Text/fontPicker";
 import {
@@ -21,6 +11,12 @@ import {
 } from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
+import { widths } from "./width";
+import { useFabricOverlayState } from "../../state/store";
+import {
+  updateActivityFeed,
+  updateTool,
+} from "../../state/actions/fabricOverlayActions";
 
 const getDrawCursor = (brushSize, brushColor) => {
   brushSize = brushSize < 4 ? 8 : brushSize * 3;
@@ -50,28 +46,26 @@ const createFreeDrawingCursor = (brushWidth, brushColor) => {
 };
 
 const Draw = ({ viewerId }) => {
-  const { color, viewerWindow, activeTool } = useSelector(
-    (state) => state.fabricOverlayState
-  );
-  const { username, roomName, alias, socket } = useSelector(
-    (state) => state.socketState
-  );
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { color, viewerWindow, activeTool } = fabricOverlayState;
 
   const { fabricOverlay, viewer, zoomValue, activityFeed } =
     viewerWindow[viewerId];
 
-  const dispatch = useDispatch();
   const { hexToRGBA } = useHexRGB();
   const isActive = activeTool === "DRAW";
 
   const [path, setPath] = useState(null);
   const [textbox, setTextbox] = useState(false);
 
-  const myState = useSelector((state) => state.drawState);
+  const [myState, setState] = useState({
+    width: widths[0],
+    isActive: false,
+  });
   const myStateRef = useRef(myState.isActive);
   const setMyState = (data) => {
     myStateRef.current = data;
-    dispatch(updateActive(data));
+    setState((state) => ({ ...state, isActive: data }));
   };
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -214,7 +208,7 @@ const Draw = ({ viewerId }) => {
 
     const addToFeed = async (path) => {
       let message = {
-        username: alias,
+        username: "",
         color: path.stroke,
         action: "added",
         text: textbox,
@@ -227,7 +221,7 @@ const Draw = ({ viewerId }) => {
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
 
-      dispatch(
+      setFabricOverlayState(
         updateActivityFeed({
           id: viewerId,
           feed: [...activityFeed, message],
@@ -238,22 +232,22 @@ const Draw = ({ viewerId }) => {
       setTextbox(false);
 
       // send annotation
-      socket.emit(
-        "send_annotations",
-        JSON.stringify({
-          roomName,
-          username,
-          content: canvas,
-          feed: [...activityFeed, message],
-        })
-      );
+      // socket.emit(
+      //   "send_annotations",
+      //   JSON.stringify({
+      //     roomName,
+      //     username,
+      //     content: canvas,
+      //     feed: [...activityFeed, message],
+      //   })
+      // );
     };
 
     addToFeed(path);
   }, [textbox]);
 
   const handleToolbarClick = () => {
-    dispatch(updateTool({ tool: "DRAW" }));
+    setFabricOverlayState(updateTool({ tool: "DRAW" }));
   };
 
   const handleSave = (text) => {

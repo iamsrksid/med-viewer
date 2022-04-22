@@ -1,15 +1,15 @@
 import { Button } from "@chakra-ui/react";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { getCanvasImage, getTimestamp } from "../../utility/utility";
-import { updateActivityFeed } from "../../reducers/fabricOverlayReducer";
 import _ from "lodash";
+import { useFabricOverlayState } from "../../state/store";
+import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 
 const LoadAnnotations = ({ viewerId, userInfo, loadAnnotationsHandler }) => {
-  const { viewerWindow } = useSelector((state) => state.fabricOverlayState);
-  const { fabricOverlay, activityFeed } = viewerWindow[viewerId];
-  const dispatch = useDispatch();
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay, activityFeed } =
+    fabricOverlayState?.viewerWindow[viewerId];
 
   const loadAnnotations = (annotations) => {
     const canvas = fabricOverlay.fabricCanvas();
@@ -28,7 +28,7 @@ const LoadAnnotations = ({ viewerId, userInfo, loadAnnotationsHandler }) => {
 
       message.image = await getCanvasImage(viewerId);
 
-      dispatch(
+      setFabricOverlayState(
         updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
       );
     };

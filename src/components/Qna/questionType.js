@@ -1,17 +1,19 @@
 import React from "react";
 import RadioType from "./radioType";
 import TextType from "./textType";
-import { useDispatch, useSelector } from "react-redux";
-import { updateResponse } from "../../reducers/slideQnaReducer";
 import CheckboxType from "./checkboxType";
 
-const QuestionType = ({ question, direction, response }) => {
-  const dispatch = useDispatch();
-
-  const handleChange = (e, choiceText) => {
-    dispatch(
-      updateResponse({ id: e.target.name, value: e.target.value, choiceText })
-    );
+const QuestionType = ({
+  question,
+  direction,
+  response,
+  setQnaResponse,
+  slideQna,
+  isSecondDisable,
+  isLastDisable,
+}) => {
+  const handleChange = ({ questionId, choiceId, choiceText, choiceType }) => {
+    setQnaResponse({ questionId, choiceId, choiceText, choiceType });
   };
 
   if (question?.questionType === "radio")
@@ -21,6 +23,8 @@ const QuestionType = ({ question, direction, response }) => {
         direction={direction}
         response={response}
         handleChange={handleChange}
+        slideQna={slideQna}
+        isSecondDisable={isSecondDisable}
       />
     );
   if (question?.questionType === "text")
@@ -29,6 +33,8 @@ const QuestionType = ({ question, direction, response }) => {
         question={question}
         response={response}
         handleChange={handleChange}
+        slideQna={slideQna}
+        isLastDisable={isLastDisable}
       />
     );
   if (question?.questionType === "checkbox")
@@ -37,6 +43,8 @@ const QuestionType = ({ question, direction, response }) => {
         question={question}
         direction={direction}
         response={response}
+        setQnaResponse={setQnaResponse}
+        slideQna={slideQna}
       />
     );
   return null;

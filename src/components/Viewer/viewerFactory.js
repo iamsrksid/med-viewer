@@ -1,14 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { SimpleGrid } from "@chakra-ui/react";
 import ViewerContainer from "./container";
 
-const ViewerFactory = () => {
-  const { viewerIds } = useSelector((state) => state.viewerState);
+const ViewerFactory = ({ viewerIds, slideType }) => {
   return (
     <>
-      {viewerIds.map((viewerId) => (
-        <ViewerContainer key={viewerId} viewerId={viewerId} />
+      {viewerIds.map((viewer) => (
+        <ViewerContainer
+          key={viewer?._id}
+          viewerId={viewer?._id}
+          slideName={viewer?.slideName}
+          slideType={slideType}
+        />
       ))}
     </>
   );
