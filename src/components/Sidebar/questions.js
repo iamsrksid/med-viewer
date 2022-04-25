@@ -26,8 +26,6 @@ const Questions = ({
     response: {},
   });
 
-  console.log({ response });
-
   return (
     <>
       <>

@@ -57,8 +57,6 @@ const MedViewer = ({
     };
   }, []);
 
-  console.log({ response });
-
   return isReady &&
     _.keys(fabricOverlayState?.viewerWindow).length ===
       projectCase?.slides.length ? (

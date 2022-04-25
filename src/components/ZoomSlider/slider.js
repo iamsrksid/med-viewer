@@ -10,7 +10,6 @@ const ZoomSlider = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewer, zoomValue, fabricOverlay } =
     fabricOverlayState?.viewerWindow[viewerId];
-  console.log({ fabricOverlayState });
 
   const screenSize = useMediaQuery([
     "(max-width: 1280px)",
