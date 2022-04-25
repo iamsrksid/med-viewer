@@ -13,8 +13,8 @@ const Questionnaire = ({
   ...restProps
 }) => {
   const isSecondVisible =
-    slideQna?.qna?.[questions[0]?._id] === "No" ||
-    response?.[questions[1]?._id];
+    slideQna?.qna?.[questions?.[0]?._id] === "No" ||
+    response?.[questions?.[1]?._id];
   const isLastVisible =
     ["(1)Few", "(2)Many"].includes(slideQna?.qna?.[questions?.[4]?._id]) ||
     response?.[questions?.[5]?._id];
