@@ -37,6 +37,23 @@ const MedViewer = ({
     }
   );
 
+  console.log({
+    userInfo,
+    projectCase,
+    tile,
+    viewerIds,
+    questionnaire,
+    userIdToQuery,
+    project,
+    response,
+    finalSubmitHandler,
+    changeCaseHandler,
+    goToHomeHandler,
+    saveAnnotationsHandler,
+    loadAnnotationsHandler,
+  });
+  console.log(fabricOverlayState);
+
   useEffect(() => {
     if (
       !fabricOverlayState?.viewerWindow ||

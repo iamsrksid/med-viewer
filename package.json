@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
-    "babel-build": "./node_modules/.bin/babel src/index.js --out-file dist/index.js"
+    "babel-build": "./node_modules/.bin/babel src/ -d dist/"
   },
   "dependencies": {
     "@babel/cli": "^7.17.6",
@@ -85,7 +85,6 @@
   "module": "dist/index.js",
   "source": "src/index.js",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ]
 }
