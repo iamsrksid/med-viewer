@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "prepare": "npm run build",
     "build": "webpack --mode production",
     "babel-build": "./node_modules/.bin/babel src/ -d dist/"
   },
