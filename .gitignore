@@ -5,3 +5,4 @@ dist/
 .yarn-integrity
 .babelrc
 rollup.config.js
+.DS_Store
