@@ -6,3 +6,4 @@ dist/
 .babelrc
 rollup.config.js
 .DS_Store
+package-lock.json
