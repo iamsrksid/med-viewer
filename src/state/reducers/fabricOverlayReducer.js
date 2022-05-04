@@ -27,7 +27,7 @@ const fabricOverlayReducer = (state, action) => {
       return { ...state, color: action.payload };
 
     case "updateTool":
-      return { ...state, activeTool: action.payload };
+      return { ...state, activeTool: action.payload.tool };
 
     case "updateOverlay":
       return {
