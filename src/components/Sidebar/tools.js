@@ -5,15 +5,18 @@ import Studies from "./studies";
 import Annotations from "./annotations";
 import Questions from "./questions";
 import "../../styles/viewer.css";
+import Report from "../Case/report";
 
 const SidebarTools = ({
   project,
   questionnaire,
   viewerIds,
+  annotations,
   userIdToQuery,
   userInfo,
   response,
   currentViewer,
+  report,
   finalSubmitHandler,
   saveAnnotationsHandler,
   loadAnnotationsHandler,
@@ -40,36 +43,57 @@ const SidebarTools = ({
           >
             Studies
           </Tab> */}
-          <Tab
-            _focus={{ border: "none" }}
-            _selected={{
-              bg: "#E4E5E8",
-              border: "0.5px solid #000000",
-              borderLeft: "none",
-            }}
-            color="#00153F"
-            py={2}
-            border="0.5px solid #000"
-            borderLeft="none"
-            fontFamily="inter"
-          >
-            Questions
-          </Tab>
-          {/* <Tab
-            _focus={{ border: "none" }}
-            _selected={{
-              bg: "#E4E5E8",
-              border: "0.5px solid #000000",
-              borderLeft: "none",
-            }}
-            color="#00153F"
-            py={2}
-            border="0.5px solid #000000"
-            borderLeft="none"
-            fontFamily="inter"
-          >
-            Annotations
-          </Tab> */}
+          {questionnaire ? (
+            <Tab
+              _focus={{ border: "none" }}
+              _selected={{
+                bg: "#E4E5E8",
+                border: "0.5px solid #000000",
+                borderLeft: "none",
+              }}
+              color="#00153F"
+              py={2}
+              border="0.5px solid #000"
+              borderLeft="none"
+              fontFamily="inter"
+            >
+              Questions
+            </Tab>
+          ) : null}
+          {report ? (
+            <Tab
+              _focus={{ border: "none" }}
+              _selected={{
+                bg: "#E4E5E8",
+                border: "0.5px solid #000000",
+                borderLeft: "none",
+              }}
+              color="#00153F"
+              py={2}
+              border="0.5px solid #000"
+              borderLeft="none"
+              fontFamily="inter"
+            >
+              Report
+            </Tab>
+          ) : null}
+          {annotations ? (
+            <Tab
+              _focus={{ border: "none" }}
+              _selected={{
+                bg: "#E4E5E8",
+                border: "0.5px solid #000000",
+                borderLeft: "none",
+              }}
+              color="#00153F"
+              py={2}
+              border="0.5px solid #000000"
+              borderLeft="none"
+              fontFamily="inter"
+            >
+              Annotations
+            </Tab>
+          ) : null}
           {/* <Tab
             _focus={{ border: "none" }}
             _selected={{ bg: "#3965C5" }}
@@ -92,19 +116,40 @@ const SidebarTools = ({
           {/* <TabPanel p="0px">
             <Studies />
           </TabPanel> */}
-          <TabPanel p="0px">
-            <Questions
-              project={project}
-              questionnaire={questionnaire}
-              viewerIds={viewerIds}
-              userInfo={userInfo}
-              response={response}
-              finalSubmitHandler={finalSubmitHandler}
-            />
-          </TabPanel>
-          {/* <TabPanel p="0px">
-            <Annotations />
-          </TabPanel> */}
+          {questionnaire ? (
+            <TabPanel p="0px">
+              <Questions
+                project={project}
+                questionnaire={questionnaire}
+                viewerIds={viewerIds}
+                userInfo={userInfo}
+                response={response}
+                finalSubmitHandler={finalSubmitHandler}
+              />
+            </TabPanel>
+          ) : null}
+          {report ? (
+            <TabPanel p="0px">
+              <Report />
+              {/* <Questions
+                project={project}
+                viewerIds={viewerIds}
+                userInfo={userInfo}
+                response={response}
+                finalSubmitHandler={finalSubmitHandler}
+              /> */}
+            </TabPanel>
+          ) : null}
+          {annotations ? (
+            <TabPanel p="0px">
+              <Annotations
+                userInfo={userInfo}
+                currentViewer={currentViewer}
+                saveAnnotationsHandler={saveAnnotationsHandler}
+                loadAnnotationsHandler={loadAnnotationsHandler}
+              />
+            </TabPanel>
+          ) : null}
           {/* <TabPanel>
             <Analysis />
           </TabPanel> */}

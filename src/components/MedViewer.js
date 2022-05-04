@@ -10,21 +10,7 @@ import {
 import fabricOverlayReducer from "../state/reducers/fabricOverlayReducer";
 import { brandColors } from "../styles/brandPalette";
 
-const MedViewer = ({
-  userInfo,
-  projectCase,
-  tile,
-  viewerIds,
-  questionnaire,
-  userIdToQuery,
-  project,
-  response,
-  finalSubmitHandler,
-  changeCaseHandler,
-  goToHomeHandler,
-  saveAnnotationsHandler,
-  loadAnnotationsHandler,
-}) => {
+const MedViewer = ({ projectCase, ...props }) => {
   const [isReady, setIsReady] = useState(false);
   const [fabricOverlayState, setFabricOverlayState] = useReducer(
     fabricOverlayReducer,
@@ -36,23 +22,6 @@ const MedViewer = ({
       roomName: "",
     }
   );
-
-  console.log({
-    userInfo,
-    projectCase,
-    tile,
-    viewerIds,
-    questionnaire,
-    userIdToQuery,
-    project,
-    response,
-    finalSubmitHandler,
-    changeCaseHandler,
-    goToHomeHandler,
-    saveAnnotationsHandler,
-    loadAnnotationsHandler,
-  });
-  console.log(fabricOverlayState);
 
   useEffect(() => {
     if (
@@ -77,23 +46,11 @@ const MedViewer = ({
   return isReady &&
     _.keys(fabricOverlayState?.viewerWindow).length ===
       projectCase?.slides.length ? (
-    <StoreProvider value={{ fabricOverlayState, setFabricOverlayState }}>
-      <LayoutApp
-        userInfo={userInfo}
-        projectCase={projectCase}
-        tile={tile}
-        viewerIds={viewerIds}
-        questionnaire={questionnaire}
-        userIdToQuery={userIdToQuery}
-        project={project}
-        response={response}
-        finalSubmitHandler={finalSubmitHandler}
-        goToHomeHandler={goToHomeHandler}
-        changeCaseHandler={changeCaseHandler}
-        saveAnnotationsHandler={saveAnnotationsHandler}
-        loadAnnotationsHandler={loadAnnotationsHandler}
-      />
-    </StoreProvider>
+    <React.StrictMode>
+      <StoreProvider value={{ fabricOverlayState, setFabricOverlayState }}>
+        <LayoutApp projectCase={projectCase} {...props} />
+      </StoreProvider>
+    </React.StrictMode>
   ) : (
     <Loading />
   );

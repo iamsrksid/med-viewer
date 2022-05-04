@@ -7,13 +7,15 @@ import LayoutOuterBody from "./outerbody";
 import LayoutAppSidebar from "./sidebar";
 import Div100vh from "react-div-100vh";
 import ViewerFactory from "../Viewer/viewerFactory";
+import PropTypes from "prop-types";
 
 const LayoutApp = ({
   userInfo,
   projectCase,
-  tile,
   viewerIds,
   questionnaire,
+  report,
+  annotations,
   userIdToQuery,
   project,
   response,
@@ -45,6 +47,7 @@ const LayoutApp = ({
           userInfo={userInfo}
           project={project}
           caseId={projectCase?._id}
+          annotations={annotations}
           changeCaseHandler={changeCaseHandler}
           currentViewer={currentViewer}
           goToHomeHandler={goToHomeHandler}
@@ -56,6 +59,8 @@ const LayoutApp = ({
             <LayoutAppSidebar
               project={project}
               questionnaire={questionnaire}
+              annotations={annotations}
+              report={report}
               viewerIds={viewerIds}
               userIdToQuery={userIdToQuery}
               userInfo={userInfo}
@@ -76,6 +81,10 @@ const LayoutApp = ({
       </LayoutOuterBody>
     </Flex>
   );
+};
+
+LayoutApp.propTypes = {
+  finalSubmitHandler: PropTypes.func,
 };
 
 export default LayoutApp;

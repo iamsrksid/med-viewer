@@ -14,6 +14,7 @@ const AdjustmentBar = ({
   project,
   caseId,
   currentViewer,
+  annotations,
   goToHomeHandler,
   changeCaseHandler,
   showSidebar,
@@ -60,7 +61,7 @@ const AdjustmentBar = ({
           caseId={caseId}
           changeCaseHandler={changeCaseHandler}
         />
-        <Move viewerId={currentViewer} />
+        <Move annotations={annotations} viewerId={currentViewer} />
         <ActionTools viewerId={currentViewer} />
         <ScreenTools viewerId={currentViewer} />
       </Flex>

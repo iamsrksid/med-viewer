@@ -3,18 +3,7 @@ import PropTypes from "prop-types";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import SidebarTools from "../Sidebar/tools";
 
-const LayoutAppSidebar = ({
-  project,
-  questionnaire,
-  viewerIds,
-  userIdToQuery,
-  userInfo,
-  response,
-  currentViewer,
-  finalSubmitHandler,
-  saveAnnotationsHandler,
-  loadAnnotationsHandler,
-}) => {
+const LayoutAppSidebar = (props) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
 
   return (
@@ -29,18 +18,7 @@ const LayoutAppSidebar = ({
       backgroundColor="rgba(236, 236, 236, 1)"
       overflowX="auto"
     >
-      <SidebarTools
-        project={project}
-        questionnaire={questionnaire}
-        viewerIds={viewerIds}
-        userIdToQuery={userIdToQuery}
-        userInfo={userInfo}
-        response={response}
-        currentViewer={currentViewer}
-        finalSubmitHandler={finalSubmitHandler}
-        saveAnnotationsHandler={saveAnnotationsHandler}
-        loadAnnotationsHandler={loadAnnotationsHandler}
-      />
+      <SidebarTools {...props} />
     </Flex>
   );
 };

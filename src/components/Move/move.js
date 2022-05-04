@@ -14,7 +14,7 @@ import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
 
-const Move = ({ viewerId }) => {
+const Move = ({ viewerId, annotations }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [typeToolsToggle, setTypeToolsToggle] = useState(false);
   const [colorBar, setColorBar] = useState(false);
@@ -50,13 +50,15 @@ const Move = ({ viewerId }) => {
         />
         <Rotate viewerId={viewerId} />
 
-        {/* <ToolbarButton
-          icon={<HiOutlinePencilAlt size={iconSize} color="#151C25" />}
-          backgroundColor={typeToolsToggle ? "#E4E5E8" : ""}
-          outline={typeToolsToggle ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
-          label="Annotations"
-          onClick={handleAnnotationsClick}
-        /> */}
+        {annotations ? (
+          <ToolbarButton
+            icon={<HiOutlinePencilAlt size={iconSize} color="#151C25" />}
+            backgroundColor={typeToolsToggle ? "#E4E5E8" : ""}
+            outline={typeToolsToggle ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
+            label="Annotations"
+            onClick={handleAnnotationsClick}
+          />
+        ) : null}
         {/* <MultiView viewerId={viewerId}/> */}
         {/* <ToolbarButton
           icon={<BsLayoutSplit size={18} color="#151C25" />}
