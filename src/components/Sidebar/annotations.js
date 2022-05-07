@@ -24,15 +24,19 @@ const Annotations = ({
             alignContent="flex-start"
             ml="-20px"
           >
-            <SaveAnnotations
-              viewerId={currentViewer}
-              saveAnnotationsHandler={saveAnnotationsHandler}
-            />
-            <LoadAnnotations
-              viewerId={currentViewer}
-              userInfo={userInfo}
-              loadAnnotationsHandler={loadAnnotationsHandler}
-            />
+            {saveAnnotationsHandler ? (
+              <SaveAnnotations
+                viewerId={currentViewer}
+                saveAnnotationsHandler={saveAnnotationsHandler}
+              />
+            ) : null}
+            {loadAnnotationsHandler ? (
+              <LoadAnnotations
+                viewerId={currentViewer}
+                userInfo={userInfo}
+                loadAnnotationsHandler={loadAnnotationsHandler}
+              />
+            ) : null}
           </HStack>
         </Box>
       </Box>

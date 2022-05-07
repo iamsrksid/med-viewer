@@ -95,24 +95,26 @@ const ViewerControls = ({ viewerId, slideName, slideType }) => {
         </Box>
         
       )} */}
-      <Box
-        position="absolute"
-        left="1.01vh"
-        top="0.937vw"
-        zIndex="1"
-        minW="7.65vw"
-        minH="3.88vh"
-      >
-        <Box minW="7.65vw" minH="0.370vh" bgColor="#ECECEC"></Box>
+      {slideType ? (
+        <Box
+          position="absolute"
+          left="1.01vh"
+          top="0.937vw"
+          zIndex="1"
+          minW="7.65vw"
+          minH="3.88vh"
+        >
+          <Box minW="7.65vw" minH="0.370vh" bgColor="#ECECEC"></Box>
 
-        <HStack bgColor="#F8F8F5" fontSize="1.25vw">
-          <Text
-            fontFamily="fira sans"
-            fontWeight="500"
-            px="0.820vw"
-          >{`${slideName}-${slideType}`}</Text>
-        </HStack>
-      </Box>
+          <HStack bgColor="#F8F8F5" fontSize="1.25vw">
+            <Text
+              fontFamily="fira sans"
+              fontWeight="500"
+              px="0.820vw"
+            >{`${slideName}-${slideType}`}</Text>
+          </HStack>
+        </Box>
+      ) : null}
       {/* <Box zIndex="1000">
         <ButtonGroup spacing="3" size="lg">
         <Tooltip label="Zoom in" aria-label="Zoom in">

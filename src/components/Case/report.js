@@ -1,7 +1,7 @@
 import { Textarea, Button, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const Report = ({ submitReport }) => {
+const Report = ({ finalSubmitHandler }) => {
   const [reportText, setReportText] = useState("");
 
   return (
@@ -17,22 +17,24 @@ const Report = ({ submitReport }) => {
         fontFamily="inter"
         onChange={(e) => setReportText(e.target.value)}
       />
-      <Button
-        mt={3}
-        backgroundColor="#00153F"
-        h="32px"
-        borderRadius={0}
-        width="10em"
-        color="white"
-        fontWeight="500"
-        fontSize="16px"
-        fontFamily="inter"
-        alignSelf="center"
-        _hover={{ bg: "#2166fc" }}
-        onClick={() => submitReport()}
-      >
-        Submit
-      </Button>
+      {finalSubmitHandler ? (
+        <Button
+          mt={3}
+          backgroundColor="#00153F"
+          h="32px"
+          borderRadius={0}
+          width="10em"
+          color="white"
+          fontWeight="500"
+          fontSize="16px"
+          fontFamily="inter"
+          alignSelf="center"
+          _hover={{ bg: "#2166fc" }}
+          onClick={() => finalSubmitHandler()}
+        >
+          Submit
+        </Button>
+      ) : null}
     </Flex>
   );
 };

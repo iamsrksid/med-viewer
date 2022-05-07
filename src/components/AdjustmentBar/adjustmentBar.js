@@ -12,7 +12,8 @@ import IconSize from "../ViewerToolbar/IconSize";
 
 const AdjustmentBar = ({
   project,
-  caseId,
+  caseInfo,
+  slide,
   currentViewer,
   annotations,
   goToHomeHandler,
@@ -52,13 +53,14 @@ const AdjustmentBar = ({
             icon={<BsGrid1X2 size={IconSize()} color="#151C25" />}
             label="Sidebar"
           />
-          <Text color="#151C25" ml="12px">
-            {project?.name}
+          <Text color="#151C25" ml="12px" fontSize="14px" fontFamily="inter">
+            {caseInfo?.caseName}
           </Text>
         </Flex>
         <ChangeCase
           project={project}
-          caseId={caseId}
+          caseInfo={caseInfo}
+          slide={slide}
           changeCaseHandler={changeCaseHandler}
         />
         <Move annotations={annotations} viewerId={currentViewer} />

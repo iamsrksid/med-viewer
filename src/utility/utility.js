@@ -72,3 +72,7 @@ export const getSlideUrl = (url) => {
     ? url.substring(0, url.lastIndexOf(".")) + "_files/8/0_0.jpeg"
     : "";
 };
+
+export const findCurrentIndex = (itemId, arr = []) => {
+  return arr.findIndex((elm) => elm._id === itemId);
+};

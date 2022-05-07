@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 
 const LayoutApp = ({
   userInfo,
-  projectCase,
+  caseInfo,
   viewerIds,
   questionnaire,
   report,
@@ -46,7 +46,8 @@ const LayoutApp = ({
         <AdjustmentBar
           userInfo={userInfo}
           project={project}
-          caseId={projectCase?._id}
+          caseInfo={caseInfo}
+          slide={viewerIds?.[0]}
           annotations={annotations}
           changeCaseHandler={changeCaseHandler}
           currentViewer={currentViewer}

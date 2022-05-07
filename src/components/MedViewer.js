@@ -10,7 +10,7 @@ import {
 import fabricOverlayReducer from "../state/reducers/fabricOverlayReducer";
 import { brandColors } from "../styles/brandPalette";
 
-const MedViewer = ({ projectCase, ...props }) => {
+const MedViewer = ({ viewerIds, ...props }) => {
   const [isReady, setIsReady] = useState(false);
   const [fabricOverlayState, setFabricOverlayState] = useReducer(
     fabricOverlayReducer,
@@ -30,12 +30,12 @@ const MedViewer = ({ projectCase, ...props }) => {
     )
       return;
     const viewerWindows = [];
-    projectCase?.slides.map((slide) => {
+    viewerIds.map((slide) => {
       viewerWindows.push({ id: slide._id, tile: slide.awsImageBucketUrl });
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));
     setIsReady(true);
-  }, [fabricOverlayState, projectCase]);
+  }, [fabricOverlayState, viewerIds]);
 
   useEffect(() => {
     return () => {
@@ -44,11 +44,10 @@ const MedViewer = ({ projectCase, ...props }) => {
   }, []);
 
   return isReady &&
-    _.keys(fabricOverlayState?.viewerWindow).length ===
-      projectCase?.slides.length ? (
+    _.keys(fabricOverlayState?.viewerWindow).length === viewerIds?.length ? (
     <React.StrictMode>
       <StoreProvider value={{ fabricOverlayState, setFabricOverlayState }}>
-        <LayoutApp projectCase={projectCase} {...props} />
+        <LayoutApp viewerIds={viewerIds} {...props} />
       </StoreProvider>
     </React.StrictMode>
   ) : (

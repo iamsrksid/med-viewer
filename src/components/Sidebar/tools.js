@@ -12,7 +12,6 @@ const SidebarTools = ({
   questionnaire,
   viewerIds,
   annotations,
-  userIdToQuery,
   userInfo,
   response,
   currentViewer,
@@ -130,14 +129,7 @@ const SidebarTools = ({
           ) : null}
           {report ? (
             <TabPanel p="0px">
-              <Report />
-              {/* <Questions
-                project={project}
-                viewerIds={viewerIds}
-                userInfo={userInfo}
-                response={response}
-                finalSubmitHandler={finalSubmitHandler}
-              /> */}
+              <Report finalSubmitHandler={finalSubmitHandler} />
             </TabPanel>
           ) : null}
           {annotations ? (

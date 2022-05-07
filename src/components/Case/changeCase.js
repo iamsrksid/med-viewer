@@ -7,10 +7,20 @@ import {
 } from "react-icons/md";
 import "../../styles/viewer.css";
 
-const ChangeCase = ({ project, caseId, changeCaseHandler, closeToggle }) => {
-  const currentCaseIndex = project?.cases.findIndex(
-    (projectCase) => projectCase._id === caseId
-  );
+const ChangeCase = ({
+  project,
+  caseInfo,
+  slide,
+  changeCaseHandler,
+  closeToggle,
+}) => {
+  const currentIndex = project
+    ? project?.cases.findIndex(
+        (projectCase) => projectCase._id === caseInfo?._id
+      )
+    : caseInfo?.slides.findIndex((s) => s._id === slide?._id);
+
+  const maxIndex = project ? project?.cases?.length : caseInfo?.slides?.length;
   const [closeButton, setCloseButton] = useState(true);
   const handleCloseButtonClick = () => {
     setCloseButton(false);
@@ -47,17 +57,23 @@ const ChangeCase = ({ project, caseId, changeCaseHandler, closeToggle }) => {
               minW={0}
               _focus={{ background: "none" }}
               disabled={
-                currentCaseIndex - 1 < 0 ||
-                !isCaseViewable(
-                  project?.type,
-                  project?.cases[currentCaseIndex - 1].slides.length
-                )
+                currentIndex - 1 < 0 ||
+                (project
+                  ? !isCaseViewable(
+                      project?.type,
+                      project?.cases[currentIndex - 1].slides.length
+                    )
+                  : caseInfo?.slides[currentIndex - 1].awsImageBucketUrl === "")
               }
-              onClick={() => changeCaseHandler(currentCaseIndex - 1)}
+              onClick={() => changeCaseHandler(currentIndex - 1)}
             />
           </Tooltip>
 
-          <Text mr="24px">{project?.cases[currentCaseIndex]?.name}</Text>
+          <Text mr="24px">
+            {project
+              ? project?.cases[currentIndex]?.name
+              : caseInfo?.slides[currentIndex]?.slideName}
+          </Text>
           <Tooltip
             label="Next Slide"
             placement="bottom"
@@ -78,13 +94,15 @@ const ChangeCase = ({ project, caseId, changeCaseHandler, closeToggle }) => {
               minW={0}
               _focus={{ background: "none", border: "none" }}
               disabled={
-                currentCaseIndex + 1 === project?.cases.length ||
-                !isCaseViewable(
-                  project?.type,
-                  project?.cases[currentCaseIndex + 1].slides.length
-                )
+                currentIndex + 1 === maxIndex ||
+                (project
+                  ? !isCaseViewable(
+                      project?.type,
+                      project?.cases[currentIndex + 1].slides.length
+                    )
+                  : caseInfo?.slides[currentIndex + 1].awsImageBucketUrl === "")
               }
-              onClick={() => changeCaseHandler(currentCaseIndex + 1)}
+              onClick={() => changeCaseHandler(currentIndex + 1)}
             />
           </Tooltip>
         </HStack>

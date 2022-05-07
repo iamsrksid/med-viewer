@@ -126,12 +126,12 @@ const ActivityFeed = ({ userInfo, viewerId }) => {
                   width="40%"
                   height="6em"
                   objectFit="contain"
-                  src={activity.image}
+                  src={activity?.image}
                 />
                 <VStack>
                   <Flex w="100%" verticalAlign="top" fontWeight="bold">
                     <Text color="#151C25" fontFamily="inter" fontSize="14px">
-                      {userInfo?.user.firstName + " " + userInfo?.user.lastName}
+                      {userInfo?.firstName + " " + userInfo?.lastName}
                     </Text>
                     <Spacer />
                   </Flex>
