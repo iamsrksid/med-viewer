@@ -1,8 +1,8 @@
 import React from "react";
 import { Divider, Text } from "@chakra-ui/react";
+import { Scrollbars } from "react-custom-scrollbars";
 import AnswersPreview from "./answersPreview";
 import Questionnaire from "../Qna/questionnaire";
-import { Scrollbars } from "react-custom-scrollbars";
 import "../../styles/scrollBar.css";
 import _ from "lodash";
 

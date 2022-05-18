@@ -17,7 +17,7 @@ const ToolbarButton = ({
 }) => {
   const windowHeight = useWindowHeight();
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
-  let iconSizes = { size: "lg", fontSize: "2xl" };
+  const iconSizes = { size: "lg", fontSize: "2xl" };
 
   if (!isMobile) {
     if (windowHeight <= 645) {

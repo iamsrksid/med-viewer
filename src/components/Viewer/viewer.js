@@ -3,15 +3,15 @@ import { useOpenSeadragon, OpenSeadragon } from "use-open-seadragon";
 import { fabric, initFabricJSOverlay } from "openseadragon-fabricjs-overlay";
 import { isBrowser } from "react-device-detect";
 import { Box } from "@chakra-ui/react";
-import ViewerControls from "./controls";
 import PropTypes from "prop-types";
+import ViewerControls from "./controls";
 import { useFabricOverlayState } from "../../state/store";
 import { updateOverlay } from "../../state/actions/fabricOverlayActions";
 
 const minZoomLevel = isBrowser ? 0.4 : 0.8;
 
 const osdOptions = {
-  constrainDuringPan: isBrowser ? true : false,
+  constrainDuringPan: !!isBrowser,
   debugMode: false,
   gestureSettingsMouse: {
     clickToZoom: true,
@@ -57,12 +57,12 @@ const Viewer = ({ viewerId, tile, slideName, slideType }) => {
 
   useEffect(() => {
     viewer && viewer.destroy();
-    //Initialize OpenSeadragon instance and set to viewer
+    // Initialize OpenSeadragon instance and set to viewer
     setViewer(
       OpenSeadragon({
         ...osdOptions,
         tileSources: tile,
-        id: "viewer" + viewerId,
+        id: `viewer${viewerId}`,
       })
     );
     initFabricJSOverlay(OpenSeadragon, fabric);
@@ -80,7 +80,7 @@ const Viewer = ({ viewerId, tile, slideName, slideType }) => {
       updateOverlay({
         id: viewerId,
         fabricOverlay: viewer.fabricjsOverlay({ scale: 1 }),
-        viewer: viewer,
+        viewer,
       })
     );
     return () => {
@@ -95,7 +95,7 @@ const Viewer = ({ viewerId, tile, slideName, slideType }) => {
   }, [viewer]);
 
   return (
-    <Box id={"viewer" + viewerId} position="relative" w="100%">
+    <Box id={`viewer${viewerId}`} position="relative" w="100%">
       {isBrowser && (
         <ViewerControls
           viewerId={viewerId}

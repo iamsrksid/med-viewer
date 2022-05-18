@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import TypeButton from "../typeButton";
 import { FaDrawPolygon } from "react-icons/fa";
 import { fabric } from "openseadragon-fabricjs-overlay";
+import { useDisclosure } from "@chakra-ui/react";
+import md5 from "md5";
+import TypeButton from "../typeButton";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import {
   getCanvasImage,
   getFontSize,
   getTimestamp,
 } from "../../utility/utility";
-import { useDisclosure } from "@chakra-ui/react";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
-import md5 from "md5";
 
 const MAX = 999999;
 const MIN = 99;
@@ -41,7 +41,7 @@ const Polygon = ({ viewerId }) => {
   const myStateRef = useRef({
     activeLine: null,
     activeShape: null,
-    color: color,
+    color,
   });
 
   const setState = (data) => {
@@ -52,7 +52,7 @@ const Polygon = ({ viewerId }) => {
   };
 
   useEffect(() => {
-    setState({ color: color });
+    setState({ color });
   }, [color.hex]);
 
   useEffect(() => {
@@ -100,7 +100,7 @@ const Polygon = ({ viewerId }) => {
       const polygon = new fabric.Polygon(points, {
         stroke: "black",
         strokeWidth: 1 / scaleFactor,
-        fill: myStateRef.current.color.hex + "40",
+        fill: `${myStateRef.current.color.hex}40`,
         strokeUniform: true,
       });
       canvas.add(polygon);
@@ -133,7 +133,7 @@ const Polygon = ({ viewerId }) => {
         hasControls: false,
         originX: "center",
         originY: "center",
-        id: id,
+        id,
         objectCaching: false,
       });
       if (arrayRef.current.pointArray.length === 0) {
@@ -144,7 +144,7 @@ const Polygon = ({ viewerId }) => {
       const points = [pointer.x, pointer.y, pointer.x, pointer.y];
       const line = new fabric.Line(points, {
         strokeWidth: 1 / scaleFactor,
-        fill: myStateRef.current.color.hex + "40",
+        fill: `${myStateRef.current.color.hex}40`,
         stroke: "black",
         class: "line",
         originX: "center",
@@ -167,7 +167,7 @@ const Polygon = ({ viewerId }) => {
         polygon = new fabric.Polygon(points, {
           stroke: "black",
           strokeWidth: 1 / scaleFactor,
-          fill: myStateRef.current.color.hex + "40",
+          fill: `${myStateRef.current.color.hex}40`,
           selectable: false,
           hasBorders: false,
           hasControls: false,
@@ -185,7 +185,7 @@ const Polygon = ({ viewerId }) => {
         polygon = new fabric.Polygon(polyPoint, {
           stroke: "black",
           strokeWidth: 1 / scaleFactor,
-          fill: myStateRef.current.color.hex + "40",
+          fill: `${myStateRef.current.color.hex}40`,
           selectable: false,
           hasBorders: false,
           hasControls: false,
@@ -225,7 +225,6 @@ const Polygon = ({ viewerId }) => {
         myStateRef.current.activeLine &&
         myStateRef.current.activeLine.class === "line"
       ) {
-        
         const pointer = canvas.getPointer(options.e);
         myStateRef.current.activeLine.set({ x2: pointer.x, y2: pointer.y });
 
@@ -235,7 +234,7 @@ const Polygon = ({ viewerId }) => {
           y: pointer.y,
         };
         myStateRef.current.activeShape.set({
-          points: points,
+          points,
         });
         canvas.renderAll();
       }
@@ -267,7 +266,7 @@ const Polygon = ({ viewerId }) => {
     if (!shape || !textbox) return;
 
     const addToFeed = async (shape) => {
-      let message = {
+      const message = {
         username: "",
         color: myStateRef.current.color,
         action: "added",

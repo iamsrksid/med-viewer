@@ -14,8 +14,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { BsCheckSquareFill, BsFillXSquareFill } from "react-icons/bs";
-import { getSlideUrl } from "../../utility/utility";
 import _ from "lodash";
+import { getSlideUrl } from "../../utility/utility";
 
 const AnswersPreview = ({
   userInfo,

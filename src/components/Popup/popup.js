@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Box, Text, Flex, Spacer } from "@chakra-ui/react";
-function Popup({ handlePopup, popup }) {
+
+const Popup = ({ handlePopup, popup }) => {
   const handlePopupClose = () => {
     handlePopup();
   };
@@ -50,6 +51,6 @@ function Popup({ handlePopup, popup }) {
       </Flex>
     </Flex>
   );
-}
+};
 
 export default Popup;

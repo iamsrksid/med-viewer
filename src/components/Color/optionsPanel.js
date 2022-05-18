@@ -13,7 +13,7 @@ const ColorOptionsPanel = ({ isActiveTool, isObjectSelected }) => {
 
   return (
     <Flex h="42px" direction="column" mt="10px">
-      <Flex h="5px" bgColor="rgba(236, 236, 236, 1)"></Flex>
+      <Flex h="5px" bgColor="rgba(236, 236, 236, 1)" />
       <SimpleGrid
         columns={7}
         spacingY={1}

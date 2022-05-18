@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 // import PropTypes from 'prop-types';
 import { FiType } from "react-icons/fi";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { fonts } from "./fontPicker";
 import FontFaceObserver from "fontfaceobserver";
+import { fonts } from "./fontPicker";
 import useFabricHelpers from "../../hooks/use-fabric-helpers";
 import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
@@ -34,7 +34,7 @@ const TypeText = ({ viewerId }) => {
    * Handle main tool change
    */
   useEffect(() => {
-    setMyState({ color: color, isActive: isActive });
+    setMyState({ color, isActive });
 
     if (!fabricOverlay) return;
     fabricOverlay.fabricCanvas().defaultCursor = isActive ? "text" : "auto";
@@ -145,7 +145,7 @@ const TypeText = ({ viewerId }) => {
 
   const handleFontChange = (font) => {
     setMyState({ activeFont: font });
-    //loadAndUse(font.fontFamily);
+    // loadAndUse(font.fontFamily);
   };
 
   const handleToolbarButtonClick = (e) => {
@@ -160,7 +160,7 @@ const TypeText = ({ viewerId }) => {
       return;
     }
 
-    var myfont = new FontFaceObserver(font);
+    const myfont = new FontFaceObserver(font);
     myfont
       .load()
       .then(function () {

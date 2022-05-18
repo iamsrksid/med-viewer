@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { RiNavigationFill } from "react-icons/ri";
 import ToolbarButton from "./button";
-import IconSize from "../ViewerToolbar/IconSize";
+import IconSize from "./IconSize";
 import { useFabricOverlayState } from "../../state/store";
 
 const ToolbarPointerControl = ({ viewerId }) => {

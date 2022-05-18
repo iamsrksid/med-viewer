@@ -45,9 +45,9 @@ const Case = (props) => {
             spacing={-1}
             className="case_toolbar_box"
           >
-            <Text >Slide Info/Case</Text>
-            <Text >History</Text>
-            <Text >Patient information</Text>
+            <Text>Slide Info/Case</Text>
+            <Text>History</Text>
+            <Text>Patient information</Text>
           </VStack>
         </Box>
       ) : (

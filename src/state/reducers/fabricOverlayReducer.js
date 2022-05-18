@@ -1,14 +1,13 @@
-import { brandColors } from "../../styles/brandPalette";
 import _ from "lodash";
+import { brandColors } from "../../styles/brandPalette";
 
 export const getLocalUserCanvases = () => {
   const userCanvases = window.localStorage.getItem("userCanvases");
   if (!userCanvases) {
     window.localStorage.setItem("userCanvases", JSON.stringify({}));
     return {};
-  } else {
-    return JSON.parse(userCanvases);
   }
+  return JSON.parse(userCanvases);
 };
 
 const defaultViewerWindow = {
@@ -55,7 +54,7 @@ const fabricOverlayReducer = (state, action) => {
         },
       };
 
-    case "updateZoomValue":
+    case "updateZoomValue": {
       const zoomValue = action.payload.value;
       return {
         ...state,
@@ -67,6 +66,7 @@ const fabricOverlayReducer = (state, action) => {
           },
         },
       };
+    }
 
     case "updateActivityFeed":
       return {
@@ -80,7 +80,7 @@ const fabricOverlayReducer = (state, action) => {
         },
       };
 
-    case "addViewerWindow":
+    case "addViewerWindow": {
       const viewerWindow = {};
       action.payload.forEach((w) => {
         viewerWindow[w.id] = { ...defaultViewerWindow, tile: w.tile };
@@ -92,14 +92,16 @@ const fabricOverlayReducer = (state, action) => {
           ...viewerWindow,
         },
       };
+    }
 
-    case "removeViewerWindow":
-      let newViewerWindow = {};
+    case "removeViewerWindow": {
+      const newViewerWindow = {};
       _.keys(state.viewerWindow).forEach((id) => {
         if (id !== action.payload.id)
           newViewerWindow[id] = state.viewerWindow[id];
       });
       return { ...state, ...newViewerWindow };
+    }
 
     case "resetFabricOverlay":
       return {
@@ -108,6 +110,10 @@ const fabricOverlayReducer = (state, action) => {
         activeTool: "Move",
         color: brandColors[0],
       };
+
+    default:
+      console.error("unknown type");
+      return null;
   }
 };
 

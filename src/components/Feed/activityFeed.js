@@ -131,7 +131,7 @@ const ActivityFeed = ({ userInfo, viewerId }) => {
                 <VStack>
                   <Flex w="100%" verticalAlign="top" fontWeight="bold">
                     <Text color="#151C25" fontFamily="inter" fontSize="14px">
-                      {userInfo?.firstName + " " + userInfo?.lastName}
+                      {`${userInfo?.firstName} ${userInfo?.lastName}`}
                     </Text>
                     <Spacer />
                   </Flex>

@@ -46,7 +46,7 @@ const CheckboxType = ({
             borderColor="#000"
             key={choice._id ? choice._id : index}
             value={choice._id ? choice._id : choice}
-            checked={true}
+            checked
             fontSize="14px"
             fontFamily="roboto"
           >

@@ -18,8 +18,8 @@ import {
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { BiSend } from "react-icons/bi";
-import { getTimestamp } from "../../utility/utility";
 import { Scrollbars } from "react-custom-scrollbars";
+import { getTimestamp } from "../../utility/utility";
 import "../../styles/scrollBar.css";
 
 const MessageBox = ({ isOpen, onClose, roomName, alias, socket }) => {

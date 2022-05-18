@@ -16,9 +16,9 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import TypeButton from "../typeButton";
 import { RiShareForwardLine } from "react-icons/ri";
 import { BiLink } from "react-icons/bi";
+import TypeButton from "../typeButton";
 import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
 

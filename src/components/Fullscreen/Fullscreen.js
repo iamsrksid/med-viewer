@@ -1,6 +1,6 @@
 import React from "react";
-import ToolbarButton from "../ViewerToolbar/button";
 import { RiFullscreenFill } from "react-icons/ri";
+import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 

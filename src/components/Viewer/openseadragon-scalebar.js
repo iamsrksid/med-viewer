@@ -121,7 +121,7 @@ import OpenSeadragon from "openseadragon";
       options.sizeAndTextRenderer ||
       $.ScalebarSizeAndTextRenderer.METRIC_LENGTH;
 
-    var self = this;
+    const self = this;
     this.viewer.addHandler("open", function () {
       self.refresh();
     });
@@ -134,7 +134,7 @@ import OpenSeadragon from "openseadragon";
   };
 
   $.Scalebar.prototype = {
-    updateOptions: function (options) {
+    updateOptions(options) {
       if (!options) {
         return;
       }
@@ -184,7 +184,7 @@ import OpenSeadragon from "openseadragon";
         this.sizeAndTextRenderer = options.sizeAndTextRenderer;
       }
     },
-    setDrawScalebarFunction: function (type) {
+    setDrawScalebarFunction(type) {
       if (!type) {
         this.drawScalebar = null;
       } else if (type === $.ScalebarType.MAP) {
@@ -193,7 +193,7 @@ import OpenSeadragon from "openseadragon";
         this.drawScalebar = this.drawMicroscopyScalebar;
       }
     },
-    setMinWidth: function (minWidth) {
+    setMinWidth(minWidth) {
       this.divElt.style.width = minWidth;
       // Make sure to display the element before getting is width
       this.divElt.style.display = "";
@@ -234,7 +234,7 @@ import OpenSeadragon from "openseadragon";
      * 2 attributes: size and text containing the size of the scale bar and the text.
      * default: $.ScalebarSizeAndTextRenderer.METRIC_LENGTH
      */
-    refresh: function (options) {
+    refresh(options) {
       this.updateOptions(options);
 
       if (
@@ -248,48 +248,47 @@ import OpenSeadragon from "openseadragon";
       }
       this.divElt.style.display = "";
 
-      var viewport = this.viewer.viewport;
-      var tiledImage = this.viewer.world.getItemAt(this.referenceItemIdx);
-      var zoom = tiledImageViewportToImageZoom(
+      const { viewport } = this.viewer;
+      const tiledImage = this.viewer.world.getItemAt(this.referenceItemIdx);
+      const zoom = tiledImageViewportToImageZoom(
         tiledImage,
         viewport.getZoom(true)
       );
-      var currentPPM = zoom * this.pixelsPerMeter;
-      var props = this.sizeAndTextRenderer(currentPPM, this.minWidth);
+      const currentPPM = zoom * this.pixelsPerMeter;
+      const props = this.sizeAndTextRenderer(currentPPM, this.minWidth);
 
       this.drawScalebar(props.size, props.text);
-      var location = this.getScalebarLocation();
-      this.divElt.style.left = location.x + "px";
-      this.divElt.style.top = location.y + "px";
+      const location = this.getScalebarLocation();
+      this.divElt.style.left = `${location.x}px`;
+      this.divElt.style.top = `${location.y}px`;
     },
-    drawMicroscopyScalebar: function (size, text) {
+    drawMicroscopyScalebar(size, text) {
       this.divElt.style.fontSize = this.fontSize;
       this.divElt.style.fontFamily = this.fontFamily;
       this.divElt.style.textAlign = "center";
       this.divElt.style.color = this.fontColor;
       this.divElt.style.border = "none";
-      this.divElt.style.borderBottom =
-        this.barThickness + "px solid " + this.color;
+      this.divElt.style.borderBottom = `${this.barThickness}px solid ${this.color}`;
       this.divElt.style.backgroundColor = this.backgroundColor;
       this.divElt.innerHTML = text;
-      this.divElt.style.width = size + "px";
+      this.divElt.style.width = `${size}px`;
     },
-    drawMapScalebar: function (size, text) {
+    drawMapScalebar(size, text) {
       this.divElt.style.fontSize = this.fontSize;
       this.divElt.style.fontFamily = this.fontFamily;
       this.divElt.style.textAlign = "center";
       this.divElt.style.color = this.fontColor;
-      this.divElt.style.border = this.barThickness + "px solid " + this.color;
+      this.divElt.style.border = `${this.barThickness}px solid ${this.color}`;
       this.divElt.style.borderTop = "none";
       this.divElt.style.backgroundColor = this.backgroundColor;
       this.divElt.innerHTML = text;
-      this.divElt.style.width = size + "px";
+      this.divElt.style.width = `${size}px`;
     },
     /**
      * Compute the location of the scale bar.
      * @returns {OpenSeadragon.Point}
      */
-    getScalebarLocation: function () {
+    getScalebarLocation() {
       if (this.location === $.ScalebarLocation.TOP_LEFT) {
         var x = 0;
         var y = 0;
@@ -309,7 +308,7 @@ import OpenSeadragon from "openseadragon";
       }
       if (this.location === $.ScalebarLocation.TOP_RIGHT) {
         var barWidth = this.divElt.offsetWidth;
-        var container = this.viewer.container;
+        var { container } = this.viewer;
         var x = container.offsetWidth - barWidth;
         var y = 0;
         if (this.stayInsideImage) {
@@ -329,7 +328,7 @@ import OpenSeadragon from "openseadragon";
       if (this.location === $.ScalebarLocation.BOTTOM_RIGHT) {
         var barWidth = this.divElt.offsetWidth;
         var barHeight = this.divElt.offsetHeight;
-        var container = this.viewer.container;
+        var { container } = this.viewer;
         var x = container.offsetWidth - barWidth;
         var y = container.offsetHeight - barHeight;
         if (this.stayInsideImage) {
@@ -348,7 +347,7 @@ import OpenSeadragon from "openseadragon";
       }
       if (this.location === $.ScalebarLocation.BOTTOM_LEFT) {
         var barHeight = this.divElt.offsetHeight;
-        var container = this.viewer.container;
+        var { container } = this.viewer;
         var x = 0;
         var y = container.offsetHeight - barHeight;
         if (this.stayInsideImage) {
@@ -370,11 +369,11 @@ import OpenSeadragon from "openseadragon";
      * Get the rendered scalebar in a canvas.
      * @returns {Element} A canvas containing the scalebar representation
      */
-    getAsCanvas: function () {
-      var canvas = document.createElement("canvas");
+    getAsCanvas() {
+      const canvas = document.createElement("canvas");
       canvas.width = this.divElt.offsetWidth;
       canvas.height = this.divElt.offsetHeight;
-      var context = canvas.getContext("2d");
+      const context = canvas.getContext("2d");
       context.fillStyle = this.backgroundColor;
       context.fillRect(0, 0, canvas.width, canvas.height);
       context.fillStyle = this.color;
@@ -397,8 +396,8 @@ import OpenSeadragon from "openseadragon";
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillStyle = this.fontColor;
-      var hCenter = canvas.width / 2;
-      var vCenter = canvas.height / 2;
+      const hCenter = canvas.width / 2;
+      const vCenter = canvas.height / 2;
       context.fillText(this.divElt.textContent, hCenter, vCenter);
       return canvas;
     },
@@ -406,15 +405,15 @@ import OpenSeadragon from "openseadragon";
      * Get a copy of the current OpenSeadragon canvas with the scalebar.
      * @returns {Element} A canvas containing a copy of the current OpenSeadragon canvas with the scalebar
      */
-    getImageWithScalebarAsCanvas: function () {
-      var imgCanvas = this.viewer.drawer.canvas;
-      var newCanvas = document.createElement("canvas");
+    getImageWithScalebarAsCanvas() {
+      const imgCanvas = this.viewer.drawer.canvas;
+      const newCanvas = document.createElement("canvas");
       newCanvas.width = imgCanvas.width;
       newCanvas.height = imgCanvas.height;
-      var newCtx = newCanvas.getContext("2d");
+      const newCtx = newCanvas.getContext("2d");
       newCtx.drawImage(imgCanvas, 0, 0);
-      var scalebarCanvas = this.getAsCanvas();
-      var location = this.getScalebarLocation();
+      const scalebarCanvas = this.getAsCanvas();
+      const location = this.getScalebarLocation();
       newCtx.drawImage(scalebarCanvas, location.x, location.y);
       return newCanvas;
     },
@@ -424,66 +423,66 @@ import OpenSeadragon from "openseadragon";
     /**
      * Metric length. From nano meters to kilometers.
      */
-    METRIC_LENGTH: function (ppm, minSize) {
+    METRIC_LENGTH(ppm, minSize) {
       return getScalebarSizeAndTextForMetric(ppm, minSize, "m");
     },
     /**
      * Imperial length. Choosing the best unit from thou, inch, foot and mile.
      */
-    IMPERIAL_LENGTH: function (ppm, minSize) {
-      var maxSize = minSize * 2;
-      var ppi = ppm * 0.0254;
+    IMPERIAL_LENGTH(ppm, minSize) {
+      const maxSize = minSize * 2;
+      const ppi = ppm * 0.0254;
       if (maxSize < ppi * 12) {
         if (maxSize < ppi) {
-          var ppt = ppi / 1000;
+          const ppt = ppi / 1000;
           return getScalebarSizeAndText(ppt, minSize, "th");
         }
         return getScalebarSizeAndText(ppi, minSize, "in");
       }
-      var ppf = ppi * 12;
+      const ppf = ppi * 12;
       if (maxSize < ppf * 2000) {
         return getScalebarSizeAndText(ppf, minSize, "ft");
       }
-      var ppmi = ppf * 5280;
+      const ppmi = ppf * 5280;
       return getScalebarSizeAndText(ppmi, minSize, "mi");
     },
     /**
      * Astronomy units. Choosing the best unit from arcsec, arcminute, and degree
      */
-    ASTRONOMY: function (ppa, minSize) {
-      var maxSize = minSize * 2;
+    ASTRONOMY(ppa, minSize) {
+      const maxSize = minSize * 2;
       if (maxSize < ppa * 60) {
         return getScalebarSizeAndText(ppa, minSize, '"', false, "");
       }
-      var ppminutes = ppa * 60;
+      const ppminutes = ppa * 60;
       if (maxSize < ppminutes * 60) {
         return getScalebarSizeAndText(ppminutes, minSize, "'", false, "");
       }
-      var ppd = ppminutes * 60;
+      const ppd = ppminutes * 60;
       return getScalebarSizeAndText(ppd, minSize, "&#176", false, "");
     },
     /**
      * Standard time. Choosing the best unit from second (and metric divisions),
      * minute, hour, day and year.
      */
-    STANDARD_TIME: function (pps, minSize) {
-      var maxSize = minSize * 2;
+    STANDARD_TIME(pps, minSize) {
+      const maxSize = minSize * 2;
       if (maxSize < pps * 60) {
         return getScalebarSizeAndTextForMetric(pps, minSize, "s", false);
       }
-      var ppminutes = pps * 60;
+      const ppminutes = pps * 60;
       if (maxSize < ppminutes * 60) {
         return getScalebarSizeAndText(ppminutes, minSize, "minute", true);
       }
-      var pph = ppminutes * 60;
+      const pph = ppminutes * 60;
       if (maxSize < pph * 24) {
         return getScalebarSizeAndText(pph, minSize, "hour", true);
       }
-      var ppd = pph * 24;
+      const ppd = pph * 24;
       if (maxSize < ppd * 365.25) {
         return getScalebarSizeAndText(ppd, minSize, "day", true);
       }
-      var ppy = ppd * 365.25;
+      const ppy = ppd * 365.25;
       return getScalebarSizeAndText(ppy, minSize, "year", true);
     },
     /**
@@ -499,7 +498,7 @@ import OpenSeadragon from "openseadragon";
 
   // Missing TiledImage.viewportToImageZoom function in OSD 2.0.0
   function tiledImageViewportToImageZoom(tiledImage, viewportZoom) {
-    var ratio =
+    const ratio =
       (tiledImage._scaleSpring.current.value *
         tiledImage.viewport._containerInnerSize.x) /
       tiledImage.source.dimensions.x;
@@ -514,31 +513,31 @@ import OpenSeadragon from "openseadragon";
     spacer
   ) {
     spacer = spacer === undefined ? " " : spacer;
-    var value = normalize(ppm, minSize);
-    var factor = roundSignificand((value / ppm) * minSize, 3);
-    var size = value * minSize;
-    var plural = handlePlural && factor > 1 ? "s" : "";
+    const value = normalize(ppm, minSize);
+    const factor = roundSignificand((value / ppm) * minSize, 3);
+    const size = value * minSize;
+    const plural = handlePlural && factor > 1 ? "s" : "";
     return {
-      size: size,
+      size,
       text: factor + spacer + unitSuffix + plural,
     };
   }
 
   function getScalebarSizeAndTextForMetric(ppm, minSize, unitSuffix) {
-    var value = normalize(ppm, minSize);
-    var factor = roundSignificand((value / ppm) * minSize, 3);
-    var size = value * minSize;
-    var valueWithUnit = getWithUnit(factor, unitSuffix);
+    const value = normalize(ppm, minSize);
+    const factor = roundSignificand((value / ppm) * minSize, 3);
+    const size = value * minSize;
+    const valueWithUnit = getWithUnit(factor, unitSuffix);
     return {
-      size: size,
+      size,
       text: valueWithUnit,
     };
   }
 
   function normalize(value, minSize) {
-    var significand = getSignificand(value);
-    var minSizeSign = getSignificand(minSize);
-    var result = getSignificand(significand / minSizeSign);
+    const significand = getSignificand(value);
+    const minSizeSign = getSignificand(minSize);
+    let result = getSignificand(significand / minSizeSign);
     if (result >= 5) {
       result /= 5;
     }
@@ -552,18 +551,18 @@ import OpenSeadragon from "openseadragon";
   }
 
   function getSignificand(x) {
-    return x * Math.pow(10, Math.ceil(-log10(x)));
+    return x * 10 ** Math.ceil(-log10(x));
   }
 
   function roundSignificand(x, decimalPlaces) {
-    var exponent = -Math.ceil(-log10(x));
-    var power = decimalPlaces - exponent;
-    var significand = x * Math.pow(10, power);
+    const exponent = -Math.ceil(-log10(x));
+    const power = decimalPlaces - exponent;
+    const significand = x * 10 ** power;
     // To avoid rounding problems, always work with integers
     if (power < 0) {
-      return Math.round(significand) * Math.pow(10, -power);
+      return Math.round(significand) * 10 ** -power;
     }
-    return Math.round(significand) / Math.pow(10, power);
+    return Math.round(significand) / 10 ** power;
   }
 
   function log10(x) {
@@ -572,18 +571,18 @@ import OpenSeadragon from "openseadragon";
 
   function getWithUnit(value, unitSuffix) {
     if (value < 0.000001) {
-      return value * 1000000000 + " n" + unitSuffix;
+      return `${value * 1000000000} n${unitSuffix}`;
     }
     if (value < 0.001) {
-      return value * 1000000 + " μ" + unitSuffix;
+      return `${value * 1000000} μ${unitSuffix}`;
     }
     if (value < 1) {
-      return value * 1000 + " m" + unitSuffix;
+      return `${value * 1000} m${unitSuffix}`;
     }
     if (value >= 1000) {
-      return value / 1000 + " k" + unitSuffix;
+      return `${value / 1000} k${unitSuffix}`;
     }
-    return value + " " + unitSuffix;
+    return `${value} ${unitSuffix}`;
   }
 
   function isDefined(variable) {

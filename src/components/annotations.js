@@ -33,7 +33,7 @@ const MyAnnotationsSave = () => {
   }, [activeUserCanvas]);
 
   const handleSaveCanvas = () => {
-    let newCanvases = {
+    const newCanvases = {
       ...userCanvases,
       [title]: {
         locWorkId: params.id,
@@ -75,7 +75,7 @@ const MyAnnotationsSave = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <FormErrorMessage>Value can't be empty</FormErrorMessage>
+            <FormErrorMessage>Value can not be empty</FormErrorMessage>
           </ModalBody>
           <ModalFooter>
             <Button mr={3} onClick={handleSaveCanvas} isDisabled={title === ""}>

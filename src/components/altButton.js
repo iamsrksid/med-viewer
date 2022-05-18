@@ -59,20 +59,21 @@ const AltButton = ({ children, ...restProps }) => {
   );
 };
 
-const MenuAltItem = (restProps) => {
+const MenuAltItem = ({ label, ...restProps }) => {
   return (
     <MenuItem
       _hover={{ backgroundColor: "#EAEAEA" }}
       _focus={{ backgroundColor: "#EAEAEA" }}
+      label={label}
       {...restProps}
     >
-      {restProps.label}
+      {label}
     </MenuItem>
   );
 };
 
 MenuAltButton.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 };
 
 export { MenuAltItem, MenuAltButton };

@@ -17,9 +17,9 @@ import {
 import { DownloadIcon } from "@chakra-ui/icons";
 import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image";
-import ToolbarButton from "./ViewerToolbar/button";
 import { FiDownload } from "react-icons/fi";
 import { BiScreenshot } from "react-icons/bi";
+import ToolbarButton from "./ViewerToolbar/button";
 import IconSize from "./ViewerToolbar/IconSize";
 
 const DownloadImage = () => {
@@ -63,7 +63,7 @@ const DownloadImage = () => {
               as="a"
               mr={3}
               href={img}
-              download={"my-speculative-annotation"}
+              download="my-speculative-annotation"
               fontFamily="ocr-a-std"
             >
               Save

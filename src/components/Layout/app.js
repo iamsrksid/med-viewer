@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
+import Div100vh from "react-div-100vh";
+import PropTypes from "prop-types";
 import AdjustmentBar from "../AdjustmentBar/adjustmentBar";
 import LayoutAppBody from "./body";
 import LayoutInnerBody from "./innerbody";
 import LayoutOuterBody from "./outerbody";
 import LayoutAppSidebar from "./sidebar";
-import Div100vh from "react-div-100vh";
 import ViewerFactory from "../Viewer/viewerFactory";
-import PropTypes from "prop-types";
 
 const LayoutApp = ({
   userInfo,

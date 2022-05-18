@@ -1,10 +1,10 @@
 import { Flex, Text, HStack, IconButton, Tooltip } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { isCaseViewable } from "../../utility/utility";
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
+import { isCaseViewable } from "../../utility/utility";
 import "../../styles/viewer.css";
 
 const ChangeCase = ({
@@ -28,86 +28,84 @@ const ChangeCase = ({
   };
 
   return (
-    <>
-      <Flex
-        justifyContent="space-between"
-        alignItems="center"
-        borderX="2px solid #E4E5E8"
-        height="18px"
-        minW="140px"
-      >
-        <HStack mx="28px">
-          <Tooltip
-            label="Previous Slide"
-            placement="bottom"
-            openDelay={0}
-            bg="#E4E5E8"
-            color="rgba(89, 89, 89, 1)"
-            fontSize="14px"
-            fontFamily="inter"
-            hasArrow
-            borderRadius="0px"
-            size="20px"
-          >
-            <IconButton
-              icon={<MdOutlineKeyboardArrowLeft color="#151C25" />}
-              color="#fff"
-              variant="unstyled"
-              cursor="pointer"
-              minW={0}
-              _focus={{ background: "none" }}
-              disabled={
-                currentIndex - 1 < 0 ||
-                (project
-                  ? !isCaseViewable(
-                      project?.type,
-                      project?.cases[currentIndex - 1].slides.length
-                    )
-                  : caseInfo?.slides[currentIndex - 1].awsImageBucketUrl === "")
-              }
-              onClick={() => changeCaseHandler(currentIndex - 1)}
-            />
-          </Tooltip>
+    <Flex
+      justifyContent="space-between"
+      alignItems="center"
+      borderX="2px solid #E4E5E8"
+      height="18px"
+      minW="140px"
+    >
+      <HStack mx="28px">
+        <Tooltip
+          label="Previous Slide"
+          placement="bottom"
+          openDelay={0}
+          bg="#E4E5E8"
+          color="rgba(89, 89, 89, 1)"
+          fontSize="14px"
+          fontFamily="inter"
+          hasArrow
+          borderRadius="0px"
+          size="20px"
+        >
+          <IconButton
+            icon={<MdOutlineKeyboardArrowLeft color="#151C25" />}
+            color="#fff"
+            variant="unstyled"
+            cursor="pointer"
+            minW={0}
+            _focus={{ background: "none" }}
+            disabled={
+              currentIndex - 1 < 0 ||
+              (project
+                ? !isCaseViewable(
+                    project?.type,
+                    project?.cases[currentIndex - 1].slides.length
+                  )
+                : caseInfo?.slides[currentIndex - 1].awsImageBucketUrl === "")
+            }
+            onClick={() => changeCaseHandler(currentIndex - 1)}
+          />
+        </Tooltip>
 
-          <Text mr="24px">
-            {project
-              ? project?.cases[currentIndex]?.name
-              : caseInfo?.slides[currentIndex]?.slideName}
-          </Text>
-          <Tooltip
-            label="Next Slide"
-            placement="bottom"
-            openDelay={0}
-            bg="#E4E5E8"
-            color="rgba(89, 89, 89, 1)"
-            fontSize="14px"
-            fontFamily="inter"
-            hasArrow
-            borderRadius="0px"
-            size="20px"
-          >
-            <IconButton
-              icon={<MdOutlineKeyboardArrowRight color="#151C25" />}
-              variant="unstyled"
-              color="#fff"
-              cursor="pointer"
-              minW={0}
-              _focus={{ background: "none", border: "none" }}
-              disabled={
-                currentIndex + 1 === maxIndex ||
-                (project
-                  ? !isCaseViewable(
-                      project?.type,
-                      project?.cases[currentIndex + 1].slides.length
-                    )
-                  : caseInfo?.slides[currentIndex + 1].awsImageBucketUrl === "")
-              }
-              onClick={() => changeCaseHandler(currentIndex + 1)}
-            />
-          </Tooltip>
-        </HStack>
-      </Flex>
-    </>
+        <Text mr="24px">
+          {project
+            ? project?.cases[currentIndex]?.name
+            : caseInfo?.slides[currentIndex]?.slideName}
+        </Text>
+        <Tooltip
+          label="Next Slide"
+          placement="bottom"
+          openDelay={0}
+          bg="#E4E5E8"
+          color="rgba(89, 89, 89, 1)"
+          fontSize="14px"
+          fontFamily="inter"
+          hasArrow
+          borderRadius="0px"
+          size="20px"
+        >
+          <IconButton
+            icon={<MdOutlineKeyboardArrowRight color="#151C25" />}
+            variant="unstyled"
+            color="#fff"
+            cursor="pointer"
+            minW={0}
+            _focus={{ background: "none", border: "none" }}
+            disabled={
+              currentIndex + 1 === maxIndex ||
+              (project
+                ? !isCaseViewable(
+                    project?.type,
+                    project?.cases[currentIndex + 1].slides.length
+                  )
+                : caseInfo?.slides[currentIndex + 1].awsImageBucketUrl === "")
+            }
+            onClick={() => changeCaseHandler(currentIndex + 1)}
+          />
+        </Tooltip>
+      </HStack>
+    </Flex>
   );
 };
 

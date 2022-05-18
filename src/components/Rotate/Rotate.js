@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import ToolbarButton from "../ViewerToolbar/button";
 import { FiRotateCw } from "react-icons/fi";
+import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 
@@ -11,8 +11,8 @@ const Rotate = ({ viewerId }) => {
   const handleRotate = (e) => {
     try {
       if (viewer.viewport) {
-        var currRotation = viewer.viewport.getRotation();
-        currRotation = currRotation + 90;
+        let currRotation = viewer.viewport.getRotation();
+        currRotation += 90;
         viewer.viewport.setRotation(currRotation);
       }
     } catch (e) {

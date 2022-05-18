@@ -1,8 +1,8 @@
 import { Button } from "@chakra-ui/react";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import React from "react";
-import { getCanvasImage, getTimestamp } from "../../utility/utility";
 import _ from "lodash";
+import { getCanvasImage, getTimestamp } from "../../utility/utility";
 import { useFabricOverlayState } from "../../state/store";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 
@@ -15,7 +15,7 @@ const LoadAnnotations = ({ viewerId, userInfo, loadAnnotationsHandler }) => {
     const canvas = fabricOverlay.fabricCanvas();
 
     const addToFeed = async (shape) => {
-      let message = {
+      const message = {
         username: `${userInfo?.user.firstName} ${userInfo?.user.lastName}`,
         color: shape.fill ? shape.fill : shape.stroke,
         action: "added",
@@ -38,51 +38,51 @@ const LoadAnnotations = ({ viewerId, userInfo, loadAnnotationsHandler }) => {
       switch (annotation.type) {
         case "ellipse":
           shape = new fabric.Ellipse({
-            left: annotation["left"],
-            top: annotation["top"],
-            width: annotation["width"],
-            height: annotation["height"],
-            color: annotation["color"],
-            fill: annotation["fill"],
-            stroke: annotation["stroke"],
-            strokeWidth: annotation["strokeWidth"],
-            strokeUniform: annotation["strokeUniform"],
-            rx: annotation["rx"],
-            ry: annotation["ry"],
-            angle: annotation["angle"],
+            left: annotation.left,
+            top: annotation.top,
+            width: annotation.width,
+            height: annotation.height,
+            color: annotation.color,
+            fill: annotation.fill,
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            strokeUniform: annotation.strokeUniform,
+            rx: annotation.rx,
+            ry: annotation.ry,
+            angle: annotation.angle,
           });
           break;
 
         case "rect":
           shape = new fabric.Rect({
-            left: annotation["left"],
-            top: annotation["top"],
-            width: annotation["width"],
-            height: annotation["height"],
-            color: annotation["color"],
-            fill: annotation["fill"],
-            stroke: annotation["stroke"],
-            strokeWidth: annotation["strokeWidth"],
-            strokeUniform: annotation["strokeUniform"],
+            left: annotation.left,
+            top: annotation.top,
+            width: annotation.width,
+            height: annotation.height,
+            color: annotation.color,
+            fill: annotation.fill,
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            strokeUniform: annotation.strokeUniform,
           });
           break;
 
         case "polygon":
           shape = new fabric.Polygon(annotation.points, {
-            stroke: annotation["stroke"],
-            strokeWidth: annotation["strokeWidth"],
-            fill: annotation["fill"],
-            strokeUniform: annotation["strokeUniform"],
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            fill: annotation.fill,
+            strokeUniform: annotation.strokeUniform,
           });
           break;
 
         case "path":
           shape = new fabric.Path(annotation.path, {
-            color: annotation["color"],
-            stroke: annotation["stroke"],
-            strokeWidth: annotation["strokeWidth"],
-            strokeUniform: annotation["strokeUniform"],
-            fill: annotation["fill"],
+            color: annotation.color,
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            strokeUniform: annotation.strokeUniform,
+            fill: annotation.fill,
           });
       }
       canvas.add(shape);

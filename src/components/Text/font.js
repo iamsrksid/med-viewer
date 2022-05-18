@@ -6,7 +6,7 @@ font-family: 'Open Sans', sans-serif;
 font-family: 'Reenie Beanie', cursive;
 
 font-family: "ocr-a-std",monospace;
-**/
+* */
 
 export const Fonts = () => (
   <Global

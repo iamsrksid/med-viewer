@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaPaintBrush } from "react-icons/fa";
 import { useMediaQuery, useDisclosure } from "@chakra-ui/react";
-import useHexRGB from "../../utility/use-hex-rgb";
 import { fabric } from "openseadragon-fabricjs-overlay";
+import md5 from "md5";
+import useHexRGB from "../../utility/use-hex-rgb";
 import { fonts } from "../Text/fontPicker";
 import {
   getCanvasImage,
@@ -17,7 +18,6 @@ import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
-import md5 from "md5";
 
 const getDrawCursor = (brushSize, brushColor) => {
   brushSize = brushSize < 4 ? 8 : brushSize * 3;
@@ -109,10 +109,10 @@ const Draw = ({ viewerId }) => {
     // Create new Textbox instance and add it to canvas
     const createTextbox = ({ left, top, height }) => {
       const tbox = new fabric.IText("", {
-        left: left,
+        left,
         top: top + height + 10,
         fontFamily: fonts[0].fontFamily,
-        fontSize: fontSize,
+        fontSize,
         fontWeight: "bold",
         selectionBackgroundColor: "rgba(255, 255, 255, 0.5)",
       });
@@ -128,7 +128,7 @@ const Draw = ({ viewerId }) => {
       setPath(e.path);
       onOpen();
     };
- 
+
     if (isActive) {
       const brushWidth = myState.width.pixelWidth;
       const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
@@ -142,7 +142,7 @@ const Draw = ({ viewerId }) => {
 
       // EXAMPLE: of using an image for cursor
       // https://i.stack.imgur.com/fp7eL.png
-      //canvas.freeDrawingCursor = `url(${logo}) 0 50, auto`;
+      // canvas.freeDrawingCursor = `url(${logo}) 0 50, auto`;
 
       canvas.freeDrawingCursor = createFreeDrawingCursor(brushWidth, color.hex);
 
@@ -182,7 +182,7 @@ const Draw = ({ viewerId }) => {
     const canvas = fabricOverlay.fabricCanvas();
 
     const addToFeed = async (path) => {
-      let message = {
+      const message = {
         username: "",
         color: path.stroke,
         action: "added",

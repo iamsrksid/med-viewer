@@ -1,9 +1,9 @@
 import React from "react";
-import UndoRedo from "../UndoRedo/undoredo";
 import { Flex, Spacer } from "@chakra-ui/react";
+import UndoRedo from "../UndoRedo/undoredo";
 import RemoveObject from "../removeComponents";
 
-function ActionsToolbar({ viewerId }) {
+const ActionsToolbar = ({ viewerId }) => {
   return (
     <Flex
       borderX="2px solid #E4E5E8"
@@ -16,6 +16,6 @@ function ActionsToolbar({ viewerId }) {
       <Spacer />
     </Flex>
   );
-}
+};
 
 export default ActionsToolbar;

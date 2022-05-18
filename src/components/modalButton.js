@@ -21,7 +21,7 @@ const ModalButton = ({ children, ...restProps }) => {
 };
 
 ModalButton.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 };
 
 export default ModalButton;

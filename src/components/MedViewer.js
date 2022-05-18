@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
+import _ from "lodash";
 import LayoutApp from "./Layout/app";
 import Loading from "./Loading/loading";
-import _ from "lodash";
 import { StoreProvider } from "../state/store";
 import {
   addViewerWindow,

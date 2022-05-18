@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { Box, Text, HStack, Flex, Icon } from "@chakra-ui/react";
+import { fabric } from "openseadragon-fabricjs-overlay";
+import { SiTarget } from "react-icons/si";
+import { BsEraser } from "react-icons/bs";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import Draw from "../Draw/draw";
 import Square from "../Shape/square";
 import Line from "../Shape/line";
 import Circle from "../Shape/circle";
-import { fabric } from "openseadragon-fabricjs-overlay";
 import Typebutton from "../typeButton";
-import { SiTarget } from "react-icons/si";
-import { BsEraser } from "react-icons/bs";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import Polygon from "../Shape/polygon";
 import { useFabricOverlayState } from "../../state/store";
 
@@ -24,7 +24,7 @@ const TypeTools = ({ viewerId, typeToolsButtonHandler }) => {
 
   return (
     <Flex direction="column" paddingTop="5px">
-      <Flex h="5px" bgColor="rgba(236, 236, 236, 1)"></Flex>
+      <Flex h="5px" bgColor="rgba(236, 236, 236, 1)" />
       <HStack px="16px" h="42px" bgColor="rgba(248, 248, 245, 1)">
         <Line viewerId={viewerId} />
         <Typebutton

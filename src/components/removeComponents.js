@@ -12,7 +12,7 @@ const RemoveObject = ({ viewerId }) => {
   const [isActiveObject, setIsActiveObject] = useState();
 
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay) return null;
 
     const handleSelectionCleared = (e) => {
       setIsActiveObject(false);
@@ -37,10 +37,10 @@ const RemoveObject = ({ viewerId }) => {
 
     // Object has children (ie. arrow has children objects triangle and line)
     if (activeObject.getObjects) {
-      let objs = activeObject.getObjects();
-      for (let i in objs) {
-        canvas.remove(objs[i]);
-      }
+      const objs = activeObject.getObjects();
+      Object.values(objs).forEach((obj) => {
+        canvas.remove(obj);
+      });
     }
 
     // let message = {

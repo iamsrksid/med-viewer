@@ -59,7 +59,7 @@ const TypeTextFontPicker = ({ viewerId, activeFont, handleFontChange }) => {
       return;
     }
 
-    var myfont = new FontFaceObserver(font);
+    const myfont = new FontFaceObserver(font);
     myfont
       .load()
       .then(function () {

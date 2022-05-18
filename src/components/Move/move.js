@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { BsArrowsMove, BsCircleHalf, BsLayoutSplit } from "react-icons/bs";
 import { RiNavigationFill, RiPencilRulerLine } from "react-icons/ri";
 import { AiOutlineSliders } from "react-icons/ai";
-import ToolbarButton from "../ViewerToolbar/button";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import { HiOutlinePencilAlt } from "react-icons/hi";
+import { ImMakeGroup, ImUngroup } from "react-icons/im";
+import { fabric } from "openseadragon-fabricjs-overlay";
+import md5 from "md5";
+import ToolbarButton from "../ViewerToolbar/button";
 import Rotate from "../Rotate/Rotate";
 import TypeTools from "../AdjustmentBar/typeTools";
 import ColorOptionsPanel from "../Color/optionsPanel";
@@ -13,9 +16,6 @@ import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
-import { ImMakeGroup, ImUngroup } from "react-icons/im";
-import { fabric } from "openseadragon-fabricjs-overlay";
-import md5 from "md5";
 
 const Move = ({ viewerId, annotations }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
@@ -47,7 +47,7 @@ const Move = ({ viewerId, annotations }) => {
     if (!canvas.getActiveObject()) {
       return;
     }
-    if (canvas.getActiveObject().type !== 'activeSelection') {
+    if (canvas.getActiveObject().type !== "activeSelection") {
       return;
     }
     const annoGroup = canvas.getActiveObject().toGroup();
@@ -70,29 +70,29 @@ const Move = ({ viewerId, annotations }) => {
     if (!canvas.getActiveObject()) {
       return;
     }
-    if (canvas.getActiveObject().type !== 'group') {
+    if (canvas.getActiveObject().type !== "group") {
       return;
     }
     canvas.getActiveObject().toActiveSelection();
     canvas.requestRenderAll();
-  }
+  };
 
   useEffect(() => {
-    if(!fabricOverlay) return;
+    if (!fabricOverlay) return;
     const canvas = fabricOverlay.fabricCanvas();
-    if(isActive) {
-    canvas.defaultCursor = "default";
-    canvas.hoverCursor = "move";
-    canvas.selection = false;
-
-    canvas.on("selection:created", () => {
-      canvas.selection = true;
-    })
-        canvas.on("selection:cleared", () => {
+    if (isActive) {
+      canvas.defaultCursor = "default";
+      canvas.hoverCursor = "move";
       canvas.selection = false;
-    })
-  }
-  },[isActive])
+
+      canvas.on("selection:created", () => {
+        canvas.selection = true;
+      });
+      canvas.on("selection:cleared", () => {
+        canvas.selection = false;
+      });
+    }
+  }, [isActive]);
 
   return (
     <Flex direction="column">
@@ -134,18 +134,20 @@ const Move = ({ viewerId, annotations }) => {
           onClick={handlePopup}
           label="Measurement"
         />
-        {annotations ? <>
-        <ToolbarButton
-          icon={<ImMakeGroup size={iconSize} color="#151C25"/>}
-          label="Group"
-          onClick={groupAnnotations}
-        />
-        <ToolbarButton
-          icon={<ImUngroup size={iconSize} color="#151C25"/>}
-          label="Ungroup"
-          onClick={ungroupAnnotations}
-        />
-        </> : null}
+        {annotations ? (
+          <>
+            <ToolbarButton
+              icon={<ImMakeGroup size={iconSize} color="#151C25" />}
+              label="Group"
+              onClick={groupAnnotations}
+            />
+            <ToolbarButton
+              icon={<ImUngroup size={iconSize} color="#151C25" />}
+              label="Ungroup"
+              onClick={ungroupAnnotations}
+            />
+          </>
+        ) : null}
         {/* <TypeText viewerId={viewerId} /> */}
       </Flex>
 

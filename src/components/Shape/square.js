@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fabric } from "openseadragon-fabricjs-overlay";
+import { BsSquare } from "react-icons/bs";
+import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
 
@@ -9,16 +12,13 @@ import {
   getFontSize,
   getTimestamp,
 } from "../../utility/utility";
-import { BsSquare } from "react-icons/bs";
 import TypeButton from "../typeButton";
-import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
-import md5 from "md5";
 
 const Square = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -60,14 +60,14 @@ const Square = ({ viewerId }) => {
    * Handle primary tool change
    */
   useEffect(() => {
-    setMyState({ activeShape: null, isActive: isActive });
+    setMyState({ activeShape: null, isActive });
   }, [isActive]);
 
   /**
    * Handle color change
    */
   useEffect(() => {
-    setMyState({ color: color });
+    setMyState({ color });
   }, [color]);
 
   /**
@@ -78,17 +78,15 @@ const Square = ({ viewerId }) => {
     const canvas = fabricOverlay.fabricCanvas();
 
     if (isActive) {
-    canvas.defaultCursor = "crosshair";
+      canvas.defaultCursor = "crosshair";
 
-    // Disable OSD mouseclicks
-    viewer.setMouseNavEnabled(false);
-    viewer.outerTracker.setTracking(false);
+      // Disable OSD mouseclicks
+      viewer.setMouseNavEnabled(false);
+      viewer.outerTracker.setTracking(false);
 
-    // Deselect all Fabric Canvas objects
-    deselectAll(canvas);
-    }
-    else {
-
+      // Deselect all Fabric Canvas objects
+      deselectAll(canvas);
+    } else {
       // Enable OSD mouseclicks
       viewer.setMouseNavEnabled(true);
       viewer.outerTracker.setTracking(true);
@@ -113,9 +111,9 @@ const Square = ({ viewerId }) => {
       canvas.selection = false;
 
       // Save starting mouse down coordinates
-      let pointer = canvas.getPointer(options.e);
-      let origX = pointer.x;
-      let origY = pointer.y;
+      const pointer = canvas.getPointer(options.e);
+      const origX = pointer.x;
+      const origY = pointer.y;
 
       // Create new Shape instance
       let newShape = null;
@@ -130,8 +128,8 @@ const Square = ({ viewerId }) => {
       // Stroke fill
       const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
 
-      let fillProps = {
-        fill: myStateRef.current.color.hex + "40",
+      const fillProps = {
+        fill: `${myStateRef.current.color.hex}40`,
         stroke: "#000000",
         strokeWidth: 1 / scaleFactor,
         strokeUniform: true,
@@ -154,7 +152,7 @@ const Square = ({ viewerId }) => {
       });
 
       // Add new shape to the canvas
-      //newShape && fabricOverlay.fabricCanvas().add(newShape);
+      // newShape && fabricOverlay.fabricCanvas().add(newShape);
     }
 
     /**
@@ -162,7 +160,7 @@ const Square = ({ viewerId }) => {
      */
     function handleMouseMove(options) {
       if (
-        //options.target ||
+        // options.target ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
       ) {
@@ -257,36 +255,36 @@ const Square = ({ viewerId }) => {
   // first remove both from canvas then group them and then add group to canvas
   useEffect(() => {
     const addToFeed = async () => {
-    if (!shape || !textbox) return;
-    // if (!shape) return;
+      if (!shape || !textbox) return;
+      // if (!shape) return;
 
-    let message = {
-      username: "",
-      color: shape.stroke,
-      action: "added",
-      text: textbox,
-      timeStamp: getTimestamp(),
-      type: shape.type,
-      object: shape,
-      image: null,
+      const message = {
+        username: "",
+        color: shape.stroke,
+        action: "added",
+        text: textbox,
+        timeStamp: getTimestamp(),
+        type: shape.type,
+        object: shape,
+        image: null,
+      };
+
+      const { left, top, width, height } = shape;
+      const hash = md5({ left, top, width, height });
+      shape.set({ hash, zoomLevel: zoomValue });
+
+      message.image = await getCanvasImage(viewerId);
+      message.object.set({ id: message.timeStamp });
+
+      setShape(null);
+      setTextbox(false);
+
+      setFabricOverlayState(
+        updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
+      );
     };
 
-    const { left, top, width, height } = shape;
-    const hash = md5({ left, top, width, height });
-    shape.set({ hash, zoomLevel: zoomValue });
-
-    message.image = await getCanvasImage(viewerId);
-    message.object.set({ id: message.timeStamp });
-
-    setShape(null);
-    setTextbox(false);
-
-    setFabricOverlayState(
-      updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
-    );
-  }
-  
-  addToFeed();
+    addToFeed();
 
     // send annotation
     // socket.emit(

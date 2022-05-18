@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fabric } from "openseadragon-fabricjs-overlay";
+import { useMediaQuery } from "@chakra-ui/react";
 import ShapePicker from "./picker";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 
 import { fonts } from "../Text/fontPicker";
 import { getCanvasImage, getFontSize, getTimestamp } from "../../hooks/utility";
-import { useMediaQuery } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateActivityFeed,
@@ -54,14 +54,14 @@ const Shape = ({ viewerId }) => {
    * Handle primary tool change
    */
   useEffect(() => {
-    setMyState({ activeShape: null, isActive: isActive });
+    setMyState({ activeShape: null, isActive });
   }, [isActive]);
 
   /**
    * Handle color change
    */
   useEffect(() => {
-    setMyState({ color: color });
+    setMyState({ color });
   }, [color.hex]);
 
   /**
@@ -111,9 +111,9 @@ const Shape = ({ viewerId }) => {
       const zoomLevel = viewer.viewport.getZoom();
 
       // Save starting mouse down coordinates
-      let pointer = canvas.getPointer(options.e);
-      let origX = pointer.x;
-      let origY = pointer.y;
+      const pointer = canvas.getPointer(options.e);
+      const origX = pointer.x;
+      const origY = pointer.y;
 
       // Create new Shape instance
       let newShape = null;
@@ -126,7 +126,7 @@ const Shape = ({ viewerId }) => {
       };
 
       // Stroke fill
-      let fillProps = {
+      const fillProps = {
         fill: "rgba(0,0,0,0)",
         stroke: shapeOptions.color,
         strokeWidth: zoomLevel <= 1 ? 2 : 2 / zoomLevel,
@@ -176,7 +176,7 @@ const Shape = ({ viewerId }) => {
       });
 
       // Add new shape to the canvas
-      //newShape && fabricOverlay.fabricCanvas().add(newShape);
+      // newShape && fabricOverlay.fabricCanvas().add(newShape);
     }
 
     /**
@@ -184,7 +184,7 @@ const Shape = ({ viewerId }) => {
      */
     function handleMouseMove(options) {
       if (
-        //options.target ||
+        // options.target ||
         !myStateRef.current.activeShape ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
@@ -246,10 +246,10 @@ const Shape = ({ viewerId }) => {
       const fontSize = getFontSize(screenSize, viewer.viewport.getZoom());
 
       const tbox = new fabric.IText("", {
-        left: left,
+        left,
         top: top + height + 2,
         fontFamily: fonts[0].fontFamily,
-        fontSize: fontSize,
+        fontSize,
         selectionBackgroundColor: "rgba(255, 255, 255, 0.5)",
       });
 
@@ -292,9 +292,9 @@ const Shape = ({ viewerId }) => {
       }
 
       createTextbox({
-        left: left,
-        top: top,
-        height: height,
+        left,
+        top,
+        height,
       });
 
       setMyState({
@@ -370,7 +370,7 @@ const Shape = ({ viewerId }) => {
     if (!shape || !textbox) return;
     const canvas = fabricOverlay.fabricCanvas();
 
-    let message = {
+    const message = {
       username: "",
       color: shape.stroke,
       action: "added",

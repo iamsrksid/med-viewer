@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Viewer from "./viewer";
 import {
   Alert,
   AlertIcon,
@@ -8,6 +7,7 @@ import {
   AlertDescription,
   Box,
 } from "@chakra-ui/react";
+import Viewer from "./viewer";
 import { useFabricOverlayState } from "../../state/store";
 
 const ViewerContainer = ({ viewerId, slideName, slideType }) => {
@@ -37,7 +37,7 @@ const ViewerContainer = ({ viewerId, slideName, slideType }) => {
     if (!fabricOverlay || !location.state) return;
     fabricOverlay
       .fabricCanvas()
-      .loadFromJSON(userCanvases[location.state.canvasTitle]["fabricCanvas"]);
+      .loadFromJSON(userCanvases[location.state.canvasTitle].fabricCanvas);
   }, [newCanvasTitle]);
 
   // Handle no match

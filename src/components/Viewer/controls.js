@@ -104,7 +104,7 @@ const ViewerControls = ({ viewerId, slideName, slideType }) => {
           minW="7.65vw"
           minH="3.88vh"
         >
-          <Box minW="7.65vw" minH="0.370vh" bgColor="#ECECEC"></Box>
+          <Box minW="7.65vw" minH="0.370vh" bgColor="#ECECEC" />
 
           <HStack bgColor="#F8F8F5" fontSize="1.25vw">
             <Text

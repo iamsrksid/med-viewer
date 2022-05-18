@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useFabricOverlayState } from "../state/store";
 
 const useCanvasHelpers = () => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow } = fabricOverlayState;
 
-  const [canvas, setCanvas] = useState([]);
+  const [canvases, setCanvases] = useState([]);
 
   useEffect(() => {
     if (!viewerWindow) return;
-    let canvases = [];
-    for (let key in viewerWindow)
-      canvases.push(viewerWindow[key].fabricOverlay);
-    setCanvas(canvases);
+    const canvas = [];
+    Object.keys(viewerWindow).forEach((key) => {
+      canvas.push(viewerWindow[key].fabricOverlay);
+    });
+    setCanvases(canvas);
   }, [viewerWindow]);
 
   // Remove all Fabric canvas objects
@@ -21,12 +22,19 @@ const useCanvasHelpers = () => {
     canvas.clear();
   };
 
+  const getUserObjects = () => {
+    if (!canvases) return null;
+    const objects = canvases.getObjects();
+    const selectableObjects = objects.filter((obj) => obj.selectable);
+    return selectableObjects;
+  };
+
   const clearUserObjects = (canvas, activityFeed) => {
     if (!canvas) return;
     const userObjects = getUserObjects();
-    for (let i in userObjects) {
-      canvas.remove(userObjects[i]);
-    }
+    Object.values(userObjects).forEach((obj) => {
+      canvas.remove(obj);
+    });
 
     // let message = {
     //   username: "",
@@ -57,27 +65,20 @@ const useCanvasHelpers = () => {
     canvas.requestRenderAll();
   };
 
-  const getUserObjects = () => {
-    if (!canvas) return;
-    const objects = canvas.getObjects();
-    const selectableObjects = objects.filter((obj) => obj.selectable);
-    return selectableObjects;
-  };
-
   const makeObjectsInvisible = (fabricObjects = []) => {
-    if (!canvas) return;
+    if (!canvases) return;
 
-    for (let obj of fabricObjects) {
-      obj.opacity = 0;
-    }
-    canvas.renderAll();
+    fabricObjects.forEach((obj) => {
+      obj.set({ opacity: 0 });
+    });
+    canvases.renderAll();
   };
 
   const makeObjectsVisible = (fabricObjects = []) => {
-    for (let obj of fabricObjects) {
-      obj.opacity = 1;
-    }
-    canvas.renderAll();
+    fabricObjects.forEach((obj) => {
+      obj.set({ opacity: 1 });
+    });
+    canvases.renderAll();
   };
 
   const updateCursor = (canvas) => {

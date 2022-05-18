@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Divider, Text, Button } from "@chakra-ui/react";
+import { Scrollbars } from "react-custom-scrollbars";
 import AnswersPreview from "./answersPreview";
 import Questionnaire from "../Qna/questionnaire";
-import { Scrollbars } from "react-custom-scrollbars";
 import "../../styles/scrollBar.css";
 import _ from "lodash";
 import MultiViewerQuestions from "./multiviewerQuestions";
@@ -74,30 +74,26 @@ const Questions = ({
         )}
         {/*  */}
         {question === "first-slide" ? (
-          <>
-            <Scrollbars
-              style={{ width: "100%", height: "79vh" }}
-              renderThumbVertical={(props) => (
-                <div {...props} className="thumb-vertical-messageBox" />
-              )}
-            >
-              <Divider />
-              {!response ? (
-                <Text>...</Text>
-              ) : (
-                <>
-                  <Questionnaire
-                    direction="column"
-                    questions={questionnaire?.questions}
-                    response={response}
-                    slideQna={firstSlideQna}
-                    slideType={project?.slideType}
-                    setSlideQna={setFirstSlideQna}
-                  />
-                </>
-              )}
-            </Scrollbars>
-          </>
+          <Scrollbars
+            style={{ width: "100%", height: "79vh" }}
+            renderThumbVertical={(props) => (
+              <div {...props} className="thumb-vertical-messageBox" />
+            )}
+          >
+            <Divider />
+            {!response ? (
+              <Text>...</Text>
+            ) : (
+              <Questionnaire
+                direction="column"
+                questions={questionnaire?.questions}
+                response={response}
+                slideQna={firstSlideQna}
+                slideType={project?.slideType}
+                setSlideQna={setFirstSlideQna}
+              />
+            )}
+          </Scrollbars>
         ) : (
           <MultiViewerQuestions
             questionnaire={questionnaire}

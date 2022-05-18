@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, HStack, Text } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import DrawWidthPicker from "../Draw/widthPicker";
 import ColorOptionsPanel from "./optionsPanel";
-import { CloseIcon } from "@chakra-ui/icons";
 import "../../styles/viewer.css";
 import { useFabricOverlayState } from "../../state/store";
 
@@ -52,7 +52,7 @@ const Color = ({ viewerId, colorsButtonHandler }) => {
     };
     const handleSelectionUpdated = (e) => {};
 
-    for (let k in viewerWindow) {
+    for (const k in viewerWindow) {
       const overlay = viewerWindow[k].fabricOverlay;
       if (!overlay) continue;
       const canvas = overlay.fabricCanvas();
@@ -61,7 +61,7 @@ const Color = ({ viewerId, colorsButtonHandler }) => {
       canvas.on("selection:updated", handleSelectionUpdated);
     }
     return () => {
-      for (let k in viewerWindow) {
+      for (const k in viewerWindow) {
         const overlay = viewerWindow[k].fabricOverlay;
         if (!overlay) continue;
         const canvas = overlay.fabricCanvas();
@@ -73,46 +73,44 @@ const Color = ({ viewerId, colorsButtonHandler }) => {
   }, [viewerWindow]);
 
   return (
-    <>
-      <Box
-        width="100%"
-        height="6em"
-        borderRight="0.5px solid black"
-        boxSizing="border-box"
-        borderRadius="3px"
+    <Box
+      width="100%"
+      height="6em"
+      borderRight="0.5px solid black"
+      boxSizing="border-box"
+      borderRadius="3px"
+    >
+      <CloseIcon
+        color="black"
+        transform="scale(0.5)"
+        cursor="pointer"
+        onClick={handleCloseButtonClick}
+        marginInline="calc(100% - 18px)"
+        marginTop="-8px"
+      />
+      <HStack
+        spacing={0}
+        align="center"
+        color="black"
+        className="color_toolbar_box"
       >
-        <CloseIcon
-          color="black"
-          transform="scale(0.5)"
-          cursor="pointer"
-          onClick={handleCloseButtonClick}
-          marginInline="calc(100% - 18px)"
-          marginTop="-8px"
-        />
-        <HStack
-          spacing={0}
-          align="center"
-          color="black"
-          className="color_toolbar_box"
-        >
-          <Box width="100%" marginTop="-2.5em">
-            <Text paddingLeft="2em">Color</Text>
-            <Box px={10} my={4}>
-              <ColorOptionsPanel
-                isActiveTool={isActiveTool}
-                isObjectSelected={isObjectSelected}
-              />
-            </Box>
+        <Box width="100%" marginTop="-2.5em">
+          <Text paddingLeft="2em">Color</Text>
+          <Box px={10} my={4}>
+            <ColorOptionsPanel
+              isActiveTool={isActiveTool}
+              isObjectSelected={isObjectSelected}
+            />
           </Box>
-          <Box width="10em" height="6em">
-            <Text marginLeft="1em" marginTop="-1.2em" color="#000">
-              Width
-            </Text>
-            <DrawWidthPicker align="center" />
-          </Box>
-        </HStack>
-      </Box>
-    </>
+        </Box>
+        <Box width="10em" height="6em">
+          <Text marginLeft="1em" marginTop="-1.2em" color="#000">
+            Width
+          </Text>
+          <DrawWidthPicker align="center" />
+        </Box>
+      </HStack>
+    </Box>
   );
 };
 

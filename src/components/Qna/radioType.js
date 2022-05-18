@@ -47,7 +47,7 @@ const RadioType = ({
                   choiceType: "id",
                 })
               }
-              checked={true}
+              checked
               fontSize="14px"
               fontFamily="roboto"
             >

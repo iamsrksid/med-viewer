@@ -8,7 +8,7 @@ const LayoutOuterBody = ({ children }) => {
       {children}
     </Flex>
   );
-}
+};
 
 LayoutOuterBody.propTypes = {
   children: PropTypes.node,

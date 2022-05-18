@@ -12,7 +12,7 @@ const DrawWidthPicker = ({ width, setWidth }) => {
   return (
     <HStack spacing={2} ml="30px" px={1} py={2} my={3}>
       {widths.map((widthObj) => {
-        let imgSrc = require(`../../assets/images/pen-weight-icons/${color.label}${widthObj.size}.png`);
+        const imgSrc = require(`../../assets/images/pen-weight-icons/${color.label}${widthObj.size}.png`);
         return (
           <ToolbarBorderBoxInner
             key={widthObj.size}
