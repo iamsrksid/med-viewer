@@ -8,9 +8,10 @@ const SaveAnnotations = ({ viewerId, saveAnnotationsHandler }) => {
 
   const handleSaveAnnotations = async () => {
     const canvas = fabricOverlay.fabricCanvas();
-    const annotations = canvas.toJSON();
+    const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
     if (annotations.objects.length === 0) return;
-    saveAnnotationsHandler(annotations);
+    console.log(annotations);
+    // saveAnnotationsHandler(annotations);
   };
 
   return (

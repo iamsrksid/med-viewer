@@ -1,8 +1,9 @@
-import React, { useSelector } from "react-redux";
+import { useFabricOverlayState } from "../state/store";
 
 // https://stackoverflow.com/questions/44320104/fabricjs-how-to-move-the-selected-object-by-keyboard
-const useKeyboardEvents = () => {
-  const { fabricOverlay } = useSelector((state) => state.fabricOverlayState);
+const useKeyboardEvents = ({viewerId}) => {
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
 
   const handleEvent = (e) => {
     if (e.repeat) {

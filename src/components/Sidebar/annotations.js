@@ -24,12 +24,10 @@ const Annotations = ({
             alignContent="flex-start"
             ml="-20px"
           >
-            {saveAnnotationsHandler ? (
-              <SaveAnnotations
-                viewerId={currentViewer}
-                saveAnnotationsHandler={saveAnnotationsHandler}
-              />
-            ) : null}
+            <SaveAnnotations
+              viewerId={currentViewer}
+              saveAnnotationsHandler={saveAnnotationsHandler}
+            />
             {loadAnnotationsHandler ? (
               <LoadAnnotations
                 viewerId={currentViewer}

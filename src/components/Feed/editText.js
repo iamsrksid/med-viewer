@@ -8,11 +8,13 @@ import {
   ModalBody,
   ModalFooter,
   useMediaQuery,
+  Input,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 const EditText = ({ isOpen, onClose, handleClose, handleSave }) => {
   const [text, setText] = useState("");
+  const [tag, setTag] = useState([]);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
 
   const handleTextChange = (e) => {
@@ -20,8 +22,9 @@ const EditText = ({ isOpen, onClose, handleClose, handleSave }) => {
   };
 
   const handleSaveButton = () => {
-    handleSave(text);
+    handleSave({ text, tag });
     setText("");
+    setTag("");
   };
 
   return (
@@ -39,8 +42,18 @@ const EditText = ({ isOpen, onClose, handleClose, handleSave }) => {
             resize="none"
             value={text}
             _focus={{ borderColor: "#00153F" }}
+            placeholder="Add description"
             onChange={handleTextChange}
             borderRadius="0px"
+          />
+          <Input
+            type="text"
+            value={tag}
+            borderRadius="0px"
+            placeholder="Add tag"
+            mt={1}
+            _focus={{ borderColor: "#00153F" }}
+            onChange={(e) => setTag(e.target.value)}
           />
         </ModalBody>
         <ModalFooter>

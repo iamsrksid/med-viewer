@@ -51,9 +51,7 @@ const Viewer = ({ viewerId, tile, slideName, slideType }) => {
     cornerColor: "white",
     cornerSize: 10,
     transparentCorners: false,
-    hasControls: false,
-    lockMovementX: true,
-    lockMovementY: true,
+    hasControls: true,
     evented: true,
   });
 

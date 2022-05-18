@@ -15,6 +15,7 @@ import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
+import md5 from "md5";
 
 const MAX = 999999;
 const MIN = 99;
@@ -212,6 +213,7 @@ const Polygon = ({ viewerId }) => {
         options.target &&
         options.target.id === arrayRef.current.pointArray[0].id
       ) {
+        canvas.selection = true;
         generatePolygon();
       } else {
         addPoints(options);
@@ -223,6 +225,7 @@ const Polygon = ({ viewerId }) => {
         myStateRef.current.activeLine &&
         myStateRef.current.activeLine.class === "line"
       ) {
+        
         const pointer = canvas.getPointer(options.e);
         myStateRef.current.activeLine.set({ x2: pointer.x, y2: pointer.y });
 
@@ -246,6 +249,7 @@ const Polygon = ({ viewerId }) => {
       ) {
         addPoints(options);
       }
+      canvas.selection = true;
       generatePolygon();
     };
 
@@ -274,6 +278,9 @@ const Polygon = ({ viewerId }) => {
         image: null,
       };
 
+      const hash = md5(shape?.points);
+      shape.set({ hash, zoomLevel: zoomValue });
+
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
 
@@ -292,8 +299,8 @@ const Polygon = ({ viewerId }) => {
     setFabricOverlayState(updateTool({ tool: "Polygon" }));
   };
 
-  const handleSave = (text) => {
-    shape.set({ isExist: true, text: text });
+  const handleSave = ({ text, tag }) => {
+    shape.set({ isExist: true, text, tag });
     setTextbox(true);
     onClose();
   };

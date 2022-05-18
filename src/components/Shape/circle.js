@@ -17,6 +17,7 @@ import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
+import md5 from "md5";
 
 const Circle = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -85,7 +86,6 @@ const Circle = ({ viewerId }) => {
       // Deselect all Fabric Canvas objects
       deselectAll(canvas);
     } else {
-      canvas.defaultCursor = "auto";
 
       // Enable OSD mouseclicks
       viewer.setMouseNavEnabled(true);
@@ -107,6 +107,8 @@ const Circle = ({ viewerId }) => {
       if (options.target || !myStateRef.current.isActive) {
         return;
       }
+
+      canvas.selection = false;
 
       // Save starting mouse down coordinates
       let pointer = canvas.getPointer(options.e);
@@ -145,7 +147,7 @@ const Circle = ({ viewerId }) => {
         ry: pointer.y - origY,
         angle: 0,
       });
-      fabricOverlay.fabricCanvas().add(newShape);
+      canvas.add(newShape);
 
       setMyState({
         ...myStateRef.current,
@@ -173,7 +175,7 @@ const Circle = ({ viewerId }) => {
       const c = myStateRef.current;
 
       // Dynamically drag size element to the canvas
-      const pointer = fabricOverlay.fabricCanvas().getPointer(options.e);
+      const pointer = canvas.getPointer(options.e);
 
       let rx = Math.abs(c.origX - pointer.x) / 2;
       let ry = Math.abs(c.origY - pointer.y) / 2;
@@ -228,11 +230,11 @@ const Circle = ({ viewerId }) => {
         return;
       }
 
-      fabricOverlay
-        .fabricCanvas()
-        .setActiveObject(myStateRef.current.currentDragShape);
+      canvas.selection = true;
 
-      fabricOverlay.fabricCanvas().renderAll();
+      canvas.setActiveObject(myStateRef.current.currentDragShape);
+
+      canvas.renderAll();
 
       const currShape = myStateRef.current.currentDragShape;
 
@@ -259,89 +261,52 @@ const Circle = ({ viewerId }) => {
       onOpen();
     }
 
-    function handleSelectionCleared(options) {
-      // hide text when no object is selected
-      if (options.deselected && options.deselected[0].type === "group")
-        options.deselected[0].item(1).set({ visible: false });
-
-      // set textbox when deselected
-      if (options.deselected && options.deselected[0].type === "i-text")
-        setTextbox(options.deselected[0]);
-
-      if (!myStateRef.current.isActive) return;
-
-      setMyState({
-        ...myStateRef.current,
-      });
-    }
-
-    function handleSelected(options) {
-      // make text visible on selected object
-      if (options && options.target.type === "group") {
-        options.target.item(1).set({ visible: true });
-      }
-
-      // hide text on previous selected object (or deselected object)
-      if (options.deselected && options.deselected[0].type === "group") {
-        options.deselected[0].item(1).set({ visible: false });
-      }
-
-      if (!myStateRef.current.isActive) return;
-
-      // Filter out any non-shape selections
-      const optionsTargetType = options.target.get("type");
-      if ("circle" === optionsTargetType) return;
-
-      setMyState({
-        ...myStateRef.current,
-      });
-    }
-
     // Add click handlers
     canvas.on("mouse:down", handleMouseDown);
     canvas.on("mouse:move", handleMouseMove);
     canvas.on("mouse:up", handleMouseUp);
-    canvas.on("selection:created", handleSelected);
-    canvas.on("selection:updated", handleSelected);
-    canvas.on("selection:cleared", handleSelectionCleared);
-
     // Remove handler
-    return function clearFabricEventHandlers() {
+    return () => {
       canvas.off("mouse:down", handleMouseDown);
       canvas.off("mouse:move", handleMouseMove);
       canvas.off("mouse:up", handleMouseUp);
-      canvas.off("selection:created", handleSelected);
-      canvas.off("selection:updated", handleSelected);
-      canvas.off("selection:cleared", handleSelectionCleared);
     };
   }, [isActive]);
 
   // group shape and textbox together
   // first remove both from canvas then group them and then add group to canvas
-  useEffect(async () => {
-    if (!shape || !textbox) return;
-    const canvas = fabricOverlay.fabricCanvas();
+  useEffect(() => {
+      const addToFeed = async () => {
+      if (!shape || !textbox) return;
+      const canvas = fabricOverlay.fabricCanvas();
 
-    let message = {
-      username: "",
-      color: shape.stroke,
-      action: "added",
-      text: textbox,
-      timeStamp: getTimestamp(),
-      type: shape.type,
-      object: shape,
-      image: null,
-    };
+      let message = {
+        username: "",
+        color: shape.stroke,
+        action: "added",
+        text: textbox,
+        timeStamp: getTimestamp(),
+        type: shape.type,
+        object: shape,
+        image: null,
+      };
 
-    message.image = await getCanvasImage(viewerId);
-    message.object.set({ id: message.timeStamp });
+      const { left, top, rx, ry } = shape;
+      const hash = md5({ left, top, rx, ry });
+      shape.set({ hash, zoomLevel: zoomValue });
 
-    setShape(null);
-    setTextbox(false);
+      message.image = await getCanvasImage(viewerId);
+      message.object.set({ id: message.timeStamp });
 
-    setFabricOverlayState(
-      updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
-    );
+      setShape(null);
+      setTextbox(false);
+
+      setFabricOverlayState(
+        updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
+      );
+    }
+
+    addToFeed();
 
     // send annotation
     // socket.emit(
@@ -359,8 +324,8 @@ const Circle = ({ viewerId }) => {
     setFabricOverlayState(updateTool({ tool: "Circle" }));
   };
 
-  const handleSave = (text) => {
-    shape.set({ isExist: true, text: text });
+  const handleSave = ({ text, tag }) => {
+    shape.set({ isExist: true, text, tag });
     setTextbox(true);
     onClose();
   };

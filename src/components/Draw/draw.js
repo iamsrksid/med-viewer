@@ -17,6 +17,7 @@ import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
+import md5 from "md5";
 
 const getDrawCursor = (brushSize, brushColor) => {
   brushSize = brushSize < 4 ? 8 : brushSize * 3;
@@ -88,6 +89,7 @@ const Draw = ({ viewerId }) => {
       if (!myStateRef.current.isActive) return;
       // Need this as double protection to make sure OSD isn't swallowing
       // Fabric's drawing mode for some reason
+      canvas.selection = false;
       viewer.setMouseNavEnabled(false);
       viewer.outerTracker.setTracking(false);
     }
@@ -122,32 +124,11 @@ const Draw = ({ viewerId }) => {
 
     // to set path when draw completes
     const pathCreated = (e) => {
+      canvas.selection = true;
       setPath(e.path);
       onOpen();
     };
-
-    const handleSelected = (options) => {
-      // make text visible on selected object
-      if (options && options.target.type === "group") {
-        options.target.item(1).set({ visible: true });
-      }
-
-      // hide text on previous selected object (or deselected object)
-      if (options.deselected && options.deselected[0].type === "group") {
-        options.deselected[0].item(1).set({ visible: false });
-      }
-    };
-
-    const handleSelectionCleared = (options) => {
-      // hide text when no object is selected
-      if (options.deselected && options.deselected[0].type === "group")
-        options.deselected[0].item(1).set({ visible: false });
-
-      // set textbox
-      if (options.deselected && options.deselected[0].type === "i-text")
-        setTextbox(options.deselected[0]);
-    };
-
+ 
     if (isActive) {
       const brushWidth = myState.width.pixelWidth;
       const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
@@ -166,9 +147,6 @@ const Draw = ({ viewerId }) => {
       canvas.freeDrawingCursor = createFreeDrawingCursor(brushWidth, color.hex);
 
       canvas.on("path:created", pathCreated);
-      canvas.on("selection:cleared", handleSelectionCleared);
-      canvas.on("selection:created", handleSelected);
-      canvas.on("selection:updated", handleSelected);
       // console.log(canvas._objects)
     } else {
       // Disable Fabric drawing; enable OSD mouseclicks
@@ -181,9 +159,6 @@ const Draw = ({ viewerId }) => {
     // Remove handler
     return () => {
       canvas.off("path:created", pathCreated);
-      canvas.on("selection:cleared", handleSelectionCleared);
-      canvas.on("selection:created", handleSelected);
-      canvas.on("selection:updated", handleSelected);
     };
   }, [isActive]);
 
@@ -218,6 +193,9 @@ const Draw = ({ viewerId }) => {
         image: null,
       };
 
+      const hash = md5(path?.path);
+      path.set({ hash, zoomLevel: zoomValue });
+
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
 
@@ -250,8 +228,8 @@ const Draw = ({ viewerId }) => {
     setFabricOverlayState(updateTool({ tool: "DRAW" }));
   };
 
-  const handleSave = (text) => {
-    path.set({ isExist: true, text: text });
+  const handleSave = ({ text, tag }) => {
+    path.set({ isExist: true, text, tag });
     setTextbox(true);
     onClose();
   };
