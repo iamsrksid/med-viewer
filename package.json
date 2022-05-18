@@ -15,6 +15,7 @@
     "axios": "^0.26.1",
     "fabric-history": "^1.6.0",
     "fontfaceobserver": "^2.1.0",
+    "md5": "^2.3.0",
     "openseadragon": "^2.4.2",
     "openseadragon-fabricjs-overlay": "github:LMDmax/OpenseadragonFabricjsOverlay",
     "random-username-generator": "^1.0.4",
