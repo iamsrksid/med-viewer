@@ -58,18 +58,14 @@ const Polygon = ({ viewerId }) => {
   useEffect(() => {
     if (!fabricOverlay) return;
     const canvas = fabricOverlay.fabricCanvas();
+
     if (isActive) {
       canvas.defaultCursor = "crosshair";
 
       // Disable OSD mouseclicks
       viewer.setMouseNavEnabled(false);
       viewer.outerTracker.setTracking(false);
-
-      // Deselect all Fabric Canvas objects
-      deselectAll(canvas);
     } else {
-      canvas.defaultCursor = "auto";
-
       // Enable OSD mouseclicks
       viewer.setMouseNavEnabled(true);
       viewer.outerTracker.setTracking(true);
@@ -77,7 +73,7 @@ const Polygon = ({ viewerId }) => {
   }, [isActive, fabricOverlay]);
 
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return;
+    if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     const generatePolygon = async () => {

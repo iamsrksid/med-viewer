@@ -26,7 +26,6 @@ const ViewerContainer = ({ viewerId, slideName, slideType }) => {
   useEffect(() => {
     if (!fabricOverlay) return;
     fabricOverlay.fabricCanvas().hoverCursor = "move";
-    fabricOverlay.fabricCanvas().selection = true;
   }, [fabricOverlay]);
 
   /**

@@ -74,30 +74,20 @@ const Square = ({ viewerId }) => {
    * Handle an individual shape being selected
    */
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
 
-    if (isActive) {
-      canvas.defaultCursor = "crosshair";
+    canvas.defaultCursor = "crosshair";
 
-      // Disable OSD mouseclicks
-      viewer.setMouseNavEnabled(false);
-      viewer.outerTracker.setTracking(false);
-
-      // Deselect all Fabric Canvas objects
-      deselectAll(canvas);
-    } else {
-      // Enable OSD mouseclicks
-      viewer.setMouseNavEnabled(true);
-      viewer.outerTracker.setTracking(true);
-    }
+    // Deselect all Fabric Canvas objects
+    deselectAll(canvas);
   }, [isActive]);
 
   /**
    * Add shapes and handle mouse events
    */
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return;
+    if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     /**
@@ -109,6 +99,10 @@ const Square = ({ viewerId }) => {
       }
 
       canvas.selection = false;
+
+      // Disable OSD mouseclicks
+      viewer.setMouseNavEnabled(false);
+      viewer.outerTracker.setTracking(false);
 
       // Save starting mouse down coordinates
       const pointer = canvas.getPointer(options.e);
@@ -220,6 +214,8 @@ const Square = ({ viewerId }) => {
       }
 
       canvas.selection = true;
+      viewer.setMouseNavEnabled(true);
+      viewer.outerTracker.setTracking(true);
 
       canvas.setActiveObject(myStateRef.current.currentDragShape);
 

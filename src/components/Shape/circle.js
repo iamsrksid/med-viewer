@@ -73,23 +73,13 @@ const Circle = ({ viewerId }) => {
    * Handle an individual shape being selected
    */
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
 
-    if (isActive) {
-      canvas.defaultCursor = "crosshair";
+    canvas.defaultCursor = "crosshair";
 
-      // Disable OSD mouseclicks
-      viewer.setMouseNavEnabled(false);
-      viewer.outerTracker.setTracking(false);
-
-      // Deselect all Fabric Canvas objects
-      deselectAll(canvas);
-    } else {
-      // Enable OSD mouseclicks
-      viewer.setMouseNavEnabled(true);
-      viewer.outerTracker.setTracking(true);
-    }
+    // Deselect all Fabric Canvas objects
+    deselectAll(canvas);
   }, [isActive]);
 
   /**
@@ -108,6 +98,10 @@ const Circle = ({ viewerId }) => {
       }
 
       canvas.selection = false;
+
+      // Disable OSD mouseclicks
+      viewer.setMouseNavEnabled(false);
+      viewer.outerTracker.setTracking(false);
 
       // Save starting mouse down coordinates
       const pointer = canvas.getPointer(options.e);
@@ -230,6 +224,10 @@ const Circle = ({ viewerId }) => {
       }
 
       canvas.selection = true;
+
+      // Enable OSD mouseclicks
+      viewer.setMouseNavEnabled(true);
+      viewer.outerTracker.setTracking(true);
 
       canvas.setActiveObject(myStateRef.current.currentDragShape);
 

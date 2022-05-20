@@ -78,21 +78,20 @@ const Move = ({ viewerId, annotations }) => {
   };
 
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
-    if (isActive) {
-      canvas.defaultCursor = "default";
-      canvas.hoverCursor = "move";
-      canvas.selection = false;
 
-      canvas.on("selection:created", () => {
-        canvas.selection = true;
-      });
-      canvas.on("selection:cleared", () => {
-        canvas.selection = false;
-      });
-    }
-  }, [isActive]);
+    canvas.defaultCursor = "default";
+    canvas.hoverCursor = "move";
+    canvas.selection = false;
+
+    canvas.on("selection:created", () => {
+      canvas.selection = true;
+    });
+    canvas.on("selection:cleared", () => {
+      canvas.selection = false;
+    });
+  }, [isActive, fabricOverlay]);
 
   return (
     <Flex direction="column">

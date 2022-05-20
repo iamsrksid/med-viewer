@@ -1,15 +1,14 @@
 import React, { memo } from "react";
 import { Flex, Text, IconButton, useMediaQuery } from "@chakra-ui/react";
 import { BsGrid1X2 } from "react-icons/bs";
+import { GrHomeRounded } from "react-icons/gr";
 import Move from "../Move/move";
 import ChangeCase from "../Case/changeCase";
 import ActionTools from "../Toolbar/ActionTools";
 import ScreenTools from "../Toolbar/ScreenTools";
 import "../../styles/viewer.css";
 import ToolbarButton from "../ViewerToolbar/button";
-import { GrHomeRounded } from "react-icons/gr";
 import IconSize from "../ViewerToolbar/IconSize";
-import { useFabricOverlayState } from "../../state/store";
 
 const AdjustmentBar = ({
   project,
@@ -23,9 +22,6 @@ const AdjustmentBar = ({
   sidebar,
 }) => {
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1660px)");
-  const { fabricOverlayState } = useFabricOverlayState();
-
-  const { fabricOverlay } = fabricOverlayState?.viewerWindow[currentViewer];
 
   const handleSidebar = () => {
     showSidebar();

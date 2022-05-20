@@ -82,7 +82,7 @@ const Draw = ({ viewerId }) => {
   }, [isActive]);
 
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     function handleMouseDown() {

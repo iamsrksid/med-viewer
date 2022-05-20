@@ -38,8 +38,8 @@ const TypeTools = ({ viewerId, typeToolsButtonHandler }) => {
         <Typebutton
           disabled
           icon={<BsEraser size={18} color="rgba(21, 28, 37, 1)" />}
+          label="Eraser"
         />
-        label="Eraser"
         <Typebutton
           disabled
           icon={<AiOutlineInfoCircle size={18} color="rgba(21, 28, 37, 1)" />}
