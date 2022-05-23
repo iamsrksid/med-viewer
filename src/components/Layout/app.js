@@ -8,6 +8,7 @@ import LayoutInnerBody from "./innerbody";
 import LayoutOuterBody from "./outerbody";
 import LayoutAppSidebar from "./sidebar";
 import ViewerFactory from "../Viewer/viewerFactory";
+import ViewerImport from "./viewerImport";
 
 const LayoutApp = ({
   userInfo,
@@ -24,6 +25,8 @@ const LayoutApp = ({
   goToHomeHandler,
   saveAnnotationsHandler,
   loadAnnotationsHandler,
+  morphometry,
+  uploadPatch,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -54,6 +57,8 @@ const LayoutApp = ({
           goToHomeHandler={goToHomeHandler}
           showSidebar={() => showSidebar()}
           sidebar={sidebar}
+          morphometry={morphometry}
+          uploadPatch={uploadPatch}
         />
         <LayoutInnerBody>
           {sidebar ? (
@@ -78,6 +83,7 @@ const LayoutApp = ({
               slideType={project?.slideType}
             />
           </LayoutAppBody>
+          {/* <ViewerImport /> */}
         </LayoutInnerBody>
       </LayoutOuterBody>
     </Flex>

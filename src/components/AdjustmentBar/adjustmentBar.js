@@ -20,6 +20,8 @@ const AdjustmentBar = ({
   changeCaseHandler,
   showSidebar,
   sidebar,
+  morphometry,
+  uploadPatch,
 }) => {
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1660px)");
 
@@ -36,6 +38,7 @@ const AdjustmentBar = ({
       fontFamily="fira sans"
       fontSize={ifScreenlessthan1536px ? "14px" : "16px"}
       fontWeight="500"
+      zIndex={2}
     >
       <Flex alignItems="center" ml="18px" mr="20px" minW="150px">
         <IconButton
@@ -64,7 +67,11 @@ const AdjustmentBar = ({
       />
       <Move annotations={annotations} viewerId={currentViewer} />
       <ActionTools viewerId={currentViewer} />
-      <ScreenTools viewerId={currentViewer} />
+      <ScreenTools
+        viewerId={currentViewer}
+        morphometry={morphometry}
+        uploadPatch={uploadPatch}
+      />
     </Flex>
   );
 };
