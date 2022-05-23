@@ -13,15 +13,11 @@ import {
   Input,
   HStack,
 } from "@chakra-ui/react";
-import axios from "axios";
-import Environment from "../../../../environment";
 
 const ViewerImport = ({ uploadPatch }) => {
   const [screenCapture, setScreenCapture] = useState("");
   const [open, setModalOpen] = useState(false);
   const [title, setTitle] = useState("image Title");
-
-  // console.log(uploadPatch);
 
   const handleScreenCapture = (screenCapture) => {
     setScreenCapture(screenCapture);
