@@ -14,6 +14,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import axios from "axios";
+import Environment from "../../../../environment";
 
 const ViewerImport = ({ uploadPatch }) => {
   const [screenCapture, setScreenCapture] = useState("");
@@ -32,26 +33,18 @@ const ViewerImport = ({ uploadPatch }) => {
   };
 
   const handleSave = () => {
+    console.log(screenCapture);
     fetch(screenCapture)
       .then((res) => res.blob())
       .then((blob) => {
         const fd = new FormData();
-        const file = new File([blob], "image", { type: "image/png" });
+        const file = new File([blob], title ?? "patch", { type: "image/png" });
 
         fd.append("file", file);
 
-        uploadPatch(file);
-
-        // const resp = axios
-        //   .post("http://localhost:8080/v1/upload", fd)
-        //   .then(function (resp) {
-        //     console.log(resp);
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
+        uploadPatch(fd);
       });
-    closeModal();
+    // closeModal();
   };
 
   return (
