@@ -29,7 +29,7 @@ const ViewerImport = ({ uploadPatch }) => {
   };
 
   const handleSave = () => {
-    console.log(screenCapture);
+    closeModal();
     fetch(screenCapture)
       .then((res) => res.blob())
       .then((blob) => {
@@ -40,7 +40,6 @@ const ViewerImport = ({ uploadPatch }) => {
 
         uploadPatch(fd);
       });
-    // closeModal();
   };
 
   return (
