@@ -34,6 +34,14 @@ const LayoutApp = ({
   const [navbar, setNavbar] = useState(true);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
   const [currentViewer, setCurrentViewer] = useState(viewerIds?.[0]?._id);
+  const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
+  const [viewPortToImagex1, setViewPortToImagex1] = useState(0);
+  const [viewPortToImagex2, setViewPortToImagex2] = useState(0);
+  const [viewPortToImagey1, setViewPortToImagey1] = useState(0);
+  const [viewPortToImagey2, setViewPortToImagey2] = useState(0);
 
   const showSidebar = () => {
     setSidebar(!sidebar);
@@ -59,6 +67,10 @@ const LayoutApp = ({
           sidebar={sidebar}
           morphometry={morphometry}
           uploadPatch={uploadPatch}
+          setStartX={setStartX}
+          setStartY={setStartY}
+          setWindowWidth={setWindowWidth}
+          setWindowHeight={setWindowHeight}
         />
         <LayoutInnerBody>
           {sidebar ? (
@@ -81,6 +93,14 @@ const LayoutApp = ({
             <ViewerFactory
               viewerIds={viewerIds}
               slideType={project?.slideType}
+              startX={startX}
+              startY={startY}
+              windowWidth={windowWidth}
+              windowHeight={windowHeight}
+              setViewPortToImagex1={setViewPortToImagex1}
+              setViewPortToImagey1={setViewPortToImagey1}
+              setViewPortToImagex2={setViewPortToImagex2}
+              setViewPortToImagey2={setViewPortToImagey2}
             />
           </LayoutAppBody>
           {/* <ViewerImport /> */}

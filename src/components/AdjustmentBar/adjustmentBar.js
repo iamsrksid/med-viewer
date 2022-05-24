@@ -22,6 +22,10 @@ const AdjustmentBar = ({
   sidebar,
   morphometry,
   uploadPatch,
+  setStartX,
+  setStartY,
+  setWindowWidth,
+  setWindowHeight,
 }) => {
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1660px)");
 
@@ -71,6 +75,10 @@ const AdjustmentBar = ({
         viewerId={currentViewer}
         morphometry={morphometry}
         uploadPatch={uploadPatch}
+        setStartX={setStartX}
+        setStartY={setStartY}
+        setWindowWidth={setWindowWidth}
+        setWindowHeight={setWindowHeight}
       />
     </Flex>
   );

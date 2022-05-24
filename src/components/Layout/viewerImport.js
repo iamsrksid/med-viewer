@@ -14,10 +14,21 @@ import {
   HStack,
 } from "@chakra-ui/react";
 
-const ViewerImport = ({ uploadPatch }) => {
+const ViewerImport = ({
+  uploadPatch,
+  setStartX,
+  setStartY,
+  setWindowWidth,
+  setWindowHeight,
+}) => {
   const [screenCapture, setScreenCapture] = useState("");
   const [open, setModalOpen] = useState(false);
   const [title, setTitle] = useState("image Title");
+
+  // const [startX, setStartX] = useState(0);
+  // const [startY, setStartY] = useState(0);
+  // const [windowWidth, setWindowWidth] = useState(0);
+  // // const [windowHeight, setWindowHeight] = useState(0);
 
   const handleScreenCapture = (screenCapture) => {
     setScreenCapture(screenCapture);
@@ -29,7 +40,6 @@ const ViewerImport = ({ uploadPatch }) => {
   };
 
   const handleSave = () => {
-    closeModal();
     fetch(screenCapture)
       .then((res) => res.blob())
       .then((blob) => {
@@ -40,10 +50,17 @@ const ViewerImport = ({ uploadPatch }) => {
 
         uploadPatch(fd);
       });
+    closeModal();
   };
 
   return (
-    <ScreenCapture onEndCapture={handleScreenCapture}>
+    <ScreenCapture
+      onEndCapture={handleScreenCapture}
+      setStartX={setStartX}
+      setStartY={setStartY}
+      setWindowWidth={setWindowWidth}
+      setWindowHeight={setWindowHeight}
+    >
       {({ onStartCapture }) => (
         <>
           <header>
@@ -65,7 +82,7 @@ const ViewerImport = ({ uploadPatch }) => {
                 {screenCapture && <Image src={screenCapture} />}
               </ModalBody>
               <ModalFooter>
-                <Button onClick={handleSave}>Save</Button>
+                <Button onClick={handleSave}>Save to S3</Button>
                 <Button onClick={closeModal}>Cancel</Button>
               </ModalFooter>
             </ModalContent>

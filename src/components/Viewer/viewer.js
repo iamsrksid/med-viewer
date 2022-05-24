@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useOpenSeadragon, OpenSeadragon } from "use-open-seadragon";
 import { fabric, initFabricJSOverlay } from "openseadragon-fabricjs-overlay";
 import { isBrowser } from "react-device-detect";
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import ViewerControls from "./controls";
 import { useFabricOverlayState } from "../../state/store";
@@ -40,7 +40,20 @@ const osdOptions = {
   crossOriginPolicy: "Anonymous",
 };
 
-const Viewer = ({ viewerId, tile, slideName, slideType }) => {
+const Viewer = ({
+  viewerId,
+  tile,
+  slideName,
+  slideType,
+  startX,
+  startY,
+  windowWidth,
+  windowHeight,
+  setViewPortToImagex1,
+  setViewPortToImagey1,
+  setViewPortToImagex2,
+  setViewPortToImagey2,
+}) => {
   const { setFabricOverlayState } = useFabricOverlayState();
   const [viewer, setViewer] = useState(null);
 
@@ -71,6 +84,15 @@ const Viewer = ({ viewerId, tile, slideName, slideType }) => {
     };
   }, []);
 
+  let topLeft = { startX, startY };
+  let bottomRightx = startX + windowWidth;
+  let bottomRighty = startY + windowHeight;
+  let bottomRight = { bottomRightx, bottomRighty };
+
+  console.log("topLeft:", topLeft, "bottomRight:", bottomRight);
+
+  // Show the results.
+
   useEffect(() => {
     if (!viewer) return;
 
@@ -83,6 +105,7 @@ const Viewer = ({ viewerId, tile, slideName, slideType }) => {
         viewer,
       })
     );
+
     return () => {
       setFabricOverlayState(
         updateOverlay({
@@ -103,6 +126,7 @@ const Viewer = ({ viewerId, tile, slideName, slideType }) => {
           slideType={slideType}
         />
       )}
+      {/* <Button onClick={selection}>Select</Button> */}
     </Box>
   );
 };

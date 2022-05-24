@@ -6,6 +6,10 @@ export default class ScreenCapture extends Component {
   static defaultProps = {
     onStartCapture: () => null,
     onEndCapture: () => null,
+    setStartX: () => 0,
+    setStartY: () => 0,
+    setWindowWidth: () => 0,
+    setWindowHeight: () => 0,
   };
 
   state = {
@@ -177,6 +181,11 @@ export default class ScreenCapture extends Component {
       );
 
       this.props.onEndCapture(croppedCanvas.toDataURL());
+      // console.log(this.state);
+      this.props.setStartX(this.state.startX);
+      this.props.setStartY(this.state.startY);
+      this.props.setWindowWidth(this.state.cropWidth);
+      this.props.setWindowHeight(this.state.cropHeigth);
     });
 
     this.setState({
@@ -207,7 +216,6 @@ export default class ScreenCapture extends Component {
         onMouseMove={this.handleMouseMove}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
-        zIndex={1}
       >
         {this.renderChild()}
         <Box

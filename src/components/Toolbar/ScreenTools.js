@@ -11,7 +11,15 @@ import DownloadImage from "../downloadImage";
 import { BiScreenshot } from "react-icons/bi";
 import ViewerImport from "../Layout/viewerImport";
 
-function ScreenTools({ viewerId, morphometry, uploadPatch }) {
+function ScreenTools({
+  viewerId,
+  morphometry,
+  uploadPatch,
+  setStartX,
+  setStartY,
+  setWindowWidth,
+  setWindowHeight,
+}) {
   const [popup, setPopup] = useState(false);
   const handlePopup = () => {
     setPopup(!popup);
@@ -35,7 +43,17 @@ function ScreenTools({ viewerId, morphometry, uploadPatch }) {
           icon={<BiScreenshot size={IconSize()} color="#151C25" />}
           label="Crop and run morphometry"
         /> */}
-        {morphometry === true ? <ViewerImport uploadPatch={uploadPatch} /> : ""}
+        {morphometry === true ? (
+          <ViewerImport
+            uploadPatch={uploadPatch}
+            setStartX={setStartX}
+            setStartY={setStartY}
+            setWindowWidth={setWindowWidth}
+            setWindowHeight={setWindowHeight}
+          />
+        ) : (
+          ""
+        )}
         {/* <ViewerImport /> */}
         <DownloadImage />
         {/* <Fullscreen viewerId={viewerId} /> */}

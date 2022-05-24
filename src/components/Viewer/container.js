@@ -10,7 +10,19 @@ import {
 import Viewer from "./viewer";
 import { useFabricOverlayState } from "../../state/store";
 
-const ViewerContainer = ({ viewerId, slideName, slideType }) => {
+const ViewerContainer = ({
+  viewerId,
+  slideName,
+  slideType,
+  startX,
+  startY,
+  windowWidth,
+  windowHeight,
+  setViewPortToImagex1,
+  setViewPortToImagey1,
+  setViewPortToImagex2,
+  setViewPortToImagey2,
+}) => {
   const location = useLocation();
 
   const { fabricOverlayState } = useFabricOverlayState();
@@ -61,6 +73,14 @@ const ViewerContainer = ({ viewerId, slideName, slideType }) => {
       tile={tile}
       slideName={slideName}
       slideType={slideType}
+      startX={startX}
+      startY={startY}
+      windowWidth={windowWidth}
+      windowHeight={windowHeight}
+      setViewPortToImagex1={setViewPortToImagex1}
+      setViewPortToImagey1={setViewPortToImagey1}
+      setViewPortToImagex2={setViewPortToImagex2}
+      setViewPortToImagey2={setViewPortToImagey2}
     />
   );
 };
