@@ -44,7 +44,7 @@ const ViewerImport = ({
       .then((res) => res.blob())
       .then((blob) => {
         const fd = new FormData();
-        const file = new File([blob], title ?? "patch", { type: "image/png" });
+        const file = new File([blob], "patch.png", { type: "image/png" });
 
         fd.append("file", file);
 
@@ -69,14 +69,14 @@ const ViewerImport = ({
 
           <Modal isOpen={open} size="xl">
             <ModalContent>
-              <HStack>
+              {/* <HStack>
                 <Text>Title: </Text>
                 <Input
                   type="text"
                   onChange={(e) => setTitle(e.target.value)}
                   name="title"
                 ></Input>
-              </HStack>
+              </HStack> */}
 
               <ModalBody>
                 {screenCapture && <Image src={screenCapture} />}
