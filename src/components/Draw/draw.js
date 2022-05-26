@@ -5,11 +5,7 @@ import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
 import useHexRGB from "../../utility/use-hex-rgb";
 import { fonts } from "../Text/fontPicker";
-import {
-  getCanvasImage,
-  getFontSize,
-  getTimestamp,
-} from "../../utility/utility";
+import { getCanvasImage } from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { widths } from "./width";
@@ -104,23 +100,23 @@ const Draw = ({ viewerId }) => {
     if (!fabricOverlay) return;
     const canvas = fabricOverlay.fabricCanvas();
 
-    const fontSize = getFontSize(screenSize, zoomValue);
+    // const fontSize = getFontSize(screenSize, zoomValue);
 
-    // Create new Textbox instance and add it to canvas
-    const createTextbox = ({ left, top, height }) => {
-      const tbox = new fabric.IText("", {
-        left,
-        top: top + height + 10,
-        fontFamily: fonts[0].fontFamily,
-        fontSize,
-        fontWeight: "bold",
-        selectionBackgroundColor: "rgba(255, 255, 255, 0.5)",
-      });
+    // // Create new Textbox instance and add it to canvas
+    // const createTextbox = ({ left, top, height }) => {
+    //   const tbox = new fabric.IText("", {
+    //     left,
+    //     top: top + height + 10,
+    //     fontFamily: fonts[0].fontFamily,
+    //     fontSize,
+    //     fontWeight: "bold",
+    //     selectionBackgroundColor: "rgba(255, 255, 255, 0.5)",
+    //   });
 
-      fabricOverlay.fabricCanvas().add(tbox);
-      canvas.setActiveObject(tbox);
-      tbox.enterEditing();
-    };
+    //   fabricOverlay.fabricCanvas().add(tbox);
+    //   canvas.setActiveObject(tbox);
+    //   tbox.enterEditing();
+    // };
 
     // to set path when draw completes
     const pathCreated = (e) => {
@@ -179,7 +175,8 @@ const Draw = ({ viewerId }) => {
   // first remove both from canvas then group them and then add group to canvas
   useEffect(() => {
     if (!path || !textbox) return;
-    const canvas = fabricOverlay.fabricCanvas();
+
+    const timeStamp = Date.now();
 
     const addToFeed = async (path) => {
       const message = {
@@ -187,13 +184,13 @@ const Draw = ({ viewerId }) => {
         color: path.stroke,
         action: "added",
         text: textbox,
-        timeStamp: getTimestamp(),
+        timeStamp,
         type: path.type,
         object: path,
         image: null,
       };
 
-      const hash = md5(path?.path);
+      const hash = md5(path + timeStamp);
       path.set({ hash, zoomLevel: zoomValue });
 
       message.image = await getCanvasImage(viewerId);

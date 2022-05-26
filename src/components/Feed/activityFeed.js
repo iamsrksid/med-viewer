@@ -40,8 +40,9 @@ const ActivityFeed = ({ userInfo, viewerId }) => {
     canvas.requestRenderAll();
   };
 
-  const handleSave = (text) => {
+  const handleSave = ({ text, tag }) => {
     annotationObject.text = text;
+    annotationObject.tag = tag;
     setAnnotationObject(null);
     onClose();
   };
@@ -51,11 +52,11 @@ const ActivityFeed = ({ userInfo, viewerId }) => {
     onOpen();
   };
 
-  const deleteObject = (activity) => {
+  const deleteObject = (e, activity) => {
+    e.stopPropagation();
     const canvas = fabricOverlay.fabricCanvas();
-    console.log(activity.object);
     const feed = activityFeed.filter(
-      (af) => af.timeStamp !== activity.timeStamp
+      (af) => af.object.hash !== activity.object.hash
     );
     canvas.remove(activity.object);
     canvas.renderAll();
@@ -182,7 +183,7 @@ const ActivityFeed = ({ userInfo, viewerId }) => {
                   as={RiDeleteBin6Line}
                   w={4}
                   h={4}
-                  onClick={() => deleteObject(activity)}
+                  onClick={(e) => deleteObject(e, activity)}
                 />
                 <Icon as={BiDotsVertical} w={4} h={4} />
               </HStack>

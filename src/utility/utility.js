@@ -7,6 +7,13 @@ export const getTimestamp = () => {
   }).format(Date.now());
 };
 
+export const getTime = (timeStamp) => {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(timeStamp);
+};
+
 export const getFontSize = (screenSize, zoomValue) => {
   const scaleValue = zoomValue / 40;
   // for screen smaller than 1280

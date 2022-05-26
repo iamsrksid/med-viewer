@@ -6,12 +6,7 @@ import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
-
-import {
-  getCanvasImage,
-  getFontSize,
-  getTimestamp,
-} from "../../utility/utility";
+import { getCanvasImage } from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
@@ -87,7 +82,7 @@ const Square = ({ viewerId }) => {
    * Add shapes and handle mouse events
    */
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return null;
+    if (!fabricOverlay) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     /**
@@ -221,8 +216,6 @@ const Square = ({ viewerId }) => {
 
       canvas.renderAll();
 
-      const currShape = myStateRef.current.currentDragShape;
-
       setShape(myStateRef.current.currentDragShape);
 
       setMyState({
@@ -234,17 +227,16 @@ const Square = ({ viewerId }) => {
       onOpen();
     }
 
-    // Add click handlers
-    canvas.on("mouse:down", handleMouseDown);
-    canvas.on("mouse:move", handleMouseMove);
-    canvas.on("mouse:up", handleMouseUp);
-
-    // Remove handler
-    return () => {
+    if (isActive) {
+      // Add click handlers
+      canvas.on("mouse:down", handleMouseDown);
+      canvas.on("mouse:move", handleMouseMove);
+      canvas.on("mouse:up", handleMouseUp);
+    } else {
       canvas.off("mouse:down", handleMouseDown);
       canvas.off("mouse:move", handleMouseMove);
       canvas.off("mouse:up", handleMouseUp);
-    };
+    }
   }, [isActive]);
 
   // group shape and textbox together
@@ -254,19 +246,20 @@ const Square = ({ viewerId }) => {
       if (!shape || !textbox) return;
       // if (!shape) return;
 
+      const timeStamp = Date.now();
+
       const message = {
         username: "",
         color: shape.stroke,
         action: "added",
         text: textbox,
-        timeStamp: getTimestamp(),
+        timeStamp,
         type: shape.type,
         object: shape,
         image: null,
       };
 
-      const { left, top, width, height } = shape;
-      const hash = md5({ left, top, width, height });
+      const hash = md5(shape + timeStamp);
       shape.set({ hash, zoomLevel: zoomValue });
 
       message.image = await getCanvasImage(viewerId);

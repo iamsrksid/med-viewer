@@ -84,13 +84,10 @@ const Viewer = ({
     };
   }, []);
 
-  let topLeft = { startX, startY };
-  let bottomRightx = startX + windowWidth;
-  let bottomRighty = startY + windowHeight;
-  let bottomRight = { bottomRightx, bottomRighty };
-
-  console.log("topLeft:", topLeft, "bottomRight:", bottomRight);
-
+  const topLeft = { startX, startY };
+  const bottomRightx = startX + windowWidth;
+  const bottomRighty = startY + windowHeight;
+  const bottomRight = { bottomRightx, bottomRighty };
   // Show the results.
 
   useEffect(() => {

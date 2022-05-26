@@ -6,11 +6,7 @@ import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
-import {
-  getCanvasImage,
-  getFontSize,
-  getTimestamp,
-} from "../../utility/utility";
+import { getCanvasImage } from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
@@ -194,23 +190,23 @@ const Circle = ({ viewerId }) => {
       fabricOverlay.fabricCanvas().renderAll();
     }
 
-    const fontSize = getFontSize(screenSize, zoomValue);
+    // const fontSize = getFontSize(screenSize, zoomValue);
 
-    // Create new Textbox instance and add it to canvas
-    const createTextbox = ({ left, top, height }) => {
-      const tbox = new fabric.IText("", {
-        left,
-        top: top + height + 2,
-        fontFamily: fonts[0].fontFamily,
-        fontSize,
-        fontWeight: "bold",
-        selectionBackgroundColor: "rgba(255, 255, 255, 0.5)",
-      });
+    // // Create new Textbox instance and add it to canvas
+    // const createTextbox = ({ left, top, height }) => {
+    //   const tbox = new fabric.IText("", {
+    //     left,
+    //     top: top + height + 2,
+    //     fontFamily: fonts[0].fontFamily,
+    //     fontSize,
+    //     fontWeight: "bold",
+    //     selectionBackgroundColor: "rgba(255, 255, 255, 0.5)",
+    //   });
 
-      fabricOverlay.fabricCanvas().add(tbox);
-      canvas.setActiveObject(tbox);
-      tbox.enterEditing();
-    };
+    //   fabricOverlay.fabricCanvas().add(tbox);
+    //   canvas.setActiveObject(tbox);
+    //   tbox.enterEditing();
+    // };
 
     /**
      * Mouse up
@@ -275,21 +271,20 @@ const Circle = ({ viewerId }) => {
   useEffect(() => {
     const addToFeed = async () => {
       if (!shape || !textbox) return;
-      const canvas = fabricOverlay.fabricCanvas();
+      const timeStamp = Date.now();
 
       const message = {
         username: "",
         color: shape.stroke,
         action: "added",
         text: textbox,
-        timeStamp: getTimestamp(),
+        timeStamp,
         type: shape.type,
         object: shape,
         image: null,
       };
 
-      const { left, top, rx, ry } = shape;
-      const hash = md5({ left, top, rx, ry });
+      const hash = md5(shape + timeStamp);
       shape.set({ hash, zoomLevel: zoomValue });
 
       message.image = await getCanvasImage(viewerId);

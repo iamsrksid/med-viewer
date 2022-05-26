@@ -5,11 +5,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import md5 from "md5";
 import TypeButton from "../typeButton";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
-import {
-  getCanvasImage,
-  getFontSize,
-  getTimestamp,
-} from "../../utility/utility";
+import { getCanvasImage } from "../../utility/utility";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
@@ -261,19 +257,21 @@ const Polygon = ({ viewerId }) => {
   useEffect(() => {
     if (!shape || !textbox) return;
 
+    const timeStamp = Date.now();
+
     const addToFeed = async (shape) => {
       const message = {
         username: "",
         color: myStateRef.current.color,
         action: "added",
         text: textbox,
-        timeStamp: getTimestamp(),
+        timeStamp,
         type: "polygon",
         object: shape,
         image: null,
       };
 
-      const hash = md5(shape?.points);
+      const hash = md5(shape + timeStamp);
       shape.set({ hash, zoomLevel: zoomValue });
 
       message.image = await getCanvasImage(viewerId);
