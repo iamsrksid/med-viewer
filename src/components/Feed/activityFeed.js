@@ -23,7 +23,7 @@ import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 
 const ActivityFeed = ({ userInfo, viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { fabricOverlay, activityFeed } =
+  const { fabricOverlay, activityFeed, viewer } =
     fabricOverlayState?.viewerWindow[viewerId];
   const scrollbar = useRef(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -37,6 +37,15 @@ const ActivityFeed = ({ userInfo, viewerId }) => {
     if (!activity.object || !activity.object.isExist) return;
     const canvas = fabricOverlay.fabricCanvas();
     canvas.setActiveObject(activity.object);
+    const { zoomLevel, left, top, width, height } = activity.object;
+    viewer.viewport.zoomTo(zoomLevel);
+
+    // get viewport point of middle of selected annotation
+    const vpoint = viewer.viewport.imageToViewportCoordinates(
+      left + width / 2,
+      top + height / 2
+    );
+    viewer.viewport.panTo(vpoint);
     canvas.requestRenderAll();
   };
 

@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Text, useMediaQuery } from "@chakra-ui/react";
-
-import { getFontSize } from "../../utility/utility";
 import { useFabricOverlayState } from "../../state/store";
-import { updateZoomValue } from "../../state/actions/fabricOverlayActions";
+import { getScaleFactor } from "../../utility/utility";
 
 const ZoomSlider = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { viewer, zoomValue, fabricOverlay } =
-    fabricOverlayState.viewerWindow[viewerId];
+  const { viewer, fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
+  const [zoomValue, setZoomValue] = useState(1);
 
   const screenSize = useMediaQuery([
     "(max-width: 1280px)",
@@ -18,38 +16,28 @@ const ZoomSlider = ({ viewerId }) => {
     "(max-width: 2560px)",
   ]);
 
-  const handleSlider = (val) => {
-    viewer.viewport.zoomTo(viewer.viewport.getMaxZoom() * val * 2.5 * 0.01);
-    setFabricOverlayState(updateZoomValue({ id: viewerId, value: val }));
-  };
-
-  const handleLabel = (val) => {
-    viewer.viewport.zoomTo(viewer.viewport.getMaxZoom() * val * 2.5 * 0.01);
-    setFabricOverlayState(updateZoomValue({ id: viewerId, value: val }));
-  };
-
   const adjustAnnotations = (value) => {
-    const scaleFactor = value !== 0 ? value / 40 : 1 / 40;
+    // const value = parseInt((e.zoom * 40) / viewer.viewport.getMaxZoom(), 10);
+    // const scaleFactor = value !== 0 ? value / 40 : 1 / 40;
+    const scaleFactor = getScaleFactor(viewer);
     const canvas = fabricOverlay.fabricCanvas();
     const strokeWidth = 1 / scaleFactor;
-    const fontSize = getFontSize(screenSize, zoomValue);
     const objs = canvas.getObjects();
     objs.forEach((object) => {
       if (object.type === "group") {
         object.item(0).set("strokeWidth", strokeWidth);
-        // object.item(1).set("fontSize", fontSize);
       } else {
         object.set("strokeWidth", strokeWidth);
       }
-      canvas.renderAll();
     });
+    canvas.requestRenderAll();
   };
 
   useEffect(() => {
     if (!viewer) return;
     viewer.addHandler("zoom", (e) => {
       const value = parseInt((e.zoom * 40) / viewer.viewport.getMaxZoom(), 10);
-      setFabricOverlayState(updateZoomValue({ id: viewerId, value }));
+      setZoomValue(value > 40 ? 40 : value);
       adjustAnnotations(value);
     });
   }, [viewer]);
@@ -58,10 +46,7 @@ const ZoomSlider = ({ viewerId }) => {
 
   return (
     <Box
-      onChange={(val) => handleSlider(val)}
-      valueRenderer={(value) => `${value}%`}
       markersLabel={label}
-      viewerId={viewerId}
       // ml="7px"
     >
       <Text>{zoomValue}x</Text>

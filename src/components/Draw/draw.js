@@ -5,7 +5,7 @@ import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
 import useHexRGB from "../../utility/use-hex-rgb";
 import { fonts } from "../Text/fontPicker";
-import { getCanvasImage } from "../../utility/utility";
+import { getCanvasImage, getScaleFactor } from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { widths } from "./width";
@@ -46,8 +46,7 @@ const Draw = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, zoomValue, activityFeed } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
 
   const { hexToRGBA } = useHexRGB();
   const isActive = activeTool === "DRAW";
@@ -100,8 +99,6 @@ const Draw = ({ viewerId }) => {
     if (!fabricOverlay) return;
     const canvas = fabricOverlay.fabricCanvas();
 
-    // const fontSize = getFontSize(screenSize, zoomValue);
-
     // // Create new Textbox instance and add it to canvas
     // const createTextbox = ({ left, top, height }) => {
     //   const tbox = new fabric.IText("", {
@@ -127,7 +124,7 @@ const Draw = ({ viewerId }) => {
 
     if (isActive) {
       const brushWidth = myState.width.pixelWidth;
-      const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
+      const scaleFactor = getScaleFactor(viewer);
       // Enable Fabric drawing; disable OSD mouseclicks
       viewer.setMouseNavEnabled(false);
       viewer.outerTracker.setTracking(false);
@@ -164,7 +161,7 @@ const Draw = ({ viewerId }) => {
 
     const canvas = fabricOverlay.fabricCanvas();
     const brushWidth = myState.width.pixelWidth;
-    const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
+    const scaleFactor = getScaleFactor(viewer);
 
     canvas.freeDrawingBrush.color = color.hex;
     canvas.freeDrawingBrush.width = brushWidth / scaleFactor;
@@ -191,7 +188,7 @@ const Draw = ({ viewerId }) => {
       };
 
       const hash = md5(path + timeStamp);
-      path.set({ hash, zoomLevel: zoomValue });
+      path.set({ hash, zoomLevel: viewer.viewport.getZoom() });
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });

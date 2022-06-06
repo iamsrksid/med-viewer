@@ -9,14 +9,17 @@ import {
   updateTool,
   updateActivityFeed,
 } from "../../state/actions/fabricOverlayActions";
-import { getCanvasImage, getTimestamp } from "../../utility/utility";
+import {
+  getCanvasImage,
+  getScaleFactor,
+  getTimestamp,
+} from "../../utility/utility";
 import EditText from "../Feed/editText";
 
 const Line = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow, color } = fabricOverlayState;
-  const { fabricOverlay, viewer, zoomValue, activityFeed } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
   const isActive = activeTool === "Line";
 
   const [shape, setShape] = useState(null);
@@ -99,7 +102,7 @@ const Line = ({ viewerId }) => {
       };
 
       // Stroke fill
-      const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
+      const scaleFactor = getScaleFactor(viewer);
 
       const fillProps = {
         stroke: myStateRef.current.color.hex,
@@ -143,24 +146,6 @@ const Line = ({ viewerId }) => {
       c.currentDragShape.set({ x2: pointer.x, y2: pointer.y });
       canvas.renderAll();
     }
-
-    // const fontSize = getFontSize(screenSize, zoomValue);
-
-    // // Create new Textbox instance and add it to canvas
-    // const createTextbox = ({ left, top, height }) => {
-    //   const tbox = new fabric.IText("", {
-    //     left: left,
-    //     top: top + height + 2,
-    //     fontFamily: fonts[0].fontFamily,
-    //     fontSize: fontSize,
-    //     fontWeight: "bold",
-    //     selectionBackgroundColor: "rgba(255, 255, 255, 0.5)",
-    //   });
-
-    //   fabricOverlay.fabricCanvas().add(tbox);
-    //   canvas.setActiveObject(tbox);
-    //   tbox.enterEditing();
-    // };
 
     /**
      * Mouse up
@@ -229,7 +214,7 @@ const Line = ({ viewerId }) => {
       };
 
       const hash = md5(shape + timeStamp);
-      shape.set({ hash, zoomLevel: zoomValue });
+      shape.set({ hash, zoomLevel: viewer.viewport.getZoom() });
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });

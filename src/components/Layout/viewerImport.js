@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ScreenCapture from "../Screencapture/ScreenCapture";
 import "../../styles/styles.css";
 import Navbar from "../Screencapture/CaptureButton";
@@ -13,8 +13,11 @@ import {
   Input,
   HStack,
 } from "@chakra-ui/react";
+import { useFabricOverlayState } from "../../state/store";
+import { fabric } from "openseadragon-fabricjs-overlay";
 
 const ViewerImport = ({
+  viewerId,
   uploadPatch,
   setStartX,
   setStartY,
@@ -24,6 +27,9 @@ const ViewerImport = ({
   const [screenCapture, setScreenCapture] = useState("");
   const [open, setModalOpen] = useState(false);
   const [title, setTitle] = useState("image Title");
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { viewerWindow, color } = fabricOverlayState;
+  const { viewer, fabricOverlay } = viewerWindow[viewerId];
 
   // const [startX, setStartX] = useState(0);
   // const [startY, setStartY] = useState(0);
@@ -45,13 +51,38 @@ const ViewerImport = ({
       .then((blob) => {
         const fd = new FormData();
         const file = new File([blob], "patch.png", { type: "image/png" });
-
         fd.append("file", file);
-
         uploadPatch(fd);
       });
     closeModal();
   };
+
+  // useEffect(() => {
+  //   if (!show) return;
+  //   const canvas = fabricOverlay.fabricCanvas();
+  //   const cells = [];
+  //   Object.values(cellData[0].nuc).forEach((cell) => {
+  //     const points = cell.contour.map((point) => ({
+  //       x: point[0] + 2100.909,
+  //       y: point[1] + 3120.0909,
+  //     }));
+  //     const polygon = new fabric.Polygon(points, {
+  //       stroke: "black",
+  //       strokeWidth: 1.2,
+  //       fill: `${color.hex}40`,
+  //       strokeUniform: true,
+  //     });
+  //     cells.push(polygon);
+  //   });
+  //   const group = new fabric.Group(cells, {
+  //     stroke: "black",
+  //     strokeWidth: 1,
+  //     fill: `${color.hex}40`,
+  //     strokeUniform: true,
+  //   });
+  //   canvas.add(group).requestRenderAll();
+  //   setShow(false);
+  // }, [show]);
 
   return (
     <ScreenCapture

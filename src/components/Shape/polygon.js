@@ -5,7 +5,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import md5 from "md5";
 import TypeButton from "../typeButton";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
-import { getCanvasImage } from "../../utility/utility";
+import { getCanvasImage, getScaleFactor } from "../../utility/utility";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
@@ -20,8 +20,7 @@ const Polygon = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, zoomValue, activityFeed } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
   const { deselectAll } = useFabricHelpers();
 
   const isActive = activeTool === "Polygon";
@@ -88,7 +87,7 @@ const Polygon = ({ viewerId }) => {
         .remove(myStateRef.current.activeShape)
         .remove(myStateRef.current.activeLine);
 
-      const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
+      const scaleFactor = getScaleFactor(viewer);
       const polygon = new fabric.Polygon(points, {
         stroke: "black",
         strokeWidth: 1 / scaleFactor,
@@ -111,7 +110,7 @@ const Polygon = ({ viewerId }) => {
       const random = Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
       const id = new Date().getTime() + random;
       const pointer = canvas.getPointer(options.e);
-      const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
+      const scaleFactor = getScaleFactor(viewer);
 
       const circle = new fabric.Circle({
         radius: 4 / scaleFactor,
@@ -272,7 +271,7 @@ const Polygon = ({ viewerId }) => {
       };
 
       const hash = md5(shape + timeStamp);
-      shape.set({ hash, zoomLevel: zoomValue });
+      shape.set({ hash, zoomLevel: viewer.viewport.getZoom() });
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });

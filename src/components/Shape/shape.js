@@ -19,8 +19,7 @@ const Shape = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, zoomValue, activityFeed } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
 
   const { deselectAll } = useFabricHelpers();
   const isActive = activeTool === "SHAPE";

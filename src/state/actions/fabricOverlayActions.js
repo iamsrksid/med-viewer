@@ -18,11 +18,6 @@ export const updateUserCanvases = (payload) => ({
   payload,
 });
 
-export const updateZoomValue = (payload) => ({
-  type: "updateZoomValue",
-  payload,
-});
-
 export const updateActivityFeed = (payload) => ({
   type: "updateActivityFeed",
   payload,

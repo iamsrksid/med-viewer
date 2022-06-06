@@ -16,7 +16,6 @@ const defaultViewerWindow = {
   userCanvases: getLocalUserCanvases(),
   viewer: null,
   activityFeed: [],
-  zoomValue: 0,
   tile: "",
 };
 
@@ -53,20 +52,6 @@ const fabricOverlayReducer = (state, action) => {
           },
         },
       };
-
-    case "updateZoomValue": {
-      const zoomValue = action.payload.value;
-      return {
-        ...state,
-        viewerWindow: {
-          ...state.viewerWindow,
-          [action.payload.id]: {
-            ...state.viewerWindow[action.payload.id],
-            zoomValue: zoomValue > 40 ? 40 : zoomValue,
-          },
-        },
-      };
-    }
 
     case "updateActivityFeed":
       return {

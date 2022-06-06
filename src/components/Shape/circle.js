@@ -6,7 +6,7 @@ import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
-import { getCanvasImage } from "../../utility/utility";
+import { getCanvasImage, getScaleFactor } from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
@@ -19,8 +19,7 @@ const Circle = ({ viewerId }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, zoomValue, activityFeed } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
 
   const { deselectAll } = useFabricHelpers();
   const isActive = activeTool === "Circle";
@@ -115,7 +114,7 @@ const Circle = ({ viewerId }) => {
       };
 
       // Stroke fill
-      const scaleFactor = zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
+      const scaleFactor = getScaleFactor(viewer);
 
       const fillProps = {
         fill: `${myStateRef.current.color.hex}40`,
@@ -189,8 +188,6 @@ const Circle = ({ viewerId }) => {
 
       fabricOverlay.fabricCanvas().renderAll();
     }
-
-    // const fontSize = getFontSize(screenSize, zoomValue);
 
     // // Create new Textbox instance and add it to canvas
     // const createTextbox = ({ left, top, height }) => {
@@ -285,7 +282,7 @@ const Circle = ({ viewerId }) => {
       };
 
       const hash = md5(shape + timeStamp);
-      shape.set({ hash, zoomLevel: zoomValue });
+      shape.set({ hash, zoomLevel: viewer.viewport.getZoom() });
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });

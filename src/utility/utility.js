@@ -78,6 +78,21 @@ export const getSlideUrl = (url) => {
     : "";
 };
 
+// get index of the item in the array
 export const findCurrentIndex = (itemId, arr = []) => {
   return arr.findIndex((elm) => elm._id === itemId);
+};
+
+// get the zoom value from the zoom level
+export const getZoomValue = (viewer) => {
+  return parseInt(
+    (viewer.viewport.getZoom() * 40) / viewer.viewport.getMaxZoom(),
+    10
+  );
+};
+
+// get the scale Factor
+export const getScaleFactor = (viewer) => {
+  const zoomValue = getZoomValue(viewer);
+  return zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
 };
