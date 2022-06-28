@@ -4,6 +4,8 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
+import SlideNavigatorIcon from "../Navigator/slideNavigatorIcon";
+import ToolbarButton from "../ViewerToolbar/button";
 import { isCaseViewable } from "../../utility/utility";
 import "../../styles/viewer.css";
 
@@ -18,7 +20,9 @@ const ChangeCase = ({
     ? project?.cases.findIndex(
         (projectCase) => projectCase._id === caseInfo?._id
       )
-    : caseInfo?.slides.findIndex((s) => s._id === slide?._id);
+    : caseInfo?.slides.findIndex(
+        (s) => s.awsImageBucketUrl === slide?.awsImageBucketUrl
+      );
 
   const maxIndex = project ? project?.cases?.length : caseInfo?.slides?.length;
   const [closeButton, setCloseButton] = useState(true);
@@ -31,11 +35,11 @@ const ChangeCase = ({
     <Flex
       justifyContent="space-between"
       alignItems="center"
-      borderX="2px solid #E4E5E8"
       height="18px"
       minW="140px"
+      pl="26px"
     >
-      <HStack mx="28px">
+      <HStack>
         <Tooltip
           label="Previous Slide"
           placement="bottom"
@@ -71,7 +75,7 @@ const ChangeCase = ({
         <Text mr="24px">
           {project
             ? project?.cases[currentIndex]?.name
-            : caseInfo?.slides[currentIndex]?.slideName}
+            : caseInfo?.slides[currentIndex]?.accessionId}
         </Text>
         <Tooltip
           label="Next Slide"

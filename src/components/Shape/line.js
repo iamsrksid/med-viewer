@@ -16,7 +16,7 @@ import {
 } from "../../utility/utility";
 import EditText from "../Feed/editText";
 
-const Line = ({ viewerId }) => {
+const Line = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow, color } = fabricOverlayState;
   const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
@@ -218,6 +218,12 @@ const Line = ({ viewerId }) => {
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
+
+      // const canvas = fabricOverlay.fabricCanvas();
+      // const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      // if (annotations.object.length > 0) {
+      //   saveAnnotationsHandler();
+      // }
 
       setShape(null);
       setTextbox(false);

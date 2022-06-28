@@ -16,8 +16,16 @@ import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
+import Multiview from "../Multiview/multiview";
 
-const Move = ({ viewerId, annotations }) => {
+const Move = ({
+  viewerId,
+  annotations,
+  isMultiview,
+  setIsMultiview,
+  setIsNavigatorActive,
+  saveAnnotationsHandler,
+}) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [typeToolsToggle, setTypeToolsToggle] = useState(false);
   const [colorBar, setColorBar] = useState(false);
@@ -29,13 +37,12 @@ const Move = ({ viewerId, annotations }) => {
 
   const handleClick = () => {
     setFabricOverlayState(updateTool({ tool: "Move" }));
-    const canvas = fabricOverlay.fabricCanvas();
   };
   const handleAnnotationsClick = () => {
-    setTypeToolsToggle((typeToolsToggle) => !typeToolsToggle);
+    setTypeToolsToggle((state) => !state);
   };
   const handleColorClick = () => {
-    setColorBar((colorBar) => !colorBar);
+    setColorBar((state) => !state);
   };
   const handlePopup = () => {
     setPopup(!popup);
@@ -128,12 +135,12 @@ const Move = ({ viewerId, annotations }) => {
           outline={colorBar ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
           onClick={handleColorClick}
         />
-        <ToolbarButton
+        {/* <ToolbarButton
           icon={<RiPencilRulerLine size={iconSize} color="#151C25" />}
           onClick={handlePopup}
           label="Measurement"
-        />
-        {annotations ? (
+        /> */}
+        {/* {annotations ? (
           <>
             <ToolbarButton
               icon={<ImMakeGroup size={iconSize} color="#151C25" />}
@@ -146,7 +153,13 @@ const Move = ({ viewerId, annotations }) => {
               onClick={ungroupAnnotations}
             />
           </>
-        ) : null}
+        ) : null} */}
+        <Multiview
+          viewerId={viewerId}
+          isMultiview={isMultiview}
+          setIsMultiview={setIsMultiview}
+          setIsNavigatorActive={setIsNavigatorActive}
+        />
         {/* <TypeText viewerId={viewerId} /> */}
       </Flex>
 
@@ -158,8 +171,13 @@ const Move = ({ viewerId, annotations }) => {
         zIndex="1000"
         ml={ifBiggerScreen ? "100px" : ""}
       >
-        {typeToolsToggle ? <TypeTools viewerId={viewerId} /> : ""}
-        {colorBar ? <ColorOptionsPanel /> : ""}
+        {typeToolsToggle ? (
+          <TypeTools
+            viewerId={viewerId}
+            saveAnnotationsHandler={saveAnnotationsHandler}
+          />
+        ) : null}
+        {colorBar ? <ColorOptionsPanel /> : null}
       </Flex>
 
       {/* Dummy component */}

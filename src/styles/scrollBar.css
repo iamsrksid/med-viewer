@@ -1,9 +1,13 @@
 .thumb-vertical {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: #F6F6F6;
   border-radius: inherit;
   cursor: pointer;
 }
 
 .thumb-vertical-messageBox {
   background: none;
+}
+
+.thumb-hide {
+    background: none;
 }

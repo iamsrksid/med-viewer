@@ -4,7 +4,7 @@ import { Flex } from "@chakra-ui/react";
 
 const LayoutAppBody = ({ children }) => {
   return (
-    <Flex flexGrow={1} direction="row" as="main">
+    <Flex flexGrow={1} direction="row" as="main" gap="2px">
       {children}
     </Flex>
   );

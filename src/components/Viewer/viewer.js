@@ -70,6 +70,7 @@ const Viewer = ({
 
   useEffect(() => {
     viewer && viewer.destroy();
+
     // Initialize OpenSeadragon instance and set to viewer
     setViewer(
       OpenSeadragon({
@@ -91,7 +92,7 @@ const Viewer = ({
   // Show the results.
 
   useEffect(() => {
-    if (!viewer) return;
+    if (!viewer) return null;
 
     // Create the fabric.js overlay, and set it on a sharable context
     // viewer.open(tile.source);
@@ -115,7 +116,7 @@ const Viewer = ({
   }, [viewer]);
 
   return (
-    <Box id={`viewer${viewerId}`} position="relative" w="100%">
+    <Box id={`viewer${viewerId}`} position="relative" w="100%" h="100%">
       {isBrowser && (
         <ViewerControls
           viewerId={viewerId}

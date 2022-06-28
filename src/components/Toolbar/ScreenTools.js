@@ -38,10 +38,11 @@ const ScreenTools = ({
         label="WSI"
         onClick={handlePopup}
       />
-      {/* <ToolbarButton
-          icon={<BiScreenshot size={IconSize()} color="#151C25" />}
-          label="Crop and run morphometry"
-        /> */}
+      <ToolbarButton
+        icon={<BiScreenshot size={IconSize()} color="#151C25" />}
+        label="Crop and run morphometry"
+        onClick={() => setShow(true)}
+      />
       {morphometry === true ? (
         <ViewerImport
           viewerId={viewerId}

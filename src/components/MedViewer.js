@@ -20,6 +20,7 @@ const MedViewer = ({ viewerIds, ...props }) => {
       viewerWindow: {},
       username: "",
       roomName: "",
+      sync: false,
     }
   );
 
@@ -30,21 +31,24 @@ const MedViewer = ({ viewerIds, ...props }) => {
     )
       return;
     const viewerWindows = [];
-    viewerIds.map((slide) => {
-      viewerWindows.push({ id: slide._id, tile: slide.awsImageBucketUrl });
+    viewerIds.forEach((slide) => {
+      viewerWindows.push({
+        id: slide._id,
+        tile: slide.awsImageBucketUrl,
+        slideName: slide.slideName,
+      });
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));
     setIsReady(true);
   }, [fabricOverlayState, viewerIds]);
 
-  useEffect(() => {
-    return () => {
-      setFabricOverlayState(resetFabricOverlay());
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     setFabricOverlayState(resetFabricOverlay());
+  //   };
+  // }, []);
 
-  return isReady &&
-    _.keys(fabricOverlayState?.viewerWindow).length === viewerIds?.length ? (
+  return isReady && _.keys(fabricOverlayState?.viewerWindow).length > 0 ? (
     <React.StrictMode>
       <StoreProvider value={{ fabricOverlayState, setFabricOverlayState }}>
         <LayoutApp viewerIds={viewerIds} {...props} />

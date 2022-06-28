@@ -17,6 +17,8 @@ const defaultViewerWindow = {
   viewer: null,
   activityFeed: [],
   tile: "",
+  slideName: "",
+  isLeading: false,
 };
 
 const fabricOverlayReducer = (state, action) => {
@@ -28,17 +30,20 @@ const fabricOverlayReducer = (state, action) => {
       return { ...state, activeTool: action.payload.tool };
 
     case "updateOverlay":
-      return {
-        ...state,
-        viewerWindow: {
-          ...state.viewerWindow,
-          [action.payload.id]: {
-            ...state.viewerWindow[action.payload.id],
-            fabricOverlay: action.payload.fabricOverlay,
-            viewer: action.payload.viewer,
+      if (action.payload.id in state.viewerWindow) {
+        return {
+          ...state,
+          viewerWindow: {
+            ...state.viewerWindow,
+            [action.payload.id]: {
+              ...state.viewerWindow[action.payload.id],
+              fabricOverlay: action.payload.fabricOverlay,
+              viewer: action.payload.viewer,
+            },
           },
-        },
-      };
+        };
+      }
+      return state;
 
     case "updateUserCanvases":
       return {
@@ -68,7 +73,11 @@ const fabricOverlayReducer = (state, action) => {
     case "addViewerWindow": {
       const viewerWindow = {};
       action.payload.forEach((w) => {
-        viewerWindow[w.id] = { ...defaultViewerWindow, tile: w.tile };
+        viewerWindow[w.id] = {
+          ...defaultViewerWindow,
+          tile: w.tile,
+          slideName: w.slideName,
+        };
       });
       return {
         ...state,
@@ -85,7 +94,60 @@ const fabricOverlayReducer = (state, action) => {
         if (id !== action.payload.id)
           newViewerWindow[id] = state.viewerWindow[id];
       });
-      return { ...state, ...newViewerWindow };
+      const { viewer } = state.viewerWindow[action.payload.id];
+      viewer.destroy();
+      return { ...state, viewerWindow: { ...newViewerWindow } };
+    }
+
+    case "addViewerInstance": {
+      const parentViewer = state.viewerWindow[action.payload.viewerId];
+      return {
+        ...state,
+        viewerWindow: {
+          ...state.viewerWindow,
+          [action.payload.viewerId]: {
+            ...parentViewer,
+            instance: action.payload.id,
+          },
+          [action.payload.id]: {
+            ...defaultViewerWindow,
+            tile: action.payload.tile,
+            slideName: action.payload.slideName,
+            parent: action.payload.viewerId,
+          },
+        },
+      };
+    }
+
+    case "removeViewerInstance": {
+      const newViewerWindow = {};
+      _.keys(state.viewerWindow).forEach((id) => {
+        if (id !== action.payload.id)
+          newViewerWindow[id] = state.viewerWindow[id];
+      });
+      const parentViewer = state.viewerWindow[action.payload.viewerId];
+      // state.viewerWindow[action.payload.id].viewer.destroy();
+      return {
+        ...state,
+        viewerWindow: {
+          ...newViewerWindow,
+          [action.payload.viewerId]: { ...parentViewer, instance: null },
+        },
+      };
+    }
+
+    case "changeTile": {
+      const viewerW = state.viewerWindow[action.payload.id];
+      return {
+        ...state,
+        viewerWindow: {
+          ...state.viewerWindow,
+          [action.payload.id]: {
+            ...viewerW,
+            tile: action.payload.tile,
+          },
+        },
+      };
     }
 
     case "resetFabricOverlay":
@@ -94,6 +156,12 @@ const fabricOverlayReducer = (state, action) => {
         viewerWindow: {},
         activeTool: "Move",
         color: brandColors[0],
+      };
+
+    case "toggleSync":
+      return {
+        ...state,
+        sync: !state.sync,
       };
 
     default:

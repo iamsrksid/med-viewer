@@ -1,0 +1,47 @@
+import React from "react";
+import { changeTile } from "../../state/actions/fabricOverlayActions";
+import { useFabricOverlayState } from "../../state/store";
+import "../../styles/viewer.css";
+import ChangeHelper from "./changeHelper";
+
+const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { viewerWindow } = fabricOverlayState;
+  const { viewer } = viewerWindow[viewerId];
+
+  const currentIndex = caseInfo.slides.findIndex(
+    (s) => s.awsImageBucketUrl === slideUrl
+  );
+
+  const maxIndex = caseInfo?.slides?.length;
+
+  const disabledLeft =
+    currentIndex - 1 < 0 ||
+    caseInfo.slides[currentIndex - 1].awsImageBucketUrl === "";
+
+  const disabledRight =
+    currentIndex + 1 === maxIndex ||
+    caseInfo?.slides[currentIndex + 1].awsImageBucketUrl === "";
+
+  const title = caseInfo.slides[currentIndex].accessionId;
+
+  const clickHandler = (position) => {
+    const nextSlide = caseInfo.slides[currentIndex + position];
+    setFabricOverlayState(
+      changeTile({ id: viewerId, tile: nextSlide.awsImageBucketUrl })
+    );
+    viewer.open(nextSlide.awsImageBucketUrl);
+  };
+
+  return (
+    <ChangeHelper
+      title={title}
+      disabledLeft={disabledLeft}
+      disabledRight={disabledRight}
+      clickHandler={clickHandler}
+      {...restProps}
+    />
+  );
+};
+
+export default ChangeSlide;

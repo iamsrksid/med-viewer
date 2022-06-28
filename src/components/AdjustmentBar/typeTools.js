@@ -12,7 +12,7 @@ import Typebutton from "../typeButton";
 import Polygon from "../Shape/polygon";
 import { useFabricOverlayState } from "../../state/store";
 
-const TypeTools = ({ viewerId, typeToolsButtonHandler }) => {
+const TypeTools = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
 
@@ -26,15 +26,30 @@ const TypeTools = ({ viewerId, typeToolsButtonHandler }) => {
     <Flex direction="column" paddingTop="5px">
       <Flex h="5px" bgColor="rgba(236, 236, 236, 1)" />
       <HStack px="16px" h="42px" bgColor="rgba(248, 248, 245, 1)">
-        <Line viewerId={viewerId} />
+        <Line
+          viewerId={viewerId}
+          saveAnnotationsHandler={saveAnnotationsHandler}
+        />
         <Typebutton
           disabled
           icon={<SiTarget size={18} color="rgba(21, 28, 37, 1)" />}
         />
-        <Square viewerId={viewerId} />
-        <Circle viewerId={viewerId} />
-        <Polygon viewerId={viewerId} />
-        <Draw viewerId={viewerId} />
+        <Square
+          viewerId={viewerId}
+          saveAnnotationsHandler={saveAnnotationsHandler}
+        />
+        <Circle
+          viewerId={viewerId}
+          saveAnnotationsHandler={saveAnnotationsHandler}
+        />
+        <Polygon
+          viewerId={viewerId}
+          saveAnnotationsHandler={saveAnnotationsHandler}
+        />
+        <Draw
+          viewerId={viewerId}
+          saveAnnotationsHandler={saveAnnotationsHandler}
+        />
         <Typebutton
           disabled
           icon={<BsEraser size={18} color="rgba(21, 28, 37, 1)" />}

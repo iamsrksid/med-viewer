@@ -9,6 +9,7 @@ import LayoutOuterBody from "./outerbody";
 import LayoutAppSidebar from "./sidebar";
 import ViewerFactory from "../Viewer/viewerFactory";
 import ViewerImport from "./viewerImport";
+import Navigator from "../Navigator/navigator";
 
 const LayoutApp = ({
   userInfo,
@@ -30,7 +31,9 @@ const LayoutApp = ({
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
-  const [sidebar, setSidebar] = useState(true);
+  const [sidebar, setSidebar] = useState(false);
+  const [isNavigatorActive, setIsNavigatorActive] = useState(false);
+  const [isMultiview, setIsMultiview] = useState(false);
   const [navbar, setNavbar] = useState(true);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
   const [currentViewer, setCurrentViewer] = useState(viewerIds?.[0]?._id);
@@ -67,15 +70,37 @@ const LayoutApp = ({
           sidebar={sidebar}
           morphometry={morphometry}
           uploadPatch={uploadPatch}
+          isNavigatorActive={isNavigatorActive}
+          setIsNavigatorActive={setIsNavigatorActive}
+          isMultiview={isMultiview}
+          setIsMultiview={setIsMultiview}
+          saveAnnotationsHandler={saveAnnotationsHandler}
+          // loadAnnotationsHandler={loadAnnotationsHandler}
           setStartX={setStartX}
           setStartY={setStartY}
           setWindowWidth={setWindowWidth}
           setWindowHeight={setWindowHeight}
         />
+        {isNavigatorActive && (
+          <Navigator
+            caseInfo={caseInfo}
+            viewerId={currentViewer}
+            isActive={isNavigatorActive}
+          />
+        )}
+        {isMultiview && (
+          <Navigator
+            caseInfo={caseInfo}
+            viewerId={currentViewer}
+            isActive={isMultiview}
+            isMultiview={isMultiview}
+          />
+        )}
         <LayoutInnerBody>
           {sidebar ? (
             <LayoutAppSidebar
               project={project}
+              caseInfo={caseInfo}
               questionnaire={questionnaire}
               annotations={annotations}
               report={report}
@@ -85,14 +110,15 @@ const LayoutApp = ({
               finalSubmitHandler={finalSubmitHandler}
               response={response}
               currentViewer={currentViewer}
-              saveAnnotationsHandler={saveAnnotationsHandler}
-              loadAnnotationsHandler={loadAnnotationsHandler}
+              setSidebar={setSidebar}
             />
           ) : null}
           <LayoutAppBody>
             <ViewerFactory
               viewerIds={viewerIds}
               slideType={project?.slideType}
+              caseInfo={caseInfo}
+              setCurrentViewer={setCurrentViewer}
               startX={startX}
               startY={startY}
               windowWidth={windowWidth}

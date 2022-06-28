@@ -6,6 +6,8 @@ import {
   AlertTitle,
   AlertDescription,
   Box,
+  Flex,
+  VStack,
 } from "@chakra-ui/react";
 import Viewer from "./viewer";
 import { useFabricOverlayState } from "../../state/store";

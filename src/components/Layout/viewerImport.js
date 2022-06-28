@@ -30,7 +30,6 @@ const ViewerImport = ({
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, color } = fabricOverlayState;
   const { viewer, fabricOverlay } = viewerWindow[viewerId];
-
   // const [startX, setStartX] = useState(0);
   // const [startY, setStartY] = useState(0);
   // const [windowWidth, setWindowWidth] = useState(0);
@@ -61,10 +60,11 @@ const ViewerImport = ({
   //   if (!show) return;
   //   const canvas = fabricOverlay.fabricCanvas();
   //   const cells = [];
-  //   Object.values(cellData[0].nuc).forEach((cell) => {
+  //   const { left, top, nuc } = cellData[0][0];
+  //   Object.values(nuc).forEach((cell) => {
   //     const points = cell.contour.map((point) => ({
-  //       x: point[0] + 2100.909,
-  //       y: point[1] + 3120.0909,
+  //       x: point[0] + left,
+  //       y: point[1] + top,
   //     }));
   //     const polygon = new fabric.Polygon(points, {
   //       stroke: "black",

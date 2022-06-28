@@ -33,7 +33,27 @@ export const removeViewerWindow = (payload) => ({
   payload,
 });
 
+export const addViewerInstance = (payload) => ({
+  type: "addViewerInstance",
+  payload,
+});
+
+export const removeViewerInstance = (payload) => ({
+  type: "removeViewerInstance",
+  payload,
+});
+
 export const resetFabricOverlay = (payload) => ({
   type: "resetFabricOverlay",
+  payload,
+});
+
+export const changeTile = (payload) => ({
+  type: "changeTile",
+  payload,
+});
+
+export const toggleSync = (payload) => ({
+  type: "toggleSync",
   payload,
 });

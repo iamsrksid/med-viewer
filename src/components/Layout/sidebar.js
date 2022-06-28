@@ -4,18 +4,19 @@ import { Flex, useMediaQuery } from "@chakra-ui/react";
 import SidebarTools from "../Sidebar/tools";
 
 const LayoutAppSidebar = (props) => {
-  const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
+  const [ifBiggerScreen] = useMediaQuery("(min-width:2560px)");
+  const [ifMiddleScreen] = useMediaQuery("(min-width:1560px)");
 
   return (
     <Flex
       as="section"
       color="BLACK"
-      w={ifBiggerScreen ? "16%" : "275px"}
+      w={ifBiggerScreen ? "12%" : ifMiddleScreen ? "15.5%" : "275px"}
       direction="column"
       alignItems="left"
       boxShadow="base"
       zIndex="2"
-      backgroundColor="rgba(236, 236, 236, 1)"
+      backgroundColor="#FCFCFC"
       overflowX="auto"
     >
       <SidebarTools {...props} />

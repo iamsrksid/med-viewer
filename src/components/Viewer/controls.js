@@ -1,18 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useZoom, OpenSeadragon } from "use-open-seadragon";
+import React, { useEffect } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  HStack,
-  IconButton,
-  Portal,
-  Tooltip,
-  VStack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, HStack, VStack, Text } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import ZoomSlider from "../ZoomSlider/slider";
 import ToolbarButton from "../ViewerToolbar/button";
@@ -21,65 +10,48 @@ import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
 
 const ViewerControls = ({ viewerId, slideName, slideType }) => {
-  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { viewer } = fabricOverlayState?.viewerWindow[viewerId];
-  const [scalebar, setScalebar] = useState(null);
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { viewer } = fabricOverlayState.viewerWindow[viewerId];
   const iconSize = IconSize();
 
-  const handleZoomIn = (e) => {
+  const handleZoomIn = () => {
     try {
       if (viewer.viewport.getMaxZoom() > viewer.viewport.getZoom()) {
         viewer.viewport.zoomBy(1.0 / 0.7);
       }
-    } catch (e) {
-      console.error("Error handling Zoom In button click", e);
+    } catch (err) {
+      console.error("Error handling Zoom In button click", err);
     }
   };
 
-  const handleZoomOut = (e) => {
+  const handleZoomOut = () => {
     try {
       if (viewer.viewport.getMinZoom() < viewer.viewport.getZoom()) {
         viewer.viewport.zoomBy(0.7);
       }
-    } catch (e) {
-      console.error("Error handling Zoom Out button click", e);
+    } catch (err) {
+      console.error("Error handling Zoom Out button click", err);
     }
   };
 
   useEffect(() => {
-    if (viewer) {
-      const scalebarInit = viewer.scalebar({
-        type: 1,
-        pixelsPerMeter: 250000,
-        minWidth: "75px",
-        maxWidth: "75px",
-        location: 4,
-        xOffset: 5,
-        yOffset: 10,
-        stayInsideImage: true,
-        color: "white",
-        fontColor: "white",
-        backgroundColor: "black",
-        fontSize: "14px",
-        barThickness: 2,
-        stayInsideImage: false,
-      });
-
-      setScalebar(scalebarInit);
-    }
+    if (!viewer) return;
+    viewer.scalebar({
+      type: 1,
+      pixelsPerMeter: 250000,
+      minWidth: "75px",
+      maxWidth: "75px",
+      location: 4,
+      xOffset: 5,
+      yOffset: 10,
+      color: "white",
+      fontColor: "white",
+      backgroundColor: "black",
+      fontSize: "14px",
+      barThickness: 2,
+      stayInsideImage: false,
+    });
   }, [viewer]);
-
-  const ZoomButton = (restProps) => {
-    return (
-      <IconButton
-        size="sm"
-        // backgroundColor="#E4E5E8"
-        // boxShadow="lg"
-        _focus={{ border: "none" }}
-        {...restProps}
-      />
-    );
-  };
 
   return (
     <>
