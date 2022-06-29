@@ -35,7 +35,7 @@ const Navigator = ({
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
-  const { tile, viewer } = viewerWindow[viewerId];
+  const { tile, viewer, fabricOverlay } = viewerWindow[viewerId];
 
   const scrollbarRef = useRef(null);
 
@@ -43,24 +43,45 @@ const Navigator = ({
     if (isMultiview) {
       const vKeys = Object.keys(viewerWindow);
       if (vKeys.length > 1) {
-        const { viewer: v } = viewerWindow[vKeys[1]];
+        const { viewer: v, fabricOverlay: fo } = viewerWindow[vKeys[1]];
         setFabricOverlayState(
-          changeTile({ id: vKeys[1], tile: slide.awsImageBucketUrl })
+          changeTile({
+            id: vKeys[1],
+            tile: slide.awsImageBucketUrl,
+            slideName: slide.accessionId,
+            slideId: slide._id,
+          })
         );
         v.open(slide.awsImageBucketUrl);
+
+        // clear canvas (remove all annotations)
+        fo.fabricCanvas().clear();
       } else {
         const id = uuidv4();
         setFabricOverlayState(
           addViewerWindow([
-            { id, tile: slide.awsImageBucketUrl, slideName: slide.accessionId },
+            {
+              id,
+              tile: slide.awsImageBucketUrl,
+              slideName: slide.accessionId,
+              slideId: slide._id,
+            },
           ])
         );
       }
     } else {
       setFabricOverlayState(
-        changeTile({ id: viewerId, tile: slide.awsImageBucketUrl })
+        changeTile({
+          id: viewerId,
+          tile: slide.awsImageBucketUrl,
+          slideName: slide.accessionId,
+          slideId: slide._id,
+        })
       );
       viewer.open(slide.awsImageBucketUrl);
+
+      // clear canvas (remove all annotations)
+      fabricOverlay.fabricCanvas().clear();
     }
   };
 

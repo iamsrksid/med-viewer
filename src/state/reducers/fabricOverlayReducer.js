@@ -18,7 +18,7 @@ const defaultViewerWindow = {
   activityFeed: [],
   tile: "",
   slideName: "",
-  isLeading: false,
+  slideId: "",
 };
 
 const fabricOverlayReducer = (state, action) => {
@@ -77,6 +77,7 @@ const fabricOverlayReducer = (state, action) => {
           ...defaultViewerWindow,
           tile: w.tile,
           slideName: w.slideName,
+          slideId: w.slideId,
         };
       });
       return {
@@ -145,6 +146,8 @@ const fabricOverlayReducer = (state, action) => {
           [action.payload.id]: {
             ...viewerW,
             tile: action.payload.tile,
+            slideName: action.payload.slideName,
+            slideId: action.payload.slideId,
           },
         },
       };

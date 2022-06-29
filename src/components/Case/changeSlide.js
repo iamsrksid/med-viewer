@@ -7,7 +7,7 @@ import ChangeHelper from "./changeHelper";
 const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
-  const { viewer } = viewerWindow[viewerId];
+  const { viewer, fabricOverlay } = viewerWindow[viewerId];
 
   const currentIndex = caseInfo.slides.findIndex(
     (s) => s.awsImageBucketUrl === slideUrl
@@ -28,9 +28,15 @@ const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
   const clickHandler = (position) => {
     const nextSlide = caseInfo.slides[currentIndex + position];
     setFabricOverlayState(
-      changeTile({ id: viewerId, tile: nextSlide.awsImageBucketUrl })
+      changeTile({
+        id: viewerId,
+        tile: nextSlide.awsImageBucketUrl,
+        slideName: nextSlide.accessionId,
+        slideId: nextSlide._id,
+      })
     );
     viewer.open(nextSlide.awsImageBucketUrl);
+    fabricOverlay.fabricCanvas().clear();
   };
 
   return (

@@ -19,7 +19,8 @@ import EditText from "../Feed/editText";
 const Line = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow, color } = fabricOverlayState;
-  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed, slideId } =
+    viewerWindow[viewerId];
   const isActive = activeTool === "Line";
 
   const [shape, setShape] = useState(null);
@@ -219,11 +220,11 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
 
-      // const canvas = fabricOverlay.fabricCanvas();
-      // const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
-      // if (annotations.object.length > 0) {
-      //   saveAnnotationsHandler();
-      // }
+      const canvas = fabricOverlay.fabricCanvas();
+      const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      if (annotations.objects.length > 0) {
+        saveAnnotationsHandler(slideId, annotations.objects);
+      }
 
       setShape(null);
       setTextbox(false);

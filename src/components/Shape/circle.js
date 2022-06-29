@@ -15,11 +15,12 @@ import {
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
 
-const Circle = ({ viewerId }) => {
+const Circle = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed, slideId } =
+    viewerWindow[viewerId];
 
   const { deselectAll } = useFabricHelpers();
   const isActive = activeTool === "Circle";
@@ -286,6 +287,12 @@ const Circle = ({ viewerId }) => {
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
+
+      const canvas = fabricOverlay.fabricCanvas();
+      const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      if (annotations.objects.length > 0) {
+        saveAnnotationsHandler(slideId, annotations.objects);
+      }
 
       setShape(null);
       setTextbox(false);

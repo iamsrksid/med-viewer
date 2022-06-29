@@ -42,11 +42,12 @@ const createFreeDrawingCursor = (brushWidth, brushColor) => {
   }, crosshair`;
 };
 
-const Draw = ({ viewerId }) => {
+const Draw = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed, slideId } =
+    viewerWindow[viewerId];
 
   const { hexToRGBA } = useHexRGB();
   const isActive = activeTool === "DRAW";
@@ -192,6 +193,12 @@ const Draw = ({ viewerId }) => {
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
+
+      const canvas = fabricOverlay.fabricCanvas();
+      const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      if (annotations.objects.length > 0) {
+        saveAnnotationsHandler(slideId, annotations.objects);
+      }
 
       setFabricOverlayState(
         updateActivityFeed({

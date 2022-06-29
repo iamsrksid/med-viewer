@@ -3,10 +3,7 @@ import _ from "lodash";
 import LayoutApp from "./Layout/app";
 import Loading from "./Loading/loading";
 import { StoreProvider } from "../state/store";
-import {
-  addViewerWindow,
-  resetFabricOverlay,
-} from "../state/actions/fabricOverlayActions";
+import { addViewerWindow } from "../state/actions/fabricOverlayActions";
 import fabricOverlayReducer from "../state/reducers/fabricOverlayReducer";
 import { brandColors } from "../styles/brandPalette";
 
@@ -35,7 +32,8 @@ const MedViewer = ({ viewerIds, ...props }) => {
       viewerWindows.push({
         id: slide._id,
         tile: slide.awsImageBucketUrl,
-        slideName: slide.slideName,
+        slideName: slide.accessionId,
+        slideId: slide._id,
       });
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));

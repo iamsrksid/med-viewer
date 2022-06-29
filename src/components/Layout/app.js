@@ -55,7 +55,7 @@ const LayoutApp = ({
   };
 
   return (
-    <Flex as={Div100vh} h="100vh" direction="column">
+    <Flex h="calc(100vh - 44px)" direction="column">
       <LayoutOuterBody>
         <AdjustmentBar
           userInfo={userInfo}

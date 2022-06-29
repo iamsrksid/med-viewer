@@ -8,10 +8,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalBody,
-  Text,
   Image,
-  Input,
-  HStack,
 } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../../state/store";
 import { fabric } from "openseadragon-fabricjs-overlay";

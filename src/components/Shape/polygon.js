@@ -16,11 +16,12 @@ import {
 const MAX = 999999;
 const MIN = 99;
 
-const Polygon = ({ viewerId }) => {
+const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
+  const { fabricOverlay, viewer, activityFeed, slideId } =
+    viewerWindow[viewerId];
   const { deselectAll } = useFabricHelpers();
 
   const isActive = activeTool === "Polygon";
@@ -275,6 +276,12 @@ const Polygon = ({ viewerId }) => {
 
       message.image = await getCanvasImage(viewerId);
       message.object.set({ id: message.timeStamp });
+
+      const canvas = fabricOverlay.fabricCanvas();
+      const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      if (annotations.objects.length > 0) {
+        saveAnnotationsHandler(slideId, annotations.objects);
+      }
 
       setFabricOverlayState(
         updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
