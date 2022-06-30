@@ -122,19 +122,13 @@ const Move = ({
             onClick={handleAnnotationsClick}
           />
         ) : null}
-        {/* <MultiView viewerId={viewerId}/> */}
         {/* <ToolbarButton
-          icon={<BsLayoutSplit size={18} color="#151C25" />}
-          label="Multiview"
-          onClick={handlePopup}
-        /> */}
-        <ToolbarButton
           icon={<BsCircleHalf size={iconSize} color="#151C25" />}
           label="Colors"
           backgroundColor={colorBar ? "#E4E5E8" : ""}
           outline={colorBar ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
           onClick={handleColorClick}
-        />
+        /> */}
         {/* <ToolbarButton
           icon={<RiPencilRulerLine size={iconSize} color="#151C25" />}
           onClick={handlePopup}
@@ -160,12 +154,11 @@ const Move = ({
           setIsMultiview={setIsMultiview}
           setIsNavigatorActive={setIsNavigatorActive}
         />
-        {/* <TypeText viewerId={viewerId} /> */}
       </Flex>
 
       <Flex
         pl="35px"
-        top="72px"
+        top="98px"
         direction="column"
         pos="absolute"
         zIndex="1000"

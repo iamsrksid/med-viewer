@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Flex, HStack, IconButton, Image } from "@chakra-ui/react";
+import { Flex, HStack, IconButton, Image, Text } from "@chakra-ui/react";
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
@@ -31,6 +31,7 @@ const Navigator = ({
   isMultiview,
   clickHandler,
   viewerId,
+  setIsMultiview,
   ...restProps
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -69,6 +70,7 @@ const Navigator = ({
           ])
         );
       }
+      setIsMultiview(false);
     } else {
       setFabricOverlayState(
         changeTile({
@@ -119,7 +121,7 @@ const Navigator = ({
           {caseInfo.slides.map((slide) => {
             const url = getSlideUrl(slide.awsImageBucketUrl);
             return (
-              <Flex key={slide._id}>
+              <Flex key={slide._id} direction="column">
                 <Image
                   minW="111px"
                   h="111px"
@@ -135,6 +137,9 @@ const Navigator = ({
                   onClick={() => changeSlide(slide)}
                   cursor="pointer"
                 />
+                <Text fontSize="12px" alignSelf="center">
+                  {slide.accessionId}
+                </Text>
                 {isMultiview && tile === slide.awsImageBucketUrl ? (
                   <Flex
                     w="28px"

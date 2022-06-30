@@ -34,7 +34,7 @@ const ShareLink = (restProps) => {
   return (
     <>
       <Tooltip
-        label="Share"
+        label="Submit Report"
         placement="bottom"
         openDelay={0}
         bg="#E4E5E8"
@@ -52,7 +52,7 @@ const ShareLink = (restProps) => {
           // px="27px"
           ml="15px"
           borderRadius="0px"
-          rightIcon={<RiShareForwardLine color="#fff" size={IconSize()} />}
+          // rightIcon={<RiShareForwardLine color="#fff" size={IconSize()} />}
           backgroundColor="#00153F"
           _hover={{}}
           _focus={{
@@ -65,7 +65,7 @@ const ShareLink = (restProps) => {
           {...restProps}
           onClick={handlePopup}
         >
-          Share
+          Submit Report
         </Button>
       </Tooltip>
       <AlertDialog

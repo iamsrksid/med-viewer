@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
-import Div100vh from "react-div-100vh";
 import PropTypes from "prop-types";
 import AdjustmentBar from "../AdjustmentBar/adjustmentBar";
 import LayoutAppBody from "./body";
@@ -94,6 +93,7 @@ const LayoutApp = ({
             viewerId={currentViewer}
             isActive={isMultiview}
             isMultiview={isMultiview}
+            setIsMultiview={setIsMultiview}
           />
         )}
         <LayoutInnerBody>

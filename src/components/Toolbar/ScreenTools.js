@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Flex, Button } from "@chakra-ui/react";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { MdOutbox } from "react-icons/md";
-import { BiScreenshot } from "react-icons/bi";
+import { BiScreenshot, BiDotsVertical } from "react-icons/bi";
 import ToolbarButton from "../ViewerToolbar/button";
 import SlideChat from "../Chat/chat";
 import ShareLink from "../Share/shareLink";
@@ -53,6 +53,13 @@ const ScreenTools = ({
       {/* <Fullscreen viewerId={viewerId} /> */}
       <SlideChat />
       <ShareLink />
+      <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
+        <ToolbarButton
+          icon={<BiDotsVertical size={20} color="#151C25" />}
+          label="Options"
+          onClick={handlePopup}
+        />
+      </Flex>
       <Popup
         handlePopup={() => {
           handlePopup();
