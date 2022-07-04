@@ -16,6 +16,8 @@ const ViewerContainer = ({
   viewerId,
   slideName,
   slideType,
+  userInfo,
+  loadAnnotationsHandler,
   startX,
   startY,
   windowWidth,
@@ -27,9 +29,9 @@ const ViewerContainer = ({
 }) => {
   const location = useLocation();
 
-  const { fabricOverlayState } = useFabricOverlayState();
-  const { fabricOverlay, userCanvases, tile } =
-    fabricOverlayState?.viewerWindow[viewerId];
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { viewerWindow } = fabricOverlayState;
+  const { fabricOverlay, userCanvases, tile } = viewerWindow[viewerId];
   const [tileSource, setTileSource] = useState({});
 
   const newCanvasTitle =
@@ -75,6 +77,8 @@ const ViewerContainer = ({
       tile={tile}
       slideName={slideName}
       slideType={slideType}
+      loadAnnotationsHandler={loadAnnotationsHandler}
+      userInfo={userInfo}
       startX={startX}
       startY={startY}
       windowWidth={windowWidth}

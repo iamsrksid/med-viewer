@@ -7,6 +7,7 @@ import {
   Tab,
   TabPanel,
   IconButton,
+  Flex,
 } from "@chakra-ui/react";
 import "../../styles/styles.css";
 import Studies from "./studies";
@@ -32,7 +33,13 @@ const SidebarTools = ({
   loadAnnotationsHandler,
 }) => {
   return (
-    <Box bg="#fcfcfc" minwidth="306px" padding="0px" margin="0px">
+    <Flex
+      bg="#fcfcfc"
+      minwidth="306px"
+      padding="0px"
+      margin="0px"
+      direction="column"
+    >
       <Tabs isFitted size="10px">
         <TabList
           backgroundColor="#F8F8F5"
@@ -156,7 +163,7 @@ const SidebarTools = ({
           </TabPanel> */}
         </TabPanels>
       </Tabs>
-    </Box>
+    </Flex>
   );
 };
 

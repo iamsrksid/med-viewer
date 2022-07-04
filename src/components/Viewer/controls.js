@@ -1,18 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
 import { Box, HStack, VStack, Text } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { fabric } from "openseadragon-fabricjs-overlay";
 import ZoomSlider from "../ZoomSlider/slider";
 import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
+import { getTimestamp, getCanvasImage } from "../../utility/utility";
+import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
+import Loading from "../Loading/loading";
 
-const ViewerControls = ({ viewerId, slideName, slideType }) => {
-  const { fabricOverlayState } = useFabricOverlayState();
-  const { viewer } = fabricOverlayState.viewerWindow[viewerId];
+const ViewerControls = ({
+  viewerId,
+  slideName,
+  slideType,
+  userInfo,
+  loadAnnotationsHandler,
+}) => {
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { viewer, fabricOverlay, slideId } =
+    fabricOverlayState.viewerWindow[viewerId];
   const iconSize = IconSize();
+  const [isAnnotationLoaded, setIsAnnotationLoaded] = useState(false);
 
   const handleZoomIn = () => {
     try {
@@ -33,6 +45,122 @@ const ViewerControls = ({ viewerId, slideName, slideType }) => {
       console.error("Error handling Zoom Out button click", err);
     }
   };
+
+  // load saved annotations from the server
+  // once viewer is initialized
+  useEffect(() => {
+    if (!fabricOverlay || !loadAnnotationsHandler) return;
+    const canvas = fabricOverlay.fabricCanvas();
+
+    const feed = [];
+
+    // add annotation to the activity feed
+    const addToFeed = async (shape) => {
+      const message = {
+        username: `${userInfo.firstName} ${userInfo.lastName}`,
+        color: shape.fill ? shape.fill : shape.stroke,
+        action: "added",
+        text: "",
+        timeStamp: getTimestamp(),
+        type: shape.type,
+        object: shape,
+        image: null,
+      };
+
+      // message.image = await getCanvasImage(viewerId);
+
+      // setFabricOverlayState(
+      //   updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
+      // );
+      feed.push(message);
+    };
+
+    // create annotation from the annotation data
+    const createAnnotation = (annotation) => {
+      let shape;
+      switch (annotation.type) {
+        case "ellipse":
+          shape = new fabric.Ellipse({
+            left: annotation.left,
+            top: annotation.top,
+            width: annotation.width,
+            height: annotation.height,
+            color: annotation.color,
+            fill: annotation.fill,
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            strokeUniform: annotation.strokeUniform,
+            rx: annotation.rx,
+            ry: annotation.ry,
+            angle: annotation.angle,
+          });
+          break;
+
+        case "rect":
+          shape = new fabric.Rect({
+            left: annotation.left,
+            top: annotation.top,
+            width: annotation.width,
+            height: annotation.height,
+            color: annotation.color,
+            fill: annotation.fill,
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            strokeUniform: annotation.strokeUniform,
+          });
+          break;
+
+        case "polygon":
+          shape = new fabric.Polygon(annotation.points, {
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            fill: annotation.fill,
+            strokeUniform: annotation.strokeUniform,
+          });
+          break;
+
+        case "path":
+          shape = new fabric.Path(annotation.path, {
+            color: annotation.color,
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            strokeUniform: annotation.strokeUniform,
+            fill: annotation.fill,
+          });
+          break;
+
+        default:
+          return;
+      }
+
+      // add shape to canvas and to activity feed
+      canvas.add(shape);
+      addToFeed(shape);
+    };
+
+    const loadAnnotations = async () => {
+      // remove render on each add annotation
+      const originalRender = canvas.renderOnAddRemove;
+      canvas.renderOnAddRemove = false;
+
+      const { data } = await loadAnnotationsHandler(slideId);
+      if (data) {
+        data.annotationsAutoSave.forEach((annotation) => {
+          createAnnotation(annotation);
+        });
+      }
+
+      // restore render on each add annotation
+      canvas.renderOnAddRemove = originalRender;
+      canvas.requestRenderAll();
+      viewer.viewport.zoomBy(1.01);
+
+      setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
+      setIsAnnotationLoaded(true);
+    };
+
+    loadAnnotations();
+  }, [fabricOverlay]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -55,18 +183,6 @@ const ViewerControls = ({ viewerId, slideName, slideType }) => {
 
   return (
     <>
-      {/* {isMultiView && (
-        <Box position="absolute" left="20px" top="20px" zIndex="1">
-          <HStack color="blue.400" fontSize={10}>
-            <Text as="button">View Details</Text>
-            <Text onClick={handleSelectSlide} as="button">
-              Select this slide
-            </Text>
-          </HStack>
-          <Text fontWeight="bold">Slide {viewerId.slice(-1)}: Name/info</Text>
-        </Box>
-        
-      )} */}
       {slideType ? (
         <Box
           position="absolute"
@@ -87,43 +203,9 @@ const ViewerControls = ({ viewerId, slideName, slideType }) => {
           </HStack>
         </Box>
       ) : null}
-      {/* <Box zIndex="1000">
-        <ButtonGroup spacing="3" size="lg">
-        <Tooltip label="Zoom in" aria-label="Zoom in">
-          <IconButton
-            icon={<AiOutlinePlus />}
-            onClick={handleZoomIn}
-            size="md"
-            border="1px solid gray"
-            borderRadius="25px"
-          />
-        </Tooltip>
-        <Tooltip label="Zoom out" aria-label="Zoom out">
-          <IconButton
-            icon={<AiOutlineMinus />}
-            onClick={handleZoomOut}
-            size="md"
-            border="1px solid gray"
-            borderRadius="25px"
-          />
-        </Tooltip> */}
-      {/* <Tooltip label="Undo" aria-label="Undo">
-            <IconButton
-              icon={<RiArrowGoBackFill />}
-              aria-label="Undo"
-              size={buttonSize}
-              disabled
-            />
-          </Tooltip>
-          <Tooltip label="Redo" aria-label="Redo">
-            <IconButton
-              icon={<RiArrowGoForwardLine />}
-              aria-label="Redo"
-              size={buttonSize}
-              disabled
-            />
-          </Tooltip>   */}
-      {/* </ButtonGroup> */}
+      {!isAnnotationLoaded ? (
+        <Loading position="absolute" w="100%" zIndex="3" h="79vh" />
+      ) : null}
       <VStack
         // w="fit-content"
         backgroundColor="#F8F8F5"
@@ -176,7 +258,6 @@ const ViewerControls = ({ viewerId, slideName, slideType }) => {
           }}
         />
       </VStack>
-      {/* </Box> */}
     </>
   );
 };

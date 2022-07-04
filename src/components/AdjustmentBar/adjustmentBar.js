@@ -109,7 +109,10 @@ const AdjustmentBar = ({
         setIsNavigatorActive={setIsNavigatorActive}
         saveAnnotationsHandler={saveAnnotationsHandler}
       />
-      <ActionTools viewerId={currentViewer} />
+      <ActionTools
+        viewerId={currentViewer}
+        saveAnnotationsHandler={saveAnnotationsHandler}
+      />
       <ScreenTools
         viewerId={currentViewer}
         morphometry={morphometry}

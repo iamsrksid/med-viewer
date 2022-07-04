@@ -21,8 +21,8 @@ const LoadAnnotations = ({ viewerId, userInfo, loadAnnotationsHandler }) => {
         action: "added",
         text: "",
         timeStamp: getTimestamp(),
-        type: "polygon",
-        object: shape.type,
+        type: shape.type,
+        object: shape,
         image: null,
       };
 

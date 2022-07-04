@@ -36,7 +36,7 @@ const osdOptions = {
     bottom: 100,
   },
   visibilityRatio: isBrowser ? 1 : 0.5,
-  zoomPerClick: 1.0,
+  zoomPerClick: 1.5,
   crossOriginPolicy: "Anonymous",
 };
 
@@ -45,6 +45,8 @@ const Viewer = ({
   tile,
   slideName,
   slideType,
+  userInfo,
+  loadAnnotationsHandler,
   startX,
   startY,
   windowWidth,
@@ -122,6 +124,8 @@ const Viewer = ({
           viewerId={viewerId}
           slideName={slideName}
           slideType={slideType}
+          userInfo={userInfo}
+          loadAnnotationsHandler={loadAnnotationsHandler}
         />
       )}
       {/* <Button onClick={selection}>Select</Button> */}

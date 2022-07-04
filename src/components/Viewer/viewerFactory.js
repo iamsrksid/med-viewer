@@ -8,7 +8,9 @@ const ViewerFactory = ({
   viewerIds,
   slideType,
   caseInfo,
+  userInfo,
   setCurrentViewer,
+  loadAnnotationsHandler,
   startX,
   startY,
   windowWidth,
@@ -78,6 +80,8 @@ const ViewerFactory = ({
             viewerId={viewer}
             slideName={viewerWindow[viewer]?.slideName}
             slideType={slideType}
+            userInfo={userInfo}
+            loadAnnotationsHandler={loadAnnotationsHandler}
             startX={startX}
             startY={startY}
             windowWidth={windowWidth}

@@ -3,7 +3,7 @@ import { Flex, Spacer } from "@chakra-ui/react";
 import UndoRedo from "../UndoRedo/undoredo";
 import RemoveObject from "../removeComponents";
 
-const ActionsToolbar = ({ viewerId }) => {
+const ActionsToolbar = ({ viewerId, saveAnnotationsHandler }) => {
   return (
     <Flex
       borderX="2px solid #E4E5E8"
@@ -12,7 +12,10 @@ const ActionsToolbar = ({ viewerId }) => {
       flex="1"
     >
       <UndoRedo viewerId={viewerId} />
-      <RemoveObject viewerId={viewerId} />
+      <RemoveObject
+        viewerId={viewerId}
+        saveAnnotationsHandler={saveAnnotationsHandler}
+      />
       <Spacer />
     </Flex>
   );

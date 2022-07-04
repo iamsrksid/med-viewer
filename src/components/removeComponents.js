@@ -5,9 +5,9 @@ import IconSize from "./ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../state/store";
 import { updateActivityFeed } from "../state/actions/fabricOverlayActions";
 
-const RemoveObject = ({ viewerId }) => {
+const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { fabricOverlay, activityFeed } =
+  const { fabricOverlay, activityFeed, slideId } =
     fabricOverlayState.viewerWindow[viewerId];
   const [isActiveObject, setIsActiveObject] = useState();
 
@@ -65,6 +65,11 @@ const RemoveObject = ({ viewerId }) => {
 
     canvas.remove(activeObject);
     canvas.renderAll();
+
+    const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+    if (annotations.objects.length > 0) {
+      saveAnnotationsHandler(slideId, annotations.objects);
+    }
 
     setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
 

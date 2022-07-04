@@ -40,7 +40,11 @@ const Studies = ({ project, caseInfo }) => {
 
   return caseInfo ? (
     <Scrollbars
-      style={{ width: "100%", height: "90vh", borderWidth: "0px" }}
+      style={{
+        width: "100%",
+        height: "80vh",
+        borderWidth: "0px",
+      }}
       renderThumbVertical={(props) => (
         <div {...props} className="thumb-vertical" />
       )}

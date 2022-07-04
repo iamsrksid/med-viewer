@@ -54,7 +54,10 @@ const LayoutApp = ({
   };
 
   return (
-    <Flex h="calc(100vh - 44px)" direction="column">
+    <Flex
+      h={ifBiggerScreen ? "calc(100vh - 5.5vh)" : "calc(100vh - 44px)"}
+      direction="column"
+    >
       <LayoutOuterBody>
         <AdjustmentBar
           userInfo={userInfo}
@@ -74,7 +77,6 @@ const LayoutApp = ({
           isMultiview={isMultiview}
           setIsMultiview={setIsMultiview}
           saveAnnotationsHandler={saveAnnotationsHandler}
-          // loadAnnotationsHandler={loadAnnotationsHandler}
           setStartX={setStartX}
           setStartY={setStartY}
           setWindowWidth={setWindowWidth}
@@ -118,6 +120,8 @@ const LayoutApp = ({
               viewerIds={viewerIds}
               slideType={project?.slideType}
               caseInfo={caseInfo}
+              userInfo={userInfo}
+              loadAnnotationsHandler={loadAnnotationsHandler}
               setCurrentViewer={setCurrentViewer}
               startX={startX}
               startY={startY}
