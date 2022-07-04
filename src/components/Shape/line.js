@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { BsSlash } from "react-icons/bs";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
-import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { IconButton, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import {
@@ -266,13 +266,20 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
 
   return (
     <>
-      <TypeButton
+      {/* <TypeButton
         pl="0px"
-        icon={<BsSlash size={25} color="#151C25" />}
+        icon={<BsSlash size={28} color="#151C25" />}
         backgroundColor={isActive ? "#E4E5E8" : ""}
         borderRadius="0px"
         label="Line"
         onClick={handleClick}
+      /> */}
+      <IconButton
+        icon={<BsSlash size={28} color="#000" />}
+        onClick={handleClick}
+        borderRadius={0}
+        bg="#F6F6F6"
+        title="Line Annotations"
       />
       <EditText
         isOpen={isOpen}

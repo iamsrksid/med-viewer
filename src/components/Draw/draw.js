@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaPaintBrush } from "react-icons/fa";
-import { useMediaQuery, useDisclosure } from "@chakra-ui/react";
+import { BsPencil } from "react-icons/bs";
+import { useMediaQuery, useDisclosure, IconButton } from "@chakra-ui/react";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
 import useHexRGB from "../../utility/use-hex-rgb";
@@ -243,12 +244,12 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
 
   return (
     <>
-      <TypeButton
+      <IconButton
+        icon={<BsPencil size={20} color="#000" />}
         onClick={handleToolbarClick}
-        icon={<FaPaintBrush size={12} />}
-        backgroundColor={isActive ? "#E4E5E8" : ""}
-        borderRadius="0px"
-        label="Draw"
+        borderRadius={0}
+        bg="#F6F6F6"
+        title="Free Draw"
       />
       <EditText
         isOpen={isOpen}

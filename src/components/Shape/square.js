@@ -1,19 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { BsSquare } from "react-icons/bs";
-import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { FcFrame } from "react-icons/fc";
+import {
+  IconButton,
+  useDisclosure,
+  useMediaQuery,
+  Image,
+} from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
 import { getCanvasImage, getScaleFactor } from "../../utility/utility";
-import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
+import SquareIcon from "../../assets/images/squareIcon.svg";
 
 const Square = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -310,13 +314,22 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
 
   return (
     <>
-      <TypeButton
+      {/* <TypeButton
         icon={<BsSquare />}
         backgroundColor={isActive ? "#E4E5E8" : ""}
         borderRadius="0px"
         label="Square"
         onClick={handleClick}
-      />
+      /> */}
+      <IconButton
+        // icon={<FcFrame size={20} color="#000" />}
+        onClick={handleClick}
+        borderRadius={0}
+        bg="#F6F6F6"
+        title="Rectangular Annotations"
+      >
+        <Image src={SquareIcon} />
+      </IconButton>
       <EditText
         isOpen={isOpen}
         onClose={onClose}

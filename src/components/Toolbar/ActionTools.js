@@ -12,10 +12,10 @@ const ActionsToolbar = ({ viewerId, saveAnnotationsHandler }) => {
       flex="1"
     >
       <UndoRedo viewerId={viewerId} />
-      <RemoveObject
+      {/* <RemoveObject
         viewerId={viewerId}
         saveAnnotationsHandler={saveAnnotationsHandler}
-      />
+      /> */}
       <Spacer />
     </Flex>
   );

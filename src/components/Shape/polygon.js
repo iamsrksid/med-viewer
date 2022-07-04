@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaDrawPolygon } from "react-icons/fa";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { useDisclosure } from "@chakra-ui/react";
+import { IconButton, useDisclosure, Image } from "@chakra-ui/react";
 import md5 from "md5";
 import TypeButton from "../typeButton";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
@@ -12,6 +12,7 @@ import {
   updateActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
+import PolygonIcon from "../../assets/images/polygonIcon.svg";
 
 const MAX = 999999;
 const MIN = 99;
@@ -312,13 +313,21 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
 
   return (
     <>
-      <TypeButton
+      {/* <TypeButton
         icon={<FaDrawPolygon />}
         backgroundColor={isActive ? "#E4E5E8" : ""}
         borderRadius="0px"
         label="Polygon"
         onClick={handleClick}
-      />
+      /> */}
+      <IconButton
+        onClick={handleClick}
+        borderRadius={0}
+        bg="#F6F6F6"
+        title="Free Hand Polygon Annotations"
+      >
+        <Image src={PolygonIcon} />
+      </IconButton>
       <EditText
         isOpen={isOpen}
         onClose={onClose}

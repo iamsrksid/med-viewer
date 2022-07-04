@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import TypeButton from "./typeButton";
+import { IconButton, Image } from "@chakra-ui/react";
 import IconSize from "./ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../state/store";
 import { updateActivityFeed } from "../state/actions/fabricOverlayActions";
+import EraseIcon from "../assets/images/eraseIcon.svg";
 
 const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -85,16 +86,25 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
   };
 
   return (
-    <TypeButton
+    // <TypeButton
+    //   onClick={handleRemoveObject}
+    //   icon={<RiDeleteBin6Line size={IconSize()} color="#151C25" />}
+    //   disabled={!isActiveObject}
+    //   // backgroundColor={!isActiveObject ? "#898888" : "#dddddd"}
+    //   // color={!isActiveObject ? "black" : "#3963c3"}
+    //   // _focus={{ backgroundColor: "white", color: "black" }}
+    //   // _hover={{ backgroundColor: !isActiveObject ? "#898888" : "#dddddd" }}
+    //   label="Remove Item"
+    // />
+    <IconButton
       onClick={handleRemoveObject}
-      icon={<RiDeleteBin6Line size={IconSize()} color="#151C25" />}
+      borderRadius={0}
+      bg="#F6F6F6"
       disabled={!isActiveObject}
-      // backgroundColor={!isActiveObject ? "#898888" : "#dddddd"}
-      // color={!isActiveObject ? "black" : "#3963c3"}
-      // _focus={{ backgroundColor: "white", color: "black" }}
-      // _hover={{ backgroundColor: !isActiveObject ? "#898888" : "#dddddd" }}
-      label="Remove Item"
-    />
+      title="Remove Item"
+    >
+      <Image src={EraseIcon} />
+    </IconButton>
   );
 };
 

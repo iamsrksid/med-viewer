@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { BsCircle } from "react-icons/bs";
-import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { IconButton, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
@@ -334,12 +334,19 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
 
   return (
     <>
-      <TypeButton
+      {/* <TypeButton
         icon={<BsCircle />}
         backgroundColor={isActive ? "#E4E5E8" : ""}
         borderRadius="0px"
         label="Circle"
         onClick={handleClick}
+      /> */}
+      <IconButton
+        icon={<BsCircle size={20} color="#000" />}
+        onClick={handleClick}
+        borderRadius={0}
+        bg="#F6F6F6"
+        title="Circle Annotation"
       />
       <EditText
         isOpen={isOpen}
