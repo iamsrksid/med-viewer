@@ -170,6 +170,17 @@ const ActivityFeed = ({ userInfo, viewerId, handlePopup, popup }) => {
         pt="3px"
         h="47%"
         overflowY="auto"
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#C4C4C4",
+          },
+        }}
       >
         <Text fontSize="1vw" pb="3px">
           Annotation Details
