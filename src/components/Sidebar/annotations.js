@@ -10,6 +10,8 @@ const Annotations = ({
   currentViewer,
   saveAnnotationsHandler,
   loadAnnotationsHandler,
+  handlePopup,
+  popup,
 }) => {
   return (
     <Box className="annotations_box">

@@ -14,6 +14,7 @@ import ChangeSlide from "../Case/changeSlide";
 import { useFabricOverlayState } from "../../state/store";
 
 const AdjustmentBar = ({
+  userInfo,
   project,
   caseInfo,
   slide,
@@ -34,6 +35,8 @@ const AdjustmentBar = ({
   setStartY,
   setWindowWidth,
   setWindowHeight,
+  setShowAnnotationsBar,
+  showAnnotationsBar,
 }) => {
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1660px)");
   const { fabricOverlayState } = useFabricOverlayState();
@@ -115,6 +118,8 @@ const AdjustmentBar = ({
       />
       <ScreenTools
         viewerId={currentViewer}
+        setShowAnnotationsBar={setShowAnnotationsBar}
+        showAnnotationsBar={showAnnotationsBar}
         morphometry={morphometry}
         uploadPatch={uploadPatch}
         setStartX={setStartX}

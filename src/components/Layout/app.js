@@ -9,6 +9,7 @@ import LayoutAppSidebar from "./sidebar";
 import ViewerFactory from "../Viewer/viewerFactory";
 import ViewerImport from "./viewerImport";
 import Navigator from "../Navigator/navigator";
+import ActivityFeed from "../Feed/activityFeed";
 
 const LayoutApp = ({
   userInfo,
@@ -44,6 +45,7 @@ const LayoutApp = ({
   const [viewPortToImagex2, setViewPortToImagex2] = useState(0);
   const [viewPortToImagey1, setViewPortToImagey1] = useState(0);
   const [viewPortToImagey2, setViewPortToImagey2] = useState(0);
+  const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
 
   const showSidebar = () => {
     setSidebar(!sidebar);
@@ -81,7 +83,10 @@ const LayoutApp = ({
           setStartY={setStartY}
           setWindowWidth={setWindowWidth}
           setWindowHeight={setWindowHeight}
+          setShowAnnotationsBar={setShowAnnotationsBar}
+          showAnnotationsBar={showAnnotationsBar}
         />
+
         {isNavigatorActive && (
           <Navigator
             caseInfo={caseInfo}
@@ -115,6 +120,14 @@ const LayoutApp = ({
               setSidebar={setSidebar}
             />
           ) : null}
+          {showAnnotationsBar ? (
+            <ActivityFeed
+              viewerId={currentViewer}
+              userInfo={userInfo}
+              handlePopup={setShowAnnotationsBar}
+              popup={showAnnotationsBar}
+            />
+          ) : null}
           <LayoutAppBody>
             <ViewerFactory
               viewerIds={viewerIds}
@@ -133,6 +146,7 @@ const LayoutApp = ({
               setViewPortToImagey2={setViewPortToImagey2}
             />
           </LayoutAppBody>
+
           {/* <ViewerImport /> */}
         </LayoutInnerBody>
       </LayoutOuterBody>
