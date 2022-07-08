@@ -134,7 +134,7 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
           fill: "red",
         });
       }
-      const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+      let points = [pointer.x, pointer.y, pointer.x, pointer.y];
       const line = new fabric.Line(points, {
         strokeWidth: 1 / scaleFactor,
         fill: `${myStateRef.current.color.hex}40`,
@@ -152,7 +152,7 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       let polygon = null;
 
       if (myStateRef.current.activeShape) {
-        const points = myStateRef.current.activeShape.get("points");
+        points = myStateRef.current.activeShape.get("points");
         points.push({
           x: pointer.x,
           y: pointer.y,
@@ -279,7 +279,12 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       message.object.set({ id: message.timeStamp });
 
       const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      const annotations = canvas.toJSON([
+        "hash",
+        "text",
+        "zoomLevel",
+        "points",
+      ]);
       if (annotations.objects.length > 0) {
         saveAnnotationsHandler(slideId, annotations.objects);
       }

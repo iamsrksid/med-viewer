@@ -102,10 +102,12 @@ const AdjustmentBar = ({
         />
       </Flex>
       <Move
+        sidebar={sidebar}
         annotations={annotations}
         viewerId={currentViewer}
         isMultiview={isMultiview}
         setIsMultiview={setIsMultiview}
+        isNavigatorActive={isNavigatorActive}
         setIsNavigatorActive={setIsNavigatorActive}
         saveAnnotationsHandler={saveAnnotationsHandler}
       />

@@ -98,8 +98,6 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
       let newShape = null;
       const shapeOptions = {
         color: myStateRef.current.color.hex,
-        originX: "center",
-        originY: "center",
       };
 
       // Stroke fill
@@ -218,10 +216,16 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
       shape.set({ hash, zoomLevel: viewer.viewport.getZoom() });
 
       message.image = await getCanvasImage(viewerId);
-      message.object.set({ id: message.timeStamp });
+      const { x1, y1, x2, y2 } = message.object;
+      message.object.set({ id: message.timeStamp, points: [x1, y1, x2, y2] });
 
       const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      const annotations = canvas.toJSON([
+        "hash",
+        "text",
+        "zoomLevel",
+        "points",
+      ]);
       if (annotations.objects.length > 0) {
         saveAnnotationsHandler(slideId, annotations.objects);
       }

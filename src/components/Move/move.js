@@ -21,12 +21,15 @@ import Multiview from "../Multiview/multiview";
 const Move = ({
   viewerId,
   annotations,
+  sidebar,
   isMultiview,
   setIsMultiview,
+  isNavigatorActive,
   setIsNavigatorActive,
   saveAnnotationsHandler,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
+  const [ifMiddleScreen] = useMediaQuery("(min-width:1560px)");
   const [typeToolsToggle, setTypeToolsToggle] = useState(false);
   const [colorBar, setColorBar] = useState(false);
   const [popup, setPopup] = useState(false);
@@ -39,6 +42,7 @@ const Move = ({
     setFabricOverlayState(updateTool({ tool: "Move" }));
   };
   const handleAnnotationsClick = () => {
+    if (typeToolsToggle) setFabricOverlayState(updateTool({ tool: "Move" }));
     setTypeToolsToggle((state) => !state);
   };
   const handleColorClick = () => {
@@ -157,8 +161,14 @@ const Move = ({
       </Flex>
 
       <Flex
-        pl="35px"
-        top="98px"
+        top={
+          isNavigatorActive || isMultiview
+            ? "250px"
+            : Object.keys(viewerWindow).length > 1
+            ? "150px"
+            : "calc(1% + 100px)"
+        }
+        left={sidebar ? "22%" : "1%"}
         direction="column"
         pos="absolute"
         zIndex="1000"

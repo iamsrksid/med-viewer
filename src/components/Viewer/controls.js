@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
-import { Box, HStack, VStack, Text } from "@chakra-ui/react";
+import { Box, HStack, VStack, Text, Center } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import ZoomSlider from "../ZoomSlider/slider";
@@ -46,12 +46,15 @@ const ViewerControls = ({
     }
   };
 
+  useEffect(() => {
+    setIsAnnotationLoaded(false);
+  }, [slideId]);
+
   // load saved annotations from the server
   // once viewer is initialized
   useEffect(() => {
     if (!fabricOverlay || !loadAnnotationsHandler) return;
     const canvas = fabricOverlay.fabricCanvas();
-
     const feed = [];
 
     // add annotation to the activity feed
@@ -129,6 +132,16 @@ const ViewerControls = ({
           });
           break;
 
+        case "line":
+          shape = new fabric.Line(annotation.points, {
+            color: annotation.color,
+            stroke: annotation.stroke,
+            strokeWidth: annotation.strokeWidth,
+            strokeUniform: annotation.strokeUniform,
+            fill: annotation.fill,
+          });
+          break;
+
         default:
           return;
       }
@@ -160,7 +173,7 @@ const ViewerControls = ({
     };
 
     loadAnnotations();
-  }, [fabricOverlay]);
+  }, [fabricOverlay, slideId]);
 
   useEffect(() => {
     if (!viewer) return;

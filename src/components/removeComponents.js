@@ -67,10 +67,8 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
     canvas.remove(activeObject);
     canvas.renderAll();
 
-    const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
-    if (annotations.objects.length > 0) {
-      saveAnnotationsHandler(slideId, annotations.objects);
-    }
+    const annotations = canvas.toJSON(["hash", "text", "zoomLevel", "points"]);
+    saveAnnotationsHandler(slideId, annotations.objects);
 
     setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
 

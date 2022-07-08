@@ -269,7 +269,12 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
       message.object.set({ id: message.timeStamp });
 
       const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON(["hash", "text", "zoomLevel"]);
+      const annotations = canvas.toJSON([
+        "hash",
+        "text",
+        "zoomLevel",
+        "points",
+      ]);
       if (annotations.objects.length > 0) {
         saveAnnotationsHandler(slideId, annotations.objects);
       }
