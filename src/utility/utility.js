@@ -73,7 +73,9 @@ export const getUserId = (user) =>
 
 // extract slide url from .dzi file
 export const getSlideUrl = (url) => {
-  return url ? `${url.substring(0, url.lastIndexOf("."))}_files/8/0_0.png` : "";
+  return url
+    ? `${url.substring(0, url.lastIndexOf("."))}_files/8/0_0.jpeg`
+    : "";
 };
 
 // get index of the item in the array

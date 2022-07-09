@@ -76,77 +76,77 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
 
     initiateAnalysis({ x: left, y: top, width, height, key });
 
+    // create annotation of cell
+    const createContours = async (body) => {
+      // get cell data from the clicked position in viewer
+      const resp = await axios.post(
+        "https://development-morphometry-api.prr.ai/click_xy",
+        body
+      );
+
+      // if the click positon is a cell, create annotation
+      // also add it the annotation feed
+      if (resp && typeof resp.data === "object") {
+        const { con, area, centroid, perimeter, end_points } = resp.data;
+        const points = con.map((point) => ({
+          x: point[0][0] + left,
+          y: point[0][1] + top,
+        }));
+        const polygon = new fabric.Polygon(points, {
+          stroke: "black",
+          strokeWidth: 1.2,
+          fill: `${color.hex}80`,
+          strokeUniform: true,
+        });
+        const message = {
+          username: "",
+          color: color.hex,
+          action: "added",
+          timeStamp: Date.now(),
+          type: "cell",
+          object: polygon,
+          image: null,
+        };
+
+        const hash = md5(polygon + message.timeStamp);
+
+        message.object.set({
+          id: message.timeStamp,
+          hash,
+          zoomLevel: viewer.viewport.getZoom(),
+          area,
+          perimeter,
+          centroid,
+          end_points,
+        });
+
+        const annotations = canvas.toJSON([
+          "hash",
+          "text",
+          "zoomLevel",
+          "points",
+          "area",
+          "perimeter",
+          "centroid",
+          "end_points",
+        ]);
+        if (annotations.objects.length > 0) {
+          saveAnnotationsHandler(slideId, annotations.objects);
+        }
+        canvas.add(polygon).requestRenderAll();
+        setTotalCells((state) => state + 1);
+        setFabricOverlayState(
+          updateActivityFeed({
+            id: viewerId,
+            feed: [...activityFeed, message],
+          })
+        );
+      }
+    };
+
     const handleMouseDown = (options) => {
       if (!options) return;
       const { x, y } = canvas.getPointer(options.e);
-
-      // create annotation of cell
-      const createContours = async (body) => {
-        // get cell data from the clicked position in viewer
-        const resp = await axios.post(
-          "https://development-morphometry-api.prr.ai/click_xy",
-          body
-        );
-
-        // if the click positon is a cell, create annotation
-        // also add it the annotation feed
-        if (resp && typeof resp.data === "object") {
-          const { con, area, centroid, perimeter, end_points } = resp.data;
-          const points = con.map((point) => ({
-            x: point[0][0] + left,
-            y: point[0][1] + top,
-          }));
-          const polygon = new fabric.Polygon(points, {
-            stroke: "black",
-            strokeWidth: 1.2,
-            fill: `${color.hex}80`,
-            strokeUniform: true,
-          });
-          const message = {
-            username: "",
-            color: color.hex,
-            action: "added",
-            timeStamp: Date.now(),
-            type: "cell",
-            object: polygon,
-            image: null,
-          };
-
-          const hash = md5(polygon + message.timeStamp);
-
-          message.object.set({
-            id: message.timeStamp,
-            hash,
-            zoomLevel: viewer.viewport.getZoom(),
-            area,
-            perimeter,
-            centroid,
-            end_points,
-          });
-
-          const annotations = canvas.toJSON([
-            "hash",
-            "text",
-            "zoomLevel",
-            "points",
-            "area",
-            "perimeter",
-            "centroid",
-            "end_points",
-          ]);
-          if (annotations.objects.length > 0) {
-            saveAnnotationsHandler(slideId, annotations.objects);
-          }
-          canvas.add(polygon).requestRenderAll();
-          setTotalCells((state) => state + 1);
-          setFabricOverlayState(
-            updateActivityFeed({
-              id: viewerId,
-              feed: [...activityFeed, message],
-            })
-          );
-        }
-      };
 
       createContours({
         x: left,
