@@ -297,7 +297,7 @@ const ActivityFeed = ({
               >
                 <Text minW="35%">Description:</Text>
                 <Text>
-                  {annotationDetails.object.text
+                  {annotationDetails.object?.text
                     ? annotationDetails.object.text
                     : "-"}
                 </Text>

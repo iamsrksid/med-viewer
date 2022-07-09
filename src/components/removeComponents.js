@@ -3,7 +3,7 @@ import { BsEraser } from "react-icons/bs";
 import { IconButton, Image } from "@chakra-ui/react";
 import IconSize from "./ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../state/store";
-import { updateActivityFeed } from "../state/actions/fabricOverlayActions";
+import { addToActivityFeed } from "../state/actions/fabricOverlayActions";
 import EraseIcon from "../assets/images/eraseIcon.svg";
 
 const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
@@ -62,15 +62,15 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
 
     // message.image = await getCanvasImage(viewerId);
 
-    const feed = activityFeed.filter((af) => af.object.id !== activeObject.id);
+    const feed = activityFeed.filter((af) => af.object?.id !== activeObject.id);
 
     canvas.remove(activeObject);
     canvas.renderAll();
 
     const annotations = canvas.toJSON(["hash", "text", "zoomLevel", "points"]);
-    saveAnnotationsHandler(slideId, annotations.objects);
+    saveAnnotationsHandler(slideId, []);
 
-    setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
+    setFabricOverlayState(addToActivityFeed({ id: viewerId, feed }));
 
     // socket.emit(
     //   "send_annotations",

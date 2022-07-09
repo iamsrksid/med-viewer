@@ -14,7 +14,7 @@ import { getCanvasImage, getScaleFactor } from "../../utility/utility";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
-  updateActivityFeed,
+  addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
 import SquareIcon from "../../assets/images/squareIcon.svg";
@@ -284,9 +284,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
       setShape(null);
       setTextbox(false);
 
-      setFabricOverlayState(
-        updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
-      );
+      setFabricOverlayState(addToActivityFeed({ id: viewerId, feed: message }));
     };
 
     addToFeed();

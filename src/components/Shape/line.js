@@ -7,7 +7,7 @@ import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateTool,
-  updateActivityFeed,
+  addToActivityFeed,
 } from "../../state/actions/fabricOverlayActions";
 import {
   getCanvasImage,
@@ -237,9 +237,7 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
       setShape(null);
       setTextbox(false);
 
-      setFabricOverlayState(
-        updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
-      );
+      setFabricOverlayState(addToActivityFeed({ id: viewerId, feed: message }));
     };
 
     addToFeed();

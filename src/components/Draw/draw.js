@@ -12,7 +12,7 @@ import EditText from "../Feed/editText";
 import { widths } from "./width";
 import { useFabricOverlayState } from "../../state/store";
 import {
-  updateActivityFeed,
+  addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
 
@@ -209,9 +209,9 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
       }
 
       setFabricOverlayState(
-        updateActivityFeed({
+        addToActivityFeed({
           id: viewerId,
-          feed: [...activityFeed, message],
+          feed: message,
         })
       );
 

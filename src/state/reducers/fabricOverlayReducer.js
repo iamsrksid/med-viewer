@@ -58,6 +58,20 @@ const fabricOverlayReducer = (state, action) => {
         },
       };
 
+    case "addToActivityFeed": {
+      const af = state.viewerWindow[action.payload.id].activityFeed;
+      return {
+        ...state,
+        viewerWindow: {
+          ...state.viewerWindow,
+          [action.payload.id]: {
+            ...state.viewerWindow[action.payload.id],
+            activityFeed: [...af, action.payload.feed],
+          },
+        },
+      };
+    }
+
     case "updateActivityFeed":
       return {
         ...state,
@@ -168,8 +182,7 @@ const fabricOverlayReducer = (state, action) => {
       };
 
     default:
-      console.error("unknown type");
-      return null;
+      return state;
   }
 };
 

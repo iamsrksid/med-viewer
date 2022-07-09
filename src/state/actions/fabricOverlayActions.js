@@ -18,6 +18,11 @@ export const updateUserCanvases = (payload) => ({
   payload,
 });
 
+export const addToActivityFeed = (payload) => ({
+  type: "addToActivityFeed",
+  payload,
+});
+
 export const updateActivityFeed = (payload) => ({
   type: "updateActivityFeed",
   payload,

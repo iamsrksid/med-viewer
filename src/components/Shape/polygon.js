@@ -9,7 +9,7 @@ import { getCanvasImage, getScaleFactor } from "../../utility/utility";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
-  updateActivityFeed,
+  addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
 import PolygonIcon from "../../assets/images/polygonIcon.svg";
@@ -291,9 +291,7 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
         saveAnnotationsHandler(slideId, annotations.objects);
       }
 
-      setFabricOverlayState(
-        updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
-      );
+      setFabricOverlayState(addToActivityFeed({ id: viewerId, feed: message }));
 
       setShape(null);
       setTextbox(false);

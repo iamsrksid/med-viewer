@@ -9,7 +9,7 @@ import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateTool,
-  updateActivityFeed,
+  addToActivityFeed,
 } from "../../state/actions/fabricOverlayActions";
 import MagicWandIcon from "../../assets/images/magicWandIcon.svg";
 import { getFileBucketFolder, getZoomValue } from "../../utility/utility";
@@ -136,9 +136,9 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
         canvas.add(polygon).requestRenderAll();
         setTotalCells((state) => state + 1);
         setFabricOverlayState(
-          updateActivityFeed({
+          addToActivityFeed({
             id: viewerId,
-            feed: [...activityFeed, message],
+            feed: message,
           })
         );
       }

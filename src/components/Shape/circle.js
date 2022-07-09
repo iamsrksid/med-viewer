@@ -11,7 +11,7 @@ import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
-  updateActivityFeed,
+  addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
 
@@ -304,9 +304,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
       setShape(null);
       setTextbox(false);
 
-      setFabricOverlayState(
-        updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
-      );
+      setFabricOverlayState(addToActivityFeed({ id: viewerId, feed: message }));
     };
 
     addToFeed();
