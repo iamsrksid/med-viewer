@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { BsEraser } from "react-icons/bs";
 import { IconButton, Image } from "@chakra-ui/react";
 import IconSize from "./ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../state/store";
@@ -95,14 +95,13 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
     //   label="Remove Item"
     // />
     <IconButton
+      icon={<BsEraser size={20} />}
       onClick={handleRemoveObject}
       borderRadius={0}
       bg="#F6F6F6"
       disabled={!isActiveObject}
       title="Remove Item"
-    >
-      <Image src={EraseIcon} />
-    </IconButton>
+    />
   );
 };
 

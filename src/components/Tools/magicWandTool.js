@@ -4,6 +4,7 @@ import axios from "axios";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { IconButton, Image } from "@chakra-ui/react";
 import md5 from "md5";
+import { VscWand } from "react-icons/vsc";
 import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import {
@@ -86,7 +87,6 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
           "https://development-morphometry-api.prr.ai/click_xy",
           body
         );
-        console.log(resp);
 
         // if the click positon is a cell, create annotation
         // also add it the annotation feed
@@ -172,14 +172,13 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
 
   return (
     <IconButton
+      icon={<VscWand size={20} />}
       onClick={handleClick}
       borderRadius={0}
       bg="#F6F6F6"
       title="Magic Wand"
       disabled={zoomValue < 40}
-    >
-      <Image src={MagicWandIcon} />
-    </IconButton>
+    />
   );
 };
 

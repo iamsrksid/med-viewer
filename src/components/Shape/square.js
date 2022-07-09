@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { FcFrame } from "react-icons/fc";
+import { BiRectangle } from "react-icons/bi";
 import {
   IconButton,
   useDisclosure,
@@ -329,14 +329,12 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
         onClick={handleClick}
       /> */}
       <IconButton
-        // icon={<FcFrame size={20} color="#000" />}
+        icon={<BiRectangle size={20} color="#00000095" />}
         onClick={handleClick}
         borderRadius={0}
         bg="#F6F6F6"
         title="Rectangular Annotations"
-      >
-        <Image src={SquareIcon} />
-      </IconButton>
+      />
       <EditText
         isOpen={isOpen}
         onClose={onClose}

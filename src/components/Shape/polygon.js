@@ -328,13 +328,12 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
         onClick={handleClick}
       /> */}
       <IconButton
+        icon={<FaDrawPolygon color="#00000095" />}
         onClick={handleClick}
         borderRadius={0}
         bg="#F6F6F6"
         title="Free Hand Polygon Annotations"
-      >
-        <Image src={PolygonIcon} />
-      </IconButton>
+      />
       <EditText
         isOpen={isOpen}
         onClose={onClose}

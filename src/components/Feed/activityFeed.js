@@ -14,11 +14,11 @@ import {
 } from "@chakra-ui/react";
 import "../../styles/scrollBar.css";
 import { Scrollbars } from "react-custom-scrollbars";
-import { AiFillLock, AiOutlineEye } from "react-icons/ai";
-import { BiDotsVertical } from "react-icons/bi";
+import { BiRectangle } from "react-icons/bi";
 import { MdModeEditOutline } from "react-icons/md";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { BsCircle, BsSlash } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
+import { FaDrawPolygon } from "react-icons/fa";
 import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
@@ -76,8 +76,6 @@ const ActivityFeed = ({
   const [annotationObject, setAnnotationObject] = useState(null);
   const [annotationDetails, setAnnotationsDetails] = useState(null);
   const [ifScreenlessthan1660px] = useMediaQuery("(max-width:1660px)");
-
-  console.log(activityFeed);
 
   useEffect(() => {
     if (scrollbar.current) scrollbar.current.scrollToBottom();
@@ -183,7 +181,7 @@ const ActivityFeed = ({
                       cursor="pointer"
                       onClick={() => setAnnotationsDetails(feed)}
                     >
-                      <Image src={StromaIcon} />
+                      <BiRectangle color="#E23636" />
                       <Text ml="0.8vw">Annotation {index + 1}</Text>
                     </Flex>
                   ) : feed?.type === "polygon" ? (
@@ -192,8 +190,9 @@ const ActivityFeed = ({
                       borderBottom="1px solid #F6F6F6"
                       cursor="pointer"
                       onClick={() => setAnnotationsDetails(feed)}
+                      align="center"
                     >
-                      <Image src={TumorIcon} />
+                      <FaDrawPolygon color="#E23636" />
                       <Text ml="0.5vw">Annotation {index + 1}</Text>
                     </Flex>
                   ) : feed?.type === "ellipse" ? (
@@ -203,7 +202,7 @@ const ActivityFeed = ({
                       cursor="pointer"
                       onClick={() => setAnnotationsDetails(feed)}
                     >
-                      <Image src={ImmuneCellsIcon} />
+                      <BsCircle color="#E23636" />
                       <Text ml="0.8vw">Annotation {index + 1}</Text>
                     </Flex>
                   ) : (
@@ -213,7 +212,7 @@ const ActivityFeed = ({
                       cursor="pointer"
                       onClick={() => setAnnotationsDetails(feed)}
                     >
-                      <Image src={NecrosisIcon} />
+                      <BsSlash color="#E23636" />
                       <Text ml="0.8vw">Annotation {index + 1}</Text>
                     </Flex>
                   )}
