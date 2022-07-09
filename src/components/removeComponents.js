@@ -70,7 +70,7 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
     const annotations = canvas.toJSON(["hash", "text", "zoomLevel", "points"]);
     saveAnnotationsHandler(slideId, []);
 
-    setFabricOverlayState(addToActivityFeed({ id: viewerId, feed }));
+    // setFabricOverlayState(addToActivityFeed({ id: viewerId, feed }));
 
     // socket.emit(
     //   "send_annotations",
