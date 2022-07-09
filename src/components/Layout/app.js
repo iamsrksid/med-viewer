@@ -35,6 +35,7 @@ const LayoutApp = ({
   const [isNavigatorActive, setIsNavigatorActive] = useState(false);
   const [isMultiview, setIsMultiview] = useState(false);
   const [navbar, setNavbar] = useState(true);
+  const [totalCells, setTotalCells] = useState(0);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
   const [currentViewer, setCurrentViewer] = useState(viewerIds?.[0]?._id);
   const [startX, setStartX] = useState(0);
@@ -74,6 +75,7 @@ const LayoutApp = ({
           sidebar={sidebar}
           morphometry={morphometry}
           uploadPatch={uploadPatch}
+          setTotalCells={setTotalCells}
           isNavigatorActive={isNavigatorActive}
           setIsNavigatorActive={setIsNavigatorActive}
           isMultiview={isMultiview}
@@ -125,6 +127,7 @@ const LayoutApp = ({
               viewerId={currentViewer}
               userInfo={userInfo}
               handlePopup={setShowAnnotationsBar}
+              totalCells={totalCells}
               popup={showAnnotationsBar}
             />
           ) : null}

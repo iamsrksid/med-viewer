@@ -182,7 +182,6 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
         username: "",
         color: path.stroke,
         action: "added",
-        text: textbox,
         timeStamp,
         type: path.type,
         object: path,
@@ -190,10 +189,13 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
       };
 
       const hash = md5(path + timeStamp);
-      path.set({ hash, zoomLevel: viewer.viewport.getZoom() });
 
-      message.image = await getCanvasImage(viewerId);
-      message.object.set({ id: message.timeStamp });
+      // message.image = await getCanvasImage(viewerId);
+      message.object.set({
+        id: message.timeStamp,
+        hash,
+        zoomLevel: viewer.viewport.getZoom(),
+      });
 
       const canvas = fabricOverlay.fabricCanvas();
       const annotations = canvas.toJSON([

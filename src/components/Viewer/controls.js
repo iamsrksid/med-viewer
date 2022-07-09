@@ -63,7 +63,7 @@ const ViewerControls = ({
         username: `${userInfo.firstName} ${userInfo.lastName}`,
         color: shape.fill ? shape.fill : shape.stroke,
         action: "added",
-        text: "",
+        text: shape.text,
         timeStamp: getTimestamp(),
         type: shape.type,
         object: shape,

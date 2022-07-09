@@ -94,3 +94,10 @@ export const getScaleFactor = (viewer) => {
   const zoomValue = getZoomValue(viewer);
   return zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
 };
+
+// get s3 bucket folder of tile
+export const getFileBucketFolder = (url) => {
+  return `source/${
+    url ? `${url.split("/")[url.split("/").length - 2]}.svs` : ""
+  }`;
+};

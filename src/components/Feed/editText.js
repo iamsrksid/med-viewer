@@ -46,7 +46,7 @@ const EditText = ({ isOpen, onClose, handleClose, handleSave }) => {
             onChange={handleTextChange}
             borderRadius="0px"
           />
-          <Input
+          {/* <Input
             type="text"
             value={tag}
             borderRadius="0px"
@@ -54,7 +54,7 @@ const EditText = ({ isOpen, onClose, handleClose, handleSave }) => {
             mt={1}
             _focus={{ borderColor: "#00153F" }}
             onChange={(e) => setTag(e.target.value)}
-          />
+          /> */}
         </ModalBody>
         <ModalFooter>
           <ButtonGroup size="sm" color="white">

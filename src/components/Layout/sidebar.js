@@ -17,7 +17,7 @@ const LayoutAppSidebar = (props) => {
       boxShadow="base"
       zIndex="2"
       backgroundColor="#FCFCFC"
-      overflowX="auto"
+      overflowX="hidden"
     >
       <SidebarTools {...props} />
     </Flex>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useReducer } from "react";
 import _ from "lodash";
+import axios from "axios";
 import LayoutApp from "./Layout/app";
 import Loading from "./Loading/loading";
 import { StoreProvider } from "../state/store";
 import { addViewerWindow } from "../state/actions/fabricOverlayActions";
 import fabricOverlayReducer from "../state/reducers/fabricOverlayReducer";
 import { brandColors } from "../styles/brandPalette";
+import { getFileBucketFolder } from "../utility/utility";
 
 const MedViewer = ({ viewerIds, ...props }) => {
   const [isReady, setIsReady] = useState(false);
@@ -37,6 +39,11 @@ const MedViewer = ({ viewerIds, ...props }) => {
       });
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));
+    const key = getFileBucketFolder(viewerIds[0].awsImageBucketUrl);
+    axios.post("https://development-morphometry-api.prr.ai/download", {
+      key,
+      bucket_name: "med-ai-image-processor",
+    });
     setIsReady(true);
   }, [fabricOverlayState, viewerIds]);
 

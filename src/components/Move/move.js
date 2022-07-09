@@ -26,6 +26,7 @@ const Move = ({
   setIsMultiview,
   isNavigatorActive,
   setIsNavigatorActive,
+  setTotalCells,
   saveAnnotationsHandler,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
@@ -177,6 +178,7 @@ const Move = ({
         {typeToolsToggle ? (
           <TypeTools
             viewerId={viewerId}
+            setTotalCells={setTotalCells}
             saveAnnotationsHandler={saveAnnotationsHandler}
           />
         ) : null}

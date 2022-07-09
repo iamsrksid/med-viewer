@@ -30,6 +30,7 @@ const AdjustmentBar = ({
   setIsNavigatorActive,
   isMultiview,
   setIsMultiview,
+  setTotalCells,
   saveAnnotationsHandler,
   setStartX,
   setStartY,
@@ -112,6 +113,7 @@ const AdjustmentBar = ({
         setIsMultiview={setIsMultiview}
         isNavigatorActive={isNavigatorActive}
         setIsNavigatorActive={setIsNavigatorActive}
+        setTotalCells={setTotalCells}
         saveAnnotationsHandler={saveAnnotationsHandler}
       />
       <ActionTools

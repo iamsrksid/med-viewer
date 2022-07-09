@@ -23,7 +23,7 @@ import RemoveObject from "../removeComponents";
 import { useFabricOverlayState } from "../../state/store";
 import MagicWandTool from "../Tools/magicWandTool";
 
-const TypeTools = ({ viewerId, saveAnnotationsHandler }) => {
+const TypeTools = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
 
@@ -49,6 +49,7 @@ const TypeTools = ({ viewerId, saveAnnotationsHandler }) => {
           />
           <MagicWandTool
             viewerId={viewerId}
+            setTotalCells={setTotalCells}
             saveAnnotationsHandler={saveAnnotationsHandler}
           />
           <Square

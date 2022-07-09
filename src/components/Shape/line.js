@@ -205,19 +205,23 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
         username: "",
         color: shape.stroke,
         action: "added",
-        text: textbox,
         timeStamp,
         type: shape.type,
         object: shape,
         image: null,
+        title: "annotation",
       };
 
       const hash = md5(shape + timeStamp);
-      shape.set({ hash, zoomLevel: viewer.viewport.getZoom() });
 
-      message.image = await getCanvasImage(viewerId);
+      // message.image = await getCanvasImage(viewerId);
       const { x1, y1, x2, y2 } = message.object;
-      message.object.set({ id: message.timeStamp, points: [x1, y1, x2, y2] });
+      message.object.set({
+        id: message.timeStamp,
+        points: [x1, y1, x2, y2],
+        hash,
+        zoomLevel: viewer.viewport.getZoom(),
+      });
 
       const canvas = fabricOverlay.fabricCanvas();
       const annotations = canvas.toJSON([

@@ -3,16 +3,22 @@ import { BsSquare } from "react-icons/bs";
 import axios from "axios";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { IconButton, Image } from "@chakra-ui/react";
+import md5 from "md5";
 import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
-import { updateTool } from "../../state/actions/fabricOverlayActions";
+import {
+  updateTool,
+  updateActivityFeed,
+} from "../../state/actions/fabricOverlayActions";
 import MagicWandIcon from "../../assets/images/magicWandIcon.svg";
+import { getFileBucketFolder, getZoomValue } from "../../utility/utility";
 
-const MagicWandTool = ({ viewerId }) => {
+const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
-  const { fabricOverlay, viewer, activityFeed, slideId } =
+  const { fabricOverlay, viewer, activityFeed, slideId, tile } =
     viewerWindow[viewerId];
+  const [zoomValue, setZoomValue] = useState(1);
 
   const isActive = activeTool === "MagicWand";
 
@@ -34,9 +40,18 @@ const MagicWandTool = ({ viewerId }) => {
   }, [isActive, fabricOverlay]);
 
   useEffect(() => {
+    if (!viewer) return null;
+    viewer.addHandler("zoom", () => setZoomValue(getZoomValue(viewer)));
+    return () => {
+      viewer.removeHandler("zoom", () => setZoomValue(getZoomValue(viewer)));
+    };
+  }, [viewer]);
+
+  useEffect(() => {
     if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
+    // get viewport bounds
     const bounds = viewer.viewport.getBounds();
     const {
       x: left,
@@ -50,24 +65,34 @@ const MagicWandTool = ({ viewerId }) => {
       bounds.height
     );
 
+    // get s3 folder key of tile
+    const key = getFileBucketFolder(tile);
+
+    // initiate analysis, sending viewport coordinates and s3 folder key
     const initiateAnalysis = async (body) => {
-      const resp = await axios.post("http://localhost:8080/wand", body);
-      console.log(resp);
+      await axios.post("https://development-morphometry-api.prr.ai/wand", body);
     };
 
-    console.log({ left, top, width, height });
-    initiateAnalysis({ x: left, y: top, width, height });
+    initiateAnalysis({ x: left, y: top, width, height, key });
 
     const handleMouseDown = (options) => {
       if (!options) return;
       const { x, y } = canvas.getPointer(options.e);
-      console.log({ x, y, left, top });
+
+      // create annotation of cell
       const createContours = async (body) => {
-        const resp = await axios.post("http://localhost:8080/click_xy", body);
+        // get cell data from the clicked position in viewer
+        const resp = await axios.post(
+          "https://development-morphometry-api.prr.ai/click_xy",
+          body
+        );
         console.log(resp);
 
+        // if the click positon is a cell, create annotation
+        // also add it the annotation feed
         if (resp && typeof resp.data === "object") {
-          const points = resp.data.map((point) => ({
+          const { con, area, centroid, perimeter, end_points } = resp.data;
+          const points = con.map((point) => ({
             x: point[0][0] + left,
             y: point[0][1] + top,
           }));
@@ -77,12 +102,61 @@ const MagicWandTool = ({ viewerId }) => {
             fill: `${color.hex}80`,
             strokeUniform: true,
           });
-          console.log(polygon);
-          canvas.add(polygon).renderAll();
+          const message = {
+            username: "",
+            color: color.hex,
+            action: "added",
+            timeStamp: Date.now(),
+            type: "cell",
+            object: polygon,
+            image: null,
+          };
+
+          const hash = md5(polygon + message.timeStamp);
+
+          message.object.set({
+            id: message.timeStamp,
+            hash,
+            zoomLevel: viewer.viewport.getZoom(),
+            area,
+            perimeter,
+            centroid,
+            end_points,
+          });
+
+          const annotations = canvas.toJSON([
+            "hash",
+            "text",
+            "zoomLevel",
+            "points",
+            "area",
+            "perimeter",
+            "centroid",
+            "end_points",
+          ]);
+          if (annotations.objects.length > 0) {
+            saveAnnotationsHandler(slideId, annotations.objects);
+          }
+          canvas.add(polygon).requestRenderAll();
+          setTotalCells((state) => state + 1);
+          setFabricOverlayState(
+            updateActivityFeed({
+              id: viewerId,
+              feed: [...activityFeed, message],
+            })
+          );
         }
       };
 
-      createContours({ x: x - left, y: y - top });
+      createContours({
+        x: left,
+        y: top,
+        width,
+        height,
+        key,
+        click_x: x - left,
+        click_y: y - top,
+      });
     };
 
     canvas.on("mouse:down", handleMouseDown);
@@ -102,6 +176,7 @@ const MagicWandTool = ({ viewerId }) => {
       borderRadius={0}
       bg="#F6F6F6"
       title="Magic Wand"
+      disabled={zoomValue < 40}
     >
       <Image src={MagicWandIcon} />
     </IconButton>

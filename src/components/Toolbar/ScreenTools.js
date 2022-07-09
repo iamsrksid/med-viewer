@@ -73,7 +73,7 @@ const ScreenTools = ({
           label="Options"
           onClick={handlePopup}
         /> */}
-        <Menu zIndex="1000">
+        <Menu zIndex="5">
           <MenuButton
             as={Button}
             transition="all 0.2s"
