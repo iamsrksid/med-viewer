@@ -12,7 +12,7 @@ import {
   addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
-import PolygonIcon from "../../assets/images/polygonIcon.svg";
+import { PolygonIcon } from "../Icons/CustomIcons";
 
 const MAX = 999999;
 const MIN = 99;
@@ -326,7 +326,8 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
         onClick={handleClick}
       /> */}
       <IconButton
-        icon={<FaDrawPolygon color="#00000095" />}
+        // icon={<FaDrawPolygon color="#00000095" />}
+        icon={<PolygonIcon />}
         onClick={handleClick}
         borderRadius={0}
         bg="#F6F6F6"

@@ -4,8 +4,6 @@ import { RiNavigationFill, RiPencilRulerLine } from "react-icons/ri";
 import { AiOutlineSliders } from "react-icons/ai";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import { HiOutlinePencilAlt } from "react-icons/hi";
-import { ImMakeGroup, ImUngroup } from "react-icons/im";
-import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
 import ToolbarButton from "../ViewerToolbar/button";
 import Rotate from "../Rotate/Rotate";

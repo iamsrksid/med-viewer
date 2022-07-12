@@ -6,6 +6,7 @@ import {
   useDisclosure,
   useMediaQuery,
   Image,
+  Icon,
 } from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
@@ -17,7 +18,8 @@ import {
   addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
-import SquareIcon from "../../assets/images/squareIcon.svg";
+// import SquareIcon from "../../assets/images/squareIcon.svg";
+import { SquareIcon } from "../Icons/CustomIcons";
 
 const Square = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -327,7 +329,8 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
         onClick={handleClick}
       /> */}
       <IconButton
-        icon={<BiRectangle size={20} color="#00000095" />}
+        // icon={<BiRectangle size={20} color="#00000095" />}
+        icon={<SquareIcon />}
         onClick={handleClick}
         borderRadius={0}
         bg="#F6F6F6"

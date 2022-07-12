@@ -4,7 +4,7 @@ import { IconButton, Image } from "@chakra-ui/react";
 import IconSize from "./ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../state/store";
 import { updateActivityFeed } from "../state/actions/fabricOverlayActions";
-import EraseIcon from "../assets/images/eraseIcon.svg";
+import { EraseIcons } from "./Icons/CustomIcons";
 
 const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -95,7 +95,8 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
     //   label="Remove Item"
     // />
     <IconButton
-      icon={<BsEraser size={20} />}
+      // icon={<BsEraser size={20} />}
+      icon={<EraseIcons size={20} />}
       onClick={handleRemoveObject}
       borderRadius={0}
       bg="#F6F6F6"

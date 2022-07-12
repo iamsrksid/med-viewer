@@ -2,12 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Flex,
-  Spacer,
   HStack,
   Text,
-  VStack,
   Icon,
-  Image,
   useDisclosure,
   Button,
   useMediaQuery,
