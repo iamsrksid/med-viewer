@@ -32,6 +32,7 @@ const Navigator = ({
   clickHandler,
   viewerId,
   setIsMultiview,
+  setIsNavigatorActive,
   ...restProps
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -84,6 +85,7 @@ const Navigator = ({
 
       // clear canvas (remove all annotations)
       fabricOverlay.fabricCanvas().clear();
+      setIsNavigatorActive(false);
     }
   };
 

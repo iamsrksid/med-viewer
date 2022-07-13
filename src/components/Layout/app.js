@@ -94,6 +94,7 @@ const LayoutApp = ({
             caseInfo={caseInfo}
             viewerId={currentViewer}
             isActive={isNavigatorActive}
+            setIsNavigatorActive={setIsNavigatorActive}
           />
         )}
         {isMultiview && (
