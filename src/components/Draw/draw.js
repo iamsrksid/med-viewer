@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaPaintBrush } from "react-icons/fa";
 import { BsPencil } from "react-icons/bs";
-import { useMediaQuery, useDisclosure, IconButton } from "@chakra-ui/react";
+import {
+  useMediaQuery,
+  useDisclosure,
+  IconButton,
+  useToast,
+} from "@chakra-ui/react";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
 import useHexRGB from "../../utility/use-hex-rgb";
@@ -43,7 +48,13 @@ const createFreeDrawingCursor = (brushWidth, brushColor) => {
   }, crosshair`;
 };
 
-const Draw = ({ viewerId, saveAnnotationsHandler }) => {
+const Draw = ({
+  viewerId,
+  saveAnnotationsHandler,
+  activeButton,
+  setActiveButton,
+}) => {
+  const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
@@ -252,11 +263,26 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
   return (
     <>
       <IconButton
-        icon={<BsPencil size={20} color="#000" />}
-        onClick={handleToolbarClick}
+        icon={
+          <BsPencil
+            size={20}
+            color={activeButton === "draw" ? "#3B5D7C" : "#000"}
+          />
+        }
+        onClick={() => {
+          handleToolbarClick();
+          toast({
+            title: "Free hand annotation draw tool selected",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+          setActiveButton("draw");
+        }}
         borderRadius={0}
-        bg="#F6F6F6"
+        bg={activeButton === "draw" ? "#DEDEDE" : "#F6F6F6"}
         title="Free Draw"
+        _focus={{ border: "none" }}
       />
       <EditText
         isOpen={isOpen}

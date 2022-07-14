@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { BsEraser } from "react-icons/bs";
-import { IconButton, Image } from "@chakra-ui/react";
+import { IconButton, useToast } from "@chakra-ui/react";
 import IconSize from "./ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../state/store";
 import { updateActivityFeed } from "../state/actions/fabricOverlayActions";
-import { EraseIcons } from "./Icons/CustomIcons";
+import { EraseIcons, EraseIconsFilled } from "./Icons/CustomIcons";
 
-const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
+const RemoveObject = ({
+  viewerId,
+  saveAnnotationsHandler,
+  activeButton,
+  setActiveButton,
+}) => {
+  const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay, activityFeed, slideId } =
     fabricOverlayState.viewerWindow[viewerId];
@@ -96,12 +102,22 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
     // />
     <IconButton
       // icon={<BsEraser size={20} />}
-      icon={<EraseIcons size={20} />}
-      onClick={handleRemoveObject}
+      icon={<EraseIcons />}
+      onClick={() => {
+        handleRemoveObject();
+        toast({
+          title: "Annotation deleted",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+        setActiveButton("remove");
+      }}
       borderRadius={0}
-      bg="#F6F6F6"
+      bg={activeButton === "remove" ? "#DEDEDE" : "#F6F6F6"}
       disabled={!isActiveObject}
       title="Remove Item"
+      _focus={{ border: "none" }}
     />
   );
 };

@@ -5,8 +5,7 @@ import {
   IconButton,
   useDisclosure,
   useMediaQuery,
-  Image,
-  Icon,
+  useToast,
 } from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
@@ -19,9 +18,14 @@ import {
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
 // import SquareIcon from "../../assets/images/squareIcon.svg";
-import { SquareIcon } from "../Icons/CustomIcons";
+import { SquareIcon, SquareIconSelected } from "../Icons/CustomIcons";
 
-const Square = ({ viewerId, saveAnnotationsHandler }) => {
+const Square = ({
+  viewerId,
+  saveAnnotationsHandler,
+  activeButton,
+  setActiveButton,
+}) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
@@ -33,6 +37,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
 
   const [shape, setShape] = useState(null);
   const [textbox, setTextbox] = useState(false);
+  const toast = useToast();
 
   const [myState, setState] = useState({
     activeShape: null, // active shape in Options Panel
@@ -330,11 +335,23 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
       /> */}
       <IconButton
         // icon={<BiRectangle size={20} color="#00000095" />}
-        icon={<SquareIcon />}
-        onClick={handleClick}
+        icon={
+          activeButton === "square" ? <SquareIconSelected /> : <SquareIcon />
+        }
+        onClick={() => {
+          handleClick();
+          toast({
+            title: "Square annotation tool selected",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+          setActiveButton("square");
+        }}
         borderRadius={0}
-        bg="#F6F6F6"
+        bg={activeButton === "square" ? "#DEDEDE" : "#F6F6F6"}
         title="Rectangular Annotations"
+        _focus={{ border: "none" }}
       />
       <EditText
         isOpen={isOpen}

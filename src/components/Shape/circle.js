@@ -2,7 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { BsCircle } from "react-icons/bs";
-import { IconButton, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import {
+  IconButton,
+  useDisclosure,
+  useMediaQuery,
+  useToast,
+} from "@chakra-ui/react";
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
@@ -14,8 +19,15 @@ import {
   addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
+import { CircleIcon, CircleIconFilled } from "../Icons/CustomIcons";
 
-const Circle = ({ viewerId, saveAnnotationsHandler }) => {
+const Circle = ({
+  viewerId,
+  saveAnnotationsHandler,
+  activeButton,
+  setActiveButton,
+}) => {
+  const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
@@ -347,11 +359,21 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
         onClick={handleClick}
       /> */}
       <IconButton
-        icon={<BsCircle size={20} color="#000" />}
-        onClick={handleClick}
+        icon={activeButton === "circle" ? <CircleIconFilled /> : <CircleIcon />}
+        onClick={() => {
+          handleClick();
+          toast({
+            title: "Circle annotation tool selected",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+          setActiveButton("circle");
+        }}
         borderRadius={0}
-        bg="#F6F6F6"
+        bg={activeButton === "circle" ? "#DEDEDE" : "#F6F6F6"}
         title="Circle Annotation"
+        _focus={{ border: "none" }}
       />
       <EditText
         isOpen={isOpen}

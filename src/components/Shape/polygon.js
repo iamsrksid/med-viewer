@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaDrawPolygon } from "react-icons/fa";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { IconButton, useDisclosure, Image } from "@chakra-ui/react";
+import { IconButton, useDisclosure, useToast } from "@chakra-ui/react";
 import md5 from "md5";
 import TypeButton from "../typeButton";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
@@ -12,12 +12,18 @@ import {
   addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
-import { PolygonIcon } from "../Icons/CustomIcons";
+import { PolygonIcon, PolygonIconFilled } from "../Icons/CustomIcons";
 
 const MAX = 999999;
 const MIN = 99;
 
-const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
+const Polygon = ({
+  viewerId,
+  saveAnnotationsHandler,
+  activeButton,
+  setActiveButton,
+}) => {
+  const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
@@ -327,11 +333,23 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       /> */}
       <IconButton
         // icon={<FaDrawPolygon color="#00000095" />}
-        icon={<PolygonIcon />}
-        onClick={handleClick}
+        icon={
+          activeButton === "polygon" ? <PolygonIconFilled /> : <PolygonIcon />
+        }
+        onClick={() => {
+          handleClick();
+          toast({
+            title: "Polygon annotation tool selected",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+          setActiveButton("polygon");
+        }}
         borderRadius={0}
-        bg="#F6F6F6"
+        bg={activeButton === "polygon" ? "#DEDEDE" : "#F6F6F6"}
         title="Free Hand Polygon Annotations"
+        _focus={{ border: "none" }}
       />
       <EditText
         isOpen={isOpen}

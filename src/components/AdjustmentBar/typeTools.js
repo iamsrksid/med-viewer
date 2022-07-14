@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -26,6 +26,7 @@ import MagicWandTool from "../Tools/magicWandTool";
 const TypeTools = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
+  const [activeButton, setActiveButton] = useState(null);
 
   fabric.IText.prototype.onKeyDown = (e) => {
     if (e.ctrlKey === true && e.key === "Enter") {
@@ -46,31 +47,45 @@ const TypeTools = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
           <Line
             viewerId={viewerId}
             saveAnnotationsHandler={saveAnnotationsHandler}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
           />
           <MagicWandTool
             viewerId={viewerId}
             setTotalCells={setTotalCells}
             saveAnnotationsHandler={saveAnnotationsHandler}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
           />
           <Square
             viewerId={viewerId}
             saveAnnotationsHandler={saveAnnotationsHandler}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
           />
           <Circle
             viewerId={viewerId}
             saveAnnotationsHandler={saveAnnotationsHandler}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
           />
           <Polygon
             viewerId={viewerId}
             saveAnnotationsHandler={saveAnnotationsHandler}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
           />
           <Draw
             viewerId={viewerId}
             saveAnnotationsHandler={saveAnnotationsHandler}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
           />
           <RemoveObject
             viewerId={viewerId}
             saveAnnotationsHandler={saveAnnotationsHandler}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
           />
         </SimpleGrid>
       </Flex>

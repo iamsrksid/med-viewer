@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { BsSlash } from "react-icons/bs";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
-import { IconButton, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import {
+  IconButton,
+  useDisclosure,
+  useMediaQuery,
+  useToast,
+} from "@chakra-ui/react";
 import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import {
@@ -16,12 +21,18 @@ import {
 } from "../../utility/utility";
 import EditText from "../Feed/editText";
 
-const Line = ({ viewerId, saveAnnotationsHandler }) => {
+const Line = ({
+  viewerId,
+  saveAnnotationsHandler,
+  activeButton,
+  setActiveButton,
+}) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow, color } = fabricOverlayState;
   const { fabricOverlay, viewer, activityFeed, slideId } =
     viewerWindow[viewerId];
   const isActive = activeTool === "Line";
+  const toast = useToast();
 
   const [shape, setShape] = useState(null);
   const [textbox, setTextbox] = useState(false);
@@ -281,11 +292,26 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
         onClick={handleClick}
       /> */}
       <IconButton
-        icon={<BsSlash size={28} color="#000" />}
-        onClick={handleClick}
+        icon={
+          <BsSlash
+            size={40}
+            color={activeButton === "line" ? "#3B5D7C" : "#000"}
+          />
+        }
+        onClick={() => {
+          handleClick();
+          setActiveButton("line");
+          toast({
+            title: "Line annotation tool selected",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+        }}
         borderRadius={0}
-        bg="#F6F6F6"
+        bg={activeButton === "line" ? "#DEDEDE" : "#F6F6F6"}
         title="Line Annotations"
+        _focus={{ border: "none" }}
       />
       <EditText
         isOpen={isOpen}
