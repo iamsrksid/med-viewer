@@ -6,12 +6,7 @@ import { useFabricOverlayState } from "../state/store";
 import { updateActivityFeed } from "../state/actions/fabricOverlayActions";
 import { EraseIcons, EraseIconsFilled } from "./Icons/CustomIcons";
 
-const RemoveObject = ({
-  viewerId,
-  saveAnnotationsHandler,
-  activeButton,
-  setActiveButton,
-}) => {
+const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay, activityFeed, slideId } =
@@ -68,7 +63,7 @@ const RemoveObject = ({
 
     // message.image = await getCanvasImage(viewerId);
 
-    const feed = activityFeed.filter((af) => af.object.id !== activeObject.id);
+    // const feed = activityFeed.filter((af) => af.object.id !== activeObject.id);
 
     canvas.remove(activeObject);
     canvas.renderAll();
@@ -111,13 +106,12 @@ const RemoveObject = ({
           duration: 1500,
           isClosable: true,
         });
-        setActiveButton("remove");
       }}
       borderRadius={0}
-      bg={activeButton === "remove" ? "#DEDEDE" : "#F6F6F6"}
+      bg="#F6F6F6"
       disabled={!isActiveObject}
       title="Remove Item"
-      _focus={{ border: "none" }}
+      _focus={{ border: "none", background: "#DEDEDE" }}
     />
   );
 };

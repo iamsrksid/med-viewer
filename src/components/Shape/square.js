@@ -20,12 +20,7 @@ import {
 // import SquareIcon from "../../assets/images/squareIcon.svg";
 import { SquareIcon, SquareIconSelected } from "../Icons/CustomIcons";
 
-const Square = ({
-  viewerId,
-  saveAnnotationsHandler,
-  activeButton,
-  setActiveButton,
-}) => {
+const Square = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
@@ -335,9 +330,7 @@ const Square = ({
       /> */}
       <IconButton
         // icon={<BiRectangle size={20} color="#00000095" />}
-        icon={
-          activeButton === "square" ? <SquareIconSelected /> : <SquareIcon />
-        }
+        icon={isActive ? <SquareIconSelected /> : <SquareIcon />}
         onClick={() => {
           handleClick();
           toast({
@@ -346,10 +339,9 @@ const Square = ({
             duration: 1500,
             isClosable: true,
           });
-          setActiveButton("square");
         }}
         borderRadius={0}
-        bg={activeButton === "square" ? "#DEDEDE" : "#F6F6F6"}
+        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
         title="Rectangular Annotations"
         _focus={{ border: "none" }}
       />

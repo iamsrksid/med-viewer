@@ -21,12 +21,7 @@ import {
 } from "../../utility/utility";
 import EditText from "../Feed/editText";
 
-const Line = ({
-  viewerId,
-  saveAnnotationsHandler,
-  activeButton,
-  setActiveButton,
-}) => {
+const Line = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow, color } = fabricOverlayState;
   const { fabricOverlay, viewer, activityFeed, slideId } =
@@ -292,15 +287,9 @@ const Line = ({
         onClick={handleClick}
       /> */}
       <IconButton
-        icon={
-          <BsSlash
-            size={40}
-            color={activeButton === "line" ? "#3B5D7C" : "#000"}
-          />
-        }
+        icon={<BsSlash size={40} color={isActive ? "#3B5D7C" : "#000"} />}
         onClick={() => {
           handleClick();
-          setActiveButton("line");
           toast({
             title: "Line annotation tool selected",
             status: "success",
@@ -309,7 +298,7 @@ const Line = ({
           });
         }}
         borderRadius={0}
-        bg={activeButton === "line" ? "#DEDEDE" : "#F6F6F6"}
+        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
         title="Line Annotations"
         _focus={{ border: "none" }}
       />

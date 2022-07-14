@@ -17,12 +17,7 @@ import { PolygonIcon, PolygonIconFilled } from "../Icons/CustomIcons";
 const MAX = 999999;
 const MIN = 99;
 
-const Polygon = ({
-  viewerId,
-  saveAnnotationsHandler,
-  activeButton,
-  setActiveButton,
-}) => {
+const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -333,9 +328,7 @@ const Polygon = ({
       /> */}
       <IconButton
         // icon={<FaDrawPolygon color="#00000095" />}
-        icon={
-          activeButton === "polygon" ? <PolygonIconFilled /> : <PolygonIcon />
-        }
+        icon={isActive ? <PolygonIconFilled /> : <PolygonIcon />}
         onClick={() => {
           handleClick();
           toast({
@@ -344,10 +337,9 @@ const Polygon = ({
             duration: 1500,
             isClosable: true,
           });
-          setActiveButton("polygon");
         }}
         borderRadius={0}
-        bg={activeButton === "polygon" ? "#DEDEDE" : "#F6F6F6"}
+        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
         title="Free Hand Polygon Annotations"
         _focus={{ border: "none" }}
       />

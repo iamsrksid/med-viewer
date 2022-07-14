@@ -21,12 +21,7 @@ import {
 } from "../../state/actions/fabricOverlayActions";
 import { CircleIcon, CircleIconFilled } from "../Icons/CustomIcons";
 
-const Circle = ({
-  viewerId,
-  saveAnnotationsHandler,
-  activeButton,
-  setActiveButton,
-}) => {
+const Circle = ({ viewerId, saveAnnotationsHandler }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -359,7 +354,7 @@ const Circle = ({
         onClick={handleClick}
       /> */}
       <IconButton
-        icon={activeButton === "circle" ? <CircleIconFilled /> : <CircleIcon />}
+        icon={isActive ? <CircleIconFilled /> : <CircleIcon />}
         onClick={() => {
           handleClick();
           toast({
@@ -368,10 +363,9 @@ const Circle = ({
             duration: 1500,
             isClosable: true,
           });
-          setActiveButton("circle");
         }}
         borderRadius={0}
-        bg={activeButton === "circle" ? "#DEDEDE" : "#F6F6F6"}
+        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
         title="Circle Annotation"
         _focus={{ border: "none" }}
       />

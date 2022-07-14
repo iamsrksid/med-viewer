@@ -48,12 +48,7 @@ const createFreeDrawingCursor = (brushWidth, brushColor) => {
   }, crosshair`;
 };
 
-const Draw = ({
-  viewerId,
-  saveAnnotationsHandler,
-  activeButton,
-  setActiveButton,
-}) => {
+const Draw = ({ viewerId, saveAnnotationsHandler }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -263,12 +258,7 @@ const Draw = ({
   return (
     <>
       <IconButton
-        icon={
-          <BsPencil
-            size={20}
-            color={activeButton === "draw" ? "#3B5D7C" : "#000"}
-          />
-        }
+        icon={<BsPencil size={20} color={isActive ? "#3B5D7C" : "#000"} />}
         onClick={() => {
           handleToolbarClick();
           toast({
@@ -277,10 +267,9 @@ const Draw = ({
             duration: 1500,
             isClosable: true,
           });
-          setActiveButton("draw");
         }}
         borderRadius={0}
-        bg={activeButton === "draw" ? "#DEDEDE" : "#F6F6F6"}
+        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
         title="Free Draw"
         _focus={{ border: "none" }}
       />

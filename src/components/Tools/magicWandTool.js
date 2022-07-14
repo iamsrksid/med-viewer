@@ -14,13 +14,7 @@ import {
 import MagicWandIcon from "../../assets/images/magicWandIcon.svg";
 import { getFileBucketFolder, getZoomValue } from "../../utility/utility";
 
-const MagicWandTool = ({
-  viewerId,
-  saveAnnotationsHandler,
-  setTotalCells,
-  activeButton,
-  setActiveButton,
-}) => {
+const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
   const { fabricOverlay, viewer, activityFeed, slideId, tile } =
@@ -179,12 +173,7 @@ const MagicWandTool = ({
 
   return (
     <IconButton
-      icon={
-        <VscWand
-          size={24}
-          color={activeButton === "magicWand" ? "#3B5D7C" : "#000"}
-        />
-      }
+      icon={<VscWand size={24} color={isActive ? "#3B5D7C" : "#000"} />}
       onClick={() => {
         handleClick();
         toast({
@@ -193,10 +182,9 @@ const MagicWandTool = ({
           duration: 1500,
           isClosable: true,
         });
-        setActiveButton("magicWand");
       }}
       borderRadius={0}
-      bg={activeButton === "magicWand" ? "#DEDEDE" : "#F6F6F6"}
+      bg={isActive ? "#DEDEDE" : "#F6F6F6"}
       title="Magic Wand"
       disabled={zoomValue < 40}
       _focus={{ border: "none" }}
