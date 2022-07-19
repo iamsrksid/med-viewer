@@ -58,17 +58,38 @@ const ViewerControls = ({
     const feed = [];
 
     // add annotation to the activity feed
-    const addToFeed = async (shape) => {
+    const addToFeed = async (shape, annotation) => {
       const message = {
         username: `${userInfo.firstName} ${userInfo.lastName}`,
-        color: shape.fill ? shape.fill : shape.stroke,
-        action: "added",
-        text: shape.text,
-        timeStamp: getTimestamp(),
-        type: shape.type,
         object: shape,
         image: null,
       };
+
+      const {
+        hash,
+        text,
+        zoomLevel,
+        points,
+        timeStamp,
+        area,
+        perimeter,
+        cnetroid,
+        endPoints,
+        isAnalysed,
+      } = annotation;
+
+      message.object.set({
+        hash,
+        text,
+        zoomLevel,
+        points,
+        timeStamp,
+        area,
+        perimeter,
+        cnetroid,
+        endPoints,
+        isAnalysed,
+      });
 
       // message.image = await getCanvasImage(viewerId);
 
@@ -148,7 +169,7 @@ const ViewerControls = ({
 
       // add shape to canvas and to activity feed
       canvas.add(shape);
-      addToFeed(shape);
+      addToFeed(shape, annotation);
     };
 
     const loadAnnotations = async () => {
@@ -168,7 +189,9 @@ const ViewerControls = ({
       canvas.requestRenderAll();
       viewer.viewport.zoomBy(1.01);
 
-      setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
+      setFabricOverlayState(
+        updateActivityFeed({ id: viewerId, fullFeed: feed })
+      );
       setIsAnnotationLoaded(true);
     };
 

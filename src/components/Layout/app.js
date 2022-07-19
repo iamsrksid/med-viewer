@@ -130,6 +130,7 @@ const LayoutApp = ({
               handlePopup={setShowAnnotationsBar}
               totalCells={totalCells}
               popup={showAnnotationsBar}
+              saveAnnotationsHandler={saveAnnotationsHandler}
             />
           ) : null}
           <LayoutAppBody>

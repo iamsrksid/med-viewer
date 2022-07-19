@@ -12,7 +12,12 @@ import {
   addToActivityFeed,
 } from "../../state/actions/fabricOverlayActions";
 import MagicWandIcon from "../../assets/images/magicWandIcon.svg";
-import { getFileBucketFolder, getZoomValue } from "../../utility/utility";
+import {
+  createAnnotationMessage,
+  getFileBucketFolder,
+  getZoomValue,
+  saveAnnotationsToDB,
+} from "../../utility/utility";
 
 const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -25,24 +30,24 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const isActive = activeTool === "MagicWand";
 
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
+    canvas.defaultCursor = "crosshair";
 
-    if (isActive) {
-      canvas.defaultCursor = "crosshair";
+    // Disable OSD mouseclicks
+    viewer.setMouseNavEnabled(false);
+    viewer.outerTracker.setTracking(false);
 
-      // Disable OSD mouseclicks
-      viewer.setMouseNavEnabled(false);
-      viewer.outerTracker.setTracking(false);
-    } else {
+    return () => {
       // Enable OSD mouseclicks
       viewer.setMouseNavEnabled(true);
       viewer.outerTracker.setTracking(true);
-    }
+    };
   }, [isActive, fabricOverlay]);
 
   useEffect(() => {
     if (!viewer) return null;
+    setZoomValue(getZoomValue(viewer));
     viewer.addHandler("zoom", () => setZoomValue(getZoomValue(viewer)));
     return () => {
       viewer.removeHandler("zoom", () => setZoomValue(getZoomValue(viewer)));
@@ -99,41 +104,23 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
           fill: `${color.hex}80`,
           strokeUniform: true,
         });
-        const message = {
-          username: "",
-          color: color.hex,
-          action: "added",
-          timeStamp: Date.now(),
-          type: "cell",
-          object: polygon,
-          image: null,
-        };
 
-        const hash = md5(polygon + message.timeStamp);
+        const message = createAnnotationMessage({ shape: polygon, viewer });
 
         message.object.set({
-          id: message.timeStamp,
-          hash,
-          zoomLevel: viewer.viewport.getZoom(),
           area,
           perimeter,
           centroid,
           end_points,
+          isAnalysed: true,
         });
 
-        const annotations = canvas.toJSON([
-          "hash",
-          "text",
-          "zoomLevel",
-          "points",
-          "area",
-          "perimeter",
-          "centroid",
-          "end_points",
-        ]);
-        if (annotations.objects.length > 0) {
-          saveAnnotationsHandler(slideId, annotations.objects);
-        }
+        saveAnnotationsToDB({
+          slideId,
+          canvas,
+          saveAnnotationsHandler,
+        });
+
         canvas.add(polygon).requestRenderAll();
         setTotalCells((state) => state + 1);
         setFabricOverlayState(

@@ -6,7 +6,6 @@ import {
   Text,
   Icon,
   useDisclosure,
-  Button,
   useMediaQuery,
 } from "@chakra-ui/react";
 import "../../styles/scrollBar.css";
@@ -18,42 +17,17 @@ import { GrFormClose } from "react-icons/gr";
 import { FaDrawPolygon } from "react-icons/fa";
 import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
-import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
-import TumorIcon from "../../assets/images/TumorIcon.svg";
-import StromaIcon from "../../assets/images/StromaIcon.svg";
-import ImmuneCellsIcon from "../../assets/images/ImmuneCellsIcon.svg";
-import NecrosisIcon from "../../assets/images/NecrosisIcon.svg";
+import { removeFromActivityFeed } from "../../state/actions/fabricOverlayActions";
+import { saveAnnotationsToDB } from "../../utility/utility";
 
-const EditTextButton = ({ activity, handleEditClick }) => {
-  return activity?.object?.text ? (
+const EditTextButton = ({ feed, handleEditClick, ...restProps }) => {
+  return (
     <Icon
       as={MdModeEditOutline}
       cursor="pointer"
-      onClick={() => handleEditClick(activity)}
+      onClick={() => handleEditClick(feed)}
+      {...restProps}
     />
-  ) : (
-    <Button
-      variant="solid"
-      py={1}
-      h="26px"
-      borderRadius={0}
-      backgroundColor="#ECECEC"
-      size="sm"
-      border="0.5px solid #00153F"
-      color="#00153F"
-      fontFamily="inter"
-      fontSize="14px"
-      fontWeight="bold"
-      _hover={{
-        backgroundColor: "#00153F20",
-      }}
-      _focus={{
-        backgroundColor: "#00153F30",
-      }}
-      onClick={() => handleEditClick(activity)}
-    >
-      Add
-    </Button>
   );
 };
 
@@ -63,10 +37,12 @@ const ActivityFeed = ({
   totalCells,
   handlePopup,
   popup,
+  saveAnnotationsHandler,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { fabricOverlay, activityFeed, viewer, slideName } =
-    fabricOverlayState.viewerWindow[viewerId];
+  const { activeTool, viewerWindow } = fabricOverlayState;
+  const { fabricOverlay, activityFeed, viewer, tile, slideId } =
+    viewerWindow[viewerId];
 
   const scrollbar = useRef(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -76,45 +52,70 @@ const ActivityFeed = ({
 
   useEffect(() => {
     if (scrollbar.current) scrollbar.current.scrollToBottom();
+    if (activityFeed.length === 0) setAnnotationsDetails(null);
   }, [activityFeed]);
 
-  const handleClick = (activity) => {
-    if (!activity.object || !activity.object.isExist) return;
-    const canvas = fabricOverlay.fabricCanvas();
-    canvas.setActiveObject(activity.object);
-    const { zoomLevel, left, top, width, height } = activity.object;
-    viewer.viewport.zoomTo(zoomLevel);
+  useEffect(() => {
+    return () => {
+      setAnnotationObject(null);
+      setAnnotationsDetails(null);
+    };
+  }, []);
 
-    // get viewport point of middle of selected annotation
-    const vpoint = viewer.viewport.imageToViewportCoordinates(
-      left + width / 2,
-      top + height / 2
-    );
-    viewer.viewport.panTo(vpoint);
+  useEffect(() => {
+    setAnnotationObject(null);
+    setAnnotationsDetails(null);
+  }, [tile]);
+
+  const handleClick = (feed) => {
+    if (!feed.object) return;
+    const canvas = fabricOverlay.fabricCanvas();
+    canvas.setActiveObject(feed.object);
+
+    // change position to annotation object location
+    // except for when MagicWand tool is activated
+    if (activeTool !== "MagicWand") {
+      const { zoomLevel, left, top, width, height } = feed.object;
+      viewer.viewport.zoomTo(zoomLevel);
+
+      // get viewport point of middle of selected annotation
+      const vpoint = viewer.viewport.imageToViewportCoordinates(
+        left + width / 2,
+        top + height / 2
+      );
+      viewer.viewport.panTo(vpoint);
+    }
+
     canvas.requestRenderAll();
+    setAnnotationsDetails(feed);
   };
 
   const handleSave = ({ text, tag }) => {
+    if (!text || !tag) return;
     annotationObject.text = text;
     annotationObject.tag = tag;
     setAnnotationObject(null);
+    saveAnnotationsToDB({
+      slideId,
+      canvas: fabricOverlay.fabricCanvas(),
+      saveAnnotationsHandler,
+    });
     onClose();
   };
 
-  const handleEditClick = (activity) => {
-    setAnnotationObject(activity.object);
+  const handleEditClick = (feed) => {
+    setAnnotationObject(feed.object);
     onOpen();
   };
 
-  const deleteObject = (e, activity) => {
+  const deleteObject = (e, feed) => {
     e.stopPropagation();
     const canvas = fabricOverlay.fabricCanvas();
-    const feed = activityFeed.filter(
-      (af) => af.object.hash !== activity.object.hash
+    setFabricOverlayState(
+      removeFromActivityFeed({ id: viewerId, hash: feed.object.hash })
     );
-    canvas.remove(activity.object);
+    canvas.remove(feed.object);
     canvas.renderAll();
-    setFabricOverlayState(updateActivityFeed({ id: viewerId, feed }));
   };
 
   return (
@@ -170,50 +171,33 @@ const ActivityFeed = ({
           <Flex direction="column">
             {activityFeed.map((feed, index) => {
               return (
-                <Box key={feed.hash}>
-                  {feed?.type === "rect" ? (
-                    <Flex
-                      pb="0.5vh"
-                      borderBottom="1px solid #F6F6F6"
-                      cursor="pointer"
-                      onClick={() => setAnnotationsDetails(feed)}
-                    >
+                <Flex
+                  key={feed.object.hash}
+                  pb="0.5vh"
+                  borderBottom="1px solid #F6F6F6"
+                  cursor="pointer"
+                  onClick={() => handleClick(feed)}
+                  justify="space-between"
+                  align="center"
+                >
+                  <Flex align="center">
+                    {feed.object?.type === "rect" ? (
                       <BiRectangle color="#E23636" />
-                      <Text ml="0.8vw">Annotation {index + 1}</Text>
-                    </Flex>
-                  ) : feed?.type === "polygon" ? (
-                    <Flex
-                      pb="0.5vh"
-                      borderBottom="1px solid #F6F6F6"
-                      cursor="pointer"
-                      onClick={() => setAnnotationsDetails(feed)}
-                      align="center"
-                    >
+                    ) : feed.object?.type === "polygon" ? (
                       <FaDrawPolygon color="#E23636" />
-                      <Text ml="0.5vw">Annotation {index + 1}</Text>
-                    </Flex>
-                  ) : feed?.type === "ellipse" ? (
-                    <Flex
-                      pb="0.5vh"
-                      borderBottom="1px solid #F6F6F6"
-                      cursor="pointer"
-                      onClick={() => setAnnotationsDetails(feed)}
-                    >
+                    ) : feed.object?.type === "ellipse" ? (
                       <BsCircle color="#E23636" />
-                      <Text ml="0.8vw">Annotation {index + 1}</Text>
-                    </Flex>
-                  ) : (
-                    <Flex
-                      pb="0.5vh"
-                      borderBottom="1px solid #F6F6F6"
-                      cursor="pointer"
-                      onClick={() => setAnnotationsDetails(feed)}
-                    >
+                    ) : (
                       <BsSlash color="#E23636" />
-                      <Text ml="0.8vw">Annotation {index + 1}</Text>
-                    </Flex>
-                  )}
-                </Box>
+                    )}
+                    <Text ml="0.8vw">Annotation {index + 1}</Text>
+                  </Flex>
+                  <EditTextButton
+                    feed={feed}
+                    handleEditClick={handleEditClick}
+                    mr={2}
+                  />
+                </Flex>
               );
             })}
           </Flex>
@@ -221,7 +205,13 @@ const ActivityFeed = ({
       </Flex>
       <Flex overflowY="auto" fontSize="14px" direction="column">
         <Box h="10px" background="#F6F6F6" w="100%" />
-        <Text pt="1.2vh" pb="1.2vh" fontSize="1vw" marginStart="0.8vw">
+        <Text
+          pt="1.2vh"
+          pb="1.2vh"
+          fontSize="1vw"
+          marginStart="0.8vw"
+          fontWeight="bold"
+        >
           Annotation Values
         </Text>
         {annotationDetails ? (
@@ -231,23 +221,38 @@ const ActivityFeed = ({
             renderThumbVertical={(props) => <div className="thumb-vertical" />}
             autoHide
           >
-            <HStack
+            {/* <HStack
               borderBottom="1px solid #F6F6F6"
               pb="0.5vw"
               marginStart="0.8vw"
             >
               <Text minW="35%">Slide Name:</Text>
               <Text>{slideName}</Text>
-            </HStack>
+            </HStack> */}
             <HStack
               marginStart="0.8vw"
               borderBottom="1px solid #F6F6F6"
               pb="0.5vw"
             >
               <Text minW="35%">Annotation:</Text>
-              <Text>{annotationDetails ? annotationDetails.type : "NULL"}</Text>
+              <Text>
+                {annotationDetails ? annotationDetails.object?.type : "-"}
+              </Text>
             </HStack>
-            {annotationDetails.type === "cell" ? (
+            <HStack
+              marginStart="0.8vw"
+              borderBottom="1px solid #F6F6F6"
+              pb="0.5vw"
+            >
+              <Text minW="35%">Description:</Text>
+              <Text>
+                {annotationDetails.object?.text
+                  ? annotationDetails.object.text
+                  : "-"}
+              </Text>
+            </HStack>
+
+            {annotationDetails.object?.isAnalysed ? (
               <>
                 <HStack
                   marginStart="0.8vw"
@@ -285,31 +290,16 @@ const ActivityFeed = ({
                     {annotationDetails.object.area} &micro;m<sup>2</sup>
                   </Text>
                 </HStack>
+                <HStack
+                  marginStart="0.8vw"
+                  borderBottom="1px solid #F6F6F6"
+                  pb="0.5vw"
+                  mt={4}
+                >
+                  <Text minW="35%">Total Cells:</Text>
+                  <Text>{totalCells || "-"}</Text>
+                </HStack>
               </>
-            ) : (
-              <HStack
-                marginStart="0.8vw"
-                borderBottom="1px solid #F6F6F6"
-                pb="0.5vw"
-              >
-                <Text minW="35%">Description:</Text>
-                <Text>
-                  {annotationDetails.object?.text
-                    ? annotationDetails.object.text
-                    : "-"}
-                </Text>
-              </HStack>
-            )}
-            {annotationDetails.type === "cell" ? (
-              <HStack
-                marginStart="0.8vw"
-                borderBottom="1px solid #F6F6F6"
-                pb="0.5vw"
-                mt={4}
-              >
-                <Text minW="35%">Total Cells:</Text>
-                <Text>{totalCells || "-"}</Text>
-              </HStack>
             ) : null}
           </Scrollbars>
         ) : null}
@@ -317,6 +307,7 @@ const ActivityFeed = ({
       <EditText
         isOpen={isOpen}
         onClose={onClose}
+        value={annotationObject?.text ? annotationObject.text : ""}
         handleClose={onClose}
         handleSave={handleSave}
       />

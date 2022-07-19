@@ -11,7 +11,12 @@ import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
 import useHexRGB from "../../utility/use-hex-rgb";
 import { fonts } from "../Text/fontPicker";
-import { getCanvasImage, getScaleFactor } from "../../utility/utility";
+import {
+  createAnnotationMessage,
+  getCanvasImage,
+  getScaleFactor,
+  saveAnnotationsToDB,
+} from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { widths } from "./width";
@@ -53,10 +58,8 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, activityFeed, slideId } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, slideId } = viewerWindow[viewerId];
 
-  const { hexToRGBA } = useHexRGB();
   const isActive = activeTool === "DRAW";
 
   const [path, setPath] = useState(null);
@@ -73,38 +76,12 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
   };
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const screenSize = useMediaQuery([
-    "(max-width: 1280px)",
-    "(max-width: 1440px)",
-    "(max-width: 1920px)",
-    "(max-width: 2560px)",
-  ]);
-
   useEffect(() => {
     setMyState(isActive);
   }, [isActive]);
 
   useEffect(() => {
-    if (!fabricOverlay) return null;
-    const canvas = fabricOverlay.fabricCanvas();
-
-    function handleMouseDown() {
-      if (!myStateRef.current.isActive) return;
-      // Need this as double protection to make sure OSD isn't swallowing
-      // Fabric's drawing mode for some reason
-      canvas.selection = false;
-      viewer.setMouseNavEnabled(false);
-      viewer.outerTracker.setTracking(false);
-    }
-    canvas.on("mouse:down", handleMouseDown);
-
-    return () => {
-      canvas.off("mouse:down", handleMouseDown);
-    };
-  }, [fabricOverlay]);
-
-  useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     // // Create new Textbox instance and add it to canvas
@@ -127,39 +104,46 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
     const pathCreated = (e) => {
       canvas.selection = true;
       setPath(e.path);
-      onOpen();
     };
 
-    if (isActive) {
-      const brushWidth = myState.width.pixelWidth;
-      const scaleFactor = getScaleFactor(viewer);
-      // Enable Fabric drawing; disable OSD mouseclicks
+    function handleMouseDown() {
+      if (!myStateRef.current.isActive) return;
+      // Need this as double protection to make sure OSD isn't swallowing
+      // Fabric's drawing mode for some reason
+      canvas.selection = false;
       viewer.setMouseNavEnabled(false);
       viewer.outerTracker.setTracking(false);
-      canvas.isDrawingMode = true;
-      canvas.freeDrawingBrush.color = color.hex;
-      canvas.freeDrawingBrush.width = brushWidth / scaleFactor;
-      canvas.renderAll();
+    }
 
-      // EXAMPLE: of using an image for cursor
-      // https://i.stack.imgur.com/fp7eL.png
-      // canvas.freeDrawingCursor = `url(${logo}) 0 50, auto`;
+    const brushWidth = myState.width.pixelWidth;
+    const scaleFactor = getScaleFactor(viewer);
+    // Enable Fabric drawing; disable OSD mouseclicks
+    viewer.setMouseNavEnabled(false);
+    viewer.outerTracker.setTracking(false);
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.color = color.hex;
+    canvas.freeDrawingBrush.width = brushWidth / scaleFactor;
+    canvas.renderAll();
 
-      canvas.freeDrawingCursor = createFreeDrawingCursor(brushWidth, color.hex);
+    // EXAMPLE: of using an image for cursor
+    // https://i.stack.imgur.com/fp7eL.png
+    // canvas.freeDrawingCursor = `url(${logo}) 0 50, auto`;
 
-      canvas.on("path:created", pathCreated);
-      // console.log(canvas._objects)
-    } else {
+    canvas.freeDrawingCursor = createFreeDrawingCursor(brushWidth, color.hex);
+
+    canvas.on("path:created", pathCreated);
+    canvas.on("mouse:down", handleMouseDown);
+
+    // Remove handler
+    return () => {
+      canvas.off("path:created", pathCreated);
+      canvas.off("mouse:down", handleMouseDown);
+
       // Disable Fabric drawing; enable OSD mouseclicks
       viewer.setMouseNavEnabled(true);
       viewer.outerTracker.setTracking(true);
       canvas.isDrawingMode = false;
       canvas.freeDrawingCursor = "";
-    }
-
-    // Remove handler
-    return () => {
-      canvas.off("path:created", pathCreated);
     };
   }, [isActive]);
 
@@ -179,40 +163,16 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
   // group drawing (path) and textbox together
   // first remove both from canvas then group them and then add group to canvas
   useEffect(() => {
-    if (!path || !textbox) return;
+    if (!path) return;
 
-    const timeStamp = Date.now();
+    const addToFeed = async () => {
+      const message = createAnnotationMessage({ shape: path, viewer });
 
-    const addToFeed = async (path) => {
-      const message = {
-        username: "",
-        color: path.stroke,
-        action: "added",
-        timeStamp,
-        type: path.type,
-        object: path,
-        image: null,
-      };
-
-      const hash = md5(path + timeStamp);
-
-      // message.image = await getCanvasImage(viewerId);
-      message.object.set({
-        id: message.timeStamp,
-        hash,
-        zoomLevel: viewer.viewport.getZoom(),
+      saveAnnotationsToDB({
+        slideId,
+        canvas: fabricOverlay.fabricCanvas(),
+        saveAnnotationsHandler,
       });
-
-      const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON([
-        "hash",
-        "text",
-        "zoomLevel",
-        "points",
-      ]);
-      if (annotations.objects.length > 0) {
-        saveAnnotationsHandler(slideId, annotations.objects);
-      }
 
       setFabricOverlayState(
         addToActivityFeed({
@@ -236,8 +196,11 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
       // );
     };
 
-    addToFeed(path);
-  }, [textbox]);
+    addToFeed();
+
+    // change tool back to move
+    setFabricOverlayState(updateTool({ tool: "Move" }));
+  }, [path]);
 
   const handleToolbarClick = () => {
     setFabricOverlayState(updateTool({ tool: "DRAW" }));
@@ -256,30 +219,22 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
   };
 
   return (
-    <>
-      <IconButton
-        icon={<BsPencil size={20} color={isActive ? "#3B5D7C" : "#000"} />}
-        onClick={() => {
-          handleToolbarClick();
-          toast({
-            title: "Free hand annotation draw tool selected",
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
-        }}
-        borderRadius={0}
-        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
-        title="Free Draw"
-        _focus={{ border: "none" }}
-      />
-      <EditText
-        isOpen={isOpen}
-        onClose={onClose}
-        handleClose={handleClose}
-        handleSave={handleSave}
-      />
-    </>
+    <IconButton
+      icon={<BsPencil size={20} color={isActive ? "#3B5D7C" : "#000"} />}
+      onClick={() => {
+        handleToolbarClick();
+        toast({
+          title: "Free hand annotation draw tool selected",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      }}
+      borderRadius={0}
+      bg={isActive ? "#DEDEDE" : "#F6F6F6"}
+      title="Free Draw"
+      _focus={{ border: "none" }}
+    />
   );
 };
 

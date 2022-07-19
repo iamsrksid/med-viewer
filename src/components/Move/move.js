@@ -41,7 +41,7 @@ const Move = ({
     setFabricOverlayState(updateTool({ tool: "Move" }));
   };
   const handleAnnotationsClick = () => {
-    if (typeToolsToggle) setFabricOverlayState(updateTool({ tool: "Move" }));
+    if (!isActive) setFabricOverlayState(updateTool({ tool: "Move" }));
     setTypeToolsToggle((state) => !state);
   };
   const handleColorClick = () => {

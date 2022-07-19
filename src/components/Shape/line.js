@@ -15,9 +15,11 @@ import {
   addToActivityFeed,
 } from "../../state/actions/fabricOverlayActions";
 import {
+  createAnnotationMessage,
   getCanvasImage,
   getScaleFactor,
   getTimestamp,
+  saveAnnotationsToDB,
 } from "../../utility/utility";
 import EditText from "../Feed/editText";
 
@@ -198,47 +200,24 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
     };
   }, [isActive]);
 
-  // group shape and textbox together
-  // first remove both from canvas then group them and then add group to canvas
+  // save annotation to db
+  // create message for annotation feed
   useEffect(() => {
     const addToFeed = async () => {
-      if (!shape || !textbox) return;
-      // if (!shape) return;
+      if (!shape) return;
 
-      const timeStamp = Date.now();
+      const message = createAnnotationMessage({ shape, viewer });
 
-      const message = {
-        username: "",
-        color: shape.stroke,
-        action: "added",
-        timeStamp,
-        type: shape.type,
-        object: shape,
-        image: null,
-        title: "annotation",
-      };
-
-      const hash = md5(shape + timeStamp);
-
-      // message.image = await getCanvasImage(viewerId);
       const { x1, y1, x2, y2 } = message.object;
       message.object.set({
-        id: message.timeStamp,
         points: [x1, y1, x2, y2],
-        hash,
-        zoomLevel: viewer.viewport.getZoom(),
       });
 
-      const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON([
-        "hash",
-        "text",
-        "zoomLevel",
-        "points",
-      ]);
-      if (annotations.objects.length > 0) {
-        saveAnnotationsHandler(slideId, annotations.objects);
-      }
+      saveAnnotationsToDB({
+        slideId,
+        canvas: fabricOverlay.fabricCanvas(),
+        saveAnnotationsHandler,
+      });
 
       setShape(null);
       setTextbox(false);
@@ -247,6 +226,9 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
     };
 
     addToFeed();
+
+    // change tool back to move
+    setFabricOverlayState(updateTool({ tool: "Move" }));
 
     // send annotation
     // socket.emit(
@@ -258,7 +240,7 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
     //     feed: [...activityFeed, message],
     //   })
     // );
-  }, [textbox]);
+  }, [shape]);
 
   const handleClick = () => {
     setFabricOverlayState(updateTool({ tool: "Line" }));
@@ -277,38 +259,22 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
   };
 
   return (
-    <>
-      {/* <TypeButton
-        pl="0px"
-        icon={<BsSlash size={28} color="#151C25" />}
-        backgroundColor={isActive ? "#E4E5E8" : ""}
-        borderRadius="0px"
-        label="Line"
-        onClick={handleClick}
-      /> */}
-      <IconButton
-        icon={<BsSlash size={40} color={isActive ? "#3B5D7C" : "#000"} />}
-        onClick={() => {
-          handleClick();
-          toast({
-            title: "Line annotation tool selected",
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
-        }}
-        borderRadius={0}
-        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
-        title="Line Annotations"
-        _focus={{ border: "none" }}
-      />
-      <EditText
-        isOpen={isOpen}
-        onClose={onClose}
-        handleClose={handleClose}
-        handleSave={handleSave}
-      />
-    </>
+    <IconButton
+      icon={<BsSlash size={40} color={isActive ? "#3B5D7C" : "#000"} />}
+      onClick={() => {
+        handleClick();
+        toast({
+          title: "Line annotation tool selected",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      }}
+      borderRadius={0}
+      bg={isActive ? "#DEDEDE" : "#F6F6F6"}
+      title="Line Annotations"
+      _focus={{ border: "none" }}
+    />
   );
 };
 

@@ -8,14 +8,17 @@ import {
   ModalBody,
   ModalFooter,
   useMediaQuery,
-  Input,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const EditText = ({ isOpen, onClose, handleClose, handleSave }) => {
-  const [text, setText] = useState("");
+const EditText = ({ isOpen, onClose, value, handleClose, handleSave }) => {
+  const [text, setText] = useState(value);
   const [tag, setTag] = useState([]);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
+
+  useEffect(() => {
+    setText(value);
+  }, [value]);
 
   const handleTextChange = (e) => {
     setText(e.target.value);

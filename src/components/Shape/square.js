@@ -10,8 +10,12 @@ import {
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
-import { getCanvasImage, getScaleFactor } from "../../utility/utility";
-import EditText from "../Feed/editText";
+import {
+  createAnnotationMessage,
+  getCanvasImage,
+  getScaleFactor,
+  saveAnnotationsToDB,
+} from "../../utility/utility";
 import { useFabricOverlayState } from "../../state/store";
 import {
   addToActivityFeed,
@@ -24,8 +28,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, activityFeed, slideId } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, slideId } = viewerWindow[viewerId];
 
   const { deselectAll } = useFabricHelpers();
   const isActive = activeTool === "Square";
@@ -137,7 +140,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
         width: pointer.x - origX,
         height: pointer.y - origY,
       });
-      fabricOverlay.fabricCanvas().add(newShape);
+      canvas.add(newShape).requestRenderAll();
 
       setMyState({
         ...myStateRef.current,
@@ -183,7 +186,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
         height: Math.abs(c.origY - pointer.y),
       });
 
-      fabricOverlay.fabricCanvas().renderAll();
+      canvas.requestRenderAll();
     }
 
     // // Create new Textbox instance and add it to canvas
@@ -219,7 +222,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
 
       canvas.setActiveObject(myStateRef.current.currentDragShape);
 
-      canvas.renderAll();
+      canvas.requestRenderAll();
 
       setShape(myStateRef.current.currentDragShape);
 
@@ -228,60 +231,33 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
         currentDragShape: null,
         isMouseDown: false,
       });
-
-      onOpen();
     }
 
-    if (isActive) {
-      // Add click handlers
-      canvas.on("mouse:down", handleMouseDown);
-      canvas.on("mouse:move", handleMouseMove);
-      canvas.on("mouse:up", handleMouseUp);
-    } else {
+    // Add click handlers
+    canvas.on("mouse:down", handleMouseDown);
+    canvas.on("mouse:move", handleMouseMove);
+    canvas.on("mouse:up", handleMouseUp);
+
+    return () => {
       canvas.off("mouse:down", handleMouseDown);
       canvas.off("mouse:move", handleMouseMove);
       canvas.off("mouse:up", handleMouseUp);
-    }
+    };
   }, [isActive]);
 
   // group shape and textbox together
   // first remove both from canvas then group them and then add group to canvas
   useEffect(() => {
+    if (!shape) return;
+
     const addToFeed = async () => {
-      if (!shape || !textbox) return;
-      // if (!shape) return;
+      const message = createAnnotationMessage({ shape, viewer });
 
-      const timeStamp = Date.now();
-
-      const message = {
-        username: "",
-        color: shape.stroke,
-        action: "added",
-        timeStamp,
-        type: shape.type,
-        object: shape,
-        image: null,
-      };
-
-      const hash = md5(shape + timeStamp);
-
-      // message.image = await getCanvasImage(viewerId);
-      message.object.set({
-        id: message.timeStamp,
-        hash,
-        zoomLevel: viewer.viewport.getZoom(),
+      saveAnnotationsToDB({
+        slideId,
+        canvas: fabricOverlay.fabricCanvas(),
+        saveAnnotationsHandler,
       });
-
-      const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON([
-        "hash",
-        "text",
-        "zoomLevel",
-        "points",
-      ]);
-      if (annotations.objects.length > 0) {
-        saveAnnotationsHandler(slideId, annotations.objects);
-      }
 
       setShape(null);
       setTextbox(false);
@@ -290,6 +266,9 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
     };
 
     addToFeed();
+
+    // change tool back to move
+    setFabricOverlayState(updateTool({ tool: "Move" }));
 
     // send annotation
     // socket.emit(
@@ -301,57 +280,41 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
     //     feed: [...activityFeed, message],
     //   })
     // );
-  }, [textbox]);
+  }, [shape]);
 
   const handleClick = () => {
     setFabricOverlayState(updateTool({ tool: "Square" }));
   };
 
   const handleSave = ({ text, tag }) => {
-    shape.set({ isExist: true, text, tag });
+    shape.set({ text, tag });
     setTextbox(true);
     onClose();
   };
 
   const handleClose = () => {
-    shape.set({ isExist: true, text: "" });
+    shape.set({ text: "" });
     setTextbox(true);
     onClose();
   };
 
   return (
-    <>
-      {/* <TypeButton
-        icon={<BsSquare />}
-        backgroundColor={isActive ? "#E4E5E8" : ""}
-        borderRadius="0px"
-        label="Square"
-        onClick={handleClick}
-      /> */}
-      <IconButton
-        // icon={<BiRectangle size={20} color="#00000095" />}
-        icon={isActive ? <SquareIconSelected /> : <SquareIcon />}
-        onClick={() => {
-          handleClick();
-          toast({
-            title: "Square annotation tool selected",
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
-        }}
-        borderRadius={0}
-        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
-        title="Rectangular Annotations"
-        _focus={{ border: "none" }}
-      />
-      <EditText
-        isOpen={isOpen}
-        onClose={onClose}
-        handleClose={handleClose}
-        handleSave={handleSave}
-      />
-    </>
+    <IconButton
+      icon={isActive ? <SquareIconSelected /> : <SquareIcon />}
+      onClick={() => {
+        handleClick();
+        toast({
+          title: "Square annotation tool selected",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      }}
+      borderRadius={0}
+      bg={isActive ? "#DEDEDE" : "#F6F6F6"}
+      title="Rectangular Annotations"
+      _focus={{ border: "none" }}
+    />
   );
 };
 

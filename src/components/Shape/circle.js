@@ -11,7 +11,12 @@ import {
 import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
-import { getCanvasImage, getScaleFactor } from "../../utility/utility";
+import {
+  createAnnotationMessage,
+  getCanvasImage,
+  getScaleFactor,
+  saveAnnotationsToDB,
+} from "../../utility/utility";
 import TypeButton from "../typeButton";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
@@ -89,7 +94,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
    * Add shapes and handle mouse events
    */
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     /**
@@ -263,6 +268,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
     canvas.on("mouse:down", handleMouseDown);
     canvas.on("mouse:move", handleMouseMove);
     canvas.on("mouse:up", handleMouseUp);
+
     // Remove handler
     return () => {
       canvas.off("mouse:down", handleMouseDown);
@@ -275,38 +281,15 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
   // first remove both from canvas then group them and then add group to canvas
   useEffect(() => {
     const addToFeed = async () => {
-      if (!shape || !textbox) return;
-      const timeStamp = Date.now();
+      if (!shape) return;
 
-      const message = {
-        username: "",
-        color: shape.stroke,
-        action: "added",
-        timeStamp,
-        type: shape.type,
-        object: shape,
-        image: null,
-      };
+      const message = createAnnotationMessage({ shape, viewer });
 
-      const hash = md5(shape + timeStamp);
-
-      // message.image = await getCanvasImage(viewerId);
-      message.object.set({
-        id: message.timeStamp,
-        hash,
-        zoomLevel: viewer.viewport.getZoom(),
+      saveAnnotationsToDB({
+        slideId,
+        canvas: fabricOverlay.fabricCanvas(),
+        saveAnnotationsHandler,
       });
-
-      const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON([
-        "hash",
-        "text",
-        "zoomLevel",
-        "points",
-      ]);
-      if (annotations.objects.length > 0) {
-        saveAnnotationsHandler(slideId, annotations.objects);
-      }
 
       setShape(null);
       setTextbox(false);
@@ -315,6 +298,9 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
     };
 
     addToFeed();
+
+    // change tool back to move
+    setFabricOverlayState(updateTool({ tool: "Move" }));
 
     // send annotation
     // socket.emit(
@@ -326,7 +312,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
     //     feed: [...activityFeed, message],
     //   })
     // );
-  }, [textbox]);
+  }, [shape]);
 
   const handleClick = () => {
     setFabricOverlayState(updateTool({ tool: "Circle" }));
@@ -345,37 +331,22 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
   };
 
   return (
-    <>
-      {/* <TypeButton
-        icon={<BsCircle />}
-        backgroundColor={isActive ? "#E4E5E8" : ""}
-        borderRadius="0px"
-        label="Circle"
-        onClick={handleClick}
-      /> */}
-      <IconButton
-        icon={isActive ? <CircleIconFilled /> : <CircleIcon />}
-        onClick={() => {
-          handleClick();
-          toast({
-            title: "Circle annotation tool selected",
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
-        }}
-        borderRadius={0}
-        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
-        title="Circle Annotation"
-        _focus={{ border: "none" }}
-      />
-      <EditText
-        isOpen={isOpen}
-        onClose={onClose}
-        handleClose={handleClose}
-        handleSave={handleSave}
-      />
-    </>
+    <IconButton
+      icon={isActive ? <CircleIconFilled /> : <CircleIcon />}
+      onClick={() => {
+        handleClick();
+        toast({
+          title: "Circle annotation tool selected",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      }}
+      borderRadius={0}
+      bg={isActive ? "#DEDEDE" : "#F6F6F6"}
+      title="Circle Annotation"
+      _focus={{ border: "none" }}
+    />
   );
 };
 

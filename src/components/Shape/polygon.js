@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaDrawPolygon } from "react-icons/fa";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { IconButton, useDisclosure, useToast } from "@chakra-ui/react";
-import md5 from "md5";
-import TypeButton from "../typeButton";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
-import { getCanvasImage, getScaleFactor } from "../../utility/utility";
+import {
+  createAnnotationMessage,
+  getCanvasImage,
+  getScaleFactor,
+  saveAnnotationsToDB,
+} from "../../utility/utility";
 import EditText from "../Feed/editText";
 import { useFabricOverlayState } from "../../state/store";
 import {
@@ -54,20 +56,19 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
   }, [color.hex]);
 
   useEffect(() => {
-    if (!fabricOverlay) return;
+    if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
+    canvas.defaultCursor = "crosshair";
 
-    if (isActive) {
-      canvas.defaultCursor = "crosshair";
+    // Disable OSD mouseclicks
+    viewer.setMouseNavEnabled(false);
+    viewer.outerTracker.setTracking(false);
 
-      // Disable OSD mouseclicks
-      viewer.setMouseNavEnabled(false);
-      viewer.outerTracker.setTracking(false);
-    } else {
+    return () => {
       // Enable OSD mouseclicks
       viewer.setMouseNavEnabled(true);
       viewer.outerTracker.setTracking(true);
-    }
+    };
   }, [isActive, fabricOverlay]);
 
   useEffect(() => {
@@ -106,7 +107,6 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       setArrayRef({ pointArray: [], lineArray: [] });
       canvas.renderAll();
       setShape(polygon);
-      onOpen();
     };
 
     const addPoints = (options) => {
@@ -246,9 +246,12 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       generatePolygon();
     };
 
+    // add handlers
     canvas.on("mouse:down", handleMouseDown);
     canvas.on("mouse:move", handleMouseMove);
     canvas.on("mouse:dblclick", handleMouseDblClick);
+
+    // remove handlers
     return () => {
       canvas.off("mouse:down", handleMouseDown);
       canvas.off("mouse:move", handleMouseMove);
@@ -257,40 +260,16 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
   }, [fabricOverlay, isActive]);
 
   useEffect(() => {
-    if (!shape || !textbox) return;
+    if (!shape) return;
 
-    const timeStamp = Date.now();
+    const addToFeed = async () => {
+      const message = createAnnotationMessage({ shape, viewer });
 
-    const addToFeed = async (shape) => {
-      const message = {
-        username: "",
-        color: myStateRef.current.color,
-        action: "added",
-        timeStamp,
-        type: "polygon",
-        object: shape,
-        image: null,
-      };
-
-      const hash = md5(shape + timeStamp);
-
-      // message.image = await getCanvasImage(viewerId);
-      message.object.set({
-        id: message.timeStamp,
-        hash,
-        zoomLevel: viewer.viewport.getZoom(),
+      saveAnnotationsToDB({
+        slideId,
+        canvas: fabricOverlay.fabricCanvas(),
+        saveAnnotationsHandler,
       });
-
-      const canvas = fabricOverlay.fabricCanvas();
-      const annotations = canvas.toJSON([
-        "hash",
-        "text",
-        "zoomLevel",
-        "points",
-      ]);
-      if (annotations.objects.length > 0) {
-        saveAnnotationsHandler(slideId, annotations.objects);
-      }
 
       setFabricOverlayState(addToActivityFeed({ id: viewerId, feed: message }));
 
@@ -298,8 +277,11 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       setTextbox(false);
     };
 
-    addToFeed(shape);
-  }, [textbox]);
+    addToFeed();
+
+    // change tool back to move
+    setFabricOverlayState(updateTool({ tool: "Move" }));
+  }, [shape]);
 
   const handleClick = () => {
     setFabricOverlayState(updateTool({ tool: "Polygon" }));
@@ -318,38 +300,22 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
   };
 
   return (
-    <>
-      {/* <TypeButton
-        icon={<FaDrawPolygon />}
-        backgroundColor={isActive ? "#E4E5E8" : ""}
-        borderRadius="0px"
-        label="Polygon"
-        onClick={handleClick}
-      /> */}
-      <IconButton
-        // icon={<FaDrawPolygon color="#00000095" />}
-        icon={isActive ? <PolygonIconFilled /> : <PolygonIcon />}
-        onClick={() => {
-          handleClick();
-          toast({
-            title: "Polygon annotation tool selected",
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
-        }}
-        borderRadius={0}
-        bg={isActive ? "#DEDEDE" : "#F6F6F6"}
-        title="Free Hand Polygon Annotations"
-        _focus={{ border: "none" }}
-      />
-      <EditText
-        isOpen={isOpen}
-        onClose={onClose}
-        handleClose={handleClose}
-        handleSave={handleSave}
-      />
-    </>
+    <IconButton
+      icon={isActive ? <PolygonIconFilled /> : <PolygonIcon />}
+      onClick={() => {
+        handleClick();
+        toast({
+          title: "Polygon annotation tool selected",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      }}
+      borderRadius={0}
+      bg={isActive ? "#DEDEDE" : "#F6F6F6"}
+      title="Free Hand Polygon Annotations"
+      _focus={{ border: "none" }}
+    />
   );
 };
 
