@@ -72,6 +72,22 @@ const fabricOverlayReducer = (state, action) => {
       };
     }
 
+    case "removeFromActivityFeed": {
+      const newFeed = state.viewerWindow[action.payload.id].activityFeed.filter(
+        (af) => af.object.hash !== action.payload.hash
+      );
+      return {
+        ...state,
+        viewerWindow: {
+          ...state.viewerWindow,
+          [action.payload.id]: {
+            ...state.viewerWindow[action.payload.id],
+            activityFeed: newFeed,
+          },
+        },
+      };
+    }
+
     case "updateActivityFeed":
       return {
         ...state,

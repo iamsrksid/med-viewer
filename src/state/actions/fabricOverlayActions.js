@@ -3,14 +3,14 @@ export const updateColor = (payload) => ({
   payload,
 });
 
-export const updateTool = (payload) => ({
+export const updateTool = ({ tool }) => ({
   type: "updateTool",
-  payload,
+  payload: { tool },
 });
 
-export const updateOverlay = (payload) => ({
+export const updateOverlay = ({ id, fabricOverlay, viewer }) => ({
   type: "updateOverlay",
-  payload,
+  payload: { id, fabricOverlay, viewer },
 });
 
 export const updateUserCanvases = (payload) => ({
@@ -18,47 +18,50 @@ export const updateUserCanvases = (payload) => ({
   payload,
 });
 
-export const addToActivityFeed = (payload) => ({
+export const addToActivityFeed = ({ id, feed }) => ({
   type: "addToActivityFeed",
-  payload,
+  payload: { id, feed },
 });
 
-export const updateActivityFeed = (payload) => ({
+export const removeFromActivityFeed = ({ id, hash }) => ({
+  type: "removeFromActivityFeed",
+  payload: { id, hash },
+});
+
+export const updateActivityFeed = ({ id, fullFeed }) => ({
   type: "updateActivityFeed",
-  payload,
+  payload: { id, feed: fullFeed },
 });
 
-export const addViewerWindow = (payload) => ({
+export const addViewerWindow = (viewerWindows) => ({
   type: "addViewerWindow",
-  payload,
+  payload: viewerWindows,
 });
 
-export const removeViewerWindow = (payload) => ({
+export const removeViewerWindow = ({ id }) => ({
   type: "removeViewerWindow",
-  payload,
+  payload: { id },
 });
 
-export const addViewerInstance = (payload) => ({
+export const addViewerInstance = ({ id, viewerId, tile, slideName }) => ({
   type: "addViewerInstance",
-  payload,
+  payload: { id, viewerId, tile, slideName },
 });
 
-export const removeViewerInstance = (payload) => ({
+export const removeViewerInstance = ({ id, viewerId }) => ({
   type: "removeViewerInstance",
-  payload,
+  payload: { id, viewerId },
 });
 
-export const resetFabricOverlay = (payload) => ({
+export const resetFabricOverlay = () => ({
   type: "resetFabricOverlay",
-  payload,
 });
 
-export const changeTile = (payload) => ({
+export const changeTile = ({ id, tile, slideId, slideName }) => ({
   type: "changeTile",
-  payload,
+  payload: { id, tile, slideId, slideName },
 });
 
-export const toggleSync = (payload) => ({
+export const toggleSync = () => ({
   type: "toggleSync",
-  payload,
 });
