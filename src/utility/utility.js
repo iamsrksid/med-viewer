@@ -1,4 +1,5 @@
 import html2canvas from "html2canvas";
+import md5 from "md5";
 
 export const getTimestamp = () => {
   return new Intl.DateTimeFormat("en-US", {
@@ -95,6 +96,55 @@ export const getZoomValue = (viewer) => {
 export const getScaleFactor = (viewer) => {
   const zoomValue = getZoomValue(viewer);
   return zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
+};
+
+// save annotations to the database
+export const saveAnnotationsToDB = ({
+  slideId,
+  canvas,
+  saveAnnotationsHandler,
+}) => {
+  if (!canvas) return false;
+  const annotations = canvas.toJSON([
+    "hash",
+    "text",
+    "zoomLevel",
+    "points",
+    "timeStamp",
+    "area",
+    "perimeter",
+    "centroid",
+    "end_points",
+    "isAnalysed",
+  ]);
+  if (annotations.objects.length > 0) {
+    saveAnnotationsHandler(slideId, annotations.objects);
+  }
+  return true;
+};
+
+// create annotaion message for the feed
+export const createAnnotationMessage = ({ shape, viewer }) => {
+  if (!viewer || !shape) return null;
+  const timeStamp = Date.now();
+
+  const message = {
+    username: "",
+    object: shape,
+    image: null,
+  };
+
+  const hash = md5(shape + timeStamp);
+
+  // message.image = await getCanvasImage(viewerId);
+  message.object.set({
+    timeStamp,
+    hash,
+    zoomLevel: viewer.viewport.getZoom(),
+    text: "",
+  });
+
+  return message;
 };
 
 // get s3 bucket folder of tile
