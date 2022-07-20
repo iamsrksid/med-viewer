@@ -314,6 +314,11 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
       bg={isActive ? "#DEDEDE" : "#F6F6F6"}
       title="Rectangular Annotations"
       _focus={{ border: "none" }}
+      boxShadow={
+        isActive
+          ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
+          : null
+      }
     />
   );
 };

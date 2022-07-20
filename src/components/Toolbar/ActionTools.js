@@ -2,6 +2,7 @@ import React from "react";
 import { Flex, Spacer } from "@chakra-ui/react";
 import UndoRedo from "../UndoRedo/undoredo";
 import RemoveObject from "../removeComponents";
+import { CustomMenu } from "../RightClickMenu/Menu";
 
 const ActionsToolbar = ({ viewerId, saveAnnotationsHandler }) => {
   return (
@@ -12,6 +13,7 @@ const ActionsToolbar = ({ viewerId, saveAnnotationsHandler }) => {
       flex="1"
     >
       <UndoRedo viewerId={viewerId} />
+      {/* <CustomMenu /> */}
       {/* <RemoveObject
         viewerId={viewerId}
         saveAnnotationsHandler={saveAnnotationsHandler}

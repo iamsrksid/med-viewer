@@ -21,10 +21,12 @@ import ToolbarButton from "./ViewerToolbar/button";
 import { FiDownload } from "react-icons/fi";
 import { BiScreenshot } from "react-icons/bi";
 import IconSize from "./ViewerToolbar/IconSize";
+import { ScreenshotIcon, ScreenshotSelectedIcon } from "./Icons/CustomIcons";
 
 const DownloadImage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [img, setImg] = useState();
+  const [screenshotHover, setScreenshotHover] = useState(false);
 
   const handleClick = () => {
     html2canvas(document.querySelector(".openseadragon-canvas"), {
@@ -41,10 +43,23 @@ const DownloadImage = () => {
   return (
     <>
       <ToolbarButton
-        icon={<DownloadIcon size={IconSize()} color="#151C25" />}
+        icon={
+          screenshotHover ? (
+            <ScreenshotSelectedIcon
+              size={IconSize()}
+              color="#151C25"
+              mt={1}
+              mr={0}
+            />
+          ) : (
+            <ScreenshotIcon size={IconSize()} color="#151C25" mt={1} mr={0} />
+          )
+        }
         paddingRight={2}
         label="Screenshot"
         onClick={handleClick}
+        onMouseEnter={() => setScreenshotHover(true)}
+        onMouseLeave={() => setScreenshotHover(false)}
       />
 
       <Modal isOpen={isOpen} onClose={onClose}>
