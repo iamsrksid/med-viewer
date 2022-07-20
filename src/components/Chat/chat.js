@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { useDisclosure } from "@chakra-ui/react";
+import {
+  useDisclosure,
+  useMediaQuery,
+  Tooltip,
+  IconButton,
+} from "@chakra-ui/react";
 import ToolbarButton from "../ViewerToolbar/button";
 import Popup from "../Popup/popup";
 import { ChatIcon, ChatSelectedIcon } from "../Icons/CustomIcons";
 
 const SlideChat = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   const [chatHover, setChatHover] = useState(false);
   const [popup, setPopup] = useState(false);
   const handlePopup = () => {
@@ -18,24 +24,41 @@ const SlideChat = () => {
 
   return (
     <>
-      <ToolbarButton
-        onClick={handlePopup}
-        icon={
-          chatHover ? (
-            <ChatSelectedIcon color="#151C25" mt={1.5} mr={2.5} />
-          ) : (
-            <ChatIcon color="#151C25" mt={1.5} mr={2.5} />
-          )
-        }
-        // backgroundColor={isActive ? "white" : "#3963c3"}
-        // border="0.5px solid rgba(255, 255, 255, 0.5)"
+      <Tooltip
         label="Chat"
-        ml="5px"
-        onMouseEnter={() => setChatHover(true)}
-        onMouseLeave={() => setChatHover(false)}
+        aria-label="Chat"
+        placement="bottom"
+        openDelay={0}
+        bg="#E4E5E8"
+        color="rgba(89, 89, 89, 1)"
+        fontSize="14px"
+        fontFamily="inter"
+        hasArrow
+        borderRadius="0px"
+        size="20px"
+      >
+        <IconButton
+          width={ifScreenlessthan1536px ? "30px" : "40px"}
+          size={ifScreenlessthan1536px ? 60 : 0}
+          height={ifScreenlessthan1536px ? "26px" : "34px"}
+          icon={chatHover ? <ChatSelectedIcon /> : <ChatIcon />}
+          _active={{
+            bgColor: "rgba(228, 229, 232, 1)",
+            outline: "0.5px solid rgba(0, 21, 63, 1)",
+          }}
+          _focus={{
+            border: "none",
+          }}
+          mr="7px"
+          ml="3px"
+          borderRadius={0}
+          onClick={handlePopup}
+          backgroundColor="#F8F8F5"
+          onMouseEnter={() => setChatHover(true)}
+          onMouseLeave={() => setChatHover(false)}
+        />
+      </Tooltip>
 
-        // transform="scale(1.5)"
-      />
       {/* <MessageBox isOpen={isOpen} onClose={close} /> */}
       <Popup
         handlePopup={() => {

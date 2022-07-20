@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BsCursorFill, BsCursor } from "react-icons/bs";
 import { RiNavigationFill, RiPencilRulerLine } from "react-icons/ri";
 import { AiOutlineSliders } from "react-icons/ai";
-import { Flex, useMediaQuery } from "@chakra-ui/react";
+import { Flex, IconButton, useMediaQuery, Tooltip } from "@chakra-ui/react";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import md5 from "md5";
 import ToolbarButton from "../ViewerToolbar/button";
@@ -30,12 +30,13 @@ const Move = ({
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [ifMiddleScreen] = useMediaQuery("(min-width:1560px)");
+  const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   const [typeToolsToggle, setTypeToolsToggle] = useState(false);
   const [colorBar, setColorBar] = useState(false);
   const [popup, setPopup] = useState(false);
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow } = fabricOverlayState;
-  const { fabricOverlay } = viewerWindow[viewerId];
+  const { fabricOverlay, viewer } = viewerWindow[viewerId];
   const isActive = activeTool === "Move";
   const [activeAnnotations, setActiveAnnotations] = useState(false);
 
@@ -144,37 +145,53 @@ const Move = ({
         />
 
         {annotations ? (
-          <ToolbarButton
-            icon={
-              activeAnnotations ? (
-                <AnnotationSelectedIcon
-                  size={iconSize}
-                  color="#151C25"
-                  mt={1}
-                  mr={1.5}
-                />
-              ) : (
-                <AnnotationIcon
-                  size={iconSize}
-                  color="#151C25"
-                  mt={1}
-                  mr={1.5}
-                />
-              )
-            }
-            backgroundColor={typeToolsToggle ? "#E4E5E8" : ""}
-            outline={typeToolsToggle ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
+          <Tooltip
             label="Annotations"
-            onClick={() => {
-              handleAnnotationsClick();
-              setActiveAnnotations(!activeAnnotations);
-            }}
-            boxShadow={
-              activeAnnotations
-                ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
-                : null
-            }
-          />
+            aria-label="Annotations"
+            placement="bottom"
+            openDelay={0}
+            bg="#E4E5E8"
+            color="rgba(89, 89, 89, 1)"
+            fontSize="14px"
+            fontFamily="inter"
+            hasArrow
+            borderRadius="0px"
+            size="20px"
+          >
+            <IconButton
+              width={ifScreenlessthan1536px ? "30px" : "40px"}
+              size={ifScreenlessthan1536px ? 60 : 0}
+              height={ifScreenlessthan1536px ? "26px" : "34px"}
+              icon={
+                activeAnnotations ? (
+                  <AnnotationSelectedIcon />
+                ) : (
+                  <AnnotationIcon />
+                )
+              }
+              _active={{
+                bgColor: "rgba(228, 229, 232, 1)",
+                outline: "0.5px solid rgba(0, 21, 63, 1)",
+              }}
+              _focus={{
+                border: "none",
+              }}
+              mr="7px"
+              borderRadius={0}
+              backgroundColor={typeToolsToggle ? "#E4E5E8" : "#F8F8F5"}
+              outline={typeToolsToggle ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
+              label="Annotations"
+              onClick={() => {
+                handleAnnotationsClick();
+                setActiveAnnotations(!activeAnnotations);
+              }}
+              boxShadow={
+                activeAnnotations
+                  ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
+                  : null
+              }
+            />
+          </Tooltip>
         ) : null}
         {/* <ToolbarButton
           icon={<BsCircleHalf size={iconSize} color="#151C25" />}

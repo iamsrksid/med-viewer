@@ -13,8 +13,8 @@ import {
   ModalCloseButton,
   Tooltip,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
-import { DownloadIcon } from "@chakra-ui/icons";
 import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image";
 import ToolbarButton from "./ViewerToolbar/button";
@@ -27,6 +27,7 @@ const DownloadImage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [img, setImg] = useState();
   const [screenshotHover, setScreenshotHover] = useState(false);
+  const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
 
   const handleClick = () => {
     html2canvas(document.querySelector(".openseadragon-canvas"), {
@@ -42,25 +43,45 @@ const DownloadImage = () => {
   };
   return (
     <>
-      <ToolbarButton
-        icon={
-          screenshotHover ? (
-            <ScreenshotSelectedIcon
-              size={IconSize()}
-              color="#151C25"
-              mt={1}
-              mr={0}
-            />
-          ) : (
-            <ScreenshotIcon size={IconSize()} color="#151C25" mt={1} mr={0} />
-          )
-        }
-        paddingRight={2}
+      <Tooltip
         label="Screenshot"
-        onClick={handleClick}
-        onMouseEnter={() => setScreenshotHover(true)}
-        onMouseLeave={() => setScreenshotHover(false)}
-      />
+        aria-label="Screenshot"
+        placement="bottom"
+        openDelay={0}
+        bg="#E4E5E8"
+        color="rgba(89, 89, 89, 1)"
+        fontSize="14px"
+        fontFamily="inter"
+        hasArrow
+        borderRadius="0px"
+        size="20px"
+      >
+        <IconButton
+          width={ifScreenlessthan1536px ? "30px" : "40px"}
+          size={ifScreenlessthan1536px ? 60 : 0}
+          height={ifScreenlessthan1536px ? "26px" : "34px"}
+          icon={
+            screenshotHover ? (
+              <ScreenshotSelectedIcon size={IconSize()} color="#151C25" />
+            ) : (
+              <ScreenshotIcon size={IconSize()} color="#151C25" />
+            )
+          }
+          _active={{
+            bgColor: "rgba(228, 229, 232, 1)",
+            outline: "0.5px solid rgba(0, 21, 63, 1)",
+          }}
+          _focus={{
+            border: "none",
+          }}
+          mr="7px"
+          borderRadius={0}
+          onClick={handleClick}
+          backgroundColor="#F8F8F5"
+          onMouseEnter={() => setScreenshotHover(true)}
+          onMouseLeave={() => setScreenshotHover(false)}
+        />
+      </Tooltip>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
