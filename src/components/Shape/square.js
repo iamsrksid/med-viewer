@@ -38,7 +38,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
   const toast = useToast();
 
   const [myState, setState] = useState({
-    activeShape: null, // active shape in Options Panel
+    activeShape: null, // active shape in event Panel
     color: null,
     currentDragShape: null,
     isActive: false, // Is the Shape tool itself active
@@ -97,8 +97,8 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse down
      */
-    function handleMouseDown(options) {
-      if (options.target || !myStateRef.current.isActive) {
+    function handleMouseDown(event) {
+      if (event.button !== 1 || event.target || !myStateRef.current.isActive) {
         return;
       }
 
@@ -109,7 +109,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
       viewer.outerTracker.setTracking(false);
 
       // Save starting mouse down coordinates
-      const pointer = canvas.getPointer(options.e);
+      const pointer = canvas.getPointer(event.e);
       const origX = pointer.x;
       const origY = pointer.y;
 
@@ -157,9 +157,9 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse move
      */
-    function handleMouseMove(options) {
+    function handleMouseMove(event) {
       if (
-        // options.target ||
+        // event.target ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
       ) {
@@ -168,7 +168,7 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
       const c = myStateRef.current;
 
       // Dynamically drag size element to the canvas
-      const pointer = canvas.getPointer(options.e);
+      const pointer = canvas.getPointer(event.e);
 
       /**
        * Rectangle or Triangle
@@ -208,8 +208,9 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse up
      */
-    function handleMouseUp(options) {
+    function handleMouseUp(event) {
       if (
+        event.button !== 1 ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
       ) {

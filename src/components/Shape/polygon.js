@@ -109,10 +109,10 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       setShape(polygon);
     };
 
-    const addPoints = (options) => {
+    const addPoints = (event) => {
       const random = Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
       const id = new Date().getTime() + random;
-      const pointer = canvas.getPointer(options.e);
+      const pointer = canvas.getPointer(event.e);
       const scaleFactor = getScaleFactor(viewer);
 
       const circle = new fabric.Circle({
@@ -201,25 +201,26 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       canvas.renderAll();
     };
 
-    const handleMouseDown = (options) => {
+    const handleMouseDown = (event) => {
+      if (event.button !== 1) return;
       if (
         arrayRef.current.pointArray.length !== 0 &&
-        options.target &&
-        options.target.id === arrayRef.current.pointArray[0].id
+        event.target &&
+        event.target.id === arrayRef.current.pointArray[0].id
       ) {
         canvas.selection = true;
         generatePolygon();
       } else {
-        addPoints(options);
+        addPoints(event);
       }
     };
 
-    const handleMouseMove = (options) => {
+    const handleMouseMove = (event) => {
       if (
         myStateRef.current.activeLine &&
         myStateRef.current.activeLine.class === "line"
       ) {
-        const pointer = canvas.getPointer(options.e);
+        const pointer = canvas.getPointer(event.e);
         myStateRef.current.activeLine.set({ x2: pointer.x, y2: pointer.y });
 
         const points = myStateRef.current.activeShape.get("points");
@@ -234,13 +235,14 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
       }
     };
 
-    const handleMouseDblClick = (options) => {
-      if (arrayRef.current.pointArray.length === 0) return;
+    const handleMouseDblClick = (event) => {
+      if (event.button !== 1 || arrayRef.current.pointArray.length === 0)
+        return;
       if (
-        options.target &&
-        options.target.id !== arrayRef.current.pointArray[0].id
+        event.target &&
+        event.target.id !== arrayRef.current.pointArray[0].id
       ) {
-        addPoints(options);
+        addPoints(event);
       }
       canvas.selection = true;
       generatePolygon();

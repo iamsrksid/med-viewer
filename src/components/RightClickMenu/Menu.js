@@ -33,11 +33,21 @@ const DisplayMenu = forwardRef((props, ref) => (
         p={0}
       >
         <MenuGroup title="Brightness/Contrast" fontWeight={400}>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>400%</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>100%</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>50%</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>10%</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>1%</MenuItem>
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="40">
+            40x
+          </MenuItem>
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="20">
+            20x
+          </MenuItem>
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="10">
+            10x
+          </MenuItem>
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="4">
+            4x
+          </MenuItem>
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="1">
+            1x
+          </MenuItem>
         </MenuGroup>
       </MenuList>
     </Portal>
@@ -117,10 +127,12 @@ const SetTagMenu = forwardRef((props, ref) => (
   </Menu>
 ));
 
-export const CustomMenu = () => {
-  return (
+export const CustomMenu = ({ isActive, left, top }) => {
+  return isActive ? (
     <Menu>
-      <MenuButton as={Button}>Actions</MenuButton>
+      <MenuButton as={Button} pos="absolute" left={left} top={top}>
+        Actions
+      </MenuButton>
       <Portal>
         <MenuList
           borderRadius={0}
@@ -147,5 +159,5 @@ export const CustomMenu = () => {
         </MenuList>
       </Portal>
     </Menu>
-  );
+  ) : null;
 };

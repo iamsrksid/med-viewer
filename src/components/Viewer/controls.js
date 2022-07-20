@@ -12,6 +12,7 @@ import { useFabricOverlayState } from "../../state/store";
 import { getTimestamp, getCanvasImage } from "../../utility/utility";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
+import { CustomMenu } from "../RightClickMenu/Menu";
 
 const ViewerControls = ({
   viewerId,
@@ -25,6 +26,8 @@ const ViewerControls = ({
     fabricOverlayState.viewerWindow[viewerId];
   const iconSize = IconSize();
   const [isAnnotationLoaded, setIsAnnotationLoaded] = useState(false);
+  const [isRightClickActive, setIsRightClickActive] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
 
   const handleZoomIn = () => {
     try {
@@ -212,6 +215,26 @@ const ViewerControls = ({
     });
   }, [viewer]);
 
+  useEffect(() => {
+    if (!viewer || !fabricOverlay) return null;
+    const canvas = fabricOverlay.fabricCanvas();
+
+    const handleMouseDown = (event) => {
+      // hanlde right click only
+      if (event.button !== 3) {
+        setIsRightClickActive(false);
+        return;
+      }
+      setMenuPosition({ left: event.pointer.x + 10, top: event.pointer.y });
+      setIsRightClickActive(true);
+    };
+
+    canvas.on("mouse:down", handleMouseDown);
+    return () => {
+      canvas.on("mouse:down", handleMouseDown);
+    };
+  }, [viewer, fabricOverlay]);
+
   return (
     <>
       {slideType ? (
@@ -289,6 +312,11 @@ const ViewerControls = ({
           }}
         />
       </VStack>
+      <CustomMenu
+        isActive={isRightClickActive}
+        left={menuPosition.left}
+        top={menuPosition.top}
+      />
     </>
   );
 };

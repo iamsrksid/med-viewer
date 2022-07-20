@@ -88,8 +88,8 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse down
      */
-    function handleMouseDown(options) {
-      if (options.target || !myStateRef.current.isActive) {
+    function handleMouseDown(event) {
+      if (event.button !== 1 || event.target || !myStateRef.current.isActive) {
         return;
       }
 
@@ -100,7 +100,7 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
       viewer.outerTracker.setTracking(false);
 
       // Save starting mouse down coordinates
-      const pointer = canvas.getPointer(options.e);
+      const pointer = canvas.getPointer(event.e);
 
       // Create new Shape instance
       let newShape = null;
@@ -137,9 +137,9 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse move
      */
-    function handleMouseMove(options) {
+    function handleMouseMove(event) {
       if (
-        // options.target ||
+        // event.target ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
       ) {
@@ -148,7 +148,7 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
       const c = myStateRef.current;
 
       // Dynamically drag size element to the canvas
-      const pointer = canvas.getPointer(options.e);
+      const pointer = canvas.getPointer(event.e);
 
       c.currentDragShape.set({ x2: pointer.x, y2: pointer.y });
       canvas.renderAll();
@@ -157,8 +157,9 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse up
      */
-    function handleMouseUp(options) {
+    function handleMouseUp(event) {
       if (
+        event.button !== 1 ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
       ) {

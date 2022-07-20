@@ -41,7 +41,10 @@ const ViewerContainer = ({
 
   useEffect(() => {
     if (!fabricOverlay) return;
-    fabricOverlay.fabricCanvas().hoverCursor = "move";
+    const canvas = fabricOverlay.fabricCanvas();
+    canvas.hoverCursor = "move";
+    canvas.fireRightClick = true;
+    canvas.stopContextMenu = true;
   }, [fabricOverlay]);
 
   /**
