@@ -34,7 +34,7 @@ const Move = ({
   const [popup, setPopup] = useState(false);
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow } = fabricOverlayState;
-  const { fabricOverlay, viewer } = viewerWindow[viewerId];
+  const { fabricOverlay } = viewerWindow[viewerId];
   const isActive = activeTool === "Move";
 
   const handleClick = () => {

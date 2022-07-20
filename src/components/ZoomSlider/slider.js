@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
-import { Box, Text, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Input, Text, useMediaQuery } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../../state/store";
-import { getScaleFactor } from "../../utility/utility";
+import { getScaleFactor, getZoomValue } from "../../utility/utility";
 import { toggleLeading } from "../../state/actions/fabricOverlayActions";
 
 const ZoomSlider = ({ viewerId }) => {
@@ -10,13 +10,33 @@ const ZoomSlider = ({ viewerId }) => {
   const { viewerWindow, sync } = fabricOverlayState;
   const { viewer, fabricOverlay } = viewerWindow[viewerId];
   const [zoomValue, setZoomValue] = useState(1);
+  const inputRef = useRef(null);
 
-  const screenSize = useMediaQuery([
-    "(max-width: 1280px)",
-    "(max-width: 1440px)",
-    "(max-width: 1920px)",
-    "(max-width: 2560px)",
-  ]);
+  const handleZoomLevel = (e) => {
+    let { value } = e.target;
+
+    // check if value is less than 1, then make it 1
+    // and if value is greater than 40, then make it 40
+    if (value && value < 1) {
+      value = 1;
+    } else if (value > 40) {
+      value = 40;
+    }
+
+    // if value is empty, don't do anything
+    if (value) {
+      const level = value * (viewer.viewport.getMaxZoom() / 40);
+      viewer.viewport.zoomTo(level);
+    }
+
+    setZoomValue(value);
+  };
+
+  const handleZoomLevelBlur = () => {
+    if (zoomValue) return;
+    const value = getZoomValue(viewer);
+    setZoomValue(value);
+  };
 
   useEffect(() => {
     if (!viewer) return null;
@@ -37,7 +57,10 @@ const ZoomSlider = ({ viewerId }) => {
       canvas.requestRenderAll();
     };
     const handler = (e) => {
-      const value = parseInt((e.zoom * 40) / viewer.viewport.getMaxZoom(), 10);
+      const value = parseInt(
+        Math.ceil((e.zoom * 40) / viewer.viewport.getMaxZoom()),
+        10
+      );
       setZoomValue(value > 40 ? 40 : value);
       // const bounds = viewer.viewport.getBounds();
       // const { x, y, width, height } = viewer.viewport.viewportToImageRectangle(
@@ -56,9 +79,19 @@ const ZoomSlider = ({ viewerId }) => {
   }, [viewer]);
 
   return (
-    <Box>
-      <Text>{zoomValue}x</Text>
-    </Box>
+    <Flex>
+      <Input
+        ref={inputRef}
+        type="number"
+        value={zoomValue}
+        onChange={handleZoomLevel}
+        onBlur={handleZoomLevelBlur}
+        variant="unstyled"
+        w="20px"
+        textAlign="center"
+      />
+      <Text>x</Text>
+    </Flex>
   );
 };
 

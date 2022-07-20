@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { changeTile } from "../../state/actions/fabricOverlayActions";
+import {
+  changeTile,
+  updateTool,
+} from "../../state/actions/fabricOverlayActions";
 import { useFabricOverlayState } from "../../state/store";
 import "../../styles/viewer.css";
 import ChangeHelper from "./changeHelper";
@@ -27,6 +30,7 @@ const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
 
   const clickHandler = (position) => {
     const nextSlide = caseInfo.slides[currentIndex + position];
+    setFabricOverlayState(updateTool({ tool: "Move" }));
     setFabricOverlayState(
       changeTile({
         id: viewerId,

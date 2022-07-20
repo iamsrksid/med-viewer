@@ -10,6 +10,7 @@ import { useFabricOverlayState } from "../../state/store";
 import {
   addViewerWindow,
   changeTile,
+  updateTool,
 } from "../../state/actions/fabricOverlayActions";
 import "../../styles/scrollBar.css";
 import { v4 as uuidv4 } from "uuid";
@@ -87,6 +88,7 @@ const Navigator = ({
       fabricOverlay.fabricCanvas().clear();
       setIsNavigatorActive(false);
     }
+    setFabricOverlayState(updateTool({ tool: "Move" }));
   };
 
   const handleScroll = (scrollDir) => {

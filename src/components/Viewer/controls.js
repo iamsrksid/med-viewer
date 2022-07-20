@@ -91,11 +91,6 @@ const ViewerControls = ({
         isAnalysed,
       });
 
-      // message.image = await getCanvasImage(viewerId);
-
-      // setFabricOverlayState(
-      //   updateActivityFeed({ id: viewerId, feed: [...activityFeed, message] })
-      // );
       feed.push(message);
     };
 
