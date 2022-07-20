@@ -6,10 +6,10 @@ import {
   MenuItem,
   Menu,
   MenuList,
+  Divider,
 } from "@chakra-ui/react";
-import { BsGrid3X3Gap } from "react-icons/bs";
-import { MdOutbox } from "react-icons/md";
 import { BiScreenshot, BiDotsVertical } from "react-icons/bi";
+import { RiShareForwardFill } from "react-icons/ri";
 import ToolbarButton from "../ViewerToolbar/button";
 import SlideChat from "../Chat/chat";
 import ShareLink from "../Share/shareLink";
@@ -17,8 +17,11 @@ import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
 import DownloadImage from "../downloadImage";
 import ViewerImport from "../Layout/viewerImport";
-import ActivityFeed from "../Feed/activityFeed";
-import Annotations from "../Sidebar/annotations";
+import {
+  ShareIcon,
+  DocumentsIcon,
+  ShareSelectedIcon,
+} from "../Icons/CustomIcons";
 
 const ScreenTools = ({
   viewerId,
@@ -32,6 +35,10 @@ const ScreenTools = ({
   setWindowHeight,
 }) => {
   const [popup, setPopup] = useState(false);
+  const [screenshotHover, setScreenshotHover] = useState(false);
+  const [menuHover, setMenuHover] = useState(false);
+  const [shareHover, setShareHover] = useState(false);
+  const [openMenuHover, setOpenMenuHover] = useState(false);
   const handlePopup = () => {
     setPopup(!popup);
   };
@@ -43,15 +50,19 @@ const ScreenTools = ({
       {/* Add respective tools */}
 
       <ToolbarButton
-        icon={<BsGrid3X3Gap size={IconSize()} color="#151C25" />}
-        label="Grid"
+        icon={
+          <BiScreenshot
+            size={20}
+            color={screenshotHover ? "#3B5D7C" : "#151C25"}
+          />
+        }
+        label="Capture part of screen"
         onClick={handlePopup}
+        onMouseEnter={() => setScreenshotHover(true)}
+        onMouseLeave={() => setScreenshotHover(false)}
       />
-      <ToolbarButton
-        icon={<MdOutbox size={IconSize()} color="#151C25" />}
-        label="WSI"
-        onClick={handlePopup}
-      />
+      <DownloadImage />
+      <Divider orientation="vertical" border="1px solid gray" />
       {morphometry === true ? (
         <ViewerImport
           viewerId={viewerId}
@@ -63,9 +74,29 @@ const ScreenTools = ({
         />
       ) : null}
       {/* <ViewerImport /> */}
-      <DownloadImage />
+      {/* <DownloadImage /> */}
       {/* <Fullscreen viewerId={viewerId} /> */}
       <SlideChat />
+      <ToolbarButton
+        icon={
+          shareHover ? (
+            <RiShareForwardFill size={20} color="#3B5D7C" />
+          ) : (
+            <ShareIcon size={20} color="#151C25" mt={1.3} mr={2} />
+          )
+        }
+        label="Share Case"
+        onClick={handlePopup}
+        onMouseEnter={() => setShareHover(true)}
+        onMouseLeave={() => setShareHover(false)}
+      />
+      <Divider orientation="vertical" border="1px solid gray" />
+      <ToolbarButton
+        icon={<DocumentsIcon color="#151C25" mt={1.4} mr={2} />}
+        label="Share Case"
+        onClick={handlePopup}
+        disabled={true}
+      />
       <ShareLink />
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
         {/* <ToolbarButton
@@ -84,8 +115,13 @@ const ScreenTools = ({
             _focus={{ outline: "none" }}
             _hover={{ bgColor: "#DEDEDE" }}
             title="More"
+            onMouseEnter={() => setMenuHover(true)}
+            onMouseLeave={() => setMenuHover(false)}
           >
-            <BiDotsVertical size={20} color="#151C25" />
+            <BiDotsVertical
+              size={20}
+              color={menuHover ? "#3B5D7C" : "#151C25"}
+            />
           </MenuButton>
           <MenuList color="#000">
             <MenuItem onClick={handlePopup}>Image Details</MenuItem>
@@ -102,6 +138,7 @@ const ScreenTools = ({
         }}
         popup={popup}
       />
+
       {/* <ActivityFeed
         viewerId={viewerId}
         userInfo={userInfo}

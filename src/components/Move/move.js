@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BsArrowsMove, BsCircleHalf, BsLayoutSplit } from "react-icons/bs";
+import { BsCursorFill, BsCursor } from "react-icons/bs";
 import { RiNavigationFill, RiPencilRulerLine } from "react-icons/ri";
 import { AiOutlineSliders } from "react-icons/ai";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
@@ -15,6 +15,7 @@ import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
 import Multiview from "../Multiview/multiview";
+import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
 
 const Move = ({
   viewerId,
@@ -36,6 +37,7 @@ const Move = ({
   const { activeTool, viewerWindow } = fabricOverlayState;
   const { fabricOverlay, viewer } = viewerWindow[viewerId];
   const isActive = activeTool === "Move";
+  const [activeAnnotations, setActiveAnnotations] = useState(false);
 
   const handleClick = () => {
     setFabricOverlayState(updateTool({ tool: "Move" }));
@@ -108,21 +110,70 @@ const Move = ({
       <Flex alignItems="center" ml="16px" mr="7px">
         {/* <ToolbarPointerControl viewerId={viewerId} /> */}
         <ToolbarButton
-          icon={<BsArrowsMove size={iconSize} color="#151C25" />}
+          icon={
+            isActive ? (
+              <BsCursorFill
+                size={iconSize}
+                color="#3B5D7C"
+                style={{ transform: "rotate(-90deg)" }}
+              />
+            ) : (
+              <BsCursor
+                size={iconSize}
+                color="#151C25"
+                style={{ transform: "rotate(-90deg)" }}
+              />
+            )
+          }
           label="Move"
           backgroundColor={!isActive ? "" : "#E4E5E8"}
           outline={isActive ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
+          boxShadow={
+            isActive
+              ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
+              : null
+          }
           onClick={handleClick}
         />
         <Rotate viewerId={viewerId} />
+        <Multiview
+          viewerId={viewerId}
+          isMultiview={isMultiview}
+          setIsMultiview={setIsMultiview}
+          setIsNavigatorActive={setIsNavigatorActive}
+        />
 
         {annotations ? (
           <ToolbarButton
-            icon={<HiOutlinePencilAlt size={iconSize} color="#151C25" />}
+            icon={
+              activeAnnotations ? (
+                <AnnotationSelectedIcon
+                  size={iconSize}
+                  color="#151C25"
+                  mt={1}
+                  mr={1.5}
+                />
+              ) : (
+                <AnnotationIcon
+                  size={iconSize}
+                  color="#151C25"
+                  mt={1}
+                  mr={1.5}
+                />
+              )
+            }
             backgroundColor={typeToolsToggle ? "#E4E5E8" : ""}
             outline={typeToolsToggle ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
             label="Annotations"
-            onClick={handleAnnotationsClick}
+            onClick={() => {
+              handleAnnotationsClick();
+              setActiveAnnotations(!activeAnnotations);
+            }}
+            boxShadow={
+              activeAnnotations
+                ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
+                : null
+            }
           />
         ) : null}
         {/* <ToolbarButton
@@ -151,12 +202,6 @@ const Move = ({
             />
           </>
         ) : null} */}
-        <Multiview
-          viewerId={viewerId}
-          isMultiview={isMultiview}
-          setIsMultiview={setIsMultiview}
-          setIsNavigatorActive={setIsNavigatorActive}
-        />
       </Flex>
 
       <Flex

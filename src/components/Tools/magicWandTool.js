@@ -175,6 +175,11 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
       title="Magic Wand"
       disabled={zoomValue < 40}
       _focus={{ border: "none" }}
+      boxShadow={
+        isActive
+          ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
+          : null
+      }
     />
   );
 };

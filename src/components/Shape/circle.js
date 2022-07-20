@@ -346,6 +346,11 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
       bg={isActive ? "#DEDEDE" : "#F6F6F6"}
       title="Circle Annotation"
       _focus={{ border: "none" }}
+      boxShadow={
+        isActive
+          ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
+          : null
+      }
     />
   );
 };
