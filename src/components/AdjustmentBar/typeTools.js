@@ -23,7 +23,7 @@ const TypeTools = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   };
 
   return (
-    <Draggable>
+    <Draggable bounds={{ top: 0, left: 0 }}>
       <Flex
         direction="column"
         pos="fixed"
