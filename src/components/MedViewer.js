@@ -54,9 +54,11 @@ const MedViewer = ({ viewerIds, ...props }) => {
   // }, []);
 
   return isReady && _.keys(fabricOverlayState?.viewerWindow).length > 0 ? (
-    <StoreProvider value={{ fabricOverlayState, setFabricOverlayState }}>
-      <LayoutApp viewerIds={viewerIds} {...props} />
-    </StoreProvider>
+    <React.StrictMode>
+      <StoreProvider value={{ fabricOverlayState, setFabricOverlayState }}>
+        <LayoutApp viewerIds={viewerIds} {...props} />
+      </StoreProvider>
+    </React.StrictMode>
   ) : (
     <Loading />
   );
