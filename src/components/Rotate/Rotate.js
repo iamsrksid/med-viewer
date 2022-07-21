@@ -7,7 +7,6 @@ import { useFabricOverlayState } from "../../state/store";
 const Rotate = ({ viewerId }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewer } = fabricOverlayState?.viewerWindow[viewerId];
-  const [active, setActive] = useState(false);
 
   const handleRotate = (e) => {
     try {
@@ -23,15 +22,9 @@ const Rotate = ({ viewerId }) => {
 
   return (
     <ToolbarButton
-      icon={
-        <FiRotateCw size={IconSize()} color={active ? "#3B5D7C" : "#151C25"} />
-      }
+      icon={<FiRotateCw size={IconSize()} color="#151C25" />}
       label="Rotate"
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
-      onClick={() => {
-        handleRotate();
-      }}
+      onClick={handleRotate}
     />
   );
 };

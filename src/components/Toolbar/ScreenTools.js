@@ -38,6 +38,8 @@ const ScreenTools = ({
   const [shareHover, setShareHover] = useState(false);
   const handlePopup = () => {
     setPopup(!popup);
+    setScreenshotHover(false);
+    setShareHover(false);
   };
   const handleMoreClick = () => {
     setShowAnnotationsBar(!showAnnotationsBar);
@@ -55,9 +57,10 @@ const ScreenTools = ({
           />
         }
         label="Capture part of screen"
-        onClick={handlePopup}
-        onMouseEnter={() => setScreenshotHover(true)}
-        onMouseLeave={() => setScreenshotHover(false)}
+        onClick={() => {
+          handlePopup();
+          setScreenshotHover(true);
+        }}
       />
       <DownloadImage />
       <Divider orientation="vertical" border="1px solid gray" />
@@ -109,10 +112,11 @@ const ScreenTools = ({
           mr="7px"
           ml="3px"
           borderRadius={0}
-          onClick={handlePopup}
+          onClick={() => {
+            handlePopup();
+            setShareHover(true);
+          }}
           backgroundColor="#F8F8F5"
-          onMouseEnter={() => setShareHover(true)}
-          onMouseLeave={() => setShareHover(false)}
         />
       </Tooltip>
 

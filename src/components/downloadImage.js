@@ -76,14 +76,21 @@ const DownloadImage = () => {
           }}
           mr="7px"
           borderRadius={0}
-          onClick={handleClick}
+          onClick={() => {
+            handleClick();
+            setScreenshotHover(true);
+          }}
           backgroundColor="#F8F8F5"
-          onMouseEnter={() => setScreenshotHover(true)}
-          onMouseLeave={() => setScreenshotHover(false)}
         />
       </Tooltip>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          setScreenshotHover(false);
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Download image</ModalHeader>
@@ -104,9 +111,6 @@ const DownloadImage = () => {
               fontFamily="ocr-a-std"
             >
               Save
-            </Button>
-            <Button variant="ghost" onClick={onClose}>
-              Close
             </Button>
           </ModalFooter>
         </ModalContent>

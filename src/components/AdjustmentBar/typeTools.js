@@ -27,8 +27,8 @@ const TypeTools = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
       bounds={{
         top: 0,
         left: 0,
-        right: 90 * (screen.width / 100),
-        bottom: 60 * (screen.height / 100),
+        right: 90 * (window.screen.width / 100),
+        bottom: 60 * (window.screen.height / 100),
       }}
     >
       <Flex

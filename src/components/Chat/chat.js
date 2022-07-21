@@ -1,25 +1,15 @@
 import React, { useState } from "react";
-import {
-  useDisclosure,
-  useMediaQuery,
-  Tooltip,
-  IconButton,
-} from "@chakra-ui/react";
-import ToolbarButton from "../ViewerToolbar/button";
+import { useMediaQuery, Tooltip, IconButton } from "@chakra-ui/react";
 import Popup from "../Popup/popup";
 import { ChatIcon, ChatSelectedIcon } from "../Icons/CustomIcons";
 
 const SlideChat = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   const [chatHover, setChatHover] = useState(false);
   const [popup, setPopup] = useState(false);
   const handlePopup = () => {
     setPopup(!popup);
-  };
-
-  const close = () => {
-    onClose();
+    setChatHover(false);
   };
 
   return (
@@ -52,10 +42,11 @@ const SlideChat = () => {
           mr="7px"
           ml="3px"
           borderRadius={0}
-          onClick={handlePopup}
+          onClick={() => {
+            handlePopup();
+            setChatHover(true);
+          }}
           backgroundColor="#F8F8F5"
-          onMouseEnter={() => setChatHover(true)}
-          onMouseLeave={() => setChatHover(false)}
         />
       </Tooltip>
 
