@@ -84,6 +84,7 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
       disabled={!isActiveObject}
       title="Remove Item"
       _focus={{ border: "none", background: "#DEDEDE" }}
+      _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
     />
   );
 };

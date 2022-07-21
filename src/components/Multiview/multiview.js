@@ -62,6 +62,7 @@ const Multiview = ({
             : null
         }
         isDisabled={Object.keys(viewerWindow).length > 1}
+        _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
       />
     </Tooltip>
   );

@@ -135,6 +135,7 @@ const Move = ({
               : null
           }
           onClick={handleClick}
+          _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
         />
         <Rotate viewerId={viewerId} />
         <Multiview
@@ -190,6 +191,7 @@ const Move = ({
                   ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
                   : null
               }
+              _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
             />
           </Tooltip>
         ) : null}

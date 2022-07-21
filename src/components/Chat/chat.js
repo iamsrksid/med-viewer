@@ -47,6 +47,7 @@ const SlideChat = () => {
             setChatHover(true);
           }}
           backgroundColor="#F8F8F5"
+          _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
         />
       </Tooltip>
 

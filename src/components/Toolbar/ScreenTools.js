@@ -117,6 +117,7 @@ const ScreenTools = ({
             setShareHover(true);
           }}
           backgroundColor="#F8F8F5"
+          _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
         />
       </Tooltip>
 
@@ -153,6 +154,7 @@ const ScreenTools = ({
           backgroundColor="#F8F8F5"
           onMouseEnter={() => setShareHover(true)}
           onMouseLeave={() => setShareHover(false)}
+          _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
           disabled={true}
         />
       </Tooltip>
@@ -173,10 +175,10 @@ const ScreenTools = ({
             overflow="clip"
             borderRadius="none"
             _focus={{ outline: "none" }}
-            _hover={{ bgColor: "#DEDEDE" }}
             title="More"
             onMouseEnter={() => setMenuHover(true)}
             onMouseLeave={() => setMenuHover(false)}
+            _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
           >
             <BiDotsVertical
               size={20}
