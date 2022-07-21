@@ -239,6 +239,7 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
           ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
           : null
       }
+      _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
     />
   );
 };

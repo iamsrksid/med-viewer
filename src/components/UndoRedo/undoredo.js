@@ -12,7 +12,6 @@ const UndoRedo = ({ viewerId }) => {
   const { fabricOverlay } = fabricOverlayState?.viewerWindow[viewerId];
   const [canvas, setCanvas] = useState();
   const params = useParams();
-  const [hover, setHover] = useState(null);
 
   useEffect(() => {
     if (!fabricOverlay) return;
@@ -38,28 +37,14 @@ const UndoRedo = ({ viewerId }) => {
   return (
     <Flex ml="18px">
       <ToolbarButton
-        icon={
-          <RiArrowGoBackFill
-            size={IconSize()}
-            color={hover === "undo" ? "#3B5D7C" : "#151C25"}
-          />
-        }
+        icon={<RiArrowGoBackFill size={IconSize()} color="#151C25" />}
         onClick={handleUndo}
-        onMouseEnter={() => setHover("undo")}
-        onMouseLeave={() => setHover(null)}
         label="Undo"
         mr="8px"
       />
       <ToolbarButton
-        icon={
-          <RiArrowGoForwardLine
-            size={IconSize()}
-            color={hover === "redo" ? "#3B5D7C" : "#151C25"}
-          />
-        }
+        icon={<RiArrowGoForwardLine size={IconSize()} color="#151C25" />}
         onClick={handleRedo}
-        onMouseEnter={() => setHover("redo")}
-        onMouseLeave={() => setHover(null)}
         label="Redo"
         mr="8px"
       />

@@ -7,6 +7,9 @@ import {
   Menu,
   MenuList,
   Divider,
+  useMediaQuery,
+  Tooltip,
+  IconButton,
 } from "@chakra-ui/react";
 import { BiScreenshot, BiDotsVertical } from "react-icons/bi";
 import { RiShareForwardFill } from "react-icons/ri";
@@ -14,14 +17,9 @@ import ToolbarButton from "../ViewerToolbar/button";
 import SlideChat from "../Chat/chat";
 import ShareLink from "../Share/shareLink";
 import Popup from "../Popup/popup";
-import IconSize from "../ViewerToolbar/IconSize";
 import DownloadImage from "../downloadImage";
 import ViewerImport from "../Layout/viewerImport";
-import {
-  ShareIcon,
-  DocumentsIcon,
-  ShareSelectedIcon,
-} from "../Icons/CustomIcons";
+import { ShareIcon, DocumentsIcon } from "../Icons/CustomIcons";
 
 const ScreenTools = ({
   viewerId,
@@ -38,13 +36,15 @@ const ScreenTools = ({
   const [screenshotHover, setScreenshotHover] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
   const [shareHover, setShareHover] = useState(false);
-  const [openMenuHover, setOpenMenuHover] = useState(false);
   const handlePopup = () => {
     setPopup(!popup);
+    setScreenshotHover(false);
+    setShareHover(false);
   };
   const handleMoreClick = () => {
     setShowAnnotationsBar(!showAnnotationsBar);
   };
+  const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   return (
     <Flex px="20px" height="18px" alignItems="center">
       {/* Add respective tools */}
@@ -57,9 +57,10 @@ const ScreenTools = ({
           />
         }
         label="Capture part of screen"
-        onClick={handlePopup}
-        onMouseEnter={() => setScreenshotHover(true)}
-        onMouseLeave={() => setScreenshotHover(false)}
+        onClick={() => {
+          handlePopup();
+          setScreenshotHover(true);
+        }}
       />
       <DownloadImage />
       <Divider orientation="vertical" border="1px solid gray" />
@@ -77,26 +78,87 @@ const ScreenTools = ({
       {/* <DownloadImage /> */}
       {/* <Fullscreen viewerId={viewerId} /> */}
       <SlideChat />
-      <ToolbarButton
-        icon={
-          shareHover ? (
-            <RiShareForwardFill size={20} color="#3B5D7C" />
-          ) : (
-            <ShareIcon size={20} color="#151C25" mt={1.3} mr={2} />
-          )
-        }
-        label="Share Case"
-        onClick={handlePopup}
-        onMouseEnter={() => setShareHover(true)}
-        onMouseLeave={() => setShareHover(false)}
-      />
+      <Tooltip
+        label="Share case"
+        aria-label="Share case"
+        placement="bottom"
+        openDelay={0}
+        bg="#E4E5E8"
+        color="rgba(89, 89, 89, 1)"
+        fontSize="14px"
+        fontFamily="inter"
+        hasArrow
+        borderRadius="0px"
+        size="20px"
+      >
+        <IconButton
+          width={ifScreenlessthan1536px ? "30px" : "40px"}
+          size={ifScreenlessthan1536px ? 60 : 0}
+          height={ifScreenlessthan1536px ? "26px" : "34px"}
+          icon={
+            shareHover ? (
+              <RiShareForwardFill size={20} color="#3B5D7C" />
+            ) : (
+              <ShareIcon />
+            )
+          }
+          _active={{
+            bgColor: "rgba(228, 229, 232, 1)",
+            outline: "0.5px solid rgba(0, 21, 63, 1)",
+          }}
+          _focus={{
+            border: "none",
+          }}
+          mr="7px"
+          ml="3px"
+          borderRadius={0}
+          onClick={() => {
+            handlePopup();
+            setShareHover(true);
+          }}
+          backgroundColor="#F8F8F5"
+          _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
+        />
+      </Tooltip>
+
       <Divider orientation="vertical" border="1px solid gray" />
-      <ToolbarButton
-        icon={<DocumentsIcon color="#151C25" mt={1.4} mr={2} />}
-        label="Share Case"
-        onClick={handlePopup}
-        disabled={true}
-      />
+      <Tooltip
+        label="Share case"
+        aria-label="Share case"
+        placement="bottom"
+        openDelay={0}
+        bg="#E4E5E8"
+        color="rgba(89, 89, 89, 1)"
+        fontSize="14px"
+        fontFamily="inter"
+        hasArrow
+        borderRadius="0px"
+        size="20px"
+      >
+        <IconButton
+          width={ifScreenlessthan1536px ? "30px" : "40px"}
+          size={ifScreenlessthan1536px ? 60 : 0}
+          height={ifScreenlessthan1536px ? "26px" : "34px"}
+          icon={<DocumentsIcon color="#151C25" />}
+          _active={{
+            bgColor: "rgba(228, 229, 232, 1)",
+            outline: "0.5px solid rgba(0, 21, 63, 1)",
+          }}
+          _focus={{
+            border: "none",
+          }}
+          mr="7px"
+          ml="3px"
+          borderRadius={0}
+          onClick={handlePopup}
+          backgroundColor="#F8F8F5"
+          onMouseEnter={() => setShareHover(true)}
+          onMouseLeave={() => setShareHover(false)}
+          _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
+          disabled={true}
+        />
+      </Tooltip>
+
       <ShareLink />
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
         {/* <ToolbarButton
@@ -113,10 +175,10 @@ const ScreenTools = ({
             overflow="clip"
             borderRadius="none"
             _focus={{ outline: "none" }}
-            _hover={{ bgColor: "#DEDEDE" }}
             title="More"
             onMouseEnter={() => setMenuHover(true)}
             onMouseLeave={() => setMenuHover(false)}
+            _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
           >
             <BiDotsVertical
               size={20}
