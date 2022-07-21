@@ -41,7 +41,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
   const [textbox, setTextbox] = useState(false);
 
   const [myState, setState] = useState({
-    activeShape: null, // active shape in Options Panel
+    activeShape: null, // active shape in event Panel
     color: null,
     currentDragShape: null,
     isActive: false, // Is the Shape tool itself active
@@ -94,14 +94,14 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
    * Add shapes and handle mouse events
    */
   useEffect(() => {
-    if (!fabricOverlay) return null;
+    if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     /**
      * Mouse down
      */
-    function handleMouseDown(options) {
-      if (options.target || !myStateRef.current.isActive) {
+    function handleMouseDown(event) {
+      if (event.button !== 1 || event.target || !myStateRef.current.isActive) {
         return;
       }
 
@@ -112,7 +112,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
       viewer.outerTracker.setTracking(false);
 
       // Save starting mouse down coordinates
-      const pointer = canvas.getPointer(options.e);
+      const pointer = canvas.getPointer(event.e);
       const origX = pointer.x;
       const origY = pointer.y;
 
@@ -165,9 +165,8 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse move
      */
-    function handleMouseMove(options) {
+    function handleMouseMove(event) {
       if (
-        // options.target ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
       ) {
@@ -176,7 +175,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
       const c = myStateRef.current;
 
       // Dynamically drag size element to the canvas
-      const pointer = canvas.getPointer(options.e);
+      const pointer = canvas.getPointer(event.e);
 
       let rx = Math.abs(c.origX - pointer.x) / 2;
       let ry = Math.abs(c.origY - pointer.y) / 2;
@@ -221,8 +220,9 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
     /**
      * Mouse up
      */
-    function handleMouseUp(options) {
+    function handleMouseUp(event) {
       if (
+        event.button !== 1 ||
         !myStateRef.current.isActive ||
         !myStateRef.current.currentDragShape
       ) {
@@ -275,7 +275,7 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
       canvas.off("mouse:move", handleMouseMove);
       canvas.off("mouse:up", handleMouseUp);
     };
-  }, [isActive]);
+  }, [isActive, fabricOverlay]);
 
   // group shape and textbox together
   // first remove both from canvas then group them and then add group to canvas

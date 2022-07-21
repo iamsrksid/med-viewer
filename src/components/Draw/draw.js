@@ -101,13 +101,13 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
     // };
 
     // to set path when draw completes
-    const pathCreated = (e) => {
+    const pathCreated = (event) => {
       canvas.selection = true;
-      setPath(e.path);
+      setPath(event.path);
     };
 
-    function handleMouseDown() {
-      if (!myStateRef.current.isActive) return;
+    function handleMouseDown(event) {
+      if (event.button !== 1 || !myStateRef.current.isActive) return;
       // Need this as double protection to make sure OSD isn't swallowing
       // Fabric's drawing mode for some reason
       canvas.selection = false;
