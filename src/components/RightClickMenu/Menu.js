@@ -12,11 +12,12 @@ import {
   Portal,
   Flex,
   Text,
+  Box,
 } from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 
 const DisplayMenu = forwardRef((props, ref) => (
-  <Menu>
+  <Menu closeOnSelect={false}>
     <MenuButton ref={ref} {...props}>
       <Flex justifyContent="space-between" alignItems="center">
         <Text>Display</Text>
@@ -129,35 +130,52 @@ const SetTagMenu = forwardRef((props, ref) => (
 
 export const CustomMenu = ({ isActive, left, top }) => {
   return isActive ? (
-    <Menu>
-      <MenuButton as={Button} pos="absolute" left={left} top={top}>
-        Actions
-      </MenuButton>
-      <Portal>
-        <MenuList
-          borderRadius={0}
-          bgColor="#FCFCFC"
-          p={0}
-          boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
-        >
-          <MenuItem
-            _hover={{ bgColor: "#DEDEDE" }}
-            as={DisplayMenu}
-            closeOnSelect={false}
-          />
-          <MenuItem
-            _hover={{ bgColor: "#DEDEDE" }}
-            as={SetTagMenu}
-            closeOnSelect={false}
-          />
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Morphometry</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
-          <MenuDivider />
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Lock</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Delete Object</MenuItem>
-        </MenuList>
-      </Portal>
-    </Menu>
-  ) : null;
+    <Box>
+      <Menu isOpen={isActive}>
+        <MenuButton
+          as={Button}
+          pos="absolute"
+          left={left}
+          top={top}
+          w={0}
+          h={0}
+        />
+        <Portal>
+          <MenuList
+            borderRadius={0}
+            bgColor="#FCFCFC"
+            p={0}
+            boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
+          >
+            <MenuItem
+              _hover={{ bgColor: "#DEDEDE" }}
+              as={DisplayMenu}
+              closeOnSelect={false}
+            />
+            <MenuItem
+              _hover={{ bgColor: "#DEDEDE" }}
+              as={SetTagMenu}
+              closeOnSelect={false}
+            />
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Morphometry</MenuItem>
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
+            <MenuDivider />
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Lock</MenuItem>
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Delete Object</MenuItem>
+          </MenuList>
+        </Portal>
+      </Menu>
+    </Box>
+  ) : // <ul className="menu" style={{ top: top, left: left, position: "absolute" }}>
+  //   <li>Share to..</li>
+  //   <li>Cut</li>
+  //   <li>Copy</li>
+  //   <li>Paste</li>
+  //   <hr />
+  //   <li>Refresh</li>
+  //   <li>Exit</li>
+  // </ul>
+
+  null;
 };
