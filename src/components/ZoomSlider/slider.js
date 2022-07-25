@@ -3,9 +3,8 @@ import PropTypes from "prop-types";
 import { Flex, Input, Text, useMediaQuery } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../../state/store";
 import { getScaleFactor, getZoomValue } from "../../utility/utility";
-import { toggleLeading } from "../../state/actions/fabricOverlayActions";
 
-const ZoomSlider = ({ viewerId }) => {
+const ZoomSlider = ({ viewerId, rightClickZoomValue }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, sync } = fabricOverlayState;
   const { viewer, fabricOverlay } = viewerWindow[viewerId];
@@ -14,7 +13,6 @@ const ZoomSlider = ({ viewerId }) => {
 
   const handleZoomLevel = (e) => {
     let { value } = e.target;
-
     // check if value is less than 1, then make it 1
     // and if value is greater than 40, then make it 40
     if (value && value < 1) {
