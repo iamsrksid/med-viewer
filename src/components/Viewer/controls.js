@@ -51,8 +51,12 @@ const ViewerControls = ({
   };
 
   const handleZoomLevel = (value) => {
-    const level = value * (viewer.viewport.getMaxZoom() / 40);
-    viewer.viewport.zoomTo(level);
+    try {
+      const level = value * (viewer.viewport.getMaxZoom() / 40);
+      viewer.viewport.zoomTo(level);
+    } catch (err) {
+      console.error("error zooming to selected level");
+    }
   };
 
   useEffect(() => {
