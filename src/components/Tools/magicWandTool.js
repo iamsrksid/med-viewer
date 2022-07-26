@@ -18,6 +18,7 @@ import {
   getZoomValue,
   saveAnnotationsToDB,
 } from "../../utility/utility";
+import { createContour, getViewportBounds } from "../../utility";
 
 const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -58,19 +59,7 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
     if (!fabricOverlay || !isActive) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
-    // get viewport bounds
-    const bounds = viewer.viewport.getBounds();
-    const {
-      x: left,
-      y: top,
-      width,
-      height,
-    } = viewer.viewport.viewportToImageRectangle(
-      bounds.x,
-      bounds.y,
-      bounds.width,
-      bounds.height
-    );
+    const { x: left, y: top, width, height } = getViewportBounds(viewer);
 
     // get s3 folder key of tile
     const key = getFileBucketFolder(tile);
@@ -94,18 +83,10 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
       // also add it the annotation feed
       if (resp && typeof resp.data === "object") {
         const { con, area, centroid, perimeter, end_points } = resp.data;
-        const points = con.map((point) => ({
-          x: point[0][0] + left,
-          y: point[0][1] + top,
-        }));
-        const polygon = new fabric.Polygon(points, {
-          stroke: "black",
-          strokeWidth: 1.2,
-          fill: `${color.hex}80`,
-          strokeUniform: true,
-        });
 
-        const message = createAnnotationMessage({ shape: polygon, viewer });
+        const shape = createContour({ contour: con, color, left, top });
+
+        const message = createAnnotationMessage({ shape, viewer });
 
         message.object.set({
           area,
@@ -121,7 +102,7 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
           saveAnnotationsHandler,
         });
 
-        canvas.add(polygon).requestRenderAll();
+        canvas.add(shape).requestRenderAll();
         setTotalCells((state) => state + 1);
         setFabricOverlayState(
           addToActivityFeed({

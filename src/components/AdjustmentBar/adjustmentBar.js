@@ -99,6 +99,7 @@ const AdjustmentBar = ({
           ml="8px"
           pl={0}
           pt={0}
+          isActive={isNavigatorActive}
           onClick={() => {
             setIsMultiview(false);
             setIsNavigatorActive((state) => !state);

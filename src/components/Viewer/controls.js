@@ -4,15 +4,28 @@ import "./openseadragon-scalebar";
 import { Box, HStack, VStack, Text, Center } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { fabric } from "openseadragon-fabricjs-overlay";
+import axios from "axios";
 import ZoomSlider from "../ZoomSlider/slider";
 import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
-import { getTimestamp, getCanvasImage } from "../../utility/utility";
+import {
+  getTimestamp,
+  getCanvasImage,
+  getFileBucketFolder,
+  createAnnotationMessage,
+  getViewportBounds,
+} from "../../utility/utility";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
+import {
+  addAnnotationsToCanvas,
+  createAnnotation,
+  createContour,
+  createContours,
+} from "../../utility";
 
 const ViewerControls = ({
   viewerId,
@@ -22,12 +35,13 @@ const ViewerControls = ({
   loadAnnotationsHandler,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { viewer, fabricOverlay, slideId } =
-    fabricOverlayState.viewerWindow[viewerId];
+  const { viewerWindow, color } = fabricOverlayState;
+  const { viewer, fabricOverlay, slideId, tile } = viewerWindow[viewerId];
   const iconSize = IconSize();
   const [isAnnotationLoaded, setIsAnnotationLoaded] = useState(false);
   const [isRightClickActive, setIsRightClickActive] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
+  const [annotationObject, setAnnotationObject] = useState(null);
 
   const handleZoomIn = () => {
     try {
@@ -49,6 +63,50 @@ const ViewerControls = ({
     }
   };
 
+  const handleAnalysis = () => {
+    const canvas = fabricOverlay.fabricCanvas();
+
+    // get s3 folder key from the tile
+    const key = getFileBucketFolder(tile);
+
+    // initiate analysis, sending annotation coordinates and s3 folder key
+    const initiateAnalysis = async (body) => {
+      const resp = await axios.post(
+        "https://development-morphometry-api.prr.ai/viewport_stats",
+        body
+      );
+
+      if (resp.status === 200) {
+        createContours({
+          canvas,
+          viewer,
+          contours: resp.data[0],
+          color,
+          left: body.left,
+          top: body.top,
+        });
+      }
+    };
+
+    let body = { key };
+
+    if (annotationObject) {
+      const { left, top, width, height, type } = annotationObject;
+      body = { ...body, type, left, top, width, height };
+
+      // if annoatation is a freehand, send the coordinates of the path
+      // otherwise, send the coordinates of the rectangle
+      if (annotationObject.type === "path") {
+        body = { ...body, path: annotationObject.path };
+      }
+    } else {
+      const { x: left, y: top, width, height } = getViewportBounds(viewer);
+      body = { ...body, left, top, width, height, type: "rect" };
+    }
+
+    initiateAnalysis(body);
+  };
+
   useEffect(() => {
     setIsAnnotationLoaded(false);
   }, [slideId]);
@@ -58,138 +116,27 @@ const ViewerControls = ({
   useEffect(() => {
     if (!fabricOverlay || !loadAnnotationsHandler) return;
     const canvas = fabricOverlay.fabricCanvas();
-    const feed = [];
-
-    // add annotation to the activity feed
-    const addToFeed = async (shape, annotation) => {
-      const message = {
-        username: `${userInfo.firstName} ${userInfo.lastName}`,
-        object: shape,
-        image: null,
-      };
-
-      const {
-        hash,
-        text,
-        zoomLevel,
-        points,
-        timeStamp,
-        area,
-        perimeter,
-        cnetroid,
-        endPoints,
-        isAnalysed,
-      } = annotation;
-
-      message.object.set({
-        hash,
-        text,
-        zoomLevel,
-        points,
-        timeStamp,
-        area,
-        perimeter,
-        cnetroid,
-        endPoints,
-        isAnalysed,
-      });
-
-      feed.push(message);
-    };
-
-    // create annotation from the annotation data
-    const createAnnotation = (annotation) => {
-      let shape;
-      switch (annotation.type) {
-        case "ellipse":
-          shape = new fabric.Ellipse({
-            left: annotation.left,
-            top: annotation.top,
-            width: annotation.width,
-            height: annotation.height,
-            color: annotation.color,
-            fill: annotation.fill,
-            stroke: annotation.stroke,
-            strokeWidth: annotation.strokeWidth,
-            strokeUniform: annotation.strokeUniform,
-            rx: annotation.rx,
-            ry: annotation.ry,
-            angle: annotation.angle,
-          });
-          break;
-
-        case "rect":
-          shape = new fabric.Rect({
-            left: annotation.left,
-            top: annotation.top,
-            width: annotation.width,
-            height: annotation.height,
-            color: annotation.color,
-            fill: annotation.fill,
-            stroke: annotation.stroke,
-            strokeWidth: annotation.strokeWidth,
-            strokeUniform: annotation.strokeUniform,
-          });
-          break;
-
-        case "polygon":
-          shape = new fabric.Polygon(annotation.points, {
-            stroke: annotation.stroke,
-            strokeWidth: annotation.strokeWidth,
-            fill: annotation.fill,
-            strokeUniform: annotation.strokeUniform,
-          });
-          break;
-
-        case "path":
-          shape = new fabric.Path(annotation.path, {
-            color: annotation.color,
-            stroke: annotation.stroke,
-            strokeWidth: annotation.strokeWidth,
-            strokeUniform: annotation.strokeUniform,
-            fill: annotation.fill,
-          });
-          break;
-
-        case "line":
-          shape = new fabric.Line(annotation.points, {
-            color: annotation.color,
-            stroke: annotation.stroke,
-            strokeWidth: annotation.strokeWidth,
-            strokeUniform: annotation.strokeUniform,
-            fill: annotation.fill,
-          });
-          break;
-
-        default:
-          return;
-      }
-
-      // add shape to canvas and to activity feed
-      canvas.add(shape);
-      addToFeed(shape, annotation);
-    };
 
     const loadAnnotations = async () => {
-      // remove render on each add annotation
-      const originalRender = canvas.renderOnAddRemove;
-      canvas.renderOnAddRemove = false;
+      // check if the annotations is already loaded
+      if (canvas.toJSON().objects.length === 0) {
+        const { data } = await loadAnnotationsHandler(slideId);
+        if (data) {
+          const feed = addAnnotationsToCanvas({
+            canvas,
+            viewer,
+            annotations: data.annotationsAutoSave,
+          });
 
-      const { data } = await loadAnnotationsHandler(slideId);
-      if (data) {
-        data.annotationsAutoSave.forEach((annotation) => {
-          createAnnotation(annotation);
-        });
+          if (feed) {
+            setFabricOverlayState(
+              updateActivityFeed({ id: viewerId, fullFeed: feed })
+            );
+            canvas.requestRenderAll();
+          }
+        }
       }
 
-      // restore render on each add annotation
-      canvas.renderOnAddRemove = originalRender;
-      canvas.requestRenderAll();
-      viewer.viewport.zoomBy(1.01);
-
-      setFabricOverlayState(
-        updateActivityFeed({ id: viewerId, fullFeed: feed })
-      );
       setIsAnnotationLoaded(true);
     };
 
@@ -225,6 +172,11 @@ const ViewerControls = ({
         setIsRightClickActive(false);
         return;
       }
+
+      // set annotationObject if right click is on annotation
+      if (event.target) setAnnotationObject(event.target);
+      else setAnnotationObject(null);
+
       setMenuPosition({ left: event.pointer.x + 10, top: event.pointer.y });
       setIsRightClickActive(true);
     };
@@ -316,6 +268,7 @@ const ViewerControls = ({
         isActive={isRightClickActive}
         left={menuPosition.left}
         top={menuPosition.top}
+        handleAnalysis={handleAnalysis}
       />
     </>
   );

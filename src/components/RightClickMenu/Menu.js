@@ -127,7 +127,7 @@ const SetTagMenu = forwardRef((props, ref) => (
   </Menu>
 ));
 
-export const CustomMenu = ({ isActive, left, top }) => {
+export const CustomMenu = ({ isActive, left, top, handleAnalysis }) => {
   return isActive ? (
     <Menu>
       <MenuButton as={Button} pos="absolute" left={left} top={top}>
@@ -150,7 +150,9 @@ export const CustomMenu = ({ isActive, left, top }) => {
             as={SetTagMenu}
             closeOnSelect={false}
           />
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Morphometry</MenuItem>
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }} onClick={handleAnalysis}>
+            Morphometry
+          </MenuItem>
           <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
           <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
           <MenuDivider />
