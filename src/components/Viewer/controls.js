@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
-import { Box, HStack, VStack, Text, Center } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  VStack,
+  Text,
+  useToast,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import axios from "axios";
@@ -10,22 +17,15 @@ import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
-import {
-  getTimestamp,
-  getCanvasImage,
-  getFileBucketFolder,
-  createAnnotationMessage,
-  getViewportBounds,
-  zoomToLevel,
-} from "../../utility/utility";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
 import {
   addAnnotationsToCanvas,
-  createAnnotation,
-  createContour,
   createContours,
+  getFileBucketFolder,
+  getViewportBounds,
+  zoomToLevel,
 } from "../../utility";
 
 const ViewerControls = ({
@@ -38,11 +38,14 @@ const ViewerControls = ({
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, color } = fabricOverlayState;
   const { viewer, fabricOverlay, slideId, tile } = viewerWindow[viewerId];
-  const iconSize = IconSize();
+
   const [isAnnotationLoaded, setIsAnnotationLoaded] = useState(false);
   const [isRightClickActive, setIsRightClickActive] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
   const [annotationObject, setAnnotationObject] = useState(null);
+
+  const toast = useToast();
+  const iconSize = IconSize();
 
   const handleZoomIn = () => {
     try {
@@ -69,7 +72,6 @@ const ViewerControls = ({
   };
 
   const handleAnalysis = () => {
-
     const canvas = fabricOverlay.fabricCanvas();
 
     // get s3 folder key from the tile
@@ -92,6 +94,12 @@ const ViewerControls = ({
           top: body.top,
         });
       }
+      toast({
+        title: "Analysis complete",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      });
     };
 
     let body = { key };
@@ -271,7 +279,7 @@ const ViewerControls = ({
         />
       </VStack>
       <CustomMenu
-        isActive={isRightClickActive}
+        isOpen={isRightClickActive}
         left={menuPosition.left}
         top={menuPosition.top}
         handleAnalysis={handleAnalysis}

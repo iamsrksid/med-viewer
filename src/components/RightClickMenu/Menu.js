@@ -149,10 +149,14 @@ const SetTagMenu = forwardRef((props, ref) => (
   </Menu>
 ));
 
-export const CustomMenu = ({ isActive, left, top, setZoom }) => {
-  return isActive ? (
+export const CustomMenu = ({ isOpen, left, top, setZoom, handleAnalysis }) => {
+  const runMorphometry = () => {
+    handleAnalysis();
+  };
+
+  return isOpen ? (
     <Box>
-      <Menu isOpen={isActive}>
+      <Menu isOpen={isOpen}>
         <MenuButton
           as={Button}
           pos="absolute"
@@ -168,15 +172,17 @@ export const CustomMenu = ({ isActive, left, top, setZoom }) => {
             p={0}
             boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
           >
-            <MenuItem _hover={{ bgColor: "#DEDEDE" }} closeOnSelect={false}>
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>
               <DisplayMenu setZoom={setZoom} />
             </MenuItem>
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }} as={SetTagMenu} />
             <MenuItem
               _hover={{ bgColor: "#DEDEDE" }}
-              as={SetTagMenu}
-              closeOnSelect={false}
-            />
-            <MenuItem _hover={{ bgColor: "#DEDEDE" }} onClick={handleAnalysis}>Morphometry</MenuItem>
+              onClick={runMorphometry}
+              closeOnSelect
+            >
+              Run Morphometry
+            </MenuItem>
             <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
             <MenuDivider />
             <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Lock</MenuItem>

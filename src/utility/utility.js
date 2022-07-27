@@ -201,8 +201,7 @@ export const getViewportBounds = (viewer) => {
   );
 
   return { x, y, width, height };
-
-}
+};
 
 // zoom to a specific level
 export const zoomToLevel = ({ viewer, value }) => {
@@ -221,4 +220,4 @@ export const zoomToLevel = ({ viewer, value }) => {
     const level = value * (viewer.viewport.getMaxZoom() / 40);
     viewer.viewport.zoomTo(level);
   }
-}
+};
