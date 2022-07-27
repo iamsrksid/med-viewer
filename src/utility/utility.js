@@ -153,3 +153,22 @@ export const getFileBucketFolder = (url) => {
     url ? `${url.split("/")[url.split("/").length - 2]}.svs` : ""
   }`;
 };
+
+// zoom to a specific level
+export const zoomToLevel = ({ viewer, value }) => {
+  if (!viewer) return;
+
+  // check if value is less than 1, then make it 1
+  // and if value is greater than 40, then make it 40
+  if (value && value < 1) {
+    value = 1;
+  } else if (value > 40) {
+    value = 40;
+  }
+
+  // if value is empty, don't do anything
+  if (value) {
+    const level = value * (viewer.viewport.getMaxZoom() / 40);
+    viewer.viewport.zoomTo(level);
+  }
+};

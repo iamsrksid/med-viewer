@@ -9,7 +9,11 @@ import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
-import { getTimestamp, getCanvasImage } from "../../utility/utility";
+import {
+  getTimestamp,
+  getCanvasImage,
+  zoomToLevel,
+} from "../../utility/utility";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
@@ -25,7 +29,6 @@ const ViewerControls = ({
   const { viewer, fabricOverlay, slideId } =
     fabricOverlayState.viewerWindow[viewerId];
   const iconSize = IconSize();
-  const [rightClickZoomValue, setRightClickZoomValue] = useState(1);
   const [isAnnotationLoaded, setIsAnnotationLoaded] = useState(false);
   const [isRightClickActive, setIsRightClickActive] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
@@ -51,21 +54,12 @@ const ViewerControls = ({
   };
 
   const handleZoomLevel = (value) => {
-    try {
-      const level = value * (viewer.viewport.getMaxZoom() / 40);
-      viewer.viewport.zoomTo(level);
-    } catch (err) {
-      console.error("error zooming to selected level");
-    }
+    zoomToLevel({ viewer, value });
   };
 
   useEffect(() => {
     setIsAnnotationLoaded(false);
   }, [slideId]);
-
-  useEffect(() => {
-    handleZoomLevel(rightClickZoomValue);
-  }, [rightClickZoomValue]);
 
   // load saved annotations from the server
   // once viewer is initialized
@@ -312,10 +306,7 @@ const ViewerControls = ({
             outline: "none",
           }}
         />
-        <ZoomSlider
-          viewerId={viewerId}
-          rightClickZoomValue={rightClickZoomValue}
-        />
+        <ZoomSlider viewerId={viewerId} />
         <ToolbarButton
           icon={<AiOutlineMinus color="#00153F" size={iconSize} />}
           // border="1px solid #3965C6"
@@ -333,7 +324,7 @@ const ViewerControls = ({
         isActive={isRightClickActive}
         left={menuPosition.left}
         top={menuPosition.top}
-        setZoom={setRightClickZoomValue}
+        setZoom={handleZoomLevel}
       />
     </>
   );
