@@ -191,7 +191,7 @@ const ViewerControls = ({
       if (event.target) setAnnotationObject(event.target);
       else setAnnotationObject(null);
 
-      setMenuPosition({ left: event.pointer.x + 10, top: event.pointer.y });
+      setMenuPosition({ left: event.pointer.x, top: event.pointer.y });
       setIsRightClickActive(true);
     };
 
@@ -280,6 +280,7 @@ const ViewerControls = ({
       </VStack>
       <CustomMenu
         isOpen={isRightClickActive}
+        setIsOpen={setIsRightClickActive}
         left={menuPosition.left}
         top={menuPosition.top}
         handleAnalysis={handleAnalysis}
