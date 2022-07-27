@@ -9,7 +9,11 @@ import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
-import { getTimestamp, getCanvasImage } from "../../utility/utility";
+import {
+  getTimestamp,
+  getCanvasImage,
+  zoomToLevel,
+} from "../../utility/utility";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
@@ -47,6 +51,10 @@ const ViewerControls = ({
     } catch (err) {
       console.error("Error handling Zoom Out button click", err);
     }
+  };
+
+  const handleZoomLevel = (value) => {
+    zoomToLevel({ viewer, value });
   };
 
   useEffect(() => {
@@ -316,6 +324,7 @@ const ViewerControls = ({
         isActive={isRightClickActive}
         left={menuPosition.left}
         top={menuPosition.top}
+        setZoom={handleZoomLevel}
       />
     </>
   );
