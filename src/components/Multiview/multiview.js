@@ -14,7 +14,6 @@ const Multiview = ({
   const iconSize = IconSize();
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
-  const [isActive, setIsActive] = useState(false);
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
 
   const handleClick = () => {
@@ -48,16 +47,15 @@ const Multiview = ({
         _focus={{
           border: "none",
         }}
-        icon={isActive ? <MultiviewSelectedIcon /> : <MultiviewIcon />}
+        icon={isMultiview ? <MultiviewSelectedIcon /> : <MultiviewIcon />}
         backgroundColor={isMultiview ? "#E4E5E8" : "#F8F8F5"}
         outline={isMultiview ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
         onClick={() => {
           handleClick();
-          setIsActive(!isActive);
         }}
         mr="7px"
         boxShadow={
-          isActive
+          isMultiview
             ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
             : null
         }

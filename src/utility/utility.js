@@ -189,7 +189,7 @@ export const getFileBucketFolder = (url) => {
   }`;
 };
 
-// get vieweport bounds
+// get viewport bounds
 export const getViewportBounds = (viewer) => {
   if (!viewer) return null;
   const bounds = viewer.viewport.getBounds();
@@ -201,4 +201,24 @@ export const getViewportBounds = (viewer) => {
   );
 
   return { x, y, width, height };
-};
+
+}
+
+// zoom to a specific level
+export const zoomToLevel = ({ viewer, value }) => {
+  if (!viewer) return;
+
+  // check if value is less than 1, then make it 1
+  // and if value is greater than 40, then make it 40
+  if (value && value < 1) {
+    value = 1;
+  } else if (value > 40) {
+    value = 40;
+  }
+
+  // if value is empty, don't do anything
+  if (value) {
+    const level = value * (viewer.viewport.getMaxZoom() / 40);
+    viewer.viewport.zoomTo(level);
+  }
+}

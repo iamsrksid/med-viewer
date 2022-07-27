@@ -16,6 +16,7 @@ import {
   getFileBucketFolder,
   createAnnotationMessage,
   getViewportBounds,
+  zoomToLevel,
 } from "../../utility/utility";
 import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
@@ -63,7 +64,12 @@ const ViewerControls = ({
     }
   };
 
+  const handleZoomLevel = (value) => {
+    zoomToLevel({ viewer, value });
+  };
+
   const handleAnalysis = () => {
+
     const canvas = fabricOverlay.fabricCanvas();
 
     // get s3 folder key from the tile
@@ -269,6 +275,7 @@ const ViewerControls = ({
         left={menuPosition.left}
         top={menuPosition.top}
         handleAnalysis={handleAnalysis}
+        setZoom={handleZoomLevel}
       />
     </>
   );

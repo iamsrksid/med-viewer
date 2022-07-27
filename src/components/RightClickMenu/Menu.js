@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import {
   Menu,
   MenuButton,
@@ -12,12 +12,14 @@ import {
   Portal,
   Flex,
   Text,
+  Box,
+  forwardRef,
 } from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 
-const DisplayMenu = forwardRef((props, ref) => (
-  <Menu>
-    <MenuButton ref={ref} {...props}>
+const DisplayMenu = ({ setZoom }) => (
+  <Menu closeOnSelect={false}>
+    <MenuButton w="100%">
       <Flex justifyContent="space-between" alignItems="center">
         <Text>Display</Text>
         <ChevronRightIcon />
@@ -26,33 +28,53 @@ const DisplayMenu = forwardRef((props, ref) => (
     <Portal>
       <MenuList
         pos="relative"
-        left="222px"
-        bottom="46px"
+        left="210px"
+        bottom="39px"
         borderRadius={0}
         bgColor="#FCFCFC"
         p={0}
       >
-        <MenuGroup title="Brightness/Contrast" fontWeight={400}>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="40">
+        <MenuGroup title="Zoom level" fontWeight={400}>
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            value="40"
+            onClick={() => setZoom(40)}
+          >
             40x
           </MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="20">
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            value="20"
+            onClick={() => setZoom(20)}
+          >
             20x
           </MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="10">
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            value="10"
+            onClick={() => setZoom(10)}
+          >
             10x
           </MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="4">
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            value="4"
+            onClick={() => setZoom(4)}
+          >
             4x
           </MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }} value="1">
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            value="1"
+            onClick={() => setZoom(1)}
+          >
             1x
           </MenuItem>
         </MenuGroup>
       </MenuList>
     </Portal>
   </Menu>
-));
+);
 
 const SetTagMenu = forwardRef((props, ref) => (
   <Menu>
@@ -127,39 +149,41 @@ const SetTagMenu = forwardRef((props, ref) => (
   </Menu>
 ));
 
-export const CustomMenu = ({ isActive, left, top, handleAnalysis }) => {
+export const CustomMenu = ({ isActive, left, top, setZoom }) => {
   return isActive ? (
-    <Menu>
-      <MenuButton as={Button} pos="absolute" left={left} top={top}>
-        Actions
-      </MenuButton>
-      <Portal>
-        <MenuList
-          borderRadius={0}
-          bgColor="#FCFCFC"
-          p={0}
-          boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
-        >
-          <MenuItem
-            _hover={{ bgColor: "#DEDEDE" }}
-            as={DisplayMenu}
-            closeOnSelect={false}
-          />
-          <MenuItem
-            _hover={{ bgColor: "#DEDEDE" }}
-            as={SetTagMenu}
-            closeOnSelect={false}
-          />
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }} onClick={handleAnalysis}>
-            Morphometry
-          </MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
-          <MenuDivider />
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Lock</MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Delete Object</MenuItem>
-        </MenuList>
-      </Portal>
-    </Menu>
+    <Box>
+      <Menu isOpen={isActive}>
+        <MenuButton
+          as={Button}
+          pos="absolute"
+          left={left}
+          top={top}
+          w={0}
+          h={0}
+        />
+        <Portal>
+          <MenuList
+            borderRadius={0}
+            bgColor="#FCFCFC"
+            p={0}
+            boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
+          >
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }} closeOnSelect={false}>
+              <DisplayMenu setZoom={setZoom} />
+            </MenuItem>
+            <MenuItem
+              _hover={{ bgColor: "#DEDEDE" }}
+              as={SetTagMenu}
+              closeOnSelect={false}
+            />
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }} onClick={handleAnalysis}>Morphometry</MenuItem>
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
+            <MenuDivider />
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Lock</MenuItem>
+            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Delete Object</MenuItem>
+          </MenuList>
+        </Portal>
+      </Menu>
+    </Box>
   ) : null;
 };
