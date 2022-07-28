@@ -17,7 +17,11 @@ import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
-import { updateActivityFeed } from "../../state/actions/fabricOverlayActions";
+import {
+  removeFromActivityFeed,
+  updateActivityFeed,
+  updateFeedInAnnotationFeed,
+} from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
 import {
@@ -25,6 +29,8 @@ import {
   createContours,
   getFileBucketFolder,
   getViewportBounds,
+  groupAnnotationAndCells,
+  removeAnnotation,
   zoomToLevel,
 } from "../../utility";
 
@@ -85,14 +91,50 @@ const ViewerControls = ({
       );
 
       if (resp.status === 200) {
-        createContours({
+        const {
+          roi_detected_list,
+          avg_area,
+          avg_perimeter,
+          max_area,
+          min_area,
+          max_perimeter,
+          min_perimeter,
+          ratio,
+        } = resp.data[0];
+
+        const cells = createContours({
           canvas,
-          viewer,
-          contours: resp.data[0],
+          contours: roi_detected_list,
           color,
           left: body.left,
           top: body.top,
         });
+
+        // group enclosing annotation and cells
+        const feedMessage = groupAnnotationAndCells({
+          enclosingAnnotation: annotationObject,
+          cells,
+          optionalData: {
+            avg_area,
+            avg_perimeter,
+            max_area,
+            min_area,
+            max_perimeter,
+            min_perimeter,
+            ratio,
+            totalCells: roi_detected_list[0].length,
+          },
+        });
+
+        // remove enclosing annotation
+        // and group to canvas
+        if (feedMessage.object) {
+          removeAnnotation({ canvas, annotation: annotationObject });
+          canvas.add(feedMessage.object).requestRenderAll();
+          setFabricOverlayState(
+            updateFeedInAnnotationFeed({ id: viewerId, feed: feedMessage })
+          );
+        }
       }
       toast({
         title: "Analysis complete",
@@ -181,7 +223,7 @@ const ViewerControls = ({
     const canvas = fabricOverlay.fabricCanvas();
 
     const handleMouseDown = (event) => {
-      // hanlde right click only
+      // if not right click
       if (event.button !== 3) {
         setIsRightClickActive(false);
         return;

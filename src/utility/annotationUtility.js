@@ -1,5 +1,6 @@
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
+import { objectKeys } from "@chakra-ui/utils";
 
 // create annotaion message for the feed
 export const createAnnotationMessage = ({
@@ -181,41 +182,64 @@ export const createContour = ({ contour, color, left, top }) => {
   });
 };
 
-// create contours(annotation) around cell from analysis data
-export const createContours = async ({
-  canvas,
-  viewer,
-  contours,
-  color,
-  left,
-  top,
-}) => {
+/** create contours(annotation) around cell from analysis data */
+export const createContours = ({ canvas, contours, color, left, top }) => {
   if (!canvas || !contours || contours.length === 0) return null;
 
-  const {
-    roi_detected_list,
-    avg_area,
-    avg_permieter,
-    max_area,
-    min_area,
-    max_permieter,
-    min_perimeter,
-    ratio,
-  } = contours;
+  const cells = [];
 
-  const feed = [];
-
-  roi_detected_list[0].forEach((roi) => {
-    const shape = createContour({ contour: roi, color, left, top });
-    canvas.add(shape);
-
-    const message = createAnnotationMessage({ shape, viewer });
-
-    message.object.set({
-      isAnalysed: true,
-    });
-    feed.push(message);
+  contours[0].forEach((roi) => {
+    cells.push(createContour({ contour: roi, color, left, top }));
   });
 
-  return feed;
+  return cells;
+};
+
+/**  
+  Group enclosing annotation and cells (contours) and return feed message object 
+*/
+export const groupAnnotationAndCells = ({
+  cells,
+  enclosingAnnotation,
+  optionalData,
+}) => {
+  if (!cells || !enclosingAnnotation) return null;
+  const { hash, text, zoomLevel, points, timeStamp, path } =
+    enclosingAnnotation;
+  enclosingAnnotation.set({ fill: "" });
+  const group = new fabric.Group([enclosingAnnotation, ...cells]).set({
+    hash,
+    text,
+    zoomLevel,
+    points,
+    path,
+    timeStamp,
+    isAnalysed: true,
+    fill: "",
+  });
+
+  // check if optionalData is available and also is not empty
+  if (optionalData && Object.keys(optionalData).length > 0) {
+    group.set({ analysedROI: optionalData });
+  }
+
+  const message = {
+    username: "",
+    object: group,
+    image: null,
+  };
+
+  return message;
+};
+
+// remove annotation from the canvas
+// and from the database
+export const removeAnnotation = async ({
+  canvas,
+  annotation,
+  deleteAnnotationFromDB,
+}) => {
+  if (!canvas || !annotation) return;
+  canvas.remove(annotation);
+  canvas.requestRenderAll();
 };
