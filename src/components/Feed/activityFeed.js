@@ -235,13 +235,17 @@ const ActivityFeed = ({
         <Text color="blue">Annotation</Text>
       </HStack>
 
-      <Flex direction="column" marginStart="0.8vw" pt="3px" overflowY="auto">
+      <Flex direction="column" marginStart="0.8vw" pt="2px" overflowY="auto">
         <Text fontSize="1vw" pb="3px">
           Annotation Details
         </Text>
         <Scrollbars
           ref={scrollbar}
-          style={{ width: "100%", height: "33vh", borderWidth: "0px" }}
+          style={{
+            width: "100%",
+            height: annotationDetails ? "33vh" : "62vh",
+            borderWidth: "0px",
+          }}
           renderThumbVertical={(props) => <div className="thumb-vertical" />}
           autoHide
         >
@@ -267,7 +271,11 @@ const ActivityFeed = ({
                     ) : (
                       <BsSlash color="#E23636" />
                     )}
-                    <Text ml="0.8vw">Annotation {index + 1}</Text>
+                    <Text ml="0.8vw">
+                      {feed.object?.type === "group"
+                        ? "ROI"
+                        : `Annotation ${index + 1}`}
+                    </Text>
                   </Flex>
                   <EditTextButton
                     feed={feed}
@@ -280,152 +288,165 @@ const ActivityFeed = ({
           </Flex>
         </Scrollbars>
       </Flex>
-      <Flex
-        overflowY="auto"
-        fontSize="14px"
-        direction="column"
-        background="#FCFCFC"
-      >
-        <Box h="10px" background="#F6F6F6" w="100%" />
-        <Tabs variant="unstyled">
-          <TabList>
-            <CustomTab title="Annotation Values" />
-            <CustomTab
-              isDisabled={annotationDetails?.analysedROI ?? true}
-              title="Morphometry Values"
-            />
-          </TabList>
-          <TabPanels px={0}>
-            <CustomTabPanel title="Annotation Values">
-              {annotationDetails ? (
-                <>
-                  <CardDetailsRow
-                    title="Annotation"
-                    value={
-                      annotationDetails?.type ? annotationDetails.type : "-"
-                    }
-                  />
-                  <CardDetailsRow
-                    title="Description"
-                    value={
-                      annotationDetails.object?.text
-                        ? annotationDetails.object.text
-                        : "-"
-                    }
-                  />
-
-                  {annotationDetails?.area ? (
+      {annotationDetails ? (
+        <>
+          <Flex
+            overflowY="auto"
+            fontSize="14px"
+            direction="column"
+            background="#FCFCFC"
+          >
+            <Box h="6px" background="#F6F6F6" w="100%" />
+            <Tabs variant="unstyled" defaultIndex={0}>
+              <TabList>
+                <CustomTab title="Annotation Values" />
+                <CustomTab
+                  isDisabled={!annotationDetails?.analysedROI}
+                  title="Morphometry Values"
+                />
+              </TabList>
+              <TabPanels px={0}>
+                <CustomTabPanel title="Annotation Values">
+                  {annotationDetails ? (
                     <>
                       <CardDetailsRow
-                        title="Centroid X"
-                        value={`${annotationDetails.centroid[0]} &micro;m`}
-                      />
-                      <CardDetailsRow
-                        title="Centroid Y"
-                        value={`${annotationDetails.centroid[1]} &micro;m`}
-                      />
-                      <CardDetailsRow
-                        title="Perimeter"
+                        title="Annotation"
                         value={
-                          <>{annotationDetails.perimeter.toFixed(2)} &micro;m</>
+                          annotationDetails?.type ? annotationDetails.type : "-"
                         }
                       />
                       <CardDetailsRow
-                        title="Area"
+                        title="Description"
+                        value={
+                          annotationDetails.object?.text
+                            ? annotationDetails.object.text
+                            : "-"
+                        }
+                      />
+
+                      {annotationDetails?.area ? (
+                        <>
+                          <CardDetailsRow
+                            title="Centroid X"
+                            value={`${annotationDetails.centroid[0]} &micro;m`}
+                          />
+                          <CardDetailsRow
+                            title="Centroid Y"
+                            value={`${annotationDetails.centroid[1]} &micro;m`}
+                          />
+                          <CardDetailsRow
+                            title="Perimeter"
+                            value={
+                              <>
+                                {annotationDetails.perimeter.toFixed(2)}{" "}
+                                &micro;m
+                              </>
+                            }
+                          />
+                          <CardDetailsRow
+                            title="Area"
+                            value={
+                              <>
+                                {annotationDetails.area} &micro;m<sup>2</sup>
+                              </>
+                            }
+                          />
+                          <CardDetailsRow
+                            title="Total Cells"
+                            value={totalCells || "-"}
+                          />
+                        </>
+                      ) : null}
+                    </>
+                  ) : null}
+                </CustomTabPanel>
+                <CustomTabPanel title="Morphometry Values">
+                  {annotationDetails?.analysedROI &&
+                  Object.keys(annotationDetails.analysedROI).length > 0 ? (
+                    <>
+                      <CardDetailsRow
+                        title="Total Cells"
+                        value={annotationDetails.analysedROI.totalCells}
+                      />
+                      <CardDetailsRow
+                        title="Min. Perimeter"
                         value={
                           <>
-                            {annotationDetails.area} &micro;m<sup>2</sup>
+                            {annotationDetails.analysedROI.min_perimeter.toFixed(
+                              2
+                            )}{" "}
+                            &micro;m
                           </>
                         }
                       />
                       <CardDetailsRow
-                        title="Total Cells"
-                        value={totalCells || "-"}
+                        title="Max. Perimeter"
+                        value={
+                          <>
+                            {annotationDetails.analysedROI.max_perimeter.toFixed(
+                              2
+                            )}{" "}
+                            &micro;m
+                          </>
+                        }
+                      />
+                      <CardDetailsRow
+                        title="Avg. Perimeter"
+                        value={
+                          <>
+                            {annotationDetails.analysedROI.avg_perimeter.toFixed(
+                              2
+                            )}{" "}
+                            &micro;m
+                          </>
+                        }
+                      />
+                      <CardDetailsRow
+                        title="Min. Area"
+                        value={
+                          <>
+                            {annotationDetails.analysedROI.min_area.toFixed(2)}{" "}
+                            &micro;m<sup>2</sup>
+                          </>
+                        }
+                      />
+                      <CardDetailsRow
+                        title="Max. Area"
+                        value={
+                          <>
+                            {annotationDetails.analysedROI.max_area.toFixed(2)}{" "}
+                            &micro;m<sup>2</sup>
+                          </>
+                        }
+                      />
+                      <CardDetailsRow
+                        title="Avg. Area"
+                        value={
+                          <>
+                            {annotationDetails.analysedROI.avg_area.toFixed(2)}{" "}
+                            &micro;m<sup>2</sup>
+                          </>
+                        }
+                      />
+                      <CardDetailsRow
+                        title="Nucleus Cytoplasm Ratio"
+                        value={annotationDetails.analysedROI.ratio.toFixed(2)}
                       />
                     </>
                   ) : null}
-                </>
-              ) : null}
-            </CustomTabPanel>
-            <CustomTabPanel title="Morphometry Values">
-              {annotationDetails?.analysedROI &&
-              Object.keys(annotationDetails.analysedROI).length > 0 ? (
-                <>
-                  <CardDetailsRow
-                    title="Total Cells"
-                    value={annotationDetails.analysedROI.totalCells}
-                  />
-                  <CardDetailsRow
-                    title="Min. Perimeter"
-                    value={
-                      <>
-                        {annotationDetails.analysedROI.min_perimeter.toFixed(2)}{" "}
-                        &micro;m
-                      </>
-                    }
-                  />
-                  <CardDetailsRow
-                    title="Max. Perimeter"
-                    value={
-                      <>
-                        {annotationDetails.analysedROI.max_perimeter.toFixed(2)}{" "}
-                        &micro;m
-                      </>
-                    }
-                  />
-                  <CardDetailsRow
-                    title="Avg. Perimeter"
-                    value={
-                      <>
-                        {annotationDetails.analysedROI.avg_perimeter.toFixed(2)}{" "}
-                        &micro;m
-                      </>
-                    }
-                  />
-                  <CardDetailsRow
-                    title="Min. Area"
-                    value={
-                      <>
-                        {annotationDetails.analysedROI.min_area.toFixed(2)}{" "}
-                        &micro;m<sup>2</sup>
-                      </>
-                    }
-                  />
-                  <CardDetailsRow
-                    title="Max. Area"
-                    value={
-                      <>
-                        {annotationDetails.analysedROI.max_area.toFixed(2)}{" "}
-                        &micro;m<sup>2</sup>
-                      </>
-                    }
-                  />
-                  <CardDetailsRow
-                    title="Avg. Area"
-                    value={
-                      <>
-                        {annotationDetails.analysedROI.avg_area.toFixed(2)}{" "}
-                        &micro;m<sup>2</sup>
-                      </>
-                    }
-                  />
-                  <CardDetailsRow
-                    title="Nucleus Cytoplasm Ratio"
-                    value={annotationDetails.analysedROI.ratio.toFixed(2)}
-                  />
-                </>
-              ) : null}
-            </CustomTabPanel>
-          </TabPanels>
-        </Tabs>
-      </Flex>
-      <EditText
-        isOpen={isOpen}
-        onClose={onClose}
-        value={annotationObject?.text ? annotationObject.text : ""}
-        handleClose={onClose}
-        handleSave={handleSave}
-      />
+                </CustomTabPanel>
+              </TabPanels>
+            </Tabs>
+          </Flex>
+          <EditText
+            isOpen={isOpen}
+            onClose={onClose}
+            value={annotationObject?.text ? annotationObject.text : ""}
+            handleClose={onClose}
+            handleSave={handleSave}
+          />
+        </>
+      ) : null}
     </Flex>
   );
 };

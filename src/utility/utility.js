@@ -86,6 +86,7 @@ export const findCurrentIndex = (itemId, arr = []) => {
 
 // get the zoom value from the zoom level
 export const getZoomValue = (viewer) => {
+  if (!viewer) return null;
   return parseInt(
     Math.ceil((viewer.viewport.getZoom() * 40) / viewer.viewport.getMaxZoom()),
     10

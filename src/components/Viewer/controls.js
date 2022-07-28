@@ -29,6 +29,7 @@ import {
   createContours,
   getFileBucketFolder,
   getViewportBounds,
+  getZoomValue,
   groupAnnotationAndCells,
   removeAnnotation,
   zoomToLevel,
@@ -327,6 +328,7 @@ const ViewerControls = ({
         top={menuPosition.top}
         handleAnalysis={handleAnalysis}
         setZoom={handleZoomLevel}
+        isMorphometryAllowed={getZoomValue(viewer) === 40}
       />
     </>
   );
