@@ -100,6 +100,22 @@ const fabricOverlayReducer = (state, action) => {
         },
       };
 
+    case "updateFeedInAnnotationFeed": {
+      const newFeed = state.viewerWindow[action.payload.id].activityFeed.filter(
+        (af) => af.object.hash !== action.payload.feed.object.hash
+      );
+      return {
+        ...state,
+        viewerWindow: {
+          ...state.viewerWindow,
+          [action.payload.id]: {
+            ...state.viewerWindow[action.payload.id],
+            activityFeed: [...newFeed, action.payload.feed],
+          },
+        },
+      };
+    }
+
     case "addViewerWindow": {
       const viewerWindow = {};
       action.payload.forEach((w) => {

@@ -59,7 +59,7 @@ const ToolbarButton = ({
           pl={ifScreenlessthan1536px ? "7px" : "10px"}
           mr="7px"
           borderRadius="0px"
-          _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
+          _hover={{ bgColor: isActive ? "" : "rgba(228, 229, 232, 1)" }}
           _active={{
             bgColor: "rgba(228, 229, 232, 1)",
             outline: "0.5px solid rgba(0, 21, 63, 1)",

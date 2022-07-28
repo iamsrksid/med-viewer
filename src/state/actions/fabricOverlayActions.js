@@ -33,6 +33,11 @@ export const updateActivityFeed = ({ id, fullFeed }) => ({
   payload: { id, feed: fullFeed },
 });
 
+export const updateFeedInAnnotationFeed = ({ id, feed }) => ({
+  type: "updateFeedInAnnotationFeed",
+  payload: { id, feed },
+});
+
 export const addViewerWindow = (viewerWindows) => ({
   type: "addViewerWindow",
   payload: viewerWindows,
