@@ -149,7 +149,14 @@ const SetTagMenu = forwardRef((props, ref) => (
   </Menu>
 ));
 
-export const CustomMenu = ({ isOpen, left, top, setZoom, handleAnalysis }) => {
+export const CustomMenu = ({
+  isOpen,
+  setIsOpen,
+  left,
+  top,
+  setZoom,
+  handleAnalysis,
+}) => {
   const runMorphometry = () => {
     handleAnalysis();
   };
@@ -165,30 +172,47 @@ export const CustomMenu = ({ isOpen, left, top, setZoom, handleAnalysis }) => {
           w={0}
           h={0}
         />
-        <Portal>
-          <MenuList
-            borderRadius={0}
-            bgColor="#FCFCFC"
-            p={0}
-            boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
+
+        <MenuList
+          borderRadius={0}
+          bgColor="#FCFCFC"
+          p={0}
+          boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
+        >
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }}>
+            <DisplayMenu setZoom={setZoom} />
+          </MenuItem>
+          <MenuItem _hover={{ bgColor: "#DEDEDE" }} as={SetTagMenu} />
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            onClick={() => {
+              runMorphometry();
+              setIsOpen(false);
+            }}
+            closeOnSelect
           >
-            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>
-              <DisplayMenu setZoom={setZoom} />
-            </MenuItem>
-            <MenuItem _hover={{ bgColor: "#DEDEDE" }} as={SetTagMenu} />
-            <MenuItem
-              _hover={{ bgColor: "#DEDEDE" }}
-              onClick={runMorphometry}
-              closeOnSelect
-            >
-              Run Morphometry
-            </MenuItem>
-            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Edit</MenuItem>
-            <MenuDivider />
-            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Lock</MenuItem>
-            <MenuItem _hover={{ bgColor: "#DEDEDE" }}>Delete Object</MenuItem>
-          </MenuList>
-        </Portal>
+            Run Morphometry
+          </MenuItem>
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            onClick={() => setIsOpen(false)}
+          >
+            Edit
+          </MenuItem>
+          <MenuDivider />
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            onClick={() => setIsOpen(false)}
+          >
+            Lock
+          </MenuItem>
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            onClick={() => setIsOpen(false)}
+          >
+            Delete Object
+          </MenuItem>
+        </MenuList>
       </Menu>
     </Box>
   ) : null;
