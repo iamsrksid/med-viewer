@@ -4,11 +4,9 @@ import { IconButton, useDisclosure, useToast } from "@chakra-ui/react";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import {
   createAnnotationMessage,
-  getCanvasImage,
   getScaleFactor,
-  saveAnnotationsToDB,
-} from "../../utility/utility";
-import EditText from "../Feed/editText";
+  saveAnnotationToDB,
+} from "../../utility";
 import { useFabricOverlayState } from "../../state/store";
 import {
   addToActivityFeed,
@@ -24,9 +22,7 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
-  const { fabricOverlay, viewer, activityFeed, slideId } =
-    viewerWindow[viewerId];
-  const { deselectAll } = useFabricHelpers();
+  const { fabricOverlay, viewer, slideId } = viewerWindow[viewerId];
 
   const isActive = activeTool === "Polygon";
 
@@ -267,9 +263,9 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
     const addToFeed = async () => {
       const message = createAnnotationMessage({ shape, viewer });
 
-      saveAnnotationsToDB({
+      saveAnnotationToDB({
         slideId,
-        canvas: fabricOverlay.fabricCanvas(),
+        annotation: message.object,
         saveAnnotationsHandler,
       });
 

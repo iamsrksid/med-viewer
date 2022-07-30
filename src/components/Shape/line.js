@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BsSlash } from "react-icons/bs";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import md5 from "md5";
 import {
   IconButton,
   useDisclosure,
   useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
-import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateTool,
@@ -16,18 +14,14 @@ import {
 } from "../../state/actions/fabricOverlayActions";
 import {
   createAnnotationMessage,
-  getCanvasImage,
   getScaleFactor,
-  getTimestamp,
-  saveAnnotationsToDB,
-} from "../../utility/utility";
-import EditText from "../Feed/editText";
+  saveAnnotationToDB,
+} from "../../utility";
 
 const Line = ({ viewerId, saveAnnotationsHandler }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow, color } = fabricOverlayState;
-  const { fabricOverlay, viewer, activityFeed, slideId } =
-    viewerWindow[viewerId];
+  const { fabricOverlay, viewer, slideId } = viewerWindow[viewerId];
   const isActive = activeTool === "Line";
   const toast = useToast();
 
@@ -214,9 +208,9 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
         points: [x1, y1, x2, y2],
       });
 
-      saveAnnotationsToDB({
+      saveAnnotationToDB({
         slideId,
-        canvas: fabricOverlay.fabricCanvas(),
+        annotation: message.object,
         saveAnnotationsHandler,
       });
 

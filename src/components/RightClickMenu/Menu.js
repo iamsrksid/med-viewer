@@ -156,7 +156,7 @@ export const CustomMenu = ({
   top,
   setZoom,
   handleAnalysis,
-  isMorphometryAllowed,
+  isMorphometryDisabled,
 }) => {
   const runMorphometry = () => {
     handleAnalysis();
@@ -191,7 +191,7 @@ export const CustomMenu = ({
               setIsOpen(false);
             }}
             closeOnSelect
-            isDisabled={!isMorphometryAllowed}
+            isDisabled={isMorphometryDisabled}
           >
             Run Morphometry
           </MenuItem>

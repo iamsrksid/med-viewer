@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
-import {
-  Box,
-  HStack,
-  VStack,
-  Text,
-  useToast,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, HStack, VStack, Text, useToast } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { fabric } from "openseadragon-fabricjs-overlay";
 import axios from "axios";
 import ZoomSlider from "../ZoomSlider/slider";
 import ToolbarButton from "../ViewerToolbar/button";
@@ -18,7 +10,6 @@ import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
 import {
-  removeFromActivityFeed,
   updateActivityFeed,
   updateFeedInAnnotationFeed,
 } from "../../state/actions/fabricOverlayActions";
@@ -26,12 +17,13 @@ import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
 import {
   addAnnotationsToCanvas,
+  convertToZoomValue,
   createContours,
   getFileBucketFolder,
   getViewportBounds,
   getZoomValue,
   groupAnnotationAndCells,
-  removeAnnotation,
+  updateAnnotationInDB,
   zoomToLevel,
 } from "../../utility";
 
@@ -50,6 +42,7 @@ const ViewerControls = ({
   const [isRightClickActive, setIsRightClickActive] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
   const [annotationObject, setAnnotationObject] = useState(null);
+  const [isMorphometryDisabled, setIsMorphometryDisabled] = useState(true);
 
   const toast = useToast();
   const iconSize = IconSize();
@@ -86,36 +79,15 @@ const ViewerControls = ({
 
     // initiate analysis, sending annotation coordinates and s3 folder key
     const initiateAnalysis = async (body) => {
-      const resp = await axios.post(
-        "https://development-morphometry-api.prr.ai/viewport_stats",
-        body
-      );
+      try {
+        const resp = await axios.post(
+          "https://development-morphometry-api.prr.ai/viewport_stats",
+          body
+        );
 
-      if (resp.status === 200) {
-        const {
-          roi_detected_list,
-          avg_area,
-          avg_perimeter,
-          max_area,
-          min_area,
-          max_perimeter,
-          min_perimeter,
-          ratio,
-        } = resp.data[0];
-
-        const cells = createContours({
-          canvas,
-          contours: roi_detected_list,
-          color,
-          left: body.left,
-          top: body.top,
-        });
-
-        // group enclosing annotation and cells
-        const feedMessage = groupAnnotationAndCells({
-          enclosingAnnotation: annotationObject,
-          cells,
-          optionalData: {
+        if (resp.status === 200 && typeof resp.data === "object") {
+          const {
+            roi_detected_list,
             avg_area,
             avg_perimeter,
             max_area,
@@ -123,26 +95,76 @@ const ViewerControls = ({
             max_perimeter,
             min_perimeter,
             ratio,
-            totalCells: roi_detected_list[0].length,
-          },
-        });
+          } = resp.data[0];
 
-        // remove enclosing annotation
-        // and group to canvas
-        if (feedMessage.object) {
-          removeAnnotation({ canvas, annotation: annotationObject });
-          canvas.add(feedMessage.object).requestRenderAll();
-          setFabricOverlayState(
-            updateFeedInAnnotationFeed({ id: viewerId, feed: feedMessage })
-          );
+          const cells = createContours({
+            canvas,
+            contours: roi_detected_list,
+            color,
+            left: body.left,
+            top: body.top,
+          });
+
+          // group enclosing annotation and cells
+          const feedMessage = groupAnnotationAndCells({
+            enclosingAnnotation: annotationObject,
+            cells,
+            optionalData: {
+              avg_area,
+              avg_perimeter,
+              max_area,
+              min_area,
+              max_perimeter,
+              min_perimeter,
+              ratio,
+              totalCells: roi_detected_list[0]?.length,
+            },
+          });
+
+          // remove enclosing annotation
+          // and group to canvas
+          if (feedMessage.object) {
+            // remove enclosing annotation and add new one to canvas
+            canvas.remove(annotationObject);
+            canvas.add(feedMessage.object).requestRenderAll();
+
+            setFabricOverlayState(
+              updateFeedInAnnotationFeed({ id: viewerId, feed: feedMessage })
+            );
+            updateAnnotationInDB({ slideId, annotation: feedMessage.object });
+          }
+          toast({
+            title: "Analysis complete",
+            status: "success",
+            duration: 1000,
+            isClosable: true,
+          });
+        } else if (resp.status === 200 && typeof resp.data === "string") {
+          toast({
+            title: "Analysis complete",
+            description: "No cells detected",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "Analysis failed",
+            description: "Please try again",
+            status: "error",
+            duration: 1500,
+            isClosable: true,
+          });
         }
+      } catch (err) {
+        toast({
+          title: "Server Unavailable",
+          description: err.message,
+          status: "error",
+          duration: 1500,
+          isClosable: true,
+        });
       }
-      toast({
-        title: "Analysis complete",
-        status: "success",
-        duration: 1000,
-        isClosable: true,
-      });
     };
 
     let body = { key };
@@ -155,9 +177,19 @@ const ViewerControls = ({
       // otherwise, send the coordinates of the rectangle
       if (annotationObject.type === "path") {
         body = { ...body, path: annotationObject.path };
+      } else if (annotationObject.type === "ellipse") {
+        body = {
+          ...body,
+          cx: annotationObject.cx,
+          cy: annotationObject.cy,
+          rx: annotationObject.rx,
+          ry: annotationObject.ry,
+        };
+      } else if (annotationObject.type === "polygon") {
+        body = { ...body, points: annotationObject.points };
       }
     } else {
-      const { x: left, y: top, width, height } = getViewportBounds(viewer);
+      const { left, top, width, height } = getViewportBounds(viewer);
       body = { ...body, left, top, width, height, type: "rect" };
     }
 
@@ -231,8 +263,17 @@ const ViewerControls = ({
       }
 
       // set annotationObject if right click is on annotation
-      if (event.target) setAnnotationObject(event.target);
-      else setAnnotationObject(null);
+      if (event.target) {
+        setAnnotationObject(event.target);
+        const zoomValue = convertToZoomValue({
+          level: event.target.zoomLevel,
+          viewer,
+        });
+        setIsMorphometryDisabled(!(zoomValue >= 40));
+      } else {
+        setAnnotationObject(null);
+        setIsMorphometryDisabled(true);
+      }
 
       setMenuPosition({ left: event.pointer.x, top: event.pointer.y });
       setIsRightClickActive(true);
@@ -328,7 +369,7 @@ const ViewerControls = ({
         top={menuPosition.top}
         handleAnalysis={handleAnalysis}
         setZoom={handleZoomLevel}
-        isMorphometryAllowed={getZoomValue(viewer) === 40}
+        isMorphometryDisabled={isMorphometryDisabled}
       />
     </>
   );

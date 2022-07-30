@@ -23,7 +23,7 @@ import { FaDrawPolygon } from "react-icons/fa";
 import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
 import { removeFromActivityFeed } from "../../state/actions/fabricOverlayActions";
-import { saveAnnotationsToDB } from "../../utility/utility";
+import { updateAnnotationInDB } from "../../utility";
 
 const EditTextButton = ({ feed, handleEditClick, ...restProps }) => {
   return (
@@ -171,12 +171,12 @@ const ActivityFeed = ({
     if (!text || !tag) return;
     annotationObject.text = text;
     annotationObject.tag = tag;
+    // updateAnnotationInDB({
+    //   slideId,
+    //   annotation: annotationObject,
+    //   saveAnnotationsHandler,
+    // });
     setAnnotationObject(null);
-    saveAnnotationsToDB({
-      slideId,
-      canvas: fabricOverlay.fabricCanvas(),
-      saveAnnotationsHandler,
-    });
     onClose();
   };
 
@@ -328,11 +328,15 @@ const ActivityFeed = ({
                         <>
                           <CardDetailsRow
                             title="Centroid X"
-                            value={`${annotationDetails.centroid[0]} &micro;m`}
+                            value={
+                              <>{annotationDetails.centroid[0]} &micro;m</>
+                            }
                           />
                           <CardDetailsRow
                             title="Centroid Y"
-                            value={`${annotationDetails.centroid[1]} &micro;m`}
+                            value={
+                              <>{annotationDetails.centroid[1]} &micro;m</>
+                            }
                           />
                           <CardDetailsRow
                             title="Perimeter"

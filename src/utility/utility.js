@@ -99,31 +99,6 @@ export const getScaleFactor = (viewer) => {
   return zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
 };
 
-// save annotations to the database
-export const saveAnnotationsToDB = ({
-  slideId,
-  canvas,
-  saveAnnotationsHandler,
-}) => {
-  if (!canvas) return false;
-  const annotations = canvas.toJSON([
-    "hash",
-    "text",
-    "zoomLevel",
-    "points",
-    "timeStamp",
-    "area",
-    "perimeter",
-    "centroid",
-    "end_points",
-    "isAnalysed",
-  ]);
-  if (annotations.objects.length > 0) {
-    saveAnnotationsHandler(slideId, annotations.objects);
-  }
-  return true;
-};
-
 // create annotaion message for the feed
 export const createAnnotationMessage = ({
   shape,
@@ -221,4 +196,10 @@ export const zoomToLevel = ({ viewer, value }) => {
     const level = value * (viewer.viewport.getMaxZoom() / 40);
     viewer.viewport.zoomTo(level);
   }
+};
+
+// convert zoom level to zoom value
+export const convertToZoomValue = ({ level, viewer }) => {
+  if (!viewer) return null;
+  return parseInt(Math.ceil((level * 40) / viewer.viewport.getMaxZoom()), 10);
 };

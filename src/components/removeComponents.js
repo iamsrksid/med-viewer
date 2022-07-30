@@ -5,7 +5,7 @@ import { useFabricOverlayState } from "../state/store";
 import { removeFromActivityFeed } from "../state/actions/fabricOverlayActions";
 import { EraseIcons, EraseIconsFilled } from "./Icons/CustomIcons";
 
-const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
+const RemoveObject = ({ viewerId, deleteAnnotationsHandler }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay, slideId } = fabricOverlayState.viewerWindow[viewerId];
@@ -46,15 +46,14 @@ const RemoveObject = ({ viewerId, saveAnnotationsHandler }) => {
     //   });
     // }
 
-    setFabricOverlayState(
-      removeFromActivityFeed({ id: viewerId, hash: activeObject.hash })
-    );
+    const { hash } = activeObject;
+
+    setFabricOverlayState(removeFromActivityFeed({ id: viewerId, hash }));
 
     canvas.remove(activeObject);
     canvas.renderAll();
 
-    const annotations = canvas.toJSON(["hash", "text", "zoomLevel", "points"]);
-    saveAnnotationsHandler(slideId, annotations.objects);
+    // deleteAnnotationsHandler({ slideId, hash });
 
     // show annotation deleted notification
     toast({

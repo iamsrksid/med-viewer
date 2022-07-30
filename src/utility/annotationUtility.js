@@ -1,6 +1,41 @@
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
-import { objectKeys } from "@chakra-ui/utils";
+
+/** Get annotation JSON */
+export const getAnnotationJSON = (annotation) => {
+  if (!annotation) return null;
+  return annotation.toJSON([
+    "hash",
+    "text",
+    "zoomLevel",
+    "points",
+    "timeStamp",
+    "area",
+    "perimeter",
+    "centroid",
+    "end_points",
+    "isAnalysed",
+    "analysedROI",
+  ]);
+};
+
+/** Get annotations JSON from canvas */
+export const getCanvasJSON = (canvas) => {
+  if (!canvas) return null;
+  return canvas.toJSON([
+    "hash",
+    "text",
+    "zoomLevel",
+    "points",
+    "timeStamp",
+    "area",
+    "perimeter",
+    "centroid",
+    "end_points",
+    "isAnalysed",
+    "analysedROI",
+  ]);
+};
 
 // create annotaion message for the feed
 export const createAnnotationMessage = ({
@@ -131,7 +166,7 @@ export const createAnnotation = (annotation) => {
   return shape;
 };
 
-// add annotation to the canva s
+// add annotation to the canvas
 export const addAnnotationsToCanvas = ({
   canvas,
   viewer,
@@ -168,7 +203,7 @@ export const addAnnotationsToCanvas = ({
   return feed;
 };
 
-// create contour(annotation) from the analysed data
+/** create contour(annotation) from the analysed data */
 export const createContour = ({ contour, color, left, top }) => {
   const points = contour.map((point) => ({
     x: point[0][0] + left,
@@ -232,14 +267,47 @@ export const groupAnnotationAndCells = ({
   return message;
 };
 
-// remove annotation from the canvas
-// and from the database
-export const removeAnnotation = async ({
-  canvas,
-  annotation,
-  deleteAnnotationFromDB,
-}) => {
+/** remove annotation from the DB */
+export const removeAnnotationFromDB = async ({ canvas, annotation }) => {
   if (!canvas || !annotation) return;
   canvas.remove(annotation);
   canvas.requestRenderAll();
+};
+
+/** save annotation to the database */
+export const saveAnnotationToDB = ({
+  slideId,
+  annotation,
+  saveAnnotationsHandler,
+}) => {
+  if (!annotation || !saveAnnotationsHandler) return false;
+  const annotationJSON = getAnnotationJSON(annotation);
+  saveAnnotationsHandler(slideId, [annotationJSON]);
+  return true;
+};
+
+// save annotations to the database
+export const saveAnnotationsToDB = ({
+  slideId,
+  canvas,
+  saveAnnotationsHandler,
+}) => {
+  if (!canvas) return false;
+  const annotations = getCanvasJSON(canvas);
+  if (annotations.objects.length > 0) {
+    saveAnnotationsHandler(slideId, annotations.objects);
+  }
+  return true;
+};
+
+/** Update annotation details in feed and also update DB */
+export const updateAnnotationInDB = async ({
+  slideId,
+  annotation,
+  updateAnnotationHandler,
+}) => {
+  if (!annotation || !updateAnnotationHandler) return false;
+  const annotationJSON = getAnnotationJSON(annotation);
+  // updateAnnotationHandler({ slideId, annotationJSON });
+  return true;
 };

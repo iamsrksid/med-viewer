@@ -1,27 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import { fabric } from "openseadragon-fabricjs-overlay";
-import { BiRectangle } from "react-icons/bi";
 import {
   IconButton,
   useDisclosure,
   useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
-import md5 from "md5";
 import useFabricHelpers from "../../utility/use-fabric-helpers";
 import { fonts } from "../Text/fontPicker";
 import {
   createAnnotationMessage,
-  getCanvasImage,
   getScaleFactor,
-  saveAnnotationsToDB,
-} from "../../utility/utility";
+  saveAnnotationToDB,
+} from "../../utility";
 import { useFabricOverlayState } from "../../state/store";
 import {
   addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
-// import SquareIcon from "../../assets/images/squareIcon.svg";
 import { SquareIcon, SquareIconSelected } from "../Icons/CustomIcons";
 
 const Square = ({ viewerId, saveAnnotationsHandler }) => {
@@ -254,9 +250,9 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
     const addToFeed = async () => {
       const message = createAnnotationMessage({ shape, viewer });
 
-      saveAnnotationsToDB({
+      saveAnnotationToDB({
         slideId,
-        canvas: fabricOverlay.fabricCanvas(),
+        annotation: message.object,
         saveAnnotationsHandler,
       });
 

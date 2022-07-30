@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { BsSquare } from "react-icons/bs";
 import axios from "axios";
-import { fabric } from "openseadragon-fabricjs-overlay";
 import { IconButton, Image, useToast } from "@chakra-ui/react";
-import md5 from "md5";
 import { VscWand } from "react-icons/vsc";
 import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
@@ -11,14 +8,14 @@ import {
   updateTool,
   addToActivityFeed,
 } from "../../state/actions/fabricOverlayActions";
-import MagicWandIcon from "../../assets/images/magicWandIcon.svg";
 import {
   createAnnotationMessage,
   getFileBucketFolder,
   getZoomValue,
-  saveAnnotationsToDB,
-} from "../../utility/utility";
-import { createContour, getViewportBounds } from "../../utility";
+  saveAnnotationToDB,
+  createContour,
+  getViewportBounds,
+} from "../../utility";
 
 const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -96,9 +93,9 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
           isAnalysed: true,
         });
 
-        saveAnnotationsToDB({
+        saveAnnotationToDB({
           slideId,
-          canvas,
+          annotation: message.object,
           saveAnnotationsHandler,
         });
 
@@ -118,8 +115,8 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
       const { x, y } = canvas.getPointer(options.e);
 
       createContours({
-        x: left,
-        y: top,
+        left,
+        top,
         width,
         height,
         key,
