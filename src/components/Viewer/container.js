@@ -17,7 +17,7 @@ const ViewerContainer = ({
   slideName,
   slideType,
   userInfo,
-  loadAnnotationsHandler,
+  onLoadAnnotations,
   startX,
   startY,
   windowWidth,
@@ -80,7 +80,7 @@ const ViewerContainer = ({
       tile={tile}
       slideName={slideName}
       slideType={slideType}
-      loadAnnotationsHandler={loadAnnotationsHandler}
+      onLoadAnnotations={onLoadAnnotations}
       userInfo={userInfo}
       startX={startX}
       startY={startY}

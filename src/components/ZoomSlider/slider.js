@@ -39,9 +39,8 @@ const ZoomSlider = ({ viewerId }) => {
       const strokeWidth = 1 / scaleFactor;
       const objs = canvas.getObjects();
       objs.forEach((object) => {
-        if (object.type === "group") {
-          object.item(0).set("strokeWidth", strokeWidth);
-        } else {
+        if (object && object.type !== "group") {
+          // object.item(0).set("strokeWidth", strokeWidth);
           object.set("strokeWidth", strokeWidth);
         }
       });

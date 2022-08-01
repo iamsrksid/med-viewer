@@ -17,7 +17,7 @@ import {
   getViewportBounds,
 } from "../../utility";
 
-const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
+const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
   const { fabricOverlay, viewer, activityFeed, slideId, tile } =
@@ -96,7 +96,7 @@ const MagicWandTool = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
         saveAnnotationToDB({
           slideId,
           annotation: message.object,
-          saveAnnotationsHandler,
+          onSaveAnnotation,
         });
 
         canvas.add(shape).requestRenderAll();

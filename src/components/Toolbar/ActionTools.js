@@ -4,7 +4,7 @@ import UndoRedo from "../UndoRedo/undoredo";
 import RemoveObject from "../removeComponents";
 import { CustomMenu } from "../RightClickMenu/Menu";
 
-const ActionsToolbar = ({ viewerId, saveAnnotationsHandler }) => {
+const ActionsToolbar = ({ viewerId }) => {
   return (
     <Flex
       borderX="2px solid #E4E5E8"
@@ -13,11 +13,6 @@ const ActionsToolbar = ({ viewerId, saveAnnotationsHandler }) => {
       flex="1"
     >
       <UndoRedo viewerId={viewerId} />
-      {/* <CustomMenu /> */}
-      {/* <RemoveObject
-        viewerId={viewerId}
-        saveAnnotationsHandler={saveAnnotationsHandler}
-      /> */}
       <Spacer />
     </Flex>
   );

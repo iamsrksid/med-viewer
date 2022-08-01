@@ -40,7 +40,7 @@ const createFreeDrawingCursor = (brushWidth, brushColor) => {
   }, crosshair`;
 };
 
-const Draw = ({ viewerId, saveAnnotationsHandler }) => {
+const Draw = ({ viewerId, onSaveAnnotation }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -153,12 +153,12 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
     if (!path) return;
 
     const addToFeed = async () => {
-      const message = createAnnotationMessage({ shape: path, viewer });
+      const message = createAnnotationMessage({ slideId, shape: path, viewer });
 
       saveAnnotationToDB({
         slideId,
         annotation: message.object,
-        saveAnnotationsHandler,
+        onSaveAnnotation,
       });
 
       setFabricOverlayState(

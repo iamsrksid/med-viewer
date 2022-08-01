@@ -17,7 +17,7 @@ import { PolygonIcon, PolygonIconFilled } from "../Icons/CustomIcons";
 const MAX = 999999;
 const MIN = 99;
 
-const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
+const Polygon = ({ viewerId, onSaveAnnotation }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -261,12 +261,12 @@ const Polygon = ({ viewerId, saveAnnotationsHandler }) => {
     if (!shape) return;
 
     const addToFeed = async () => {
-      const message = createAnnotationMessage({ shape, viewer });
+      const message = createAnnotationMessage({ slideId, shape, viewer });
 
       saveAnnotationToDB({
         slideId,
         annotation: message.object,
-        saveAnnotationsHandler,
+        onSaveAnnotation,
       });
 
       setFabricOverlayState(addToActivityFeed({ id: viewerId, feed: message }));

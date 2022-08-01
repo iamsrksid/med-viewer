@@ -16,13 +16,12 @@ import {
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
 import {
-  addAnnotationsToCanvas,
   convertToZoomValue,
   createContours,
   getFileBucketFolder,
   getViewportBounds,
-  getZoomValue,
   groupAnnotationAndCells,
+  loadAnnotationsFromDB,
   updateAnnotationInDB,
   zoomToLevel,
 } from "../../utility";
@@ -32,7 +31,7 @@ const ViewerControls = ({
   slideName,
   slideType,
   userInfo,
-  loadAnnotationsHandler,
+  onLoadAnnotations,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, color } = fabricOverlayState;
@@ -203,26 +202,39 @@ const ViewerControls = ({
   // load saved annotations from the server
   // once viewer is initialized
   useEffect(() => {
-    if (!fabricOverlay || !loadAnnotationsHandler) return;
+    if (!fabricOverlay || !onLoadAnnotations) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     const loadAnnotations = async () => {
       // check if the annotations is already loaded
       if (canvas.toJSON().objects.length === 0) {
-        const { data } = await loadAnnotationsHandler(slideId);
-        if (data) {
-          const feed = addAnnotationsToCanvas({
-            canvas,
-            viewer,
-            annotations: data.annotationsAutoSave,
-          });
+        const { feed, status } = await loadAnnotationsFromDB({
+          slideId,
+          canvas,
+          viewer,
+          onLoadAnnotations,
+        });
 
-          if (feed) {
+        if (status === "success") {
+          if (feed)
             setFabricOverlayState(
               updateActivityFeed({ id: viewerId, fullFeed: feed })
             );
-            canvas.requestRenderAll();
-          }
+          canvas.requestRenderAll();
+          toast({
+            title: "Annotations loaded",
+            status: "success",
+            duration: 1000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "Annotation load failed",
+            description: "Please try again",
+            status: "error",
+            duration: 1500,
+            isClosable: true,
+          });
         }
       }
 

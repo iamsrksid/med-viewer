@@ -4,8 +4,9 @@ import IconSize from "./ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../state/store";
 import { removeFromActivityFeed } from "../state/actions/fabricOverlayActions";
 import { EraseIcons, EraseIconsFilled } from "./Icons/CustomIcons";
+import { deleteAnnotationFromDB } from "../utility";
 
-const RemoveObject = ({ viewerId, deleteAnnotationsHandler }) => {
+const RemoveObject = ({ viewerId, onDeleteAnnotation }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay, slideId } = fabricOverlayState.viewerWindow[viewerId];
@@ -35,6 +36,7 @@ const RemoveObject = ({ viewerId, deleteAnnotationsHandler }) => {
   }, [fabricOverlay]);
 
   const handleRemoveObject = async () => {
+    if (!fabricOverlay) return;
     const canvas = fabricOverlay.fabricCanvas();
     const activeObject = canvas.getActiveObject();
 
@@ -46,22 +48,34 @@ const RemoveObject = ({ viewerId, deleteAnnotationsHandler }) => {
     //   });
     // }
 
-    const { hash } = activeObject;
+    if (
+      await deleteAnnotationFromDB({
+        slideId,
+        hash: activeObject?.hash,
+        onDeleteAnnotation,
+      })
+    ) {
+      setFabricOverlayState(
+        removeFromActivityFeed({ id: viewerId, hash: activeObject?.hash })
+      );
 
-    setFabricOverlayState(removeFromActivityFeed({ id: viewerId, hash }));
-
-    canvas.remove(activeObject);
-    canvas.renderAll();
-
-    // deleteAnnotationsHandler({ slideId, hash });
-
-    // show annotation deleted notification
-    toast({
-      title: "Annotation deleted",
-      status: "success",
-      duration: 1000,
-      isClosable: true,
-    });
+      canvas.remove(activeObject);
+      canvas.renderAll();
+      toast({
+        title: "Annotation deleted",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Annotation could not be deleted",
+        description: "server error",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+    }
 
     // socket.emit(
     //   "send_annotations",
