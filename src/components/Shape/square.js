@@ -20,7 +20,7 @@ import {
 } from "../../state/actions/fabricOverlayActions";
 import { SquareIcon, SquareIconSelected } from "../Icons/CustomIcons";
 
-const Square = ({ viewerId, saveAnnotationsHandler }) => {
+const Square = ({ viewerId, onSaveAnnotation }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
 
@@ -248,12 +248,12 @@ const Square = ({ viewerId, saveAnnotationsHandler }) => {
     if (!shape) return;
 
     const addToFeed = async () => {
-      const message = createAnnotationMessage({ shape, viewer });
+      const message = createAnnotationMessage({ slideId, shape, viewer });
 
       saveAnnotationToDB({
         slideId,
         annotation: message.object,
-        saveAnnotationsHandler,
+        onSaveAnnotation,
       });
 
       setShape(null);

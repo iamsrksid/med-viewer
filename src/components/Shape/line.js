@@ -18,7 +18,7 @@ import {
   saveAnnotationToDB,
 } from "../../utility";
 
-const Line = ({ viewerId, saveAnnotationsHandler }) => {
+const Line = ({ viewerId, onSaveAnnotation }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow, color } = fabricOverlayState;
   const { fabricOverlay, viewer, slideId } = viewerWindow[viewerId];
@@ -201,7 +201,7 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
     const addToFeed = async () => {
       if (!shape) return;
 
-      const message = createAnnotationMessage({ shape, viewer });
+      const message = createAnnotationMessage({ slideId, shape, viewer });
 
       const { x1, y1, x2, y2 } = message.object;
       message.object.set({
@@ -211,7 +211,7 @@ const Line = ({ viewerId, saveAnnotationsHandler }) => {
       saveAnnotationToDB({
         slideId,
         annotation: message.object,
-        saveAnnotationsHandler,
+        onSaveAnnotation,
       });
 
       setShape(null);

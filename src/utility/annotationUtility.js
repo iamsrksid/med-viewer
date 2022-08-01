@@ -5,6 +5,7 @@ import md5 from "md5";
 export const getAnnotationJSON = (annotation) => {
   if (!annotation) return null;
   return annotation.toJSON([
+    "slide",
     "hash",
     "text",
     "zoomLevel",
@@ -23,6 +24,7 @@ export const getAnnotationJSON = (annotation) => {
 export const getCanvasJSON = (canvas) => {
   if (!canvas) return null;
   return canvas.toJSON([
+    "slide",
     "hash",
     "text",
     "zoomLevel",
@@ -39,6 +41,7 @@ export const getCanvasJSON = (canvas) => {
 
 // create annotaion message for the feed
 export const createAnnotationMessage = ({
+  slideId,
   shape,
   viewer,
   user,
@@ -56,6 +59,7 @@ export const createAnnotationMessage = ({
   // else create a new one
   if (annotation) {
     const {
+      slide,
       hash,
       text,
       zoomLevel,
@@ -69,6 +73,7 @@ export const createAnnotationMessage = ({
     } = annotation;
 
     message.object.set({
+      slide,
       hash,
       text,
       zoomLevel,
@@ -88,6 +93,7 @@ export const createAnnotationMessage = ({
     message.object.set({
       timeStamp,
       hash,
+      slide: slideId,
       zoomLevel: viewer.viewport.getZoom(),
       text: "",
     });
@@ -173,7 +179,7 @@ export const addAnnotationsToCanvas = ({
   user,
   annotations = [],
 }) => {
-  if (!canvas || !viewer || annotations.length > 0) return null;
+  if (!canvas || !viewer || annotations.length === 0) return null;
   // remove render on each add annotation
   const originalRender = canvas.renderOnAddRemove;
   canvas.renderOnAddRemove = false;
@@ -192,6 +198,7 @@ export const addAnnotationsToCanvas = ({
       annotation,
       user,
     });
+
     feed.push(message);
   });
 
@@ -239,10 +246,11 @@ export const groupAnnotationAndCells = ({
   optionalData,
 }) => {
   if (!cells || !enclosingAnnotation) return null;
-  const { hash, text, zoomLevel, points, timeStamp, path } =
+  const { slide, hash, text, zoomLevel, points, timeStamp, path } =
     enclosingAnnotation;
   enclosingAnnotation.set({ fill: "" });
   const group = new fabric.Group([enclosingAnnotation, ...cells]).set({
+    slide,
     hash,
     text,
     zoomLevel,
@@ -267,35 +275,51 @@ export const groupAnnotationAndCells = ({
   return message;
 };
 
-/** remove annotation from the DB */
-export const removeAnnotationFromDB = async ({ canvas, annotation }) => {
-  if (!canvas || !annotation) return;
-  canvas.remove(annotation);
-  canvas.requestRenderAll();
-};
-
-/** save annotation to the database */
-export const saveAnnotationToDB = ({
+/** Remove annotation from the DB */
+export const deleteAnnotationFromDB = async ({
   slideId,
-  annotation,
-  saveAnnotationsHandler,
+  hash,
+  onDeleteAnnotation,
 }) => {
-  if (!annotation || !saveAnnotationsHandler) return false;
-  const annotationJSON = getAnnotationJSON(annotation);
-  saveAnnotationsHandler(slideId, [annotationJSON]);
+  if (!hash || !onDeleteAnnotation) return false;
+  try {
+    await onDeleteAnnotation({ hash, slideId });
+  } catch (error) {
+    return false;
+  }
   return true;
 };
 
-// save annotations to the database
-export const saveAnnotationsToDB = ({
+/** Save annotation to the database */
+export const saveAnnotationToDB = async ({
+  slideId,
+  annotation,
+  onSaveAnnotation,
+}) => {
+  if (!slideId || !annotation || !onSaveAnnotation) return false;
+  const annotationJSON = getAnnotationJSON(annotation);
+  try {
+    await onSaveAnnotation({ slideId, data: [annotationJSON] });
+  } catch (error) {
+    return false;
+  }
+  return true;
+};
+
+/** Save annotations to the database */
+export const saveAnnotationsToDB = async ({
   slideId,
   canvas,
-  saveAnnotationsHandler,
+  onSaveAnnotation,
 }) => {
-  if (!canvas) return false;
+  if (!slideId || !canvas || !onSaveAnnotation) return false;
   const annotations = getCanvasJSON(canvas);
   if (annotations.objects.length > 0) {
-    saveAnnotationsHandler(slideId, annotations.objects);
+    try {
+      await onSaveAnnotation({ slideId, data: annotations.objects });
+    } catch (error) {
+      return false;
+    }
   }
   return true;
 };
@@ -304,10 +328,81 @@ export const saveAnnotationsToDB = ({
 export const updateAnnotationInDB = async ({
   slideId,
   annotation,
-  updateAnnotationHandler,
+  onUpdateAnnotation,
 }) => {
-  if (!annotation || !updateAnnotationHandler) return false;
+  if (!annotation || !onUpdateAnnotation) return false;
   const annotationJSON = getAnnotationJSON(annotation);
-  // updateAnnotationHandler({ slideId, annotationJSON });
+  try {
+    await onUpdateAnnotation({
+      slideId,
+      hash: annotationJSON.hash,
+      updateObject: annotationJSON,
+    });
+  } catch (error) {
+    return false;
+  }
   return true;
+};
+
+/** Load annotations from the DB  and return feed */
+export const loadAnnotationsFromDB = async ({
+  slideId,
+  canvas,
+  viewer,
+  onLoadAnnotations,
+}) => {
+  if (!slideId || !canvas || !viewer || !onLoadAnnotations)
+    return { feed: null, status: "error", message: "Invalid parameters" };
+  try {
+    const { data } = await onLoadAnnotations({ slideId });
+    if (data) {
+      const feed = addAnnotationsToCanvas({
+        canvas,
+        viewer,
+        annotations: data.annotationsAutoSave,
+      });
+
+      return { feed, status: "success" };
+    }
+  } catch (error) {
+    return { feed: null, status: "error" };
+  }
+  return { feed: null, status: "success" };
+};
+
+/** Group selected anntations */
+export const groupAnnotations = ({ canvas }) => {
+  if (!canvas) return;
+  if (!canvas.getActiveObject()) {
+    return;
+  }
+  if (canvas.getActiveObject().type !== "activeSelection") {
+    return;
+  }
+  const annoGroup = canvas.getActiveObject().toGroup();
+  annoGroup.hash = md5(annoGroup);
+  canvas.requestRenderAll();
+  // const annotations = canvas.getObjects();
+
+  // if (annotations.length > 1) {
+  //   const annoGroup = new fabric.Group(annotations);
+  //   const hash = md5(annoGroup);
+  //   annoGroup.set({ hash });
+  //   annotations.forEach((obj) => canvas.remove(obj));
+  //   canvas.add(annoGroup);
+  //   canvas.renderAll();
+  // }
+};
+
+/** Ungroup the group annotation */
+export const ungroupAnnotations = ({ canvas }) => {
+  if (!canvas) return;
+  if (!canvas.getActiveObject()) {
+    return;
+  }
+  if (canvas.getActiveObject().type !== "group") {
+    return;
+  }
+  canvas.getActiveObject().toActiveSelection();
+  canvas.requestRenderAll();
 };

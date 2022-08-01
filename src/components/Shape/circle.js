@@ -21,7 +21,7 @@ import {
 } from "../../state/actions/fabricOverlayActions";
 import { CircleIcon, CircleIconFilled } from "../Icons/CustomIcons";
 
-const Circle = ({ viewerId, saveAnnotationsHandler }) => {
+const Circle = ({ viewerId, onSaveAnnotation }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -278,12 +278,12 @@ const Circle = ({ viewerId, saveAnnotationsHandler }) => {
     const addToFeed = async () => {
       if (!shape) return;
 
-      const message = createAnnotationMessage({ shape, viewer });
+      const message = createAnnotationMessage({ slideId, shape, viewer });
 
       saveAnnotationToDB({
         slideId,
         annotation: message.object,
-        saveAnnotationsHandler,
+        onSaveAnnotation,
       });
 
       setShape(null);

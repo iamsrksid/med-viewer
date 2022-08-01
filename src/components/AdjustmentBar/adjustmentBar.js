@@ -1,6 +1,5 @@
 import React, { memo } from "react";
-import { Flex, Text, IconButton, useMediaQuery } from "@chakra-ui/react";
-import { BsGrid1X2 } from "react-icons/bs";
+import { Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Move from "../Move/move";
 import ChangeCase from "../Case/changeCase";
@@ -20,7 +19,6 @@ const AdjustmentBar = ({
   slide,
   currentViewer,
   annotations,
-  goToHomeHandler,
   changeCaseHandler,
   showSidebar,
   sidebar,
@@ -31,7 +29,8 @@ const AdjustmentBar = ({
   isMultiview,
   setIsMultiview,
   setTotalCells,
-  saveAnnotationsHandler,
+  onSaveAnnotation,
+  onDeleteAnnotation,
   setStartX,
   setStartY,
   setWindowWidth,
@@ -115,12 +114,10 @@ const AdjustmentBar = ({
         isNavigatorActive={isNavigatorActive}
         setIsNavigatorActive={setIsNavigatorActive}
         setTotalCells={setTotalCells}
-        saveAnnotationsHandler={saveAnnotationsHandler}
+        onSaveAnnotation={onSaveAnnotation}
+        onDeleteAnnotation={onDeleteAnnotation}
       />
-      <ActionTools
-        viewerId={currentViewer}
-        saveAnnotationsHandler={saveAnnotationsHandler}
-      />
+      <ActionTools viewerId={currentViewer} />
       <ScreenTools
         viewerId={currentViewer}
         setShowAnnotationsBar={setShowAnnotationsBar}

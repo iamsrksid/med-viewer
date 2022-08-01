@@ -22,7 +22,6 @@ import { GrFormClose } from "react-icons/gr";
 import { FaDrawPolygon } from "react-icons/fa";
 import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
-import { removeFromActivityFeed } from "../../state/actions/fabricOverlayActions";
 import { updateAnnotationInDB } from "../../utility";
 
 const EditTextButton = ({ feed, handleEditClick, ...restProps }) => {
@@ -114,7 +113,7 @@ const ActivityFeed = ({
   totalCells,
   handlePopup,
   popup,
-  saveAnnotationsHandler,
+  onUpdateAnnotation,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow } = fabricOverlayState;
@@ -171,11 +170,11 @@ const ActivityFeed = ({
     if (!text || !tag) return;
     annotationObject.text = text;
     annotationObject.tag = tag;
-    // updateAnnotationInDB({
-    //   slideId,
-    //   annotation: annotationObject,
-    //   saveAnnotationsHandler,
-    // });
+    updateAnnotationInDB({
+      slideId,
+      annotation: annotationObject,
+      onUpdateAnnotation,
+    });
     setAnnotationObject(null);
     onClose();
   };
@@ -183,16 +182,6 @@ const ActivityFeed = ({
   const handleEditClick = (feed) => {
     setAnnotationObject(feed.object);
     onOpen();
-  };
-
-  const deleteObject = (e, feed) => {
-    e.stopPropagation();
-    const canvas = fabricOverlay.fabricCanvas();
-    setFabricOverlayState(
-      removeFromActivityFeed({ id: viewerId, hash: feed.object.hash })
-    );
-    canvas.remove(feed.object);
-    canvas.renderAll();
   };
 
   return (
@@ -329,13 +318,13 @@ const ActivityFeed = ({
                           <CardDetailsRow
                             title="Centroid X"
                             value={
-                              <>{annotationDetails.centroid[0]} &micro;m</>
+                              <>{annotationDetails.centroid?.[0]} &micro;m</>
                             }
                           />
                           <CardDetailsRow
                             title="Centroid Y"
                             value={
-                              <>{annotationDetails.centroid[1]} &micro;m</>
+                              <>{annotationDetails.centroid?.[1]} &micro;m</>
                             }
                           />
                           <CardDetailsRow

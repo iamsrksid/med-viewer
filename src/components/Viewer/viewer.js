@@ -46,7 +46,7 @@ const Viewer = ({
   slideName,
   slideType,
   userInfo,
-  loadAnnotationsHandler,
+  onLoadAnnotations,
   startX,
   startY,
   windowWidth,
@@ -71,7 +71,7 @@ const Viewer = ({
   });
 
   useEffect(() => {
-    viewer && viewer.destroy();
+    if (viewer) viewer.destroy();
 
     // Initialize OpenSeadragon instance and set to viewer
     setViewer(
@@ -83,7 +83,7 @@ const Viewer = ({
     );
     initFabricJSOverlay(OpenSeadragon, fabric);
     return () => {
-      viewer && viewer.destroy();
+      if (viewer) viewer.destroy();
     };
   }, []);
 
@@ -125,7 +125,7 @@ const Viewer = ({
           slideName={slideName}
           slideType={slideType}
           userInfo={userInfo}
-          loadAnnotationsHandler={loadAnnotationsHandler}
+          onLoadAnnotations={onLoadAnnotations}
         />
       )}
       {/* <Button onClick={selection}>Select</Button> */}
