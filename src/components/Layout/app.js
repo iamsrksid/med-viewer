@@ -10,6 +10,7 @@ import ViewerFactory from "../Viewer/viewerFactory";
 import ViewerImport from "./viewerImport";
 import Navigator from "../Navigator/navigator";
 import ActivityFeed from "../Feed/activityFeed";
+import SlideFeed from "../Feed/feed";
 
 const LayoutApp = ({
   userInfo,
@@ -28,6 +29,9 @@ const LayoutApp = ({
   loadAnnotationsHandler,
   morphometry,
   uploadPatch,
+  saveReport,
+  mediaUpload,
+  slideInfo,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -47,6 +51,8 @@ const LayoutApp = ({
   const [viewPortToImagey1, setViewPortToImagey1] = useState(0);
   const [viewPortToImagey2, setViewPortToImagey2] = useState(0);
   const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
+  const [showFeedBar, setShowFeedBar] = useState(false);
+  const [showReport, setShowReport] = useState(false);
 
   const showSidebar = () => {
     setSidebar(!sidebar);
@@ -55,7 +61,12 @@ const LayoutApp = ({
   const showNavbar = () => {
     setNavbar(!navbar);
   };
-
+  const handleFeedBar = () => {
+    setShowFeedBar(!showFeedBar);
+  };
+  const handleReport = () => {
+    setShowReport(true);
+  };
   return (
     <Flex
       h={ifBiggerScreen ? "calc(100vh - 5.5vh)" : "calc(100vh - 44px)"}
@@ -87,6 +98,14 @@ const LayoutApp = ({
           setWindowHeight={setWindowHeight}
           setShowAnnotationsBar={setShowAnnotationsBar}
           showAnnotationsBar={showAnnotationsBar}
+          saveReport={saveReport}
+          mediaUpload={mediaUpload}
+          slideInfo={slideInfo}
+          showFeedBar={showFeedBar}
+          handleFeedBar={handleFeedBar}
+          handleReport={handleReport}
+          showReport={showReport}
+          setShowReport={setShowReport}
         />
 
         {isNavigatorActive && (
@@ -123,7 +142,7 @@ const LayoutApp = ({
               setSidebar={setSidebar}
             />
           ) : null}
-          {showAnnotationsBar ? (
+          {showAnnotationsBar && !showFeedBar && !showReport ? (
             <ActivityFeed
               viewerId={currentViewer}
               userInfo={userInfo}
@@ -131,6 +150,14 @@ const LayoutApp = ({
               totalCells={totalCells}
               popup={showAnnotationsBar}
               saveAnnotationsHandler={saveAnnotationsHandler}
+            />
+          ) : null}
+          {showFeedBar ? (
+            <SlideFeed
+              viewerId={currentViewer}
+              showFeedBar={showFeedBar}
+              handleFeedBar={handleFeedBar}
+              showReport={showReport}
             />
           ) : null}
           <LayoutAppBody>

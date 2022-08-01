@@ -15,7 +15,7 @@ import { BiScreenshot, BiDotsVertical } from "react-icons/bi";
 import { RiShareForwardFill } from "react-icons/ri";
 import ToolbarButton from "../ViewerToolbar/button";
 import SlideChat from "../Chat/chat";
-import ShareLink from "../Share/shareLink";
+import ReportHelper from "../Report/ReportHelper";
 import Popup from "../Popup/popup";
 import DownloadImage from "../downloadImage";
 import ViewerImport from "../Layout/viewerImport";
@@ -31,6 +31,15 @@ const ScreenTools = ({
   setStartY,
   setWindowWidth,
   setWindowHeight,
+  caseInfo,
+  saveReport,
+  mediaUpload,
+  slideInfo,
+  handleFeedBar,
+  showFeedBar,
+  handleReport,
+  showReport,
+  setShowReport,
 }) => {
   const [popup, setPopup] = useState(false);
   const [screenshotHover, setScreenshotHover] = useState(false);
@@ -155,11 +164,20 @@ const ScreenTools = ({
           onMouseEnter={() => setShareHover(true)}
           onMouseLeave={() => setShareHover(false)}
           _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
-          disabled={true}
+          disabled
         />
       </Tooltip>
 
-      <ShareLink />
+      <ReportHelper
+        caseInfo={caseInfo}
+        saveReport={saveReport}
+        viewerId={viewerId}
+        mediaUpload={mediaUpload}
+        slideInfo={slideInfo}
+        handleReport={handleReport}
+        showReport={showReport}
+        setShowReport={setShowReport}
+      />
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
         {/* <ToolbarButton
           icon={<BiDotsVertical size={20} color="#151C25" />}
@@ -187,7 +205,7 @@ const ScreenTools = ({
           </MenuButton>
           <MenuList color="#000">
             <MenuItem onClick={handlePopup}>Image Details</MenuItem>
-            <MenuItem onClick={handlePopup}>Keypoints</MenuItem>
+            <MenuItem onClick={handleFeedBar}>Keypoints</MenuItem>
             <MenuItem onClick={handleMoreClick}>Annotation Details</MenuItem>
             <MenuItem onClick={handlePopup}>Morphometry Results</MenuItem>
             <MenuItem onClick={handlePopup}>Hierarchy</MenuItem>

@@ -38,8 +38,16 @@ const AdjustmentBar = ({
   setWindowHeight,
   setShowAnnotationsBar,
   showAnnotationsBar,
+  saveReport,
+  mediaUpload,
+  slideInfo,
+  showFeedBar,
+  handleFeedBar,
+  handleReport,
+  showReport,
+  setShowReport,
 }) => {
-  const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1660px)");
+  const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { tile } = viewerWindow[currentViewer];
@@ -52,10 +60,10 @@ const AdjustmentBar = ({
     <Flex
       className="adjustmentbar"
       alignItems="center"
-      height={ifScreenlessthan1536px ? "46px" : "56px"}
+      height={ifWidthLessthan1920 ? "46px" : "5.185vh"}
       bgColor="#F8F8F5"
       fontFamily="fira sans"
-      fontSize={ifScreenlessthan1536px ? "14px" : "16px"}
+      fontSize={ifWidthLessthan1920 ? "14px" : "16px"}
       fontWeight="500"
       zIndex={2}
     >
@@ -130,6 +138,15 @@ const AdjustmentBar = ({
         setStartY={setStartY}
         setWindowWidth={setWindowWidth}
         setWindowHeight={setWindowHeight}
+        caseInfo={caseInfo}
+        saveReport={saveReport}
+        mediaUpload={mediaUpload}
+        slideInfo={slideInfo}
+        showFeedBar={showFeedBar}
+        handleFeedBar={handleFeedBar}
+        handleReport={handleReport}
+        showReport={showReport}
+        setShowReport={setShowReport}
       />
     </Flex>
   );
