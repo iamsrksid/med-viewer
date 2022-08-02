@@ -45,11 +45,15 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
 
   useEffect(() => {
     if (!viewer) return null;
-    setZoomValue(getZoomValue(viewer));
-    viewer.addHandler("zoom", () => setZoomValue(getZoomValue(viewer)));
-    return () => {
-      viewer.removeHandler("zoom", () => setZoomValue(getZoomValue(viewer)));
+    const handleZoomValueChange = () => {
+      setZoomValue(getZoomValue(viewer));
     };
+
+    handleZoomValueChange();
+    viewer.addHandler("zoom", handleZoomValueChange);
+    return () => {
+      viewer.removeHandler("zoom", handleZoomValueChange);
+    };  
   }, [viewer]);
 
   useEffect(() => {
