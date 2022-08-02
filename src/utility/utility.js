@@ -86,6 +86,7 @@ export const findCurrentIndex = (itemId, arr = []) => {
 
 // get the zoom value from the zoom level
 export const getZoomValue = (viewer) => {
+  if (!viewer) return null;
   return parseInt(
     Math.ceil((viewer.viewport.getZoom() * 40) / viewer.viewport.getMaxZoom()),
     10
@@ -98,51 +99,61 @@ export const getScaleFactor = (viewer) => {
   return zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
 };
 
-// save annotations to the database
-export const saveAnnotationsToDB = ({
-  slideId,
-  canvas,
-  saveAnnotationsHandler,
-}) => {
-  if (!canvas) return false;
-  const annotations = canvas.toJSON([
-    "hash",
-    "text",
-    "zoomLevel",
-    "points",
-    "timeStamp",
-    "area",
-    "perimeter",
-    "centroid",
-    "end_points",
-    "isAnalysed",
-  ]);
-  if (annotations.objects.length > 0) {
-    saveAnnotationsHandler(slideId, annotations.objects);
-  }
-  return true;
-};
-
 // create annotaion message for the feed
-export const createAnnotationMessage = ({ shape, viewer }) => {
+export const createAnnotationMessage = ({
+  shape,
+  viewer,
+  user,
+  annotation,
+}) => {
   if (!viewer || !shape) return null;
-  const timeStamp = Date.now();
 
   const message = {
-    username: "",
+    username: user ? `${user.firstName} ${user.lastName}` : "",
     object: shape,
     image: null,
   };
 
-  const hash = md5(shape + timeStamp);
+  // if annotation data is available
+  // else create a new one
+  if (annotation) {
+    const {
+      hash,
+      text,
+      zoomLevel,
+      points,
+      timeStamp,
+      area,
+      perimeter,
+      cnetroid,
+      endPoints,
+      isAnalysed,
+    } = annotation;
 
-  // message.image = await getCanvasImage(viewerId);
-  message.object.set({
-    timeStamp,
-    hash,
-    zoomLevel: viewer.viewport.getZoom(),
-    text: "",
-  });
+    message.object.set({
+      hash,
+      text,
+      zoomLevel,
+      points,
+      timeStamp,
+      area,
+      perimeter,
+      cnetroid,
+      endPoints,
+      isAnalysed,
+    });
+  } else {
+    const timeStamp = Date.now();
+    const hash = md5(shape + timeStamp);
+
+    // message.image = await getCanvasImage(viewerId);
+    message.object.set({
+      timeStamp,
+      hash,
+      zoomLevel: viewer.viewport.getZoom(),
+      text: "",
+    });
+  }
 
   return message;
 };
@@ -152,4 +163,43 @@ export const getFileBucketFolder = (url) => {
   return `source/${
     url ? `${url.split("/")[url.split("/").length - 2]}.svs` : ""
   }`;
+};
+
+// get viewport bounds
+export const getViewportBounds = (viewer) => {
+  if (!viewer) return null;
+  const bounds = viewer.viewport.getBounds();
+  const { x, y, width, height } = viewer.viewport.viewportToImageRectangle(
+    bounds.x,
+    bounds.y,
+    bounds.width,
+    bounds.height
+  );
+
+  return { x, y, width, height };
+};
+
+// zoom to a specific level
+export const zoomToLevel = ({ viewer, value }) => {
+  if (!viewer) return;
+
+  // check if value is less than 1, then make it 1
+  // and if value is greater than 40, then make it 40
+  if (value && value < 1) {
+    value = 1;
+  } else if (value > 40) {
+    value = 40;
+  }
+
+  // if value is empty, don't do anything
+  if (value) {
+    const level = value * (viewer.viewport.getMaxZoom() / 40);
+    viewer.viewport.zoomTo(level);
+  }
+};
+
+// convert zoom level to zoom value
+export const convertToZoomValue = ({ level, viewer }) => {
+  if (!viewer) return null;
+  return parseInt(Math.ceil((level * 40) / viewer.viewport.getMaxZoom()), 10);
 };

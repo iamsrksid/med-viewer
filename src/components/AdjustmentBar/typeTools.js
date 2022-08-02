@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Box, Text, HStack, Flex, SimpleGrid } from "@chakra-ui/react";
+import React from "react";
+import { Flex, SimpleGrid } from "@chakra-ui/react";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import Draggable from "react-draggable";
 import Draw from "../Draw/draw";
 import Square from "../Shape/square";
 import Line from "../Shape/line";
 import Circle from "../Shape/circle";
-import Typebutton from "../typeButton";
 import Polygon from "../Shape/polygon";
 import RemoveObject from "../removeComponents";
 import { useFabricOverlayState } from "../../state/store";
 import MagicWandTool from "../Tools/magicWandTool";
 
-const TypeTools = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
+const TypeTools = ({
+  viewerId,
+  onSaveAnnotation,
+  onDeleteAnnotation,
+  setTotalCells,
+}) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
 
@@ -39,34 +43,19 @@ const TypeTools = ({ viewerId, saveAnnotationsHandler, setTotalCells }) => {
       >
         <Flex h="12px" bgColor="rgba(236, 236, 236, 1)" cursor="crosshair" />
         <SimpleGrid columns={2} px="8px" bgColor="#fff" py="8px" spacing={2}>
-          <Line
-            viewerId={viewerId}
-            saveAnnotationsHandler={saveAnnotationsHandler}
-          />
+          <Line viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
           <MagicWandTool
             viewerId={viewerId}
             setTotalCells={setTotalCells}
-            saveAnnotationsHandler={saveAnnotationsHandler}
+            onSaveAnnotation={onSaveAnnotation}
           />
-          <Square
-            viewerId={viewerId}
-            saveAnnotationsHandler={saveAnnotationsHandler}
-          />
-          <Circle
-            viewerId={viewerId}
-            saveAnnotationsHandler={saveAnnotationsHandler}
-          />
-          <Polygon
-            viewerId={viewerId}
-            saveAnnotationsHandler={saveAnnotationsHandler}
-          />
-          <Draw
-            viewerId={viewerId}
-            saveAnnotationsHandler={saveAnnotationsHandler}
-          />
+          <Square viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
+          <Circle viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
+          <Polygon viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
+          <Draw viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
           <RemoveObject
             viewerId={viewerId}
-            saveAnnotationsHandler={saveAnnotationsHandler}
+            onDeleteAnnotation={onDeleteAnnotation}
           />
         </SimpleGrid>
       </Flex>

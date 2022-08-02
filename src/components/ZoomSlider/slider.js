@@ -2,32 +2,23 @@ import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { Flex, Input, Text, useMediaQuery } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../../state/store";
-import { getScaleFactor, getZoomValue } from "../../utility/utility";
-import { toggleLeading } from "../../state/actions/fabricOverlayActions";
+import {
+  getScaleFactor,
+  getZoomValue,
+  zoomToLevel,
+} from "../../utility/utility";
 
 const ZoomSlider = ({ viewerId }) => {
-  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { viewerWindow, sync } = fabricOverlayState;
+  const { fabricOverlayState } = useFabricOverlayState();
+  const { viewerWindow } = fabricOverlayState;
   const { viewer, fabricOverlay } = viewerWindow[viewerId];
   const [zoomValue, setZoomValue] = useState(1);
   const inputRef = useRef(null);
 
   const handleZoomLevel = (e) => {
-    let { value } = e.target;
+    const { value } = e.target;
 
-    // check if value is less than 1, then make it 1
-    // and if value is greater than 40, then make it 40
-    if (value && value < 1) {
-      value = 1;
-    } else if (value > 40) {
-      value = 40;
-    }
-
-    // if value is empty, don't do anything
-    if (value) {
-      const level = value * (viewer.viewport.getMaxZoom() / 40);
-      viewer.viewport.zoomTo(level);
-    }
+    zoomToLevel({ viewer, value });
 
     setZoomValue(value);
   };
@@ -48,9 +39,8 @@ const ZoomSlider = ({ viewerId }) => {
       const strokeWidth = 1 / scaleFactor;
       const objs = canvas.getObjects();
       objs.forEach((object) => {
-        if (object.type === "group") {
-          object.item(0).set("strokeWidth", strokeWidth);
-        } else {
+        if (object && object.type !== "group") {
+          // object.item(0).set("strokeWidth", strokeWidth);
           object.set("strokeWidth", strokeWidth);
         }
       });

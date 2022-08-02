@@ -25,8 +25,10 @@ const LayoutApp = ({
   finalSubmitHandler,
   changeCaseHandler,
   goToHomeHandler,
-  saveAnnotationsHandler,
-  loadAnnotationsHandler,
+  onSaveAnnotation,
+  onUpdateAnnotation,
+  onDeleteAnnotation,
+  onLoadAnnotations,
   morphometry,
   uploadPatch,
   saveReport,
@@ -101,7 +103,8 @@ const LayoutApp = ({
           setIsNavigatorActive={setIsNavigatorActive}
           isMultiview={isMultiview}
           setIsMultiview={setIsMultiview}
-          saveAnnotationsHandler={saveAnnotationsHandler}
+          onSaveAnnotation={onSaveAnnotation}
+          onDeleteAnnotation={onDeleteAnnotation}
           setStartX={setStartX}
           setStartY={setStartY}
           setWindowWidth={setWindowWidth}
@@ -159,7 +162,7 @@ const LayoutApp = ({
               handlePopup={setShowAnnotationsBar}
               totalCells={totalCells}
               popup={showAnnotationsBar}
-              saveAnnotationsHandler={saveAnnotationsHandler}
+              onUpdateAnnotation={onUpdateAnnotation}
             />
           ) : null} */}
           {showFeedBar ? (
@@ -177,7 +180,7 @@ const LayoutApp = ({
               slideType={project?.slideType}
               caseInfo={caseInfo}
               userInfo={userInfo}
-              loadAnnotationsHandler={loadAnnotationsHandler}
+              onLoadAnnotations={onLoadAnnotations}
               setCurrentViewer={setCurrentViewer}
               startX={startX}
               startY={startY}

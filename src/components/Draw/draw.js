@@ -1,24 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaPaintBrush } from "react-icons/fa";
 import { BsPencil } from "react-icons/bs";
-import {
-  useMediaQuery,
-  useDisclosure,
-  IconButton,
-  useToast,
-} from "@chakra-ui/react";
-import { fabric } from "openseadragon-fabricjs-overlay";
-import md5 from "md5";
-import useHexRGB from "../../utility/use-hex-rgb";
-import { fonts } from "../Text/fontPicker";
+import { useDisclosure, IconButton, useToast } from "@chakra-ui/react";
 import {
   createAnnotationMessage,
-  getCanvasImage,
   getScaleFactor,
-  saveAnnotationsToDB,
-} from "../../utility/utility";
-import TypeButton from "../typeButton";
-import EditText from "../Feed/editText";
+  saveAnnotationToDB,
+} from "../../utility";
 import { widths } from "./width";
 import { useFabricOverlayState } from "../../state/store";
 import {
@@ -53,7 +40,7 @@ const createFreeDrawingCursor = (brushWidth, brushColor) => {
   }, crosshair`;
 };
 
-const Draw = ({ viewerId, saveAnnotationsHandler }) => {
+const Draw = ({ viewerId, onSaveAnnotation }) => {
   const toast = useToast();
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -166,12 +153,12 @@ const Draw = ({ viewerId, saveAnnotationsHandler }) => {
     if (!path) return;
 
     const addToFeed = async () => {
-      const message = createAnnotationMessage({ shape: path, viewer });
+      const message = createAnnotationMessage({ slideId, shape: path, viewer });
 
-      saveAnnotationsToDB({
+      saveAnnotationToDB({
         slideId,
-        canvas: fabricOverlay.fabricCanvas(),
-        saveAnnotationsHandler,
+        annotation: message.object,
+        onSaveAnnotation,
       });
 
       setFabricOverlayState(
