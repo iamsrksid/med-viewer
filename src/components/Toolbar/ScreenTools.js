@@ -23,7 +23,7 @@ import { ShareIcon, DocumentsIcon } from "../Icons/CustomIcons";
 
 const ScreenTools = ({
   viewerId,
-  setShowAnnotationsBar,
+  handleAnnotationBar,
   showAnnotationsBar,
   morphometry,
   uploadPatch,
@@ -50,9 +50,7 @@ const ScreenTools = ({
     setScreenshotHover(false);
     setShareHover(false);
   };
-  const handleMoreClick = () => {
-    setShowAnnotationsBar(!showAnnotationsBar);
-  };
+
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   return (
     <Flex px="20px" height="18px" alignItems="center">
@@ -206,7 +204,9 @@ const ScreenTools = ({
           <MenuList color="#000">
             <MenuItem onClick={handlePopup}>Image Details</MenuItem>
             <MenuItem onClick={handleFeedBar}>Keypoints</MenuItem>
-            <MenuItem onClick={handleMoreClick}>Annotation Details</MenuItem>
+            <MenuItem onClick={handleAnnotationBar}>
+              Annotation Details
+            </MenuItem>
             <MenuItem onClick={handlePopup}>Morphometry Results</MenuItem>
             <MenuItem onClick={handlePopup}>Hierarchy</MenuItem>
           </MenuList>

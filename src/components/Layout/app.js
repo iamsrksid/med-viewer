@@ -53,7 +53,7 @@ const LayoutApp = ({
   const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
   const [showFeedBar, setShowFeedBar] = useState(false);
   const [showReport, setShowReport] = useState(false);
-
+  const [feedTab, setFeedBar] = useState(0);
   const showSidebar = () => {
     setSidebar(!sidebar);
   };
@@ -62,10 +62,20 @@ const LayoutApp = ({
     setNavbar(!navbar);
   };
   const handleFeedBar = () => {
-    setShowFeedBar(!showFeedBar);
+    setShowFeedBar(true);
+    setFeedBar(1);
+  };
+  const handleFeedBarClose = () => {
+    setShowFeedBar(false);
   };
   const handleReport = () => {
     setShowReport(true);
+  };
+  const handleAnnotationBar = () => {
+    setShowAnnotationsBar(!showAnnotationsBar);
+    setShowFeedBar(true);
+
+    setFeedBar(2);
   };
   return (
     <Flex
@@ -96,7 +106,7 @@ const LayoutApp = ({
           setStartY={setStartY}
           setWindowWidth={setWindowWidth}
           setWindowHeight={setWindowHeight}
-          setShowAnnotationsBar={setShowAnnotationsBar}
+          handleAnnotationBar={handleAnnotationBar}
           showAnnotationsBar={showAnnotationsBar}
           saveReport={saveReport}
           mediaUpload={mediaUpload}
@@ -142,7 +152,7 @@ const LayoutApp = ({
               setSidebar={setSidebar}
             />
           ) : null}
-          {showAnnotationsBar && !showFeedBar && !showReport ? (
+          {/* {showAnnotationsBar && !showFeedBar && !showReport ? (
             <ActivityFeed
               viewerId={currentViewer}
               userInfo={userInfo}
@@ -151,13 +161,14 @@ const LayoutApp = ({
               popup={showAnnotationsBar}
               saveAnnotationsHandler={saveAnnotationsHandler}
             />
-          ) : null}
+          ) : null} */}
           {showFeedBar ? (
             <SlideFeed
               viewerId={currentViewer}
               showFeedBar={showFeedBar}
-              handleFeedBar={handleFeedBar}
+              handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
+              feedTab={feedTab}
             />
           ) : null}
           <LayoutAppBody>

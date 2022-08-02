@@ -51,6 +51,7 @@ const Report = ({
       >
         <GrFormClose
           size={16}
+          cursor="pointer"
           onClick={handleReportClose}
           _hover={{ cursor: "pointer" }}
         />
@@ -63,15 +64,15 @@ const Report = ({
         alignItems="center"
         boxShadow="1px 1px 2px rgba(176, 200, 214, 0.25)"
       >
-        <Icon as={BiGridHorizontal} color="#AEAEAE" w="2vw" h="20vw" />
+        {/* <Icon as={BiGridHorizontal} color="#AEAEAE" w="2vw" h="20vw" /> */}
       </Flex>
       <Flex
         bg="#fff"
         mt="0.5vw"
-        h="75vh"
+        h="77vh"
         mr="0.7333vw"
         pl="1.666vw"
-        pb="2vh"
+        // pb="1vh"
         pr="0.8333vw"
         direction="column"
         overflow="auto"

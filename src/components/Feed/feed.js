@@ -13,7 +13,13 @@ import KeyPoints from "./KeyPoints";
 import { useFabricOverlayState } from "../../state/store";
 import ActivityFeed from "./activityFeed";
 
-const SlideFeed = ({ viewerId, handleFeedBar, showFeedBar, showReport }) => {
+const SlideFeed = ({
+  viewerId,
+  handleFeedBarClose,
+  showFeedBar,
+  showReport,
+  feedTab,
+}) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { activityFeed } = viewerWindow[viewerId];
@@ -34,11 +40,12 @@ const SlideFeed = ({ viewerId, handleFeedBar, showFeedBar, showReport }) => {
       >
         <GrFormClose
           size={16}
-          onClick={handleFeedBar}
+          cursor="pointer"
+          onClick={handleFeedBarClose}
           _hover={{ cursor: "pointer" }}
         />
       </Flex>
-      <Tabs w="100%" defaultIndex={1} variant="unstyled">
+      <Tabs w="100%" defaultIndex={feedTab} variant="unstyled">
         <TabList
           justifyContent="space-around"
           mb="1.1vh"
@@ -51,6 +58,7 @@ const SlideFeed = ({ viewerId, handleFeedBar, showFeedBar, showReport }) => {
             p="0.41vw 0.7vh"
             h="2.962vh"
             minH="32px"
+            _selected={{ bg: "#FCFCFC" }}
           >
             Morphometry
           </Tab>
@@ -60,6 +68,7 @@ const SlideFeed = ({ viewerId, handleFeedBar, showFeedBar, showReport }) => {
             p="0.41vw 0.7vh"
             h="2.962vh"
             minH="32px"
+            _selected={{ bg: "#FCFCFC" }}
           >
             Key Points
           </Tab>
@@ -69,6 +78,7 @@ const SlideFeed = ({ viewerId, handleFeedBar, showFeedBar, showReport }) => {
             p="0.41vw 0.7vh"
             h="2.962vh"
             minH="32px"
+            _selected={{ bg: "#FCFCFC" }}
           >
             Annotations
           </Tab>

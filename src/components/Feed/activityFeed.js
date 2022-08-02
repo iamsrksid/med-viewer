@@ -122,7 +122,7 @@ const ActivityFeed = ({
   return (
     <Flex
       as="section"
-      w="16.52vw"
+      w="100%"
       position={showFeedBar ? "unset" : "absolute"}
       // h={ifScreenlessthan1660px ? "calc(100% - 90px)" : "90%"}
       h={

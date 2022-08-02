@@ -20,10 +20,11 @@ const ReportHelper = ({
   const { slideId } = viewerWindow[viewerId];
   const { user } = useAuth0();
   const [slideData, setSlideData] = useState();
+
   useEffect(() => {
     async function fetchData() {
       const response = await slideInfo({ slideId });
-      setSlideData(response);
+      setSlideData(response?.data);
     }
     fetchData();
   }, [slideId]);
@@ -91,7 +92,7 @@ const ReportHelper = ({
       microscopicDescription: reportData?.microscopicDescription,
       impression: reportData?.impression,
       advise: reportData?.advice,
-      // annotatedSlides: reportData?.annotedSlides,
+      annotatedSlides: reportData?.annotedSlides,
       mediaURLs: data?.urls,
     });
     clearValues();
@@ -99,7 +100,7 @@ const ReportHelper = ({
   };
   return (
     <>
-      {slideData?.data?.slideReports?.length > 0 ? (
+      {slideData?.slideReports?.length > 0 ? (
         showReport ? (
           ""
         ) : (
@@ -135,7 +136,7 @@ const ReportHelper = ({
             </Button>
           </Tooltip>
         )
-      ) : !slideData?.data?.slideReports.length > 0 && !showReport ? (
+      ) : !slideData?.slideReports.length > 0 && !showReport ? (
         <Tooltip
           label="Report"
           placement="bottom"
@@ -218,7 +219,7 @@ const ReportHelper = ({
         caseInfo={caseInfo}
         handleUpload={handleUpload}
         annotedSlideImages={annotedSlideImages}
-        reportedData={slideData?.data?.slideReports}
+        reportedData={slideData?.slideReports}
       />
     </>
   );

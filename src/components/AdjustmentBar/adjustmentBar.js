@@ -36,7 +36,7 @@ const AdjustmentBar = ({
   setStartY,
   setWindowWidth,
   setWindowHeight,
-  setShowAnnotationsBar,
+  handleAnnotationBar,
   showAnnotationsBar,
   saveReport,
   mediaUpload,
@@ -130,7 +130,7 @@ const AdjustmentBar = ({
       />
       <ScreenTools
         viewerId={currentViewer}
-        setShowAnnotationsBar={setShowAnnotationsBar}
+        handleAnnotationBar={handleAnnotationBar}
         showAnnotationsBar={showAnnotationsBar}
         morphometry={morphometry}
         uploadPatch={uploadPatch}
