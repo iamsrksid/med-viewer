@@ -13,6 +13,7 @@ const KeyPoints = ({ activityFeed }) => {
         {activityFeed?.map((feed) => {
           return (
             <VStack
+              key={feed.object?.hash}
               alignItems="flex-start"
               fontSize="14px"
               bg="#fff"

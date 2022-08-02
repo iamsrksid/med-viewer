@@ -317,9 +317,7 @@ const ActivityFeed = ({
                       <CardDetailsRow
                         title="Description"
                         value={
-                          annotationDetails.object?.text
-                            ? annotationDetails.object.text
-                            : "-"
+                          annotationDetails?.text ? annotationDetails.text : "-"
                         }
                       />
 
