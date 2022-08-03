@@ -14,13 +14,13 @@ const osdOptions = {
   constrainDuringPan: !!isBrowser,
   debugMode: false,
   gestureSettingsMouse: {
-    clickToZoom: true,
+    clickToZoom: false,
     flickEnabled: true,
     pinchToZoom: true,
     scrollToZoom: true,
   },
   gestureSettingsTouch: {
-    clickToZoom: true,
+    clickToZoom: false,
     flickEnabled: true,
     pinchToZoom: true,
     scrollToZoom: true,

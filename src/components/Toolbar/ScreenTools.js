@@ -15,7 +15,7 @@ import { BiScreenshot, BiDotsVertical } from "react-icons/bi";
 import { RiShareForwardFill } from "react-icons/ri";
 import ToolbarButton from "../ViewerToolbar/button";
 import SlideChat from "../Chat/chat";
-import ShareLink from "../Share/shareLink";
+import ReportHelper from "../Report/ReportHelper";
 import Popup from "../Popup/popup";
 import DownloadImage from "../downloadImage";
 import ViewerImport from "../Layout/viewerImport";
@@ -23,7 +23,7 @@ import { ShareIcon, DocumentsIcon } from "../Icons/CustomIcons";
 
 const ScreenTools = ({
   viewerId,
-  setShowAnnotationsBar,
+  handleAnnotationBar,
   showAnnotationsBar,
   morphometry,
   uploadPatch,
@@ -31,6 +31,15 @@ const ScreenTools = ({
   setStartY,
   setWindowWidth,
   setWindowHeight,
+  caseInfo,
+  saveReport,
+  mediaUpload,
+  slideInfo,
+  handleFeedBar,
+  showFeedBar,
+  handleReport,
+  showReport,
+  setShowReport,
 }) => {
   const [popup, setPopup] = useState(false);
   const [screenshotHover, setScreenshotHover] = useState(false);
@@ -41,9 +50,7 @@ const ScreenTools = ({
     setScreenshotHover(false);
     setShareHover(false);
   };
-  const handleMoreClick = () => {
-    setShowAnnotationsBar(!showAnnotationsBar);
-  };
+
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   return (
     <Flex px="20px" height="18px" alignItems="center">
@@ -155,11 +162,20 @@ const ScreenTools = ({
           onMouseEnter={() => setShareHover(true)}
           onMouseLeave={() => setShareHover(false)}
           _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
-          disabled={true}
+          disabled
         />
       </Tooltip>
 
-      <ShareLink />
+      <ReportHelper
+        caseInfo={caseInfo}
+        saveReport={saveReport}
+        viewerId={viewerId}
+        mediaUpload={mediaUpload}
+        slideInfo={slideInfo}
+        handleReport={handleReport}
+        showReport={showReport}
+        setShowReport={setShowReport}
+      />
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
         {/* <ToolbarButton
           icon={<BiDotsVertical size={20} color="#151C25" />}
@@ -187,8 +203,10 @@ const ScreenTools = ({
           </MenuButton>
           <MenuList color="#000">
             <MenuItem onClick={handlePopup}>Image Details</MenuItem>
-            <MenuItem onClick={handlePopup}>Keypoints</MenuItem>
-            <MenuItem onClick={handleMoreClick}>Annotation Details</MenuItem>
+            <MenuItem onClick={handleFeedBar}>Keypoints</MenuItem>
+            <MenuItem onClick={handleAnnotationBar}>
+              Annotation Details
+            </MenuItem>
             <MenuItem onClick={handlePopup}>Morphometry Results</MenuItem>
             <MenuItem onClick={handlePopup}>Hierarchy</MenuItem>
           </MenuList>
