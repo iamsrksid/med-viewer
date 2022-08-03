@@ -110,7 +110,7 @@ const Report = ({
                 </Text>
               </HStack>
               <HStack minW="50%">
-                <Text pl="0.5208vw">UHID:</Text>
+                <Text>UHID:</Text>
                 <Text pr="0.5208vw" />
               </HStack>
             </HStack>
@@ -126,7 +126,7 @@ const Report = ({
                 </Text>
               </HStack>
               <HStack minW="50%">
-                <Text pl="0.5208vw">clinician:</Text>
+                <Text>Clinician:</Text>
                 <Text pr="0.5208vw">{caseInfo?.treatingDoctor}</Text>
               </HStack>
             </HStack>
@@ -137,12 +137,12 @@ const Report = ({
             >
               <HStack minW="50%" py="0.7vh" borderRight="1px solid #DEDEDE">
                 <Text pl="0.5208vw" isTruncated>
-                  contact Number:
+                  Contact No:
                 </Text>
                 <Text pr="0.5208vw"> {caseInfo?.patient?.contactNumber}</Text>
               </HStack>
               <HStack minW="50%">
-                <Text pl="0.5208vw">Clinician’s number:</Text>
+                <Text>Clinician’s No:</Text>
                 <Text pr="0.5208vw" />
               </HStack>
             </HStack>
@@ -161,7 +161,7 @@ const Report = ({
                 <Text pr="0.5208vw">{caseInfo?.patient?.patientAddress}</Text>
               </HStack>
               <HStack minW="50%" h="100%">
-                <Text pl="0.5208vw">Hospital:</Text>
+                <Text>Hospital:</Text>
                 <Text pr="0.5208vw" isTruncated>
                   {caseInfo?.treatingHospitalDetails?.hospitalName}
                 </Text>
