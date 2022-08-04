@@ -145,6 +145,7 @@ const AdjustmentBar = ({
         handleReport={handleReport}
         showReport={showReport}
         setShowReport={setShowReport}
+        userInfo={userInfo}
       />
     </Flex>
   );

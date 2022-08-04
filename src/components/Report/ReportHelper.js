@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "@chakra-ui/react";
-import { useAuth0 } from "@auth0/auth0-react";
 import Report from "./Report";
 import { useFabricOverlayState } from "../../state/store";
 
@@ -14,11 +13,11 @@ const ReportHelper = ({
   // handleReport,
   showReport,
   setShowReport,
+  userInfo,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { slideId } = viewerWindow[viewerId];
-  const { user } = useAuth0();
   const [slideData, setSlideData] = useState();
 
   useEffect(() => {
@@ -86,7 +85,7 @@ const ReportHelper = ({
     const { data } = await mediaUpload(annotedSlidesForm);
     await saveReport({
       slideId,
-      subClaim: user?.sub,
+      subClaim: userInfo?.subClaim,
       clinicalStudy: reportData?.clinicalStudy,
       grossDescription: reportData?.grossDescription,
       microscopicDescription: reportData?.microscopicDescription,

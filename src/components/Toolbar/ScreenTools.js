@@ -40,6 +40,7 @@ const ScreenTools = ({
   handleReport,
   showReport,
   setShowReport,
+  userInfo,
 }) => {
   const [popup, setPopup] = useState(false);
   const [screenshotHover, setScreenshotHover] = useState(false);
@@ -175,6 +176,7 @@ const ScreenTools = ({
         handleReport={handleReport}
         showReport={showReport}
         setShowReport={setShowReport}
+        userInfo={userInfo}
       />
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
         {/* <ToolbarButton
