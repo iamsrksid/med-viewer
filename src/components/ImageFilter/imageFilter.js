@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { MdFilter } from "react-icons/md";
-import OpenSeadragon from "openseadragon";
 import { rgb, lab } from "color-convert";
 import ToolbarButton from "../ViewerToolbar/button";
 import "./openseadragon-filtering";
