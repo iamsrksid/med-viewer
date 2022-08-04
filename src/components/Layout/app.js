@@ -10,6 +10,7 @@ import ViewerFactory from "../Viewer/viewerFactory";
 import ViewerImport from "./viewerImport";
 import Navigator from "../Navigator/navigator";
 import ActivityFeed from "../Feed/activityFeed";
+import SlideFeed from "../Feed/feed";
 
 const LayoutApp = ({
   userInfo,
@@ -30,6 +31,9 @@ const LayoutApp = ({
   onLoadAnnotations,
   morphometry,
   uploadPatch,
+  saveReport,
+  mediaUpload,
+  slideInfo,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -49,7 +53,9 @@ const LayoutApp = ({
   const [viewPortToImagey1, setViewPortToImagey1] = useState(0);
   const [viewPortToImagey2, setViewPortToImagey2] = useState(0);
   const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
-
+  const [showFeedBar, setShowFeedBar] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+  const [feedTab, setFeedBar] = useState(0);
   const showSidebar = () => {
     setSidebar(!sidebar);
   };
@@ -57,7 +63,22 @@ const LayoutApp = ({
   const showNavbar = () => {
     setNavbar(!navbar);
   };
+  const handleFeedBar = () => {
+    setShowFeedBar(true);
+    setFeedBar(1);
+  };
+  const handleFeedBarClose = () => {
+    setShowFeedBar(false);
+  };
+  const handleReport = () => {
+    setShowReport(true);
+  };
+  const handleAnnotationBar = () => {
+    setShowAnnotationsBar(!showAnnotationsBar);
+    setShowFeedBar(true);
 
+    setFeedBar(2);
+  };
   return (
     <Flex
       h={ifBiggerScreen ? "calc(100vh - 5.5vh)" : "calc(100vh - 44px)"}
@@ -88,8 +109,16 @@ const LayoutApp = ({
           setStartY={setStartY}
           setWindowWidth={setWindowWidth}
           setWindowHeight={setWindowHeight}
-          setShowAnnotationsBar={setShowAnnotationsBar}
+          handleAnnotationBar={handleAnnotationBar}
           showAnnotationsBar={showAnnotationsBar}
+          saveReport={saveReport}
+          mediaUpload={mediaUpload}
+          slideInfo={slideInfo}
+          showFeedBar={showFeedBar}
+          handleFeedBar={handleFeedBar}
+          handleReport={handleReport}
+          showReport={showReport}
+          setShowReport={setShowReport}
         />
 
         {isNavigatorActive && (
@@ -126,7 +155,7 @@ const LayoutApp = ({
               setSidebar={setSidebar}
             />
           ) : null}
-          {showAnnotationsBar ? (
+          {/* {showAnnotationsBar && !showFeedBar && !showReport ? (
             <ActivityFeed
               viewerId={currentViewer}
               userInfo={userInfo}
@@ -134,6 +163,15 @@ const LayoutApp = ({
               totalCells={totalCells}
               popup={showAnnotationsBar}
               onUpdateAnnotation={onUpdateAnnotation}
+            />
+          ) : null} */}
+          {showFeedBar ? (
+            <SlideFeed
+              viewerId={currentViewer}
+              showFeedBar={showFeedBar}
+              handleFeedBarClose={handleFeedBarClose}
+              showReport={showReport}
+              feedTab={feedTab}
             />
           ) : null}
           <LayoutAppBody>

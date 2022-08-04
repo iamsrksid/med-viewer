@@ -99,65 +99,6 @@ export const getScaleFactor = (viewer) => {
   return zoomValue !== 0 ? zoomValue / 40 : 1 / 40;
 };
 
-// create annotaion message for the feed
-export const createAnnotationMessage = ({
-  shape,
-  viewer,
-  user,
-  annotation,
-}) => {
-  if (!viewer || !shape) return null;
-
-  const message = {
-    username: user ? `${user.firstName} ${user.lastName}` : "",
-    object: shape,
-    image: null,
-  };
-
-  // if annotation data is available
-  // else create a new one
-  if (annotation) {
-    const {
-      hash,
-      text,
-      zoomLevel,
-      points,
-      timeStamp,
-      area,
-      perimeter,
-      cnetroid,
-      endPoints,
-      isAnalysed,
-    } = annotation;
-
-    message.object.set({
-      hash,
-      text,
-      zoomLevel,
-      points,
-      timeStamp,
-      area,
-      perimeter,
-      cnetroid,
-      endPoints,
-      isAnalysed,
-    });
-  } else {
-    const timeStamp = Date.now();
-    const hash = md5(shape + timeStamp);
-
-    // message.image = await getCanvasImage(viewerId);
-    message.object.set({
-      timeStamp,
-      hash,
-      zoomLevel: viewer.viewport.getZoom(),
-      text: "",
-    });
-  }
-
-  return message;
-};
-
 // get s3 bucket folder of tile
 export const getFileBucketFolder = (url) => {
   return `source/${

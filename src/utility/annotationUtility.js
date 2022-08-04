@@ -39,7 +39,7 @@ export const getCanvasJSON = (canvas) => {
   ]);
 };
 
-// create annotaion message for the feed
+// create annotation message for the feed
 export const createAnnotationMessage = ({
   slideId,
   shape,
