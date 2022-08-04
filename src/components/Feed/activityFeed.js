@@ -113,6 +113,8 @@ const ActivityFeed = ({
   totalCells,
   handlePopup,
   popup,
+  saveAnnotationsHandler,
+  showFeedBar,
   onUpdateAnnotation,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -187,15 +189,22 @@ const ActivityFeed = ({
   return (
     <Flex
       as="section"
-      w="305px"
-      position="absolute"
-      h={ifScreenlessthan1660px ? "calc(100% - 90px)" : "90%"}
+      w="100%"
+      position={showFeedBar ? "unset" : "absolute"}
+      // h={ifScreenlessthan1660px ? "calc(100% - 90px)" : "90%"}
+      h={
+        showFeedBar
+          ? "90vh"
+          : !showFeedBar && ifScreenlessthan1660px
+          ? "calc(100% - 90px)"
+          : "90%"
+      }
       padding={0}
       margin={0}
       right="0"
       zIndex={2}
       background="#FCFCFC"
-      boxShadow="-1px 0px 2px rgba(176, 200, 214, 0.3)"
+      boxShadow={showFeedBar ? "" : "-1px 0px 2px rgba(176, 200, 214, 0.3)"}
       direction="column"
       overflowY="auto"
       overflowX="hidden"
@@ -205,6 +214,7 @@ const ActivityFeed = ({
         justifyContent="flex-end"
         alignItems="center"
         background="#F6F6F6"
+        display={showFeedBar ? "none" : "flex"}
       >
         <GrFormClose
           size={16}
@@ -307,9 +317,7 @@ const ActivityFeed = ({
                       <CardDetailsRow
                         title="Description"
                         value={
-                          annotationDetails.object?.text
-                            ? annotationDetails.object.text
-                            : "-"
+                          annotationDetails?.text ? annotationDetails.text : "-"
                         }
                       />
 
