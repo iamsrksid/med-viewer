@@ -16,6 +16,7 @@ import { useFabricOverlayState } from "../../state/store";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
 import Multiview from "../Multiview/multiview";
 import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
+import Tags from "../AnnotationTags/Tags";
 
 const Move = ({
   viewerId,
@@ -158,6 +159,7 @@ const Move = ({
             />
           </Tooltip>
         ) : null}
+        <Tags />
       </Flex>
 
       <Flex
