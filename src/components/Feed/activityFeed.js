@@ -12,6 +12,11 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import "../../styles/scrollBar.css";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -95,7 +100,11 @@ const CustomTabPanel = ({
       {children ? (
         <Flex bg="#FFFFFF" mt="8px">
           <Scrollbars
-            style={{ width: "100%", height: "29vh", borderWidth: "0px" }}
+            style={{
+              width: "100%",
+              height: "29vh",
+              borderWidth: "0px",
+            }}
             renderThumbVertical={(props) => <div className="thumb-vertical" />}
             autoHide
           >
@@ -242,7 +251,7 @@ const ActivityFeed = ({
           ref={scrollbar}
           style={{
             width: "100%",
-            height: annotationDetails ? "33vh" : "62vh",
+            height: annotationDetails ? "30vh" : "62vh",
             borderWidth: "0px",
           }}
           renderThumbVertical={(props) => <div className="thumb-vertical" />}
@@ -300,7 +309,7 @@ const ActivityFeed = ({
               <TabList>
                 <CustomTab title="Annotation Values" />
                 <CustomTab
-                  isDisabled={!annotationDetails?.analysedROI}
+                  isDisabled={!annotationDetails?.analysedData}
                   title="Morphometry Values"
                 />
               </TabList>
@@ -362,78 +371,96 @@ const ActivityFeed = ({
                   ) : null}
                 </CustomTabPanel>
                 <CustomTabPanel title="Morphometry Values">
-                  {annotationDetails?.analysedROI &&
-                  Object.keys(annotationDetails.analysedROI).length > 0 ? (
-                    <>
-                      <CardDetailsRow
-                        title="Total Cells"
-                        value={annotationDetails.analysedROI.totalCells}
-                      />
-                      <CardDetailsRow
-                        title="Min. Perimeter"
-                        value={
-                          <>
-                            {annotationDetails.analysedROI.min_perimeter.toFixed(
-                              2
-                            )}{" "}
-                            &micro;m
-                          </>
-                        }
-                      />
-                      <CardDetailsRow
-                        title="Max. Perimeter"
-                        value={
-                          <>
-                            {annotationDetails.analysedROI.max_perimeter.toFixed(
-                              2
-                            )}{" "}
-                            &micro;m
-                          </>
-                        }
-                      />
-                      <CardDetailsRow
-                        title="Avg. Perimeter"
-                        value={
-                          <>
-                            {annotationDetails.analysedROI.avg_perimeter.toFixed(
-                              2
-                            )}{" "}
-                            &micro;m
-                          </>
-                        }
-                      />
-                      <CardDetailsRow
-                        title="Min. Area"
-                        value={
-                          <>
-                            {annotationDetails.analysedROI.min_area.toFixed(2)}{" "}
-                            &micro;m<sup>2</sup>
-                          </>
-                        }
-                      />
-                      <CardDetailsRow
-                        title="Max. Area"
-                        value={
-                          <>
-                            {annotationDetails.analysedROI.max_area.toFixed(2)}{" "}
-                            &micro;m<sup>2</sup>
-                          </>
-                        }
-                      />
-                      <CardDetailsRow
-                        title="Avg. Area"
-                        value={
-                          <>
-                            {annotationDetails.analysedROI.avg_area.toFixed(2)}{" "}
-                            &micro;m<sup>2</sup>
-                          </>
-                        }
-                      />
-                      <CardDetailsRow
-                        title="Nucleus Cytoplasm Ratio"
-                        value={annotationDetails.analysedROI.ratio.toFixed(2)}
-                      />
-                    </>
+                  {annotationDetails?.analysedData &&
+                  annotationDetails.analysedData.data.length > 0 ? (
+                    <Accordion allowToggle>
+                      {annotationDetails.analysedData.data.map((cell) => {
+                        return (
+                          <AccordionItem
+                            color="black"
+                            isDisabled={cell.status !== "detected"}
+                          >
+                            <h2>
+                              <AccordionButton _focus={{ outline: "none" }}>
+                                <Box flex="1" textAlign="left">
+                                  <Text fontSize="14px">{cell.type}</Text>
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </h2>
+                            {cell.status === "detected" ? (
+                              <AccordionPanel pb={4}>
+                                {/* <CardDetailsRow
+                                  title="Total Cells"
+                                  value={
+                                    annotationDetails.analysedData.totalCells
+                                  }
+                                /> */}
+                                <CardDetailsRow
+                                  title="Nucleus Count"
+                                  value={cell.count}
+                                />
+                                <CardDetailsRow
+                                  title="Nucleus Cytoplasm Ratio"
+                                  value={cell.ratio.toFixed(2)}
+                                />
+                                <CardDetailsRow
+                                  title="Min. Perimeter"
+                                  value={
+                                    <>
+                                      {cell.min_perimeter.toFixed(2)} &micro;m
+                                    </>
+                                  }
+                                />
+                                <CardDetailsRow
+                                  title="Max. Perimeter"
+                                  value={
+                                    <>
+                                      {cell.max_perimeter.toFixed(2)} &micro;m
+                                    </>
+                                  }
+                                />
+                                <CardDetailsRow
+                                  title="Avg. Perimeter"
+                                  value={
+                                    <>
+                                      {cell.avg_perimeter.toFixed(2)} &micro;m
+                                    </>
+                                  }
+                                />
+                                <CardDetailsRow
+                                  title="Min. Area"
+                                  value={
+                                    <>
+                                      {cell.min_area.toFixed(2)} &micro;m
+                                      <sup>2</sup>
+                                    </>
+                                  }
+                                />
+                                <CardDetailsRow
+                                  title="Max. Area"
+                                  value={
+                                    <>
+                                      {cell.max_area.toFixed(2)} &micro;m
+                                      <sup>2</sup>
+                                    </>
+                                  }
+                                />
+                                <CardDetailsRow
+                                  title="Avg. Area"
+                                  value={
+                                    <>
+                                      {cell.avg_area.toFixed(2)} &micro;m
+                                      <sup>2</sup>
+                                    </>
+                                  }
+                                />
+                              </AccordionPanel>
+                            ) : null}
+                          </AccordionItem>
+                        );
+                      })}
+                    </Accordion>
                   ) : null}
                 </CustomTabPanel>
               </TabPanels>

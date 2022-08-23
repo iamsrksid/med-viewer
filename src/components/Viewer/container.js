@@ -18,6 +18,9 @@ const ViewerContainer = ({
   slideType,
   userInfo,
   onLoadAnnotations,
+  onVhutAnalysis,
+  onGetVhutAnalysis,
+  onMessageListener,
   startX,
   startY,
   windowWidth,
@@ -82,6 +85,9 @@ const ViewerContainer = ({
       slideType={slideType}
       onLoadAnnotations={onLoadAnnotations}
       userInfo={userInfo}
+      onVhutAnalysis={onVhutAnalysis}
+      onGetVhutAnalysis={onGetVhutAnalysis}
+      onMessageListener={onMessageListener}
       startX={startX}
       startY={startY}
       windowWidth={windowWidth}

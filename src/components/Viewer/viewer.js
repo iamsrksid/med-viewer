@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import ViewerControls from "./controls";
 import { useFabricOverlayState } from "../../state/store";
 import { updateOverlay } from "../../state/actions/fabricOverlayActions";
+import "../../utility/fabricUtility";
 
 const minZoomLevel = isBrowser ? 0.4 : 0.8;
 
@@ -47,6 +48,9 @@ const Viewer = ({
   slideType,
   userInfo,
   onLoadAnnotations,
+  onVhutAnalysis,
+  onGetVhutAnalysis,
+  onMessageListener,
   startX,
   startY,
   windowWidth,
@@ -126,6 +130,9 @@ const Viewer = ({
           slideType={slideType}
           userInfo={userInfo}
           onLoadAnnotations={onLoadAnnotations}
+          onVhutAnalysis={onVhutAnalysis}
+          onGetVhutAnalysis={onGetVhutAnalysis}
+          onMessageListener={onMessageListener}
         />
       )}
       {/* <Button onClick={selection}>Select</Button> */}
