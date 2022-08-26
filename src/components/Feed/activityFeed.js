@@ -17,6 +17,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Circle,
 } from "@chakra-ui/react";
 import "../../styles/scrollBar.css";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -382,9 +383,16 @@ const ActivityFeed = ({
                           >
                             <h2>
                               <AccordionButton _focus={{ outline: "none" }}>
-                                <Box flex="1" textAlign="left">
+                                <HStack
+                                  flex="1"
+                                  textAlign="left"
+                                  align="center"
+                                >
                                   <Text fontSize="14px">{cell.type}</Text>
-                                </Box>
+                                  {cell.status === "detected" ? (
+                                    <Circle size="12px" bg={cell.color} />
+                                  ) : null}
+                                </HStack>
                                 <AccordionIcon />
                               </AccordionButton>
                             </h2>
