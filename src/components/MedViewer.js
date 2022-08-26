@@ -40,7 +40,7 @@ const MedViewer = ({ viewerIds, ...props }) => {
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));
     const key = getFileBucketFolder(viewerIds[0].awsImageBucketUrl);
-    axios.post("https://development-morphometry-api.prr.ai/download", {
+    axios.post("https://development-morphometry-api.prr.ai/vhut/download", {
       key,
       bucket_name: "med-ai-image-processor",
     });

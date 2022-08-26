@@ -11,6 +11,9 @@ const ViewerFactory = ({
   userInfo,
   setCurrentViewer,
   onLoadAnnotations,
+  onVhutAnalysis,
+  onGetVhutAnalysis,
+  onMessageListener,
   startX,
   startY,
   windowWidth,
@@ -82,6 +85,9 @@ const ViewerFactory = ({
             slideType={slideType}
             userInfo={userInfo}
             onLoadAnnotations={onLoadAnnotations}
+            onVhutAnalysis={onVhutAnalysis}
+            onGetVhutAnalysis={onGetVhutAnalysis}
+            onMessageListener={onMessageListener}
             startX={startX}
             startY={startY}
             windowWidth={windowWidth}

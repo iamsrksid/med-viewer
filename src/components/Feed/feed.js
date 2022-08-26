@@ -26,7 +26,7 @@ const SlideFeed = ({
   return (
     <Box
       w="15.88vw"
-      minW="250px"
+      minW="300px"
       position="fixed"
       right={showReport ? "33.281vw" : "0"}
       zIndex={2}

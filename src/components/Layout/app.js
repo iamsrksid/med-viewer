@@ -29,6 +29,9 @@ const LayoutApp = ({
   onUpdateAnnotation,
   onDeleteAnnotation,
   onLoadAnnotations,
+  onVhutAnalysis,
+  onGetVhutAnalysis,
+  onMessageListener,
   morphometry,
   uploadPatch,
   saveReport,
@@ -182,6 +185,9 @@ const LayoutApp = ({
               userInfo={userInfo}
               onLoadAnnotations={onLoadAnnotations}
               setCurrentViewer={setCurrentViewer}
+              onVhutAnalysis={onVhutAnalysis}
+              onGetVhutAnalysis={onGetVhutAnalysis}
+              onMessageListener={onMessageListener}
               startX={startX}
               startY={startY}
               windowWidth={windowWidth}
