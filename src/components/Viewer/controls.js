@@ -24,6 +24,7 @@ import {
   loadAnnotationsFromDB,
   updateAnnotationInDB,
   zoomToLevel,
+  getVhutAnalysisData,
 } from "../../utility";
 
 const ViewerControls = ({
@@ -32,6 +33,9 @@ const ViewerControls = ({
   slideType,
   userInfo,
   onLoadAnnotations,
+  onVhutAnalysis,
+  onGetVhutAnalysis,
+  onMessageListener,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, color } = fabricOverlayState;
@@ -70,129 +74,227 @@ const ViewerControls = ({
     zoomToLevel({ viewer, value });
   };
 
-  const handleAnalysis = () => {
-    const canvas = fabricOverlay.fabricCanvas();
+  // const handleAnalysis = () => {
+  //   const canvas = fabricOverlay.fabricCanvas();
 
+  //   // get s3 folder key from the tile
+  //   const key = getFileBucketFolder(tile);
+
+  //   // initiate analysis, sending annotation coordinates and s3 folder key
+  //   const initiateAnalysis = async (body) => {
+  //     try {
+  //       const resp = await axios.post(
+  //         "https://development-morphometry-api.prr.ai/viewport_stats",
+  //         body
+  //       );
+
+  //       if (resp.status === 200 && typeof resp.data === "object") {
+  //         const {
+  //           roi_detected_list,
+  //           avg_area,
+  //           avg_perimeter,
+  //           max_area,
+  //           min_area,
+  //           max_perimeter,
+  //           min_perimeter,
+  //           ratio,
+  //         } = resp.data[0];
+
+  //         const cells = createContours({
+  //           canvas,
+  //           contours: roi_detected_list,
+  //           color,
+  //           left: body.left,
+  //           top: body.top,
+  //         });
+
+  //         // group enclosing annotation and cells
+  //         const feedMessage = groupAnnotationAndCells({
+  //           enclosingAnnotation: annotationObject,
+  //           cells,
+  //           optionalData: {
+  //             avg_area,
+  //             avg_perimeter,
+  //             max_area,
+  //             min_area,
+  //             max_perimeter,
+  //             min_perimeter,
+  //             ratio,
+  //             totalCells: roi_detected_list[0]?.length,
+  //           },
+  //         });
+
+  //         // remove enclosing annotation
+  //         // and group to canvas
+  //         if (feedMessage.object) {
+  //           // remove enclosing annotation and add new one to canvas
+  //           canvas.remove(annotationObject);
+  //           canvas.add(feedMessage.object).requestRenderAll();
+
+  //           setFabricOverlayState(
+  //             updateFeedInAnnotationFeed({ id: viewerId, feed: feedMessage })
+  //           );
+  //           updateAnnotationInDB({ slideId, annotation: feedMessage.object });
+  //         }
+  //         toast({
+  //           title: "Analysis complete",
+  //           status: "success",
+  //           duration: 1000,
+  //           isClosable: true,
+  //         });
+  //       } else if (resp.status === 200 && typeof resp.data === "string") {
+  //         toast({
+  //           title: "Analysis complete",
+  //           description: "No cells detected",
+  //           status: "success",
+  //           duration: 1500,
+  //           isClosable: true,
+  //         });
+  //       } else {
+  //         toast({
+  //           title: "Analysis failed",
+  //           description: "Please try again",
+  //           status: "error",
+  //           duration: 1500,
+  //           isClosable: true,
+  //         });
+  //       }
+  //     } catch (err) {
+  //       toast({
+  //         title: "Server Unavailable",
+  //         description: err.message,
+  //         status: "error",
+  //         duration: 1500,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   };
+
+  //   let body = { key };
+
+  //   if (annotationObject) {
+  //     const { left, top, width, height, type } = annotationObject;
+  //     body = { ...body, type, left, top, width, height };
+
+  //     // if annoatation is a freehand, send the coordinates of the path
+  //     // otherwise, send the coordinates of the rectangle
+  //     if (annotationObject.type === "path") {
+  //       body = { ...body, path: annotationObject.path, type: "freehand" };
+  //     } else if (annotationObject.type === "ellipse") {
+  //       body = {
+  //         ...body,
+  //         cx: annotationObject.cx,
+  //         cy: annotationObject.cy,
+  //         rx: annotationObject.rx,
+  //         ry: annotationObject.ry,
+  //         type: "ellipse",
+  //       };
+  //     } else if (annotationObject.type === "polygon") {
+  //       body = { ...body, points: annotationObject.points, type: "polygon" };
+  //     }
+  //   } else {
+  //     const { left, top, width, height } = getViewportBounds(viewer);
+  //     body = { ...body, left, top, width, height, type: "rect" };
+  //   }
+
+  //   initiateAnalysis(body);
+  // };
+
+  const handleVhutAnalysis = async () => {
+    if (!annotationObject) return;
     // get s3 folder key from the tile
     const key = getFileBucketFolder(tile);
 
-    // initiate analysis, sending annotation coordinates and s3 folder key
-    const initiateAnalysis = async (body) => {
-      try {
-        const resp = await axios.post(
-          "https://development-morphometry-api.prr.ai/viewport_stats",
-          body
-        );
-
-        if (resp.status === 200 && typeof resp.data === "object") {
-          const {
-            roi_detected_list,
-            avg_area,
-            avg_perimeter,
-            max_area,
-            min_area,
-            max_perimeter,
-            min_perimeter,
-            ratio,
-          } = resp.data[0];
-
-          const cells = createContours({
-            canvas,
-            contours: roi_detected_list,
-            color,
-            left: body.left,
-            top: body.top,
-          });
-
-          // group enclosing annotation and cells
-          const feedMessage = groupAnnotationAndCells({
-            enclosingAnnotation: annotationObject,
-            cells,
-            optionalData: {
-              avg_area,
-              avg_perimeter,
-              max_area,
-              min_area,
-              max_perimeter,
-              min_perimeter,
-              ratio,
-              totalCells: roi_detected_list[0]?.length,
-            },
-          });
-
-          // remove enclosing annotation
-          // and group to canvas
-          if (feedMessage.object) {
-            // remove enclosing annotation and add new one to canvas
-            canvas.remove(annotationObject);
-            canvas.add(feedMessage.object).requestRenderAll();
-
-            setFabricOverlayState(
-              updateFeedInAnnotationFeed({ id: viewerId, feed: feedMessage })
-            );
-            updateAnnotationInDB({ slideId, annotation: feedMessage.object });
-          }
-          toast({
-            title: "Analysis complete",
-            status: "success",
-            duration: 1000,
-            isClosable: true,
-          });
-        } else if (resp.status === 200 && typeof resp.data === "string") {
-          toast({
-            title: "Analysis complete",
-            description: "No cells detected",
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
-        } else {
-          toast({
-            title: "Analysis failed",
-            description: "Please try again",
-            status: "error",
-            duration: 1500,
-            isClosable: true,
-          });
-        }
-      } catch (err) {
-        toast({
-          title: "Server Unavailable",
-          description: err.message,
-          status: "error",
-          duration: 1500,
-          isClosable: true,
-        });
-      }
+    const { left, top, width, height, type } = annotationObject;
+    let body = {
+      key,
+      type,
+      left,
+      top,
+      width,
+      height,
+      hash: annotationObject.hash,
+      subClaim: userInfo.subClaim,
     };
 
-    let body = { key };
-
-    if (annotationObject) {
-      const { left, top, width, height, type } = annotationObject;
-      body = { ...body, type, left, top, width, height };
-
-      // if annoatation is a freehand, send the coordinates of the path
-      // otherwise, send the coordinates of the rectangle
-      if (annotationObject.type === "path") {
-        body = { ...body, path: annotationObject.path };
-      } else if (annotationObject.type === "ellipse") {
-        body = {
-          ...body,
-          cx: annotationObject.cx,
-          cy: annotationObject.cy,
-          rx: annotationObject.rx,
-          ry: annotationObject.ry,
-        };
-      } else if (annotationObject.type === "polygon") {
-        body = { ...body, points: annotationObject.points };
-      }
-    } else {
-      const { left, top, width, height } = getViewportBounds(viewer);
-      body = { ...body, left, top, width, height, type: "rect" };
+    // if annoatation is a freehand, send the coordinates of the path
+    // otherwise, send the coordinates of the rectangle
+    if (annotationObject.type === "path") {
+      body = { ...body, path: annotationObject.path };
+    } else if (annotationObject.type === "ellipse") {
+      body = {
+        ...body,
+        cx: annotationObject.cx,
+        cy: annotationObject.cy,
+        rx: annotationObject.rx,
+        ry: annotationObject.ry,
+        type: "ellipse",
+      };
+    } else if (annotationObject.type === "polygon") {
+      body = { ...body, points: annotationObject.points };
     }
 
-    initiateAnalysis(body);
+    try {
+      const resp = await onVhutAnalysis(body);
+
+      toast({
+        title: resp.data.message,
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
+    } catch (err) {
+      toast({
+        title: "Server Unavailable",
+        description: err.message,
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleShowAnalysis = async () => {
+    if (!annotationObject) return;
+
+    const canvas = fabricOverlay.fabricCanvas();
+
+    const resp = await onGetVhutAnalysis({
+      analysisId: annotationObject?.analysedROI,
+    });
+
+    if (resp.data && typeof resp.data === "object") {
+      const { vhut } = resp.data;
+      const { left, top } = annotationObject;
+      const { analysedData, cells, totalCells } = await getVhutAnalysisData({
+        canvas,
+        vhut,
+        left,
+        top,
+      });
+
+      // group enclosing annotation and cells
+      const feedMessage = groupAnnotationAndCells({
+        enclosingAnnotation: annotationObject,
+        cells,
+        optionalData: {
+          data: analysedData,
+          totalCells,
+        },
+      });
+
+      // remove enclosing annotation
+      // and group to canvas
+      if (feedMessage.object) {
+        // remove enclosing annotation and add new one to canvas
+        canvas.remove(annotationObject);
+        canvas.add(feedMessage.object).requestRenderAll();
+
+        setFabricOverlayState(
+          updateFeedInAnnotationFeed({ id: viewerId, feed: feedMessage })
+        );
+      }
+    }
   };
 
   useEffect(() => {
@@ -297,6 +399,38 @@ const ViewerControls = ({
     };
   }, [viewer, fabricOverlay]);
 
+  onMessageListener()
+    .then((payload) => {
+      if (payload.notification) {
+        const { title, body } = payload.notification;
+        toast({
+          title: title || "Notification",
+          description: body || "",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+      if (payload.data && payload.data.type === "vhut_analysis") {
+        const canvas = fabricOverlay.fabricCanvas();
+        const { hash, analysedROI } = payload.data;
+        const annotation = canvas.getObjectByHash(hash);
+        if (annotation) {
+          annotation.set({ isAnalysed: true, analysedROI });
+        }
+      }
+    })
+    .catch((err) => {
+      toast({
+        title: "Server Error",
+        description: err.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      console.error(err);
+    });
+
   return (
     <>
       {slideType ? (
@@ -379,9 +513,11 @@ const ViewerControls = ({
         setIsOpen={setIsRightClickActive}
         left={menuPosition.left}
         top={menuPosition.top}
-        handleAnalysis={handleAnalysis}
+        onHandleVhutAnalysis={handleVhutAnalysis}
         setZoom={handleZoomLevel}
         isMorphometryDisabled={isMorphometryDisabled}
+        isAnalysed={annotationObject?.isAnalysed}
+        onHandleShowAnalysis={handleShowAnalysis}
       />
     </>
   );

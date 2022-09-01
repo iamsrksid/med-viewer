@@ -1,5 +1,6 @@
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
+import randomColor from "randomcolor";
 
 /** Get annotation JSON */
 export const getAnnotationJSON = (annotation) => {
@@ -70,6 +71,7 @@ export const createAnnotationMessage = ({
       cnetroid,
       endPoints,
       isAnalysed,
+      analysedROI,
     } = annotation;
 
     message.object.set({
@@ -84,6 +86,7 @@ export const createAnnotationMessage = ({
       cnetroid,
       endPoints,
       isAnalysed,
+      analysedROI,
     });
   } else {
     const timeStamp = Date.now();
@@ -211,7 +214,7 @@ export const addAnnotationsToCanvas = ({
 };
 
 /** create contour(annotation) from the analysed data */
-export const createContour = ({ contour, color, left, top }) => {
+export const createContour = ({ contour, color, tag, left, top }) => {
   const points = contour.map((point) => ({
     x: point[0][0] + left,
     y: point[0][1] + top,
@@ -219,19 +222,20 @@ export const createContour = ({ contour, color, left, top }) => {
   return new fabric.Polygon(points, {
     stroke: "black",
     strokeWidth: 1.2,
+    tag,
     fill: color ? `${color.hex}80` : "",
     strokeUniform: true,
   });
 };
 
 /** create contours(annotation) around cell from analysis data */
-export const createContours = ({ canvas, contours, color, left, top }) => {
+export const createContours = ({ canvas, contours, color, tag, left, top }) => {
   if (!canvas || !contours || contours.length === 0) return null;
 
   const cells = [];
 
   contours[0].forEach((roi) => {
-    cells.push(createContour({ contour: roi, color, left, top }));
+    cells.push(createContour({ contour: roi, color, tag, left, top }));
   });
 
   return cells;
@@ -263,7 +267,7 @@ export const groupAnnotationAndCells = ({
 
   // check if optionalData is available and also is not empty
   if (optionalData && Object.keys(optionalData).length > 0) {
-    group.set({ analysedROI: optionalData });
+    group.set({ analysedData: optionalData });
   }
 
   const message = {
@@ -405,4 +409,60 @@ export const ungroupAnnotations = ({ canvas }) => {
   }
   canvas.getActiveObject().toActiveSelection();
   canvas.requestRenderAll();
+};
+
+export const getVhutAnalysisData = async ({ canvas, vhut, left, top }) => {
+  if (!canvas || !vhut) return null;
+  const { analysedData: data } = vhut;
+  const analysedData = [];
+  let cells = [];
+  let totalCells = 0;
+  data.forEach((item) => {
+    const {
+      status,
+      type,
+      count,
+      ratio,
+      total_area,
+      min_area,
+      max_area,
+      avg_area,
+      total_perimeter,
+      min_perimeter,
+      max_perimeter,
+      avg_perimeter,
+      contours,
+    } = item;
+    const hex = randomColor();
+    if (status === "detected") {
+      const cell = createContours({
+        canvas,
+        contours,
+        tag: type,
+        color: { hex },
+        left,
+        top,
+      });
+
+      cells = [...cells, ...cell];
+      totalCells += count;
+    }
+    analysedData.push({
+      color: hex,
+      status,
+      type,
+      count,
+      ratio,
+      total_area,
+      min_area,
+      max_area,
+      avg_area,
+      total_perimeter,
+      min_perimeter,
+      max_perimeter,
+      avg_perimeter,
+    });
+  });
+
+  return { analysedData, cells, totalCells };
 };
