@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useOpenSeadragon, OpenSeadragon } from "use-open-seadragon";
 import { fabric, initFabricJSOverlay } from "openseadragon-fabricjs-overlay";
+import OpenSeadragon from "openseadragon";
 import { isBrowser } from "react-device-detect";
 import { Box, Button } from "@chakra-ui/react";
 import PropTypes from "prop-types";

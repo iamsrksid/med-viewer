@@ -1,8 +1,7 @@
 import React from "react";
 import { Flex, Spacer } from "@chakra-ui/react";
 import UndoRedo from "../UndoRedo/undoredo";
-import RemoveObject from "../removeComponents";
-import { CustomMenu } from "../RightClickMenu/Menu";
+import ImageFilter from "../ImageFilter/imageFilter";
 
 const ActionsToolbar = ({ viewerId }) => {
   return (
