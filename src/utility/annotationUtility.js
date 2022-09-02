@@ -5,6 +5,7 @@ import randomColor from "randomcolor";
 /** Get annotation JSON */
 export const getAnnotationJSON = (annotation) => {
   if (!annotation) return null;
+  if (annotation.type === "viewport") return annotation;
   return annotation.toJSON([
     "slide",
     "hash",
@@ -68,38 +69,67 @@ export const createAnnotationMessage = ({
       timeStamp,
       area,
       perimeter,
-      cnetroid,
+      centroid,
       endPoints,
       isAnalysed,
       analysedROI,
     } = annotation;
 
-    message.object.set({
-      slide,
-      hash,
-      text,
-      zoomLevel,
-      points,
-      timeStamp,
-      area,
-      perimeter,
-      cnetroid,
-      endPoints,
-      isAnalysed,
-      analysedROI,
-    });
+    if (shape.type === "viewport") {
+      message.object = {
+        ...message.object,
+        slide,
+        hash,
+        text,
+        zoomLevel,
+        points,
+        timeStamp,
+        area,
+        perimeter,
+        centroid,
+        endPoints,
+        isAnalysed,
+        analysedROI,
+      };
+    } else {
+      message.object.set({
+        slide,
+        hash,
+        text,
+        zoomLevel,
+        points,
+        timeStamp,
+        area,
+        perimeter,
+        centroid,
+        endPoints,
+        isAnalysed,
+        analysedROI,
+      });
+    }
   } else {
     const timeStamp = Date.now();
     const hash = md5(shape + timeStamp);
 
     // message.image = await getCanvasImage(viewerId);
-    message.object.set({
-      timeStamp,
-      hash,
-      slide: slideId,
-      zoomLevel: viewer.viewport.getZoom(),
-      text: "",
-    });
+    if (shape.type === "viewport") {
+      message.object = {
+        ...message.object,
+        timeStamp,
+        hash,
+        slide: slideId,
+        zoomLevel: viewer.viewport.getZoom(),
+        text: "",
+      };
+    } else {
+      message.object.set({
+        timeStamp,
+        hash,
+        slide: slideId,
+        zoomLevel: viewer.viewport.getZoom(),
+        text: "",
+      });
+    }
   }
 
   return message;
@@ -169,6 +199,10 @@ export const createAnnotation = (annotation) => {
       });
       break;
 
+    case "viewport":
+      shape = { ...annotation };
+      break;
+
     default:
       shape = null;
   }
@@ -193,7 +227,7 @@ export const addAnnotationsToCanvas = ({
     const shape = createAnnotation(annotation);
 
     // add shape to canvas and to activity feed
-    canvas.add(shape);
+    if (shape && shape.type !== "viewport") canvas.add(shape);
 
     const message = createAnnotationMessage({
       shape,
@@ -215,6 +249,7 @@ export const addAnnotationsToCanvas = ({
 
 /** create contour(annotation) from the analysed data */
 export const createContour = ({ contour, color, tag, left, top }) => {
+  if (!contour || !left || !top) return null;
   const points = contour.map((point) => ({
     x: point[0][0] + left,
     y: point[0][1] + top,

@@ -65,27 +65,32 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
     // get s3 folder key of tile
     const key = getFileBucketFolder(tile);
 
-    // initiate analysis, sending viewport coordinates and s3 folder key
-    const initiateAnalysis = async (body) => {
-      await axios.post("https://development-morphometry-api.prr.ai/wand", body);
-    };
+    // // initiate analysis, sending viewport coordinates and s3 folder key
+    // const initiateAnalysis = async (body) => {
+    //   await axios.post(
+    //     "https://development-morphometry-api.prr.ai/vhut/click/init",
+    //     body
+    //   );
+    //   const shape = { ...body, type: "viewport" };
+    // };
 
-    initiateAnalysis({ x: left, y: top, width, height, key });
+    // initiateAnalysis({ left, top, width, height, key, type: "rect" });
 
     // create annotation of cell
     const createContours = async (body) => {
       // get cell data from the clicked position in viewer
       const resp = await axios.post(
-        "https://development-morphometry-api.prr.ai/click_xy",
+        "https://development-morphometry-api.prr.ai/vhut/click/xy",
         body
       );
 
       // if the click positon is a cell, create annotation
       // also add it the annotation feed
       if (resp && typeof resp.data === "object") {
-        const { con, area, centroid, perimeter, end_points } = resp.data;
+        const { contour, area, centroid, perimeter, end_points, type } =
+          resp.data;
 
-        const shape = createContour({ contour: con, color, left, top });
+        const shape = createContour({ contour, color, left, top });
 
         const message = createAnnotationMessage({ shape, viewer });
 
@@ -94,6 +99,7 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
           perimeter,
           centroid,
           end_points,
+          classType: type,
           isAnalysed: true,
         });
 

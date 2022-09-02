@@ -158,7 +158,10 @@ const ActivityFeed = ({
   const handleClick = (feed) => {
     if (!feed.object) return;
     const canvas = fabricOverlay.fabricCanvas();
-    canvas.setActiveObject(feed.object);
+
+    if (feed.object.type !== "viewport") {
+      canvas.setActiveObject(feed.object);
+    }
 
     // change position to annotation object location
     // except for when MagicWand tool is activated
@@ -167,10 +170,15 @@ const ActivityFeed = ({
       viewer.viewport.zoomTo(zoomLevel);
 
       // get viewport point of middle of selected annotation
-      const vpoint = viewer.viewport.imageToViewportCoordinates(
-        left + width / 2,
-        top + height / 2
-      );
+      let vpoint;
+      if (feed.object.type !== "viewport") {
+        vpoint = viewer.viewport.imageToViewportCoordinates(left, top);
+      } else {
+        vpoint = viewer.viewport.imageToViewportCoordinates(
+          left + width / 2,
+          top + height / 2
+        );
+      }
       viewer.viewport.panTo(vpoint);
     }
 
@@ -283,6 +291,8 @@ const ActivityFeed = ({
                     <Text ml="0.8vw">
                       {feed.object?.type === "group"
                         ? "ROI"
+                        : feed.object?.type === "viewport"
+                        ? `Viewport ${index + 1}`
                         : `Annotation ${index + 1}`}
                     </Text>
                   </Flex>
@@ -333,17 +343,21 @@ const ActivityFeed = ({
 
                       {annotationDetails?.area ? (
                         <>
-                          <CardDetailsRow
+                          {/* <CardDetailsRow
                             title="Centroid X"
                             value={
-                              <>{annotationDetails.centroid?.[0]} &micro;m</>
+                              <>{annotationDetails.centroid?.[0][0]}</>
                             }
                           />
                           <CardDetailsRow
                             title="Centroid Y"
                             value={
-                              <>{annotationDetails.centroid?.[1]} &micro;m</>
+                              <>{annotationDetails.centroid?.[0][1]}</>
                             }
+                          /> */}
+                          <CardDetailsRow
+                            title="Class"
+                            value={annotationDetails?.classType}
                           />
                           <CardDetailsRow
                             title="Perimeter"

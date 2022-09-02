@@ -11,6 +11,7 @@ const ViewerFactory = ({
   userInfo,
   setCurrentViewer,
   onLoadAnnotations,
+  onSaveAnnotation,
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
@@ -85,6 +86,7 @@ const ViewerFactory = ({
             slideType={slideType}
             userInfo={userInfo}
             onLoadAnnotations={onLoadAnnotations}
+            onSaveAnnotation={onSaveAnnotation}
             onVhutAnalysis={onVhutAnalysis}
             onGetVhutAnalysis={onGetVhutAnalysis}
             onMessageListener={onMessageListener}
