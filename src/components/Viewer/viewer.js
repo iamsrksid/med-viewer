@@ -48,6 +48,7 @@ const Viewer = ({
   slideType,
   userInfo,
   onLoadAnnotations,
+  onSaveAnnotation,
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
@@ -130,6 +131,7 @@ const Viewer = ({
           slideType={slideType}
           userInfo={userInfo}
           onLoadAnnotations={onLoadAnnotations}
+          onSaveAnnotation={onSaveAnnotation}
           onVhutAnalysis={onVhutAnalysis}
           onGetVhutAnalysis={onGetVhutAnalysis}
           onMessageListener={onMessageListener}

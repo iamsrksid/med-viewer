@@ -184,6 +184,7 @@ const LayoutApp = ({
               caseInfo={caseInfo}
               userInfo={userInfo}
               onLoadAnnotations={onLoadAnnotations}
+              onSaveAnnotation={onSaveAnnotation}
               setCurrentViewer={setCurrentViewer}
               onVhutAnalysis={onVhutAnalysis}
               onGetVhutAnalysis={onGetVhutAnalysis}

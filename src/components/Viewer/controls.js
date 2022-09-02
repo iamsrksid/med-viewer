@@ -10,6 +10,7 @@ import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
 import {
+  addToActivityFeed,
   updateActivityFeed,
   updateFeedInAnnotationFeed,
 } from "../../state/actions/fabricOverlayActions";
@@ -25,6 +26,9 @@ import {
   updateAnnotationInDB,
   zoomToLevel,
   getVhutAnalysisData,
+  getZoomValue,
+  createAnnotationMessage,
+  saveAnnotationToDB,
 } from "../../utility";
 
 const ViewerControls = ({
@@ -33,6 +37,7 @@ const ViewerControls = ({
   slideType,
   userInfo,
   onLoadAnnotations,
+  onSaveAnnotation,
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
@@ -201,7 +206,38 @@ const ViewerControls = ({
   // };
 
   const handleVhutAnalysis = async () => {
-    if (!annotationObject) return;
+    if (!fabricOverlay) return null;
+    if (!annotationObject) {
+      const canvas = fabricOverlay.fabricCanvas();
+
+      const { x: left, y: top, width, height } = getViewportBounds(viewer);
+
+      // get s3 folder key of tile
+      const key = getFileBucketFolder(tile);
+
+      // initiate analysis, sending viewport coordinates and s3 folder key
+      const initiateAnalysis = async (body) => {
+        axios.post(
+          "https://development-morphometry-api.prr.ai/vhut/click/init",
+          body
+        );
+        const shape = { ...body, type: "viewport" };
+
+        const message = createAnnotationMessage({ slideId, viewer, shape });
+
+        saveAnnotationToDB({
+          slideId,
+          annotation: message.object,
+          onSaveAnnotation,
+        });
+
+        setFabricOverlayState(
+          addToActivityFeed({ id: viewerId, feed: message })
+        );
+      };
+
+      initiateAnalysis({ left, top, width, height, key, type: "rect" });
+    }
     // get s3 folder key from the tile
     const key = getFileBucketFolder(tile);
 
@@ -376,14 +412,18 @@ const ViewerControls = ({
         return;
       }
 
-      // set annotationObject if right click is on annotation
-      if (event.target) {
-        setAnnotationObject(event.target);
-        const zoomValue = convertToZoomValue({
-          level: event.target.zoomLevel,
-          viewer,
-        });
-        setIsMorphometryDisabled(!(zoomValue >= 40));
+      if (getZoomValue(viewer) >= 40) {
+        // set annotationObject if right click is on annotation
+        if (event.target) {
+          setAnnotationObject(event.target);
+          const zoomValue = convertToZoomValue({
+            level: event.target.zoomLevel,
+            viewer,
+          });
+          setIsMorphometryDisabled(!(zoomValue >= 40));
+        } else {
+          setIsMorphometryDisabled(false);
+        }
       } else {
         setAnnotationObject(null);
         setIsMorphometryDisabled(true);

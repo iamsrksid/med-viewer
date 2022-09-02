@@ -57,7 +57,7 @@ const ScreenTools = ({
     <Flex px="20px" height="18px" alignItems="center">
       {/* Add respective tools */}
 
-      <ToolbarButton
+      {/* <ToolbarButton
         icon={
           <BiScreenshot
             size={20}
@@ -69,10 +69,10 @@ const ScreenTools = ({
           handlePopup();
           setScreenshotHover(true);
         }}
-      />
+      /> */}
       <DownloadImage />
       <Divider orientation="vertical" border="1px solid gray" />
-      {morphometry === true ? (
+      {/* {morphometry === true ? (
         <ViewerImport
           viewerId={viewerId}
           uploadPatch={uploadPatch}
@@ -81,11 +81,11 @@ const ScreenTools = ({
           setWindowWidth={setWindowWidth}
           setWindowHeight={setWindowHeight}
         />
-      ) : null}
+      ) : null} */}
       {/* <ViewerImport /> */}
       {/* <DownloadImage /> */}
       {/* <Fullscreen viewerId={viewerId} /> */}
-      <SlideChat />
+      {/* <SlideChat />
       <Tooltip
         label="Share case"
         aria-label="Share case"
@@ -165,7 +165,7 @@ const ScreenTools = ({
           _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
           disabled
         />
-      </Tooltip>
+      </Tooltip> */}
 
       <ReportHelper
         caseInfo={caseInfo}
@@ -204,13 +204,13 @@ const ScreenTools = ({
             />
           </MenuButton>
           <MenuList color="#000">
-            <MenuItem onClick={handlePopup}>Image Details</MenuItem>
+            {/* <MenuItem onClick={handlePopup}>Image Details</MenuItem> */}
             <MenuItem onClick={handleFeedBar}>Keypoints</MenuItem>
             <MenuItem onClick={handleAnnotationBar}>
               Annotation Details
             </MenuItem>
-            <MenuItem onClick={handlePopup}>Morphometry Results</MenuItem>
-            <MenuItem onClick={handlePopup}>Hierarchy</MenuItem>
+            {/* <MenuItem onClick={handlePopup}>Morphometry Results</MenuItem>
+            <MenuItem onClick={handlePopup}>Hierarchy</MenuItem> */}
           </MenuList>
         </Menu>
       </Flex>
