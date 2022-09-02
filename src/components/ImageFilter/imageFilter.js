@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MdFilter } from "react-icons/md";
+import { BsFilterSquare } from "react-icons/bs";
 import { rgb, lab } from "color-convert";
 import ToolbarButton from "../ViewerToolbar/button";
 import "./openseadragon-filtering";
@@ -100,7 +100,7 @@ const ImageFilter = ({ viewerId }) => {
 
   return (
     <ToolbarButton
-      icon={<MdFilter />}
+      icon={<BsFilterSquare color={isActive ? "#3B5D7C" : "#151C25"} />}
       label="RH Filter"
       backgroundColor={!isActive ? "" : "#E4E5E8"}
       outline={isActive ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}

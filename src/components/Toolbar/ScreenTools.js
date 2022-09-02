@@ -20,6 +20,7 @@ import Popup from "../Popup/popup";
 import DownloadImage from "../downloadImage";
 import ViewerImport from "../Layout/viewerImport";
 import { ShareIcon, DocumentsIcon } from "../Icons/CustomIcons";
+import ImageFilter from "../ImageFilter/imageFilter";
 
 const ScreenTools = ({
   viewerId,
@@ -70,6 +71,7 @@ const ScreenTools = ({
           setScreenshotHover(true);
         }}
       /> */}
+      <ImageFilter viewerId={viewerId} />
       <DownloadImage />
       <Divider orientation="vertical" border="1px solid gray" />
       {/* {morphometry === true ? (

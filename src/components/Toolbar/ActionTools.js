@@ -12,7 +12,6 @@ const ActionsToolbar = ({ viewerId }) => {
       flex="1"
     >
       <UndoRedo viewerId={viewerId} />
-      <ImageFilter viewerId={viewerId} />
       <Spacer />
     </Flex>
   );

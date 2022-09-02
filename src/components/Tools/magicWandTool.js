@@ -53,7 +53,7 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
     viewer.addHandler("zoom", handleZoomValueChange);
     return () => {
       viewer.removeHandler("zoom", handleZoomValueChange);
-    };  
+    };
   }, [viewer]);
 
   useEffect(() => {
@@ -93,6 +93,8 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
         const shape = createContour({ contour, color, left, top });
 
         const message = createAnnotationMessage({ shape, viewer });
+
+        if (!message || !message.object) return null;
 
         message.object.set({
           area,
