@@ -124,6 +124,7 @@ const AdjustmentBar = ({
         setTotalCells={setTotalCells}
         onSaveAnnotation={onSaveAnnotation}
         onDeleteAnnotation={onDeleteAnnotation}
+        caseInfo={caseInfo}
       />
       <ActionTools viewerId={currentViewer} />
       <ScreenTools

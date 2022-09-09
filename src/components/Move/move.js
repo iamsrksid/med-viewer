@@ -29,6 +29,7 @@ const Move = ({
   setTotalCells,
   onSaveAnnotation,
   onDeleteAnnotation,
+  caseInfo,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [ifMiddleScreen] = useMediaQuery("(min-width:1560px)");
@@ -159,7 +160,7 @@ const Move = ({
             />
           </Tooltip>
         ) : null}
-        <Tags />
+        <Tags caseInfo={caseInfo} />
       </Flex>
 
       <Flex

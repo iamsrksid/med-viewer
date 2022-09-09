@@ -192,122 +192,10 @@ const NewTags = ({ tagName, tagColour, tags, setTags }) => {
   );
 };
 
-const Tags = () => {
+const Tags = ({ caseInfo }) => {
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   const [isOpen, setIsOpen] = useState(false);
-  const tags = [
-    {
-      Neutrophil: {
-        status: "detected",
-        colour: "#C80000",
-        count: 124,
-        ratio: 6.1915591555173295,
-        total_area: 18452.0,
-        min_area: 22.0,
-        max_area: 649.5,
-        avg_area: 148.80645161290323,
-        total_perimeter: 6615.068762898445,
-        min_perimeter: 20.485281229019165,
-        max_perimeter: 157.0954532623291,
-        avg_perimeter: 53.347328733051974,
-        centroid_list: [1, 2, 3],
-        contour: [1, 2, 3],
-      },
-    },
-    {
-      Epithelial: {
-        status: "detected",
-        colour: "#96C896",
-        count: 124,
-        ratio: 6.1915591555173295,
-        total_area: 18452.0,
-        min_area: 22.0,
-        max_area: 649.5,
-        avg_area: 148.80645161290323,
-        total_perimeter: 6615.068762898445,
-        min_perimeter: 20.485281229019165,
-        max_perimeter: 157.0954532623291,
-        avg_perimeter: 53.347328733051974,
-        centroid_list: [1, 2, 3],
-        contour: [1, 2, 3],
-      },
-    },
 
-    {
-      Plasma: {
-        status: "detected",
-        colour: "#A05AA0",
-        count: 124,
-        ratio: 6.1915591555173295,
-        total_area: 18452.0,
-        min_area: 22.0,
-        max_area: 649.5,
-        avg_area: 148.80645161290323,
-        total_perimeter: 6615.068762898445,
-        min_perimeter: 20.485281229019165,
-        max_perimeter: 157.0954532623291,
-        avg_perimeter: 53.347328733051974,
-        centroid_list: [1, 2, 3],
-        contour: [1, 2, 3],
-      },
-    },
-    {
-      Lymphocyte: {
-        status: "detected",
-        colour: "#323232",
-        count: 124,
-        ratio: 6.1915591555173295,
-        total_area: 18452.0,
-        min_area: 22.0,
-        max_area: 649.5,
-        avg_area: 148.80645161290323,
-        total_perimeter: 6615.068762898445,
-        min_perimeter: 20.485281229019165,
-        max_perimeter: 157.0954532623291,
-        avg_perimeter: 53.347328733051974,
-        centroid_list: [1, 2, 3],
-        contour: [1, 2, 3],
-      },
-    },
-    {
-      Eosinohil: {
-        status: "detected",
-        colour: "#FFC800",
-        count: 124,
-        ratio: 6.1915591555173295,
-        total_area: 18452.0,
-        min_area: 22.0,
-        max_area: 649.5,
-        avg_area: 148.80645161290323,
-        total_perimeter: 6615.068762898445,
-        min_perimeter: 20.485281229019165,
-        max_perimeter: 157.0954532623291,
-        avg_perimeter: 53.347328733051974,
-        centroid_list: [1, 2, 3],
-        contour: [1, 2, 3],
-      },
-    },
-    {
-      Connective: {
-        status: "detected",
-        colour: "#FFF800",
-        count: 124,
-        ratio: 6.1915591555173295,
-        total_area: 18452.0,
-        min_area: 22.0,
-        max_area: 649.5,
-        avg_area: 148.80645161290323,
-        total_perimeter: 6615.068762898445,
-        min_perimeter: 20.485281229019165,
-        max_perimeter: 157.0954532623291,
-        avg_perimeter: 53.347328733051974,
-        centroid_list: [1, 2, 3],
-        contour: [1, 2, 3],
-      },
-    },
-  ];
-
-  const [definedTags, setDefinedTags] = useState(tags);
   return (
     <Menu isOpen={isOpen}>
       <Tooltip
@@ -363,7 +251,7 @@ const Tags = () => {
         p={0}
         boxShadow="0px 2px 4px rgba(0, 0, 0, 0.15)"
       >
-        {tags.map((tagItem) => {
+        {caseInfo.tagsConfig.colorMap.map((tagItem) => {
           return (
             <MenuItem
               _hover={{ bgColor: "#DEDEDE" }}
@@ -372,12 +260,7 @@ const Tags = () => {
               }}
               alignItems="center"
             >
-              <DisplayMenu
-                tagName={Object.keys(tagItem)[0]}
-                tagColour={Object.values(tagItem)[0].colour}
-                tags={definedTags}
-                setTags={setDefinedTags}
-              />
+              <DisplayMenu tagName={tagItem.tag} tagColour={tagItem.color} />
             </MenuItem>
           );
         })}
