@@ -491,7 +491,7 @@ export const getVhutAnalysisData = async ({ canvas, vhut, left, top }) => {
       totalCells += count;
     }
     analysedData.push({
-      color: hex,
+      color: cellColor[type].hex,
       status,
       type,
       count,
