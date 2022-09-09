@@ -1,6 +1,5 @@
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
-import randomColor from "randomcolor";
 
 /** Get annotation JSON */
 export const getAnnotationJSON = (annotation) => {
@@ -452,6 +451,16 @@ export const getVhutAnalysisData = async ({ canvas, vhut, left, top }) => {
   const analysedData = [];
   let cells = [];
   let totalCells = 0;
+
+  const cellColor = {
+    Neutrophil: { hex: "#9800FF" },
+    Epithelial: { hex: "#0008FF" },
+    Lymphocyte: { hex: "#00F6FF" },
+    Plasma: { hex: "#2AFF00" },
+    Eosinohil: { hex: "#FAFF00" },
+    Connective: { hex: "#478C9E" },
+  };
+
   data.forEach((item) => {
     const {
       status,
@@ -474,7 +483,7 @@ export const getVhutAnalysisData = async ({ canvas, vhut, left, top }) => {
         canvas,
         contours,
         tag: type,
-        color: { hex },
+        color: cellColor[type],
         left,
         top,
       });

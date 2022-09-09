@@ -170,15 +170,10 @@ const ActivityFeed = ({
       viewer.viewport.zoomTo(zoomLevel);
 
       // get viewport point of middle of selected annotation
-      let vpoint;
-      if (feed.object.type !== "viewport") {
-        vpoint = viewer.viewport.imageToViewportCoordinates(left, top);
-      } else {
-        vpoint = viewer.viewport.imageToViewportCoordinates(
-          left + width / 2,
-          top + height / 2
-        );
-      }
+      const vpoint = viewer.viewport.imageToViewportRectangle(
+        left + width / 2,
+        top + height / 2
+      );
       viewer.viewport.panTo(vpoint);
     }
 
@@ -362,24 +357,17 @@ const ActivityFeed = ({
                           <CardDetailsRow
                             title="Perimeter"
                             value={
-                              <>
-                                {annotationDetails.perimeter.toFixed(2)}{" "}
-                                &micro;m
-                              </>
+                              <>{annotationDetails.perimeter.toFixed(2)}</>
                             }
                           />
                           <CardDetailsRow
                             title="Area"
-                            value={
-                              <>
-                                {annotationDetails.area} &micro;m<sup>2</sup>
-                              </>
-                            }
+                            value={annotationDetails.area}
                           />
-                          <CardDetailsRow
+                          {/* <CardDetailsRow
                             title="Total Cells"
                             value={totalCells || "-"}
-                          />
+                          /> */}
                         </>
                       ) : null}
                     </>
@@ -428,54 +416,27 @@ const ActivityFeed = ({
                                 />
                                 <CardDetailsRow
                                   title="Min. Perimeter"
-                                  value={
-                                    <>
-                                      {cell.min_perimeter.toFixed(2)} &micro;m
-                                    </>
-                                  }
+                                  value={<>{cell.min_perimeter.toFixed(2)}</>}
                                 />
                                 <CardDetailsRow
                                   title="Max. Perimeter"
-                                  value={
-                                    <>
-                                      {cell.max_perimeter.toFixed(2)} &micro;m
-                                    </>
-                                  }
+                                  value={<>{cell.max_perimeter.toFixed(2)}</>}
                                 />
                                 <CardDetailsRow
                                   title="Avg. Perimeter"
-                                  value={
-                                    <>
-                                      {cell.avg_perimeter.toFixed(2)} &micro;m
-                                    </>
-                                  }
+                                  value={<>{cell.avg_perimeter.toFixed(2)}</>}
                                 />
                                 <CardDetailsRow
                                   title="Min. Area"
-                                  value={
-                                    <>
-                                      {cell.min_area.toFixed(2)} &micro;m
-                                      <sup>2</sup>
-                                    </>
-                                  }
+                                  value={<>{cell.min_area.toFixed(2)}</>}
                                 />
                                 <CardDetailsRow
                                   title="Max. Area"
-                                  value={
-                                    <>
-                                      {cell.max_area.toFixed(2)} &micro;m
-                                      <sup>2</sup>
-                                    </>
-                                  }
+                                  value={<>{cell.max_area.toFixed(2)}</>}
                                 />
                                 <CardDetailsRow
                                   title="Avg. Area"
-                                  value={
-                                    <>
-                                      {cell.avg_area.toFixed(2)} &micro;m
-                                      <sup>2</sup>
-                                    </>
-                                  }
+                                  value={<>{cell.avg_area.toFixed(2)}</>}
                                 />
                               </AccordionPanel>
                             ) : null}

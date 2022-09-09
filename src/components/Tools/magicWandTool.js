@@ -17,6 +17,15 @@ import {
   getViewportBounds,
 } from "../../utility";
 
+const cellColor = {
+  Neutrophil: { hex: "#9800FF" },
+  Epithelial: { hex: "#0008FF" },
+  Lymphocyte: { hex: "#00F6FF" },
+  Plasma: { hex: "#2AFF00" },
+  Eosinohil: { hex: "#FAFF00" },
+  Connective: { hex: "#478C9E" },
+};
+
 const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
@@ -90,7 +99,12 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
         const { contour, area, centroid, perimeter, end_points, type } =
           resp.data;
 
-        const shape = createContour({ contour, color, left, top });
+        const shape = createContour({
+          contour,
+          color: cellColor[type],
+          left,
+          top,
+        });
 
         const message = createAnnotationMessage({ shape, viewer });
 
