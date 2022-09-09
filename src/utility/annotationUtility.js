@@ -477,7 +477,6 @@ export const getVhutAnalysisData = async ({ canvas, vhut, left, top }) => {
       avg_perimeter,
       contours,
     } = item;
-    const hex = randomColor();
     if (status === "detected") {
       const cell = createContours({
         canvas,
