@@ -4,14 +4,12 @@ import {
   Text,
   Flex,
   useMediaQuery,
-  Icon,
   HStack,
   VStack,
   Input,
   Textarea,
   Image,
 } from "@chakra-ui/react";
-import { BiGridHorizontal } from "react-icons/bi";
 import { GrFormClose } from "react-icons/gr";
 
 const Report = ({
@@ -171,13 +169,13 @@ const Report = ({
         </Flex>
         <Flex pt="1.7vh" flexDirection="column">
           <Text fontWeight="600">HISTOPATHOLOGY FINAL DIAGNOSIS REPORT</Text>
-          <HStack pt="1.29vh" justifyContent="space-between">
-            <HStack>
-              <Text fontWeight="600" isTruncated>
-                CASE NUMBER:
-              </Text>
-              <Text ml="0.1rem !important">{caseInfo?.caseName}</Text>
-            </HStack>
+          <HStack pt="1.29vh">
+            <Text fontWeight="600" isTruncated>
+              CASE NUMBER:
+            </Text>
+            <Text ml="0.1rem !important">{caseInfo?.caseName}</Text>
+          </HStack>
+          <HStack pt="1.29vh" spacing={2}>
             <HStack>
               <Text fontWeight="600">DEPARTMENT:</Text>
               <Text ml="0.1rem !important">{caseInfo?.departmentFrom}</Text>
@@ -193,6 +191,7 @@ const Report = ({
             justifyContent="space-around"
             alignItems="flex-start"
             pt="1.29vh"
+            spacing={6}
           >
             <HStack position="relative">
               <Box pl="0.2vw" maxW="30vw">
@@ -207,12 +206,13 @@ const Report = ({
                       onChange={handleReportData("clinicalStudy")}
                       defaultValue={reportData.clinicalStudy}
                       h="full"
+                      w="28vw"
                       minH="12px"
+                      fontSize="14px"
                       position="absolute"
                       overflow="hidden"
+                      borderRadius="0"
                       resize="none"
-                      border="none"
-                      size="xs"
                       outline="none"
                       _focus={{ outline: "none" }}
                       p="0"
@@ -245,13 +245,13 @@ const Report = ({
                     <Textarea
                       onChange={handleReportData("grossDescription")}
                       defaultValue={reportData.grossDescription}
-                      w="100%"
+                      w="28vw"
                       h="full"
                       minH="12px"
+                      fontSize="14px"
                       position="absolute"
                       overflow="hidden"
                       resize="none"
-                      border="none"
                       size="xs"
                       outline="none"
                       _focus={{ outline: "none" }}
@@ -286,12 +286,13 @@ const Report = ({
                     <Textarea
                       onChange={handleReportData("microscopicDescription")}
                       defaultValue={reportData?.microscopicDescription}
+                      w="28vw"
                       h="full"
                       minH="12px"
+                      fontSize="14px"
                       position="absolute"
                       overflow="hidden"
                       resize="none"
-                      border="none"
                       size="xs"
                       outline="none"
                       _focus={{ outline: "none" }}
@@ -324,12 +325,13 @@ const Report = ({
                     <Textarea
                       onChange={handleReportData("impression")}
                       defaultValue={reportData?.impression}
+                      w="28vw"
                       h="full"
                       minH="12px"
+                      fontSize="14px"
                       position="absolute"
                       overflow="hidden"
                       resize="none"
-                      border="none"
                       size="xs"
                       outline="none"
                       _focus={{ outline: "none" }}
@@ -362,12 +364,13 @@ const Report = ({
                     <Textarea
                       onChange={handleReportData("advice")}
                       defaultValue={reportData?.advice}
+                      w="28vw"
                       h="full"
                       minH="12px"
+                      fontSize="14px"
                       position="absolute"
                       overflow="hidden"
                       resize="none"
-                      border="none"
                       size="xs"
                       outline="none"
                       _focus={{ outline: "none" }}
@@ -400,12 +403,13 @@ const Report = ({
                     <Textarea
                       onChange={handleReportData("annotedSlides")}
                       defaultValue={reportData?.annotedSlides}
+                      w="28vw"
                       h="full"
                       minH="12px"
+                      fontSize="14px"
                       position="absolute"
                       overflow="hidden"
                       resize="none"
-                      border="none"
                       size="xs"
                       outline="none"
                       _focus={{ outline: "none" }}
