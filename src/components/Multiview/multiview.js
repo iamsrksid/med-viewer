@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import { IconButton, Tooltip, useMediaQuery } from "@chakra-ui/react";
 import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 import { MultiviewIcon, MultiviewSelectedIcon } from "../Icons/CustomIcons";
-import { IconButton, Tooltip, useMediaQuery } from "@chakra-ui/react";
 
 const Multiview = ({
   viewerId,
@@ -13,7 +13,7 @@ const Multiview = ({
 }) => {
   const iconSize = IconSize();
   const { fabricOverlayState } = useFabricOverlayState();
-  const { viewerWindow } = fabricOverlayState;
+  const { viewerWindow, isAnnotationLoading } = fabricOverlayState;
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
 
   const handleClick = () => {
@@ -59,7 +59,7 @@ const Multiview = ({
             ? "inset -2px -2px 2px rgba(0, 0, 0, 0.1), inset 2px 2px 2px rgba(0, 0, 0, 0.1)"
             : null
         }
-        isDisabled={Object.keys(viewerWindow).length > 1}
+        isDisabled={isAnnotationLoading || Object.keys(viewerWindow).length > 1}
         _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
       />
     </Tooltip>

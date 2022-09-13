@@ -48,7 +48,7 @@ const AdjustmentBar = ({
 }) => {
   const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const { fabricOverlayState } = useFabricOverlayState();
-  const { viewerWindow } = fabricOverlayState;
+  const { viewerWindow, isAnnotationLoading } = fabricOverlayState;
   const { tile } = viewerWindow[currentViewer];
 
   const handleSidebar = () => {
@@ -106,6 +106,7 @@ const AdjustmentBar = ({
           ml="8px"
           pl={0}
           pt={0}
+          isDisabled={isAnnotationLoading}
           isActive={isNavigatorActive}
           onClick={() => {
             setIsMultiview(false);

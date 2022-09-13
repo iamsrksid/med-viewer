@@ -70,3 +70,8 @@ export const changeTile = ({ id, tile, slideId, slideName }) => ({
 export const toggleSync = () => ({
   type: "toggleSync",
 });
+
+export const updateIsAnnotationLoading = ({ isLoading }) => ({
+  type: "updateIsAnnotationLoading",
+  payload: { isLoading },
+});

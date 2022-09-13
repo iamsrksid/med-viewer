@@ -11,6 +11,7 @@ import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
 import {
   addToActivityFeed,
+  updateIsAnnotationLoading,
   updateActivityFeed,
   updateFeedInAnnotationFeed,
 } from "../../state/actions/fabricOverlayActions";
@@ -340,7 +341,7 @@ const ViewerControls = ({
   // load saved annotations from the server
   // once viewer is initialized
   useEffect(() => {
-    if (!fabricOverlay || !onLoadAnnotations) return;
+    if (!fabricOverlay || !onLoadAnnotations) return null;
     const canvas = fabricOverlay.fabricCanvas();
 
     const loadAnnotations = async () => {
@@ -366,6 +367,10 @@ const ViewerControls = ({
             isClosable: true,
           });
         } else {
+          setFabricOverlayState(
+            updateActivityFeed({ id: viewerId, fullFeed: [] })
+          );
+          canvas.requestRenderAll();
           toast({
             title: "Annotation load failed",
             description: "Please try again",
@@ -381,6 +386,12 @@ const ViewerControls = ({
 
     loadAnnotations();
   }, [fabricOverlay, slideId]);
+
+  useEffect(() => {
+    setFabricOverlayState(
+      updateIsAnnotationLoading({ isLoading: !isAnnotationLoaded })
+    );
+  }, [isAnnotationLoaded]);
 
   useEffect(() => {
     if (!viewer) return;

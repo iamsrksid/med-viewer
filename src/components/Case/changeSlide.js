@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   changeTile,
   updateTool,
@@ -9,7 +9,7 @@ import ChangeHelper from "./changeHelper";
 
 const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { viewerWindow } = fabricOverlayState;
+  const { viewerWindow, isAnnotationLoading } = fabricOverlayState;
   const { viewer, fabricOverlay } = viewerWindow[viewerId];
 
   const currentIndex = caseInfo.slides.findIndex(
@@ -19,10 +19,12 @@ const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
   const maxIndex = caseInfo?.slides?.length;
 
   const disabledLeft =
+    isAnnotationLoading ||
     currentIndex - 1 < 0 ||
     caseInfo.slides[currentIndex - 1].awsImageBucketUrl === "";
 
   const disabledRight =
+    isAnnotationLoading ||
     currentIndex + 1 === maxIndex ||
     caseInfo?.slides[currentIndex + 1].awsImageBucketUrl === "";
 

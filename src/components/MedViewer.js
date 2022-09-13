@@ -20,6 +20,7 @@ const MedViewer = ({ viewerIds, ...props }) => {
       username: "",
       roomName: "",
       sync: false,
+      isAnnotationLoading: false,
     }
   );
 

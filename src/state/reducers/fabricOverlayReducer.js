@@ -194,6 +194,7 @@ const fabricOverlayReducer = (state, action) => {
             tile: action.payload.tile,
             slideName: action.payload.slideName,
             slideId: action.payload.slideId,
+            activityFeed: [],
           },
         },
       };
@@ -211,6 +212,12 @@ const fabricOverlayReducer = (state, action) => {
       return {
         ...state,
         sync: !state.sync,
+      };
+
+    case "updateIsAnnotationLoading":
+      return {
+        ...state,
+        isAnnotationLoading: action.payload.isLoading,
       };
 
     default:

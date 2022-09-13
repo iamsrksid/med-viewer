@@ -47,6 +47,11 @@ const Navigator = ({
       const vKeys = Object.keys(viewerWindow);
       if (vKeys.length > 1) {
         const { viewer: v, fabricOverlay: fo } = viewerWindow[vKeys[1]];
+
+        // clear canvas (remove all annotations)
+        fo.fabricCanvas().clear();
+
+        // change tile
         setFabricOverlayState(
           changeTile({
             id: vKeys[1],
@@ -56,9 +61,7 @@ const Navigator = ({
           })
         );
         v.open(slide.awsImageBucketUrl);
-
-        // clear canvas (remove all annotations)
-        fo.fabricCanvas().clear();
+        fo.fabricCanvas().requestRenderAll();
       } else {
         const id = uuidv4();
         setFabricOverlayState(
