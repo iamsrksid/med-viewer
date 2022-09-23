@@ -19,6 +19,7 @@ const ReportHelper = ({
   const { viewerWindow } = fabricOverlayState;
   const { slideId } = viewerWindow[viewerId];
   const [slideData, setSlideData] = useState();
+  const [submitReport, setSubmitReport] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -26,7 +27,7 @@ const ReportHelper = ({
       setSlideData(response?.data);
     }
     fetchData();
-  }, [slideId]);
+  }, [slideId, submitReport]);
 
   const [annotedSlideImages, setAnnotedSlideImages] = useState([]);
   const [reportData, setReportData] = useState({
@@ -83,19 +84,24 @@ const ReportHelper = ({
       annotedSlidesForm.append("files", annotedSlideImages[i]);
     });
     const { data } = await mediaUpload(annotedSlidesForm);
-    await saveReport({
-      slideId,
-      subClaim: userInfo?.subClaim,
-      clinicalStudy: reportData?.clinicalStudy,
-      grossDescription: reportData?.grossDescription,
-      microscopicDescription: reportData?.microscopicDescription,
-      impression: reportData?.impression,
-      advise: reportData?.advice,
-      annotatedSlides: reportData?.annotedSlides,
-      mediaURLs: data?.urls,
-    });
-    clearValues();
-    setShowReport(!showReport);
+    try {
+      await saveReport({
+        slideId,
+        subClaim: userInfo?.subClaim,
+        clinicalStudy: reportData?.clinicalStudy,
+        grossDescription: reportData?.grossDescription,
+        microscopicDescription: reportData?.microscopicDescription,
+        impression: reportData?.impression,
+        advise: reportData?.advice,
+        annotatedSlides: reportData?.annotedSlides,
+        mediaURLs: data?.urls,
+      }).unwrap();
+      clearValues();
+      setSubmitReport(true);
+      setShowReport(!showReport);
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <>
