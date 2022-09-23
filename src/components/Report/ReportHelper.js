@@ -85,7 +85,7 @@ const ReportHelper = ({
     });
     const { data } = await mediaUpload(annotedSlidesForm);
     try {
-      await saveReport({
+      const resp = await saveReport({
         slideId,
         subClaim: userInfo?.subClaim,
         clinicalStudy: reportData?.clinicalStudy,
@@ -97,6 +97,7 @@ const ReportHelper = ({
         mediaURLs: data?.urls,
       }).unwrap();
       clearValues();
+      setSlideData({ slideReports: [{ ...resp.report }] });
       setSubmitReport(true);
       setShowReport(!showReport);
     } catch (err) {
