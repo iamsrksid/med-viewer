@@ -125,9 +125,9 @@ const Circle = ({ viewerId, onSaveAnnotation }) => {
       const scaleFactor = getScaleFactor(viewer);
 
       const fillProps = {
-        fill: `${myStateRef.current.color.hex}40`,
+        fill: "",
         stroke: "#000000",
-        strokeWidth: 1 / scaleFactor,
+        strokeWidth: 2 / scaleFactor,
         strokeUniform: true,
       };
 

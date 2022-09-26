@@ -107,7 +107,7 @@ const Line = ({ viewerId, onSaveAnnotation }) => {
 
       const fillProps = {
         stroke: myStateRef.current.color.hex,
-        strokeWidth: 1 / scaleFactor,
+        strokeWidth: 2 / scaleFactor,
         strokeUniform: true,
       };
 

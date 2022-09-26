@@ -36,7 +36,7 @@ const ZoomSlider = ({ viewerId }) => {
       // const scaleFactor = value !== 0 ? value / 40 : 1 / 40;
       const scaleFactor = getScaleFactor(viewer);
       const canvas = fabricOverlay.fabricCanvas();
-      const strokeWidth = 1 / scaleFactor;
+      const strokeWidth = 2 / scaleFactor;
       const objs = canvas.getObjects();
       objs.forEach((object) => {
         if (object && object.type !== "group") {

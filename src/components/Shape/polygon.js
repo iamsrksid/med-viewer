@@ -90,8 +90,8 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
       const scaleFactor = getScaleFactor(viewer);
       const polygon = new fabric.Polygon(points, {
         stroke: "black",
-        strokeWidth: 1 / scaleFactor,
-        fill: `${myStateRef.current.color.hex}40`,
+        strokeWidth: 2 / scaleFactor,
+        fill: "",
         strokeUniform: true,
       });
       canvas.add(polygon);
@@ -115,7 +115,7 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
         radius: 4 / scaleFactor,
         fill: "#ffffff",
         stroke: "#333333",
-        strokeWidth: 1 / scaleFactor,
+        strokeWidth: 2 / scaleFactor,
         left: pointer.x,
         top: pointer.y,
         selectable: false,
@@ -133,7 +133,7 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
       }
       let points = [pointer.x, pointer.y, pointer.x, pointer.y];
       const line = new fabric.Line(points, {
-        strokeWidth: 1 / scaleFactor,
+        strokeWidth: 2 / scaleFactor,
         fill: `${myStateRef.current.color.hex}40`,
         stroke: "black",
         class: "line",
@@ -156,7 +156,7 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
         });
         polygon = new fabric.Polygon(points, {
           stroke: "black",
-          strokeWidth: 1 / scaleFactor,
+          strokeWidth: 2 / scaleFactor,
           fill: `${myStateRef.current.color.hex}40`,
           selectable: false,
           hasBorders: false,
@@ -174,7 +174,7 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
         ];
         polygon = new fabric.Polygon(polyPoint, {
           stroke: "black",
-          strokeWidth: 1 / scaleFactor,
+          strokeWidth: 2 / scaleFactor,
           fill: `${myStateRef.current.color.hex}40`,
           selectable: false,
           hasBorders: false,
