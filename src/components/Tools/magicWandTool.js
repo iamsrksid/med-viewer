@@ -7,6 +7,7 @@ import { useFabricOverlayState } from "../../state/store";
 import {
   updateTool,
   addToActivityFeed,
+  updateIsViewportAnalysing,
 } from "../../state/actions/fabricOverlayActions";
 import {
   createAnnotationMessage,
@@ -16,6 +17,7 @@ import {
   createContour,
   getViewportBounds,
 } from "../../utility";
+import Loading from "../Loading/loading";
 
 const cellColor = {
   Neutrophil: { hex: "#9800FF" },
@@ -26,7 +28,13 @@ const cellColor = {
   Connective: { hex: "#478C9E" },
 };
 
-const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
+const MagicWandTool = ({
+  userInfo,
+  viewerId,
+  onSaveAnnotation,
+  setTotalCells,
+  onVhutViewportAnalysis,
+}) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { color, viewerWindow, activeTool } = fabricOverlayState;
   const { fabricOverlay, viewer, activityFeed, slideId, tile } =
@@ -35,6 +43,11 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
   const toast = useToast();
 
   const isActive = activeTool === "MagicWand";
+
+  useEffect(() => {
+    if (isActive) return;
+    setFabricOverlayState(updateIsViewportAnalysing(false));
+  }, [isActive, setFabricOverlayState]);
 
   useEffect(() => {
     if (!fabricOverlay || !isActive) return null;
@@ -74,16 +87,38 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
     // get s3 folder key of tile
     const key = getFileBucketFolder(tile);
 
-    // // initiate analysis, sending viewport coordinates and s3 folder key
-    // const initiateAnalysis = async (body) => {
-    //   await axios.post(
-    //     "https://development-morphometry-api.prr.ai/vhut/click/init",
-    //     body
-    //   );
-    //   const shape = { ...body, type: "viewport" };
-    // };
+    // initiate analysis, sending viewport coordinates and s3 folder key
+    const initiateAnalysis = async (body) => {
+      try {
+        const resp = await onVhutViewportAnalysis(body);
+        toast({
+          title: resp.data?.message || "Viewport Ready",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      } catch (error) {
+        setFabricOverlayState(updateTool({ tool: "Move" }));
+        toast({
+          title: "Viewport Analysing",
+          description: "Failed, try  again",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        setFabricOverlayState(updateIsViewportAnalysing(false));
+      }
+    };
 
-    // initiateAnalysis({ left, top, width, height, key, type: "rect" });
+    initiateAnalysis({
+      left,
+      top,
+      width,
+      height,
+      key,
+      type: "rect",
+      userId: userInfo._id,
+    });
 
     // create annotation of cell
     const createContours = async (body) => {
@@ -108,7 +143,7 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
 
         const message = createAnnotationMessage({ shape, viewer });
 
-        if (!message || !message.object) return null;
+        if (!message || !message.object) return;
 
         message.object.set({
           area,
@@ -133,6 +168,13 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
             feed: message,
           })
         );
+      } else if (resp && typeof resp.data === "string") {
+        toast({
+          status: "info",
+          title: "No cell detected!",
+          isClosable: true,
+          duration: 1500,
+        });
       }
     };
 
@@ -160,6 +202,7 @@ const MagicWandTool = ({ viewerId, onSaveAnnotation, setTotalCells }) => {
 
   const handleClick = () => {
     setFabricOverlayState(updateTool({ tool: "MagicWand" }));
+    setFabricOverlayState(updateIsViewportAnalysing(true));
   };
 
   return (

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { IconButton, useDisclosure, useToast } from "@chakra-ui/react";
-import useFabricHelpers from "../../utility/use-fabric-helpers";
 import {
   createAnnotationMessage,
   getScaleFactor,

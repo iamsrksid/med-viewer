@@ -21,6 +21,7 @@ const MedViewer = ({ viewerIds, ...props }) => {
       roomName: "",
       sync: false,
       isAnnotationLoading: false,
+      isViewportAnalysing: false,
     }
   );
 

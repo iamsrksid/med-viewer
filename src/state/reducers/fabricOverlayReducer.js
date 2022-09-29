@@ -220,6 +220,12 @@ const fabricOverlayReducer = (state, action) => {
         isAnnotationLoading: action.payload.isLoading,
       };
 
+    case "UPDATE_VIEWPORT_ANALYSING":
+      return {
+        ...state,
+        isViewportAnalysing: action.payload.isAnalysing,
+      };
+
     default:
       return state;
   }

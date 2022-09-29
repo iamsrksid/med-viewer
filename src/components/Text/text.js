@@ -4,7 +4,7 @@ import { FiType } from "react-icons/fi";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import FontFaceObserver from "fontfaceobserver";
 import { fonts } from "./fontPicker";
-import useFabricHelpers from "../../hooks/use-fabric-helpers";
+import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
@@ -14,7 +14,7 @@ const TypeText = ({ viewerId }) => {
   const { color, viewerWindow, activeTool } = fabricOverlayState;
   const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
 
-  const { deselectAll } = useFabricHelpers();
+  const { deselectAll } = useCanvasHelpers(viewerId);
   const isActive = activeTool === "TYPE";
 
   const [myState, setState] = useState({

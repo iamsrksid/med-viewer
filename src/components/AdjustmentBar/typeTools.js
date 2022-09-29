@@ -12,10 +12,12 @@ import { useFabricOverlayState } from "../../state/store";
 import MagicWandTool from "../Tools/magicWandTool";
 
 const TypeTools = ({
+  userInfo,
   viewerId,
   onSaveAnnotation,
   onDeleteAnnotation,
   setTotalCells,
+  onVhutViewportAnalysis,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
@@ -45,9 +47,11 @@ const TypeTools = ({
         <SimpleGrid columns={2} px="8px" bgColor="#fff" py="8px" spacing={2}>
           <Line viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
           <MagicWandTool
+            userInfo={userInfo}
             viewerId={viewerId}
             setTotalCells={setTotalCells}
             onSaveAnnotation={onSaveAnnotation}
+            onVhutViewportAnalysis={onVhutViewportAnalysis}
           />
           <Square viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
           <Circle viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />

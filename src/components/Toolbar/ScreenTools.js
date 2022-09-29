@@ -7,53 +7,32 @@ import {
   Menu,
   MenuList,
   Divider,
-  useMediaQuery,
-  Tooltip,
-  IconButton,
 } from "@chakra-ui/react";
-import { BiScreenshot, BiDotsVertical } from "react-icons/bi";
-import { RiShareForwardFill } from "react-icons/ri";
-import ToolbarButton from "../ViewerToolbar/button";
-import SlideChat from "../Chat/chat";
+import { BiDotsVertical } from "react-icons/bi";
 import ReportHelper from "../Report/ReportHelper";
 import Popup from "../Popup/popup";
 import DownloadImage from "../downloadImage";
-import ViewerImport from "../Layout/viewerImport";
-import { ShareIcon, DocumentsIcon } from "../Icons/CustomIcons";
 import ImageFilter from "../ImageFilter/imageFilter";
 
 const ScreenTools = ({
   viewerId,
   handleAnnotationBar,
-  showAnnotationsBar,
-  morphometry,
-  uploadPatch,
-  setStartX,
-  setStartY,
-  setWindowWidth,
-  setWindowHeight,
   caseInfo,
   saveReport,
   mediaUpload,
   slideInfo,
   handleFeedBar,
-  showFeedBar,
   handleReport,
   showReport,
   setShowReport,
   userInfo,
 }) => {
   const [popup, setPopup] = useState(false);
-  const [screenshotHover, setScreenshotHover] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
-  const [shareHover, setShareHover] = useState(false);
   const handlePopup = () => {
     setPopup(!popup);
-    setScreenshotHover(false);
-    setShareHover(false);
   };
 
-  const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   return (
     <Flex px="20px" height="18px" alignItems="center">
       {/* Add respective tools */}

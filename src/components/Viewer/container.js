@@ -19,17 +19,11 @@ const ViewerContainer = ({
   userInfo,
   onLoadAnnotations,
   onSaveAnnotation,
+  onDeleteAnnotation,
+  onUpdateAnnotation,
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
-  startX,
-  startY,
-  windowWidth,
-  windowHeight,
-  setViewPortToImagex1,
-  setViewPortToImagey1,
-  setViewPortToImagex2,
-  setViewPortToImagey2,
 }) => {
   const location = useLocation();
 
@@ -86,18 +80,12 @@ const ViewerContainer = ({
       slideType={slideType}
       onLoadAnnotations={onLoadAnnotations}
       onSaveAnnotation={onSaveAnnotation}
+      onDeleteAnnotation={onDeleteAnnotation}
+      onUpdateAnnotation={onUpdateAnnotation}
       userInfo={userInfo}
       onVhutAnalysis={onVhutAnalysis}
       onGetVhutAnalysis={onGetVhutAnalysis}
       onMessageListener={onMessageListener}
-      startX={startX}
-      startY={startY}
-      windowWidth={windowWidth}
-      windowHeight={windowHeight}
-      setViewPortToImagex1={setViewPortToImagex1}
-      setViewPortToImagey1={setViewPortToImagey1}
-      setViewPortToImagex2={setViewPortToImagex2}
-      setViewPortToImagey2={setViewPortToImagey2}
     />
   );
 };

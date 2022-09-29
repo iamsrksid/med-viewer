@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { useMediaQuery } from "@chakra-ui/react";
 import ShapePicker from "./picker";
-import useFabricHelpers from "../../utility/use-fabric-helpers";
+import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 
 import { fonts } from "../Text/fontPicker";
-import { getCanvasImage, getFontSize, getTimestamp } from "../../hooks/utility";
+import { getCanvasImage, getFontSize, getTimestamp } from "../../utility";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateActivityFeed,
@@ -21,7 +21,7 @@ const Shape = ({ viewerId }) => {
 
   const { fabricOverlay, viewer, activityFeed } = viewerWindow[viewerId];
 
-  const { deselectAll } = useFabricHelpers();
+  const { deselectAll } = useCanvasHelpers(viewerId);
   const isActive = activeTool === "SHAPE";
 
   const [shape, setShape] = useState(null);

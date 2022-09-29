@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
-import useFabricHelpers from "../../utility/use-fabric-helpers";
+import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 import {
   createAnnotationMessage,
   getCanvasImage,
@@ -29,7 +29,7 @@ const Circle = ({ viewerId, onSaveAnnotation }) => {
   const { fabricOverlay, viewer, activityFeed, slideId } =
     viewerWindow[viewerId];
 
-  const { deselectAll } = useFabricHelpers();
+  const { deselectAll } = useCanvasHelpers(viewerId);
   const isActive = activeTool === "Circle";
 
   const [shape, setShape] = useState(null);

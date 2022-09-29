@@ -7,9 +7,7 @@ import LayoutInnerBody from "./innerbody";
 import LayoutOuterBody from "./outerbody";
 import LayoutAppSidebar from "./sidebar";
 import ViewerFactory from "../Viewer/viewerFactory";
-import ViewerImport from "./viewerImport";
 import Navigator from "../Navigator/navigator";
-import ActivityFeed from "../Feed/activityFeed";
 import SlideFeed from "../Feed/feed";
 
 const LayoutApp = ({
@@ -30,10 +28,9 @@ const LayoutApp = ({
   onDeleteAnnotation,
   onLoadAnnotations,
   onVhutAnalysis,
+  onVhutViewportAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
-  morphometry,
-  uploadPatch,
   saveReport,
   mediaUpload,
   slideInfo,
@@ -43,18 +40,9 @@ const LayoutApp = ({
   const [sidebar, setSidebar] = useState(false);
   const [isNavigatorActive, setIsNavigatorActive] = useState(false);
   const [isMultiview, setIsMultiview] = useState(false);
-  const [navbar, setNavbar] = useState(true);
   const [totalCells, setTotalCells] = useState(0);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
   const [currentViewer, setCurrentViewer] = useState(viewerIds?.[0]?._id);
-  const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(0);
-  const [windowHeight, setWindowHeight] = useState(0);
-  const [viewPortToImagex1, setViewPortToImagex1] = useState(0);
-  const [viewPortToImagex2, setViewPortToImagex2] = useState(0);
-  const [viewPortToImagey1, setViewPortToImagey1] = useState(0);
-  const [viewPortToImagey2, setViewPortToImagey2] = useState(0);
   const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
   const [showFeedBar, setShowFeedBar] = useState(false);
   const [showReport, setShowReport] = useState(false);
@@ -63,9 +51,6 @@ const LayoutApp = ({
     setSidebar(!sidebar);
   };
 
-  const showNavbar = () => {
-    setNavbar(!navbar);
-  };
   const handleFeedBar = () => {
     setShowFeedBar(true);
     setFeedBar(1);
@@ -96,11 +81,8 @@ const LayoutApp = ({
           annotations={annotations}
           changeCaseHandler={changeCaseHandler}
           currentViewer={currentViewer}
-          goToHomeHandler={goToHomeHandler}
           showSidebar={() => showSidebar()}
           sidebar={sidebar}
-          morphometry={morphometry}
-          uploadPatch={uploadPatch}
           setTotalCells={setTotalCells}
           isNavigatorActive={isNavigatorActive}
           setIsNavigatorActive={setIsNavigatorActive}
@@ -108,16 +90,11 @@ const LayoutApp = ({
           setIsMultiview={setIsMultiview}
           onSaveAnnotation={onSaveAnnotation}
           onDeleteAnnotation={onDeleteAnnotation}
-          setStartX={setStartX}
-          setStartY={setStartY}
-          setWindowWidth={setWindowWidth}
-          setWindowHeight={setWindowHeight}
           handleAnnotationBar={handleAnnotationBar}
-          showAnnotationsBar={showAnnotationsBar}
+          onVhutViewportAnalysis={onVhutViewportAnalysis}
           saveReport={saveReport}
           mediaUpload={mediaUpload}
           slideInfo={slideInfo}
-          showFeedBar={showFeedBar}
           handleFeedBar={handleFeedBar}
           handleReport={handleReport}
           showReport={showReport}
@@ -185,18 +162,12 @@ const LayoutApp = ({
               userInfo={userInfo}
               onLoadAnnotations={onLoadAnnotations}
               onSaveAnnotation={onSaveAnnotation}
+              onDeleteAnnotation={onDeleteAnnotation}
+              onUpdateAnnotation={onUpdateAnnotation}
               setCurrentViewer={setCurrentViewer}
               onVhutAnalysis={onVhutAnalysis}
               onGetVhutAnalysis={onGetVhutAnalysis}
               onMessageListener={onMessageListener}
-              startX={startX}
-              startY={startY}
-              windowWidth={windowWidth}
-              windowHeight={windowHeight}
-              setViewPortToImagex1={setViewPortToImagex1}
-              setViewPortToImagey1={setViewPortToImagey1}
-              setViewPortToImagex2={setViewPortToImagex2}
-              setViewPortToImagey2={setViewPortToImagey2}
             />
           </LayoutAppBody>
 

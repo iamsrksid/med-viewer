@@ -12,17 +12,11 @@ const ViewerFactory = ({
   setCurrentViewer,
   onLoadAnnotations,
   onSaveAnnotation,
+  onDeleteAnnotation,
+  onUpdateAnnotation,
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
-  startX,
-  startY,
-  windowWidth,
-  windowHeight,
-  setViewPortToImagex1,
-  setViewPortToImagey1,
-  setViewPortToImagex2,
-  setViewPortToImagey2,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, sync } = fabricOverlayState;
@@ -87,17 +81,11 @@ const ViewerFactory = ({
             userInfo={userInfo}
             onLoadAnnotations={onLoadAnnotations}
             onSaveAnnotation={onSaveAnnotation}
+            onDeleteAnnotation={onDeleteAnnotation}
+            onUpdateAnnotation={onUpdateAnnotation}
             onVhutAnalysis={onVhutAnalysis}
             onGetVhutAnalysis={onGetVhutAnalysis}
             onMessageListener={onMessageListener}
-            startX={startX}
-            startY={startY}
-            windowWidth={windowWidth}
-            windowHeight={windowHeight}
-            setViewPortToImagex1={setViewPortToImagex1}
-            setViewPortToImagey1={setViewPortToImagey1}
-            setViewPortToImagex2={setViewPortToImagex2}
-            setViewPortToImagey2={setViewPortToImagey2}
           />
         </Flex>
       ))}

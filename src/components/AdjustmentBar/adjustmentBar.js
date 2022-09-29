@@ -22,8 +22,6 @@ const AdjustmentBar = ({
   changeCaseHandler,
   showSidebar,
   sidebar,
-  morphometry,
-  uploadPatch,
   isNavigatorActive,
   setIsNavigatorActive,
   isMultiview,
@@ -31,16 +29,11 @@ const AdjustmentBar = ({
   setTotalCells,
   onSaveAnnotation,
   onDeleteAnnotation,
-  setStartX,
-  setStartY,
-  setWindowWidth,
-  setWindowHeight,
   handleAnnotationBar,
-  showAnnotationsBar,
+  onVhutViewportAnalysis,
   saveReport,
   mediaUpload,
   slideInfo,
-  showFeedBar,
   handleFeedBar,
   handleReport,
   showReport,
@@ -72,7 +65,7 @@ const AdjustmentBar = ({
           backgroundColor={sidebar ? "#E4E5E8" : ""}
           outline={sidebar ? "0.5px solid rgba(0, 21, 63, 1)" : ""}
           icon={<GiHamburgerMenu size={IconSize()} color="#151C25" />}
-          label="Sidebar"
+          label="Case Info"
         />
         <Text color="#151C25" ml="12px" fontSize="14px" fontFamily="inter">
           {caseInfo?.caseName}
@@ -115,6 +108,7 @@ const AdjustmentBar = ({
         />
       </Flex>
       <Move
+        userInfo={userInfo}
         sidebar={sidebar}
         annotations={annotations}
         viewerId={currentViewer}
@@ -125,23 +119,16 @@ const AdjustmentBar = ({
         setTotalCells={setTotalCells}
         onSaveAnnotation={onSaveAnnotation}
         onDeleteAnnotation={onDeleteAnnotation}
+        onVhutViewportAnalysis={onVhutViewportAnalysis}
       />
       <ActionTools viewerId={currentViewer} />
       <ScreenTools
         viewerId={currentViewer}
         handleAnnotationBar={handleAnnotationBar}
-        showAnnotationsBar={showAnnotationsBar}
-        morphometry={morphometry}
-        uploadPatch={uploadPatch}
-        setStartX={setStartX}
-        setStartY={setStartY}
-        setWindowWidth={setWindowWidth}
-        setWindowHeight={setWindowHeight}
         caseInfo={caseInfo}
         saveReport={saveReport}
         mediaUpload={mediaUpload}
         slideInfo={slideInfo}
-        showFeedBar={showFeedBar}
         handleFeedBar={handleFeedBar}
         handleReport={handleReport}
         showReport={showReport}

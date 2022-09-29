@@ -150,8 +150,8 @@ const SetTagMenu = forwardRef((props, ref) => (
 ));
 
 export const CustomMenu = ({
-  isOpen,
-  setIsOpen,
+  isMenuOpen,
+  closeMenu,
   left,
   top,
   setZoom,
@@ -159,10 +159,13 @@ export const CustomMenu = ({
   onHandleShowAnalysis,
   isMorphometryDisabled,
   isAnalysed,
+  handleDeleteAnnotation,
+  isAnnotationSelected,
+  handleEditOpen,
 }) => {
-  return isOpen ? (
+  return isMenuOpen ? (
     <Box>
-      <Menu isOpen={isOpen}>
+      <Menu isOpen={isMenuOpen} onClose={closeMenu}>
         <MenuButton
           as={Button}
           pos="absolute"
@@ -181,13 +184,12 @@ export const CustomMenu = ({
           <MenuItem _hover={{ bgColor: "#DEDEDE" }}>
             <DisplayMenu setZoom={setZoom} />
           </MenuItem>
-          <MenuItem _hover={{ bgColor: "#DEDEDE" }} as={SetTagMenu} />
           {!isAnalysed ? (
             <MenuItem
               _hover={{ bgColor: "#DEDEDE" }}
               onClick={() => {
                 onHandleVhutAnalysis();
-                setIsOpen(false);
+                closeMenu();
               }}
               closeOnSelect
               isDisabled={isMorphometryDisabled}
@@ -199,7 +201,7 @@ export const CustomMenu = ({
               _hover={{ bgColor: "#DEDEDE" }}
               onClick={() => {
                 onHandleShowAnalysis();
-                setIsOpen(false);
+                closeMenu();
               }}
               closeOnSelect
             >
@@ -208,22 +210,25 @@ export const CustomMenu = ({
           )}
           <MenuItem
             _hover={{ bgColor: "#DEDEDE" }}
-            onClick={() => setIsOpen(false)}
+            onClick={handleEditOpen}
+            isDisabled={!isAnnotationSelected}
           >
             Edit
           </MenuItem>
           <MenuDivider />
-          <MenuItem
+          {/* <MenuItem
             _hover={{ bgColor: "#DEDEDE" }}
             onClick={() => setIsOpen(false)}
+            isDisabled={!isAnnotationSelected}
           >
             Lock
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem
             _hover={{ bgColor: "#DEDEDE" }}
-            onClick={() => setIsOpen(false)}
+            onClick={handleDeleteAnnotation}
+            isDisabled={!isAnnotationSelected}
           >
-            Delete Object
+            Delete
           </MenuItem>
         </MenuList>
       </Menu>

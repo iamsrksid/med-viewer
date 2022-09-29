@@ -75,3 +75,8 @@ export const updateIsAnnotationLoading = ({ isLoading }) => ({
   type: "updateIsAnnotationLoading",
   payload: { isLoading },
 });
+
+export const updateIsViewportAnalysing = (isAnalysing) => ({
+  type: "UPDATE_VIEWPORT_ANALYSING",
+  payload: { isAnalysing },
+});

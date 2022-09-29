@@ -18,6 +18,7 @@ import Multiview from "../Multiview/multiview";
 import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
 
 const Move = ({
+  userInfo,
   viewerId,
   annotations,
   sidebar,
@@ -28,6 +29,7 @@ const Move = ({
   setTotalCells,
   onSaveAnnotation,
   onDeleteAnnotation,
+  onVhutViewportAnalysis,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [ifMiddleScreen] = useMediaQuery("(min-width:1560px)");
@@ -176,10 +178,12 @@ const Move = ({
       >
         {typeToolsToggle ? (
           <TypeTools
+            userInfo={userInfo}
             viewerId={viewerId}
             setTotalCells={setTotalCells}
             onSaveAnnotation={onSaveAnnotation}
             onDeleteAnnotation={onDeleteAnnotation}
+            onVhutViewportAnalysis={onVhutViewportAnalysis}
           />
         ) : null}
         {colorBar ? <ColorOptionsPanel /> : null}

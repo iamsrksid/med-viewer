@@ -26,7 +26,7 @@ const osdOptions = {
     pinchToZoom: true,
     scrollToZoom: true,
   },
-  showNavigator: true,
+  showNavigator: false,
   showNavigationControl: false,
   navigatorPosition: "BOTTOM_RIGHT",
   springStiffness: isBrowser ? 20 : 10,
@@ -49,17 +49,11 @@ const Viewer = ({
   userInfo,
   onLoadAnnotations,
   onSaveAnnotation,
+  onDeleteAnnotation,
+  onUpdateAnnotation,
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
-  startX,
-  startY,
-  windowWidth,
-  windowHeight,
-  setViewPortToImagex1,
-  setViewPortToImagey1,
-  setViewPortToImagex2,
-  setViewPortToImagey2,
 }) => {
   const { setFabricOverlayState } = useFabricOverlayState();
   const [viewer, setViewer] = useState(null);
@@ -92,12 +86,7 @@ const Viewer = ({
     };
   }, []);
 
-  const topLeft = { startX, startY };
-  const bottomRightx = startX + windowWidth;
-  const bottomRighty = startY + windowHeight;
-  const bottomRight = { bottomRightx, bottomRighty };
   // Show the results.
-
   useEffect(() => {
     if (!viewer) return null;
 
@@ -132,6 +121,8 @@ const Viewer = ({
           userInfo={userInfo}
           onLoadAnnotations={onLoadAnnotations}
           onSaveAnnotation={onSaveAnnotation}
+          onDeleteAnnotation={onDeleteAnnotation}
+          onUpdateAnnotation={onUpdateAnnotation}
           onVhutAnalysis={onVhutAnalysis}
           onGetVhutAnalysis={onGetVhutAnalysis}
           onMessageListener={onMessageListener}
