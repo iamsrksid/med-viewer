@@ -4,6 +4,7 @@ import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
 import { MultiviewIcon, MultiviewSelectedIcon } from "../Icons/CustomIcons";
+import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
 const Multiview = ({
   viewerId,
@@ -23,7 +24,12 @@ const Multiview = ({
 
   return (
     <Tooltip
-      label="Multiview"
+      label={
+        <TooltipLabel
+          heading="Multiview"
+          paragraph="View Multi-WSI Images in Same Screen"
+        />
+      }
       aria-label="Multiview"
       placement="bottom"
       openDelay={0}

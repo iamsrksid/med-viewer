@@ -4,6 +4,7 @@ import { rgb, lab } from "color-convert";
 import ToolbarButton from "../ViewerToolbar/button";
 import "./openseadragon-filtering";
 import { useFabricOverlayState } from "../../state/store";
+import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
 const ImageFilter = ({ viewerId }) => {
   const { fabricOverlayState } = useFabricOverlayState();
@@ -101,7 +102,7 @@ const ImageFilter = ({ viewerId }) => {
   return (
     <ToolbarButton
       icon={<BsFilterSquare color={isActive ? "#3B5D7C" : "#151C25"} />}
-      label="RH Filter"
+      label={<TooltipLabel heading="Normalisation" />}
       backgroundColor={!isActive ? "" : "#E4E5E8"}
       outline={isActive ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
       boxShadow={

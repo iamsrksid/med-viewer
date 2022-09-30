@@ -4,6 +4,7 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
+import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
 const ChangeHelper = ({
   title,
@@ -22,7 +23,12 @@ const ChangeHelper = ({
     >
       <HStack>
         <Tooltip
-          label="Previous Slide"
+          label={
+            <TooltipLabel
+              heading="Navigator"
+              paragraph="For previous WSI image"
+            />
+          }
           placement="bottom"
           openDelay={0}
           bg="#E4E5E8"
@@ -56,7 +62,9 @@ const ChangeHelper = ({
           {title}
         </Text>
         <Tooltip
-          label="Next Slide"
+          label={
+            <TooltipLabel heading="Navigator" paragraph="For next WSI image" />
+          }
           placement="bottom"
           openDelay={0}
           bg="#E4E5E8"

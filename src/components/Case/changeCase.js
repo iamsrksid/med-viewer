@@ -8,6 +8,7 @@ import SlideNavigatorIcon from "../Navigator/slideNavigatorIcon";
 import ToolbarButton from "../ViewerToolbar/button";
 import { isCaseViewable } from "../../utility/utility";
 import "../../styles/viewer.css";
+import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
 const ChangeCase = ({
   project,
@@ -41,7 +42,12 @@ const ChangeCase = ({
     >
       <HStack>
         <Tooltip
-          label="Previous Slide"
+          label={
+            <TooltipLabel
+              heading="Navigator"
+              paragraph="For previous WSI image"
+            />
+          }
           placement="bottom"
           openDelay={0}
           bg="#E4E5E8"
@@ -78,7 +84,9 @@ const ChangeCase = ({
             : caseInfo?.slides[currentIndex]?.accessionId}
         </Text>
         <Tooltip
-          label="Next Slide"
+          label={
+            <TooltipLabel heading="Navigator" paragraph="For next WSI image" />
+          }
           placement="bottom"
           openDelay={0}
           bg="#E4E5E8"

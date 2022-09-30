@@ -235,21 +235,10 @@ const ActivityFeed = ({
           _hover={{ cursor: "pointer" }}
         />
       </Flex>
-      <HStack
-        fontSize="0.729vw"
-        spacing="1vw"
-        w="100%"
-        h="4vh"
-        marginStart="0.8vw"
-      >
-        {/* <Text>Image Info</Text>
-        <Text>Key Points</Text> */}
-        <Text color="blue">Annotation</Text>
-      </HStack>
 
       <Flex direction="column" marginStart="0.8vw" pt="2px" overflowY="auto">
         <Text fontSize="1vw" pb="3px">
-          Annotation Details
+          Annotation List
         </Text>
         <Scrollbars
           ref={scrollbar}

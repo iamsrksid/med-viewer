@@ -16,6 +16,7 @@ import { useFabricOverlayState } from "../../state/store";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
 import Multiview from "../Multiview/multiview";
 import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
+import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
 const Move = ({
   userInfo,
@@ -91,7 +92,7 @@ const Move = ({
               />
             )
           }
-          label="Move"
+          label={<TooltipLabel heading="Move" />}
           backgroundColor={!isActive ? "" : "#E4E5E8"}
           outline={isActive ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
           boxShadow={
@@ -112,7 +113,12 @@ const Move = ({
 
         {annotations ? (
           <Tooltip
-            label="Annotations"
+            label={
+              <TooltipLabel
+                heading="Annotation"
+                paragraph="Open/Close more annotation tools"
+              />
+            }
             aria-label="Annotations"
             placement="bottom"
             openDelay={0}

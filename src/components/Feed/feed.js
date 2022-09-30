@@ -60,16 +60,6 @@ const SlideFeed = ({
             minH="32px"
             _selected={{ bg: "#FCFCFC" }}
           >
-            Morphometry
-          </Tab>
-          <Tab
-            fontSize="12px"
-            _focus={{ outline: "none" }}
-            p="0.41vw 0.7vh"
-            h="2.962vh"
-            minH="32px"
-            _selected={{ bg: "#FCFCFC" }}
-          >
             Key Points
           </Tab>
           <Tab
@@ -84,9 +74,6 @@ const SlideFeed = ({
           </Tab>
         </TabList>
         <TabPanels bg="#fff" boxShadow="1px 1px 2px rgba(176, 200, 214, 0.25)">
-          <TabPanel h="90vh">
-            <p>comming soon</p>
-          </TabPanel>
           <TabPanel p="0">
             <KeyPoints activityFeed={activityFeed} />
           </TabPanel>

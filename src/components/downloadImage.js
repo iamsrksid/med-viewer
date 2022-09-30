@@ -17,11 +17,12 @@ import {
 } from "@chakra-ui/react";
 import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image";
-import ToolbarButton from "./ViewerToolbar/button";
 import { FiDownload } from "react-icons/fi";
 import { BiScreenshot } from "react-icons/bi";
+import ToolbarButton from "./ViewerToolbar/button";
 import IconSize from "./ViewerToolbar/IconSize";
 import { ScreenshotIcon, ScreenshotSelectedIcon } from "./Icons/CustomIcons";
+import TooltipLabel from "./AdjustmentBar/ToolTipLabel";
 
 const DownloadImage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,7 +45,7 @@ const DownloadImage = () => {
   return (
     <>
       <Tooltip
-        label="Screenshot"
+        label={<TooltipLabel heading="Download Image" />}
         aria-label="Screenshot"
         placement="bottom"
         openDelay={0}
@@ -108,7 +109,7 @@ const DownloadImage = () => {
               as="a"
               mr={3}
               href={img}
-              download={"my-speculative-annotation"}
+              download="my-speculative-annotation"
               fontFamily="ocr-a-std"
             >
               Save

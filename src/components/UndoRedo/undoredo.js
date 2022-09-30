@@ -6,10 +6,11 @@ import "fabric-history/src/index";
 import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
+import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
 const UndoRedo = ({ viewerId }) => {
   const { fabricOverlayState } = useFabricOverlayState();
-  const { fabricOverlay } = fabricOverlayState?.viewerWindow[viewerId];
+  const { fabricOverlay, slideId } = fabricOverlayState?.viewerWindow[viewerId];
   const [canvas, setCanvas] = useState();
   const params = useParams();
 
@@ -18,7 +19,7 @@ const UndoRedo = ({ viewerId }) => {
     const canvasLocal = fabricOverlay.fabricCanvas();
     setCanvas(canvasLocal);
     canvasLocal.clearHistory();
-  }, [fabricOverlay]);
+  }, [fabricOverlay, slideId]);
 
   useEffect(() => {
     if (!params || !canvas) return;
@@ -39,13 +40,13 @@ const UndoRedo = ({ viewerId }) => {
       <ToolbarButton
         icon={<RiArrowGoBackFill size={IconSize()} color="#151C25" />}
         onClick={handleUndo}
-        label="Undo"
+        label={<TooltipLabel heading="Undo" />}
         mr="8px"
       />
       <ToolbarButton
         icon={<RiArrowGoForwardLine size={IconSize()} color="#151C25" />}
         onClick={handleRedo}
-        label="Redo"
+        label={<TooltipLabel heading="Redo" />}
         mr="8px"
       />
     </Flex>

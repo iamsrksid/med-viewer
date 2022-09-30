@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "@chakra-ui/react";
 import Report from "./Report";
 import { useFabricOverlayState } from "../../state/store";
+import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
 const ReportHelper = ({
   restProps,
@@ -111,7 +112,7 @@ const ReportHelper = ({
           ""
         ) : (
           <Tooltip
-            label="View Report"
+            label={<TooltipLabel heading="View Report" />}
             placement="bottom"
             openDelay={0}
             bg="#E4E5E8"
@@ -203,11 +204,11 @@ const ReportHelper = ({
             fontSize="14px"
             fontWeight="500"
             disabled={
-              !reportData?.clinicalStudy ||
-              !reportData?.grossDescription ||
-              !reportData?.microscopicDescription ||
-              !reportData?.impression ||
-              !reportData?.advice ||
+              !reportData?.clinicalStudy &&
+              !reportData?.grossDescription &&
+              !reportData?.microscopicDescription &&
+              !reportData?.impression &&
+              !reportData?.advice &&
               !reportData?.annotedSlides
             }
             onClick={handleReportsubmit}

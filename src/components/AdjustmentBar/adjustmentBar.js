@@ -11,6 +11,7 @@ import IconSize from "../ViewerToolbar/IconSize";
 import SlideNavigatorIcon from "../Navigator/slideNavigatorIcon";
 import ChangeSlide from "../Case/changeSlide";
 import { useFabricOverlayState } from "../../state/store";
+import TooltipLabel from "./ToolTipLabel";
 
 const AdjustmentBar = ({
   userInfo,
@@ -65,7 +66,7 @@ const AdjustmentBar = ({
           backgroundColor={sidebar ? "#E4E5E8" : ""}
           outline={sidebar ? "0.5px solid rgba(0, 21, 63, 1)" : ""}
           icon={<GiHamburgerMenu size={IconSize()} color="#151C25" />}
-          label="Case Info"
+          label={<TooltipLabel heading="Case Info" />}
         />
         <Text color="#151C25" ml="12px" fontSize="14px" fontFamily="inter">
           {caseInfo?.caseName}
@@ -95,7 +96,12 @@ const AdjustmentBar = ({
         )}
         <ToolbarButton
           icon={<SlideNavigatorIcon isNavigatorActive={isNavigatorActive} />}
-          label="Slide Navigation"
+          label={
+            <TooltipLabel
+              heading="Slide Navigation"
+              paragraph="Navigate any slide in this case"
+            />
+          }
           ml="8px"
           pl={0}
           pt={0}
