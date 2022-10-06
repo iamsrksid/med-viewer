@@ -196,7 +196,7 @@ const Report = ({
             <HStack position="relative">
               <Box pl="0.2vw" maxW="30vw">
                 <Text isTruncated fontWeight="600">
-                  CLINICAL STUDY:
+                  CLINICAL HISTORY:
                 </Text>
                 {reportedData?.length > 0 ? (
                   <Text>{reportedData?.[0].clinicalStudy}</Text>
