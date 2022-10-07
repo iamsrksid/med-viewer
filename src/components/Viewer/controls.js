@@ -314,7 +314,7 @@ const ViewerControls = ({
           level: annotation.zoomLevel,
           viewer,
         });
-        setIsMorphometryDisabled(!(zoomValue >= 40));
+        setIsMorphometryDisabled(!(zoomValue >= 20));
       } else {
         setAnnotationObject(null);
         setIsMorphometryDisabled(true);
