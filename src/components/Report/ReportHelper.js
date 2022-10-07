@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Tooltip } from "@chakra-ui/react";
+import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import Report from "./Report";
 import { useFabricOverlayState } from "../../state/store";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
@@ -136,16 +136,19 @@ const ReportHelper = ({
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { slideId } = viewerWindow[viewerId];
-  const [slideData, setSlideData] = useState();
-  const [submitReport, setSubmitReport] = useState(false);
+  const [slideData, setSlideData] = useState(null);
+
+  const toast = useToast();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await slideInfo({ caseId: caseInfo._id });
-      setSlideData(response?.data);
+      const response = await slideInfo({
+        caseId: caseInfo?._id,
+      }).unwrap();
+      setSlideData(response);
     }
     fetchData();
-  }, [slideId, submitReport]);
+  }, [slideId, caseInfo, slideInfo]);
 
   const [annotedSlideImages, setAnnotedSlideImages] = useState([]);
   const [reportData, setReportData] = useState({
@@ -204,7 +207,7 @@ const ReportHelper = ({
     });
     const { data } = await mediaUpload(annotedSlidesForm);
     try {
-      await saveReport({
+      const resp = await saveReport({
         caseId: caseInfo._id,
         subClaim: userInfo?.subClaim,
         clinicalStudy: reportData?.clinicalStudy,
@@ -216,10 +219,24 @@ const ReportHelper = ({
         mediaURLs: data?.urls,
       }).unwrap();
       clearValues();
-      setSubmitReport(true);
+      setSlideData(resp);
       setShowReport(!showReport);
+
+      toast({
+        status: "success",
+        title: "Successfully Reported",
+        duration: 1500,
+        isClosable: true,
+      });
     } catch (err) {
       console.error(err);
+      toast({
+        status: "error",
+        title: "Reporting Failed",
+        description: "Something went wrong, try again!",
+        duration: 1500,
+        isClosable: true,
+      });
     }
   };
 

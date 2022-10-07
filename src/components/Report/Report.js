@@ -14,7 +14,6 @@ import { GrFormClose } from "react-icons/gr";
 
 const Report = ({
   handleReport,
-  report,
   caseInfo,
   reportData,
   handleReportData,
