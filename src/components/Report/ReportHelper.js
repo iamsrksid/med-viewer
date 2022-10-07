@@ -22,6 +22,8 @@ const ReportHelper = ({
   const [slideData, setSlideData] = useState();
   const [submitReport, setSubmitReport] = useState(false);
 
+  console.log(userInfo);
+
   useEffect(() => {
     async function fetchData() {
       const response = await slideInfo({ slideId });
@@ -204,12 +206,13 @@ const ReportHelper = ({
             fontSize="14px"
             fontWeight="500"
             disabled={
-              !reportData?.clinicalStudy &&
-              !reportData?.grossDescription &&
-              !reportData?.microscopicDescription &&
-              !reportData?.impression &&
-              !reportData?.advice &&
-              !reportData?.annotedSlides
+              userInfo.userType !== "pathologist" ||
+              (!reportData?.clinicalStudy &&
+                !reportData?.grossDescription &&
+                !reportData?.microscopicDescription &&
+                !reportData?.impression &&
+                !reportData?.advice &&
+                !reportData?.annotedSlides)
             }
             onClick={handleReportsubmit}
           >
