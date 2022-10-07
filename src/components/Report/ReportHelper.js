@@ -4,29 +4,144 @@ import Report from "./Report";
 import { useFabricOverlayState } from "../../state/store";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 
+const ShowReport = ({ showReport, openReport }) => {
+  return showReport ? (
+    ""
+  ) : (
+    <Tooltip
+      label={<TooltipLabel heading="View Report" />}
+      placement="bottom"
+      openDelay={0}
+      bg="#E4E5E8"
+      color="rgba(89, 89, 89, 1)"
+      fontSize="14px"
+      fontFamily="inter"
+      hasArrow
+      borderRadius="0px"
+      size="20px"
+    >
+      <Button
+        variant="solid"
+        h="32px"
+        ml="15px"
+        borderRadius="0px"
+        backgroundColor="#00153F"
+        _hover={{}}
+        _focus={{
+          border: "none",
+        }}
+        color="#fff"
+        fontFamily="inter"
+        fontSize="14px"
+        fontWeight="500"
+        onClick={openReport}
+      >
+        View Report
+      </Button>
+    </Tooltip>
+  );
+};
+
+const OpenReportButton = ({ openReport }) => {
+  return (
+    <Tooltip
+      label="Report"
+      placement="bottom"
+      openDelay={0}
+      bg="#E4E5E8"
+      color="rgba(89, 89, 89, 1)"
+      fontSize="14px"
+      fontFamily="inter"
+      hasArrow
+      borderRadius="0px"
+      size="20px"
+    >
+      <Button
+        variant="solid"
+        h="32px"
+        ml="15px"
+        borderRadius="0px"
+        backgroundColor="#00153F"
+        _hover={{}}
+        _focus={{
+          border: "none",
+        }}
+        color="#fff"
+        fontFamily="inter"
+        fontSize="14px"
+        fontWeight="500"
+        onClick={openReport}
+      >
+        Report
+      </Button>
+    </Tooltip>
+  );
+};
+
+const SubmitReportButton = ({ userInfo, reportData, handleReportsubmit }) => {
+  return (
+    <Tooltip
+      label="Submit Report"
+      placement="bottom"
+      openDelay={0}
+      bg="#E4E5E8"
+      color="rgba(89, 89, 89, 1)"
+      fontSize="14px"
+      fontFamily="inter"
+      hasArrow
+      borderRadius="0px"
+      size="20px"
+    >
+      <Button
+        variant="solid"
+        h="32px"
+        ml="15px"
+        borderRadius="0px"
+        backgroundColor="#00153F"
+        _hover={{}}
+        _focus={{
+          border: "none",
+        }}
+        color="#fff"
+        fontFamily="inter"
+        fontSize="14px"
+        fontWeight="500"
+        disabled={
+          userInfo.userType !== "pathologist" ||
+          (!reportData?.clinicalStudy &&
+            !reportData?.grossDescription &&
+            !reportData?.microscopicDescription &&
+            !reportData?.impression &&
+            !reportData?.advice &&
+            !reportData?.annotedSlides)
+        }
+        onClick={handleReportsubmit}
+      >
+        Submit Report
+      </Button>
+    </Tooltip>
+  );
+};
+
 const ReportHelper = ({
-  restProps,
   caseInfo,
   saveReport,
   viewerId,
   mediaUpload,
   slideInfo,
-  // handleReport,
   showReport,
   setShowReport,
   userInfo,
 }) => {
-  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { slideId } = viewerWindow[viewerId];
   const [slideData, setSlideData] = useState();
   const [submitReport, setSubmitReport] = useState(false);
 
-  console.log(userInfo);
-
   useEffect(() => {
     async function fetchData() {
-      const response = await slideInfo({ slideId });
+      const response = await slideInfo({ caseId: caseInfo._id });
       setSlideData(response?.data);
     }
     fetchData();
@@ -62,9 +177,9 @@ const ReportHelper = ({
   };
   // clear values of textarea and file upload
   const clearValues = () => {
-    Array.from(document.querySelectorAll("Textarea")).forEach(
-      (input) => (input.value = "")
-    );
+    Array.from(document.querySelectorAll("Textarea")).forEach((input) => {
+      input.value = "";
+    });
     setReportData({
       clinicalStudy: "",
       grossDescription: "",
@@ -73,23 +188,24 @@ const ReportHelper = ({
       advice: "",
       annotedSlides: "",
     });
-    Array.from(document.querySelectorAll("input")).forEach(
-      (input) => (input.value = "")
-    );
+    Array.from(document.querySelectorAll("input")).forEach((input) => {
+      input.value = "";
+    });
     setAnnotedSlideImages([]);
   };
   const handleReport = () => {
     setShowReport(!showReport);
     clearValues();
   };
+
   const handleReportsubmit = async () => {
     annotedSlideImages.forEach((element, i) => {
       annotedSlidesForm.append("files", annotedSlideImages[i]);
     });
     const { data } = await mediaUpload(annotedSlidesForm);
     try {
-      const resp = await saveReport({
-        slideId,
+      await saveReport({
+        caseId: caseInfo._id,
         subClaim: userInfo?.subClaim,
         clinicalStudy: reportData?.clinicalStudy,
         grossDescription: reportData?.grossDescription,
@@ -100,137 +216,43 @@ const ReportHelper = ({
         mediaURLs: data?.urls,
       }).unwrap();
       clearValues();
-      setSlideData({ slideReports: [{ ...resp.report }] });
       setSubmitReport(true);
       setShowReport(!showReport);
     } catch (err) {
       console.error(err);
     }
   };
+
+  // if (slideData) {
+  //   return
+  // }
+
   return (
     <>
-      {slideData?.slideReports?.length > 0 ? (
-        showReport ? (
-          ""
-        ) : (
-          <Tooltip
-            label={<TooltipLabel heading="View Report" />}
-            placement="bottom"
-            openDelay={0}
-            bg="#E4E5E8"
-            color="rgba(89, 89, 89, 1)"
-            fontSize="14px"
-            fontFamily="inter"
-            hasArrow
-            borderRadius="0px"
-            size="20px"
-          >
-            <Button
-              variant="solid"
-              h="32px"
-              ml="15px"
-              borderRadius="0px"
-              backgroundColor="#00153F"
-              _hover={{}}
-              _focus={{
-                border: "none",
-              }}
-              color="#fff"
-              fontFamily="inter"
-              fontSize="14px"
-              fontWeight="500"
-              onClick={openReport}
-            >
-              View Report
-            </Button>
-          </Tooltip>
-        )
-      ) : !slideData?.slideReports.length > 0 && !showReport ? (
-        <Tooltip
-          label="Report"
-          placement="bottom"
-          openDelay={0}
-          bg="#E4E5E8"
-          color="rgba(89, 89, 89, 1)"
-          fontSize="14px"
-          fontFamily="inter"
-          hasArrow
-          borderRadius="0px"
-          size="20px"
-        >
-          <Button
-            variant="solid"
-            h="32px"
-            ml="15px"
-            borderRadius="0px"
-            backgroundColor="#00153F"
-            _hover={{}}
-            _focus={{
-              border: "none",
-            }}
-            color="#fff"
-            fontFamily="inter"
-            fontSize="14px"
-            fontWeight="500"
-            {...restProps}
-            onClick={openReport}
-          >
-            Report
-          </Button>
-        </Tooltip>
+      {slideData ? (
+        <ShowReport showReport={showReport} openReport={openReport} />
+      ) : !showReport ? (
+        <OpenReportButton openReport={openReport} />
       ) : (
-        <Tooltip
-          label="Submit Report"
-          placement="bottom"
-          openDelay={0}
-          bg="#E4E5E8"
-          color="rgba(89, 89, 89, 1)"
-          fontSize="14px"
-          fontFamily="inter"
-          hasArrow
-          borderRadius="0px"
-          size="20px"
-        >
-          <Button
-            variant="solid"
-            h="32px"
-            ml="15px"
-            borderRadius="0px"
-            backgroundColor="#00153F"
-            _hover={{}}
-            _focus={{
-              border: "none",
-            }}
-            color="#fff"
-            fontFamily="inter"
-            fontSize="14px"
-            fontWeight="500"
-            disabled={
-              userInfo.userType !== "pathologist" ||
-              (!reportData?.clinicalStudy &&
-                !reportData?.grossDescription &&
-                !reportData?.microscopicDescription &&
-                !reportData?.impression &&
-                !reportData?.advice &&
-                !reportData?.annotedSlides)
-            }
-            onClick={handleReportsubmit}
-          >
-            Submit Report
-          </Button>
-        </Tooltip>
+        <SubmitReportButton
+          userInfo={userInfo}
+          reportData={reportData}
+          handleReportsubmit={handleReportsubmit}
+        />
       )}
 
-      <Report
-        handleReport={handleReport}
-        report={showReport}
-        reportData={reportData}
-        handleReportData={handleReportData}
-        caseInfo={caseInfo}
-        handleUpload={handleUpload}
-        annotedSlideImages={annotedSlideImages}
-        reportedData={slideData?.slideReports}
-      />
+      {showReport ? (
+        <Report
+          handleReport={handleReport}
+          report={showReport}
+          reportData={reportData}
+          handleReportData={handleReportData}
+          caseInfo={caseInfo}
+          handleUpload={handleUpload}
+          annotedSlideImages={annotedSlideImages}
+          reportedData={slideData}
+        />
+      ) : null}
     </>
   );
 };

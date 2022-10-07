@@ -39,7 +39,7 @@ const Report = ({
       right="0px"
       bg="#FCFCFC"
       flexDirection="column"
-      display={report ? "flex" : "none"}
+      display="flex"
     >
       <Flex
         py="0.5px"
@@ -198,8 +198,8 @@ const Report = ({
                 <Text isTruncated fontWeight="600">
                   CLINICAL HISTORY:
                 </Text>
-                {reportedData?.length > 0 ? (
-                  <Text>{reportedData?.[0].clinicalStudy}</Text>
+                {reportedData ? (
+                  <Text>{reportedData?.clinicalStudy}</Text>
                 ) : (
                   <>
                     <Textarea
@@ -238,8 +238,8 @@ const Report = ({
                 <Text isTruncated fontWeight="600" w="100%">
                   GROSS DESCRIPTION:
                 </Text>
-                {reportedData?.length > 0 ? (
-                  <Text>{reportedData?.[0]?.grossDescription}</Text>
+                {reportedData ? (
+                  <Text>{reportedData?.grossDescription}</Text>
                 ) : (
                   <>
                     <Textarea
@@ -279,8 +279,8 @@ const Report = ({
                 <Text isTruncated fontWeight="600">
                   MICROSCOPIC DESCRIPTION:
                 </Text>
-                {reportedData?.length > 0 ? (
-                  <Text>{reportedData?.[0]?.microscopicDescription}</Text>
+                {reportedData ? (
+                  <Text>{reportedData?.microscopicDescription}</Text>
                 ) : (
                   <>
                     <Textarea
@@ -318,8 +318,8 @@ const Report = ({
                 <Text isTruncated fontWeight="600">
                   IMPRESSION:
                 </Text>
-                {reportedData?.length > 0 ? (
-                  <Text>{reportedData?.[0]?.impression}</Text>
+                {reportedData ? (
+                  <Text>{reportedData?.impression}</Text>
                 ) : (
                   <>
                     <Textarea
@@ -357,8 +357,8 @@ const Report = ({
                 <Text isTruncated fontWeight="600">
                   ADVICE:
                 </Text>
-                {reportedData?.length > 0 ? (
-                  <Text>{reportedData?.[0]?.advise}</Text>
+                {reportedData ? (
+                  <Text>{reportedData?.advise}</Text>
                 ) : (
                   <>
                     <Textarea
@@ -396,8 +396,8 @@ const Report = ({
                 <Text isTruncated fontWeight="600">
                   ANNOTED SLIDES:
                 </Text>
-                {reportedData?.length > 0 ? (
-                  <Text>{reportedData?.[0]?.annotedSlides}</Text>
+                {reportedData ? (
+                  <Text>{reportedData?.annotedSlides}</Text>
                 ) : (
                   <>
                     <Textarea
@@ -432,8 +432,8 @@ const Report = ({
               </Box>
             </HStack>
             <Flex w="100%" pt="2vh" alignItems="flex-start" flexWrap="wrap">
-              {reportedData?.length > 0
-                ? reportedData?.[0]?.mediaURLs?.map((url) => {
+              {reportedData
+                ? reportedData?.mediaURLs?.map((url) => {
                     return (
                       <Image
                         key={url}
@@ -456,7 +456,7 @@ const Report = ({
                     />
                   ))}
             </Flex>
-            {!reportedData?.length > 0 && (
+            {!reportedData && (
               <Flex
                 borderRadius="0px"
                 fontSize="12px"
