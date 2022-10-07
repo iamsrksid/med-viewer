@@ -101,9 +101,9 @@ export const getScaleFactor = (viewer) => {
 
 // get s3 bucket folder of tile
 export const getFileBucketFolder = (url) => {
-  return `source/${
-    url ? `${url.split("/")[url.split("/").length - 2]}.svs` : ""
-  }`;
+  if (!url) return "";
+  url = url.split("/");
+  return `unprocessed_images/hospital/${url[4]}/source/${url[6]}.svs`;
 };
 
 // get viewport bounds

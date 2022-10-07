@@ -165,7 +165,7 @@ export const CustomMenu = ({
 }) => {
   return isMenuOpen ? (
     <Box>
-      <Menu isOpen={isMenuOpen} onClose={closeMenu}>
+      <Menu isOpen={isMenuOpen}>
         <MenuButton
           as={Button}
           pos="absolute"
