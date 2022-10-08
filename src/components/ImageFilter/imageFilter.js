@@ -9,7 +9,7 @@ import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 const ImageFilter = ({ viewerId }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
-  const { viewer } = viewerWindow[viewerId];
+  const { viewer, fabricOverlay } = viewerWindow[viewerId];
   const [isActive, setIsActive] = useState(false);
 
   const targetMean = [56.35951712, 55.60842896, -40.15281677];
@@ -87,6 +87,7 @@ const ImageFilter = ({ viewerId }) => {
     if (!viewer) return;
     if (isActive) {
       viewer.setFilterOptions(null);
+      viewer.viewport.zoomBy(1.01);
       setIsActive(false);
     } else {
       viewer.setFilterOptions({

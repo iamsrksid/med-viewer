@@ -20,6 +20,7 @@ const Report = ({
   handleUpload,
   annotedSlideImages,
   reportedData,
+  userInfo,
 }) => {
   const [ifwidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const handleReportClose = () => {
@@ -107,7 +108,7 @@ const Report = ({
                 </Text>
               </HStack>
               <HStack minW="50%">
-                <Text>UHID:</Text>
+                <Text>UHID: {caseInfo?.patient?.uhid}</Text>
                 <Text pr="0.5208vw" />
               </HStack>
             </HStack>
@@ -119,7 +120,9 @@ const Report = ({
               <HStack minW="50%" py="0.7vh" borderRight="1px solid #DEDEDE">
                 <Text pl="0.5208vw">Gender/Age:</Text>
                 <Text pr="0.5208vw">
-                  {`${caseInfo?.patient?.gender}/${caseInfo?.patient?.age?.years}`}
+                  {`${caseInfo?.patient?.gender}/${
+                    caseInfo?.patient?.age?.years ?? "-"
+                  }`}
                 </Text>
               </HStack>
               <HStack minW="50%">
@@ -136,11 +139,19 @@ const Report = ({
                 <Text pl="0.5208vw" isTruncated>
                   Contact No:
                 </Text>
-                <Text pr="0.5208vw"> {caseInfo?.patient?.contactNumber}</Text>
+                <Text pr="0.5208vw">
+                  {caseInfo?.patient?.contactNumber
+                    ? `+91-${caseInfo?.patient?.contactNumber}`
+                    : "-"}
+                </Text>
               </HStack>
               <HStack minW="50%">
-                <Text>Clinician’s No:</Text>
-                <Text pr="0.5208vw" />
+                <Text>Helpline No:</Text>
+                <Text pr="0.5208vw">
+                  {caseInfo?.patient?.contactNumber
+                    ? `+91-${caseInfo?.patient?.contactNumber}`
+                    : "-"}
+                </Text>
               </HStack>
             </HStack>
             <HStack
@@ -155,7 +166,11 @@ const Report = ({
                 borderRight="1px solid #DEDEDE"
               >
                 <Text pl="0.5208vw">Address:</Text>
-                <Text pr="0.5208vw">{caseInfo?.patient?.patientAddress}</Text>
+                <Text pr="0.5208vw">
+                  {caseInfo?.patient?.patientAddress
+                    ? caseInfo?.patient?.patientAddress
+                    : "-"}
+                </Text>
               </HStack>
               <HStack minW="50%" h="100%">
                 <Text>Hospital:</Text>

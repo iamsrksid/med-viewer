@@ -11,7 +11,7 @@ const ActionsToolbar = ({ viewerId }) => {
       alignItems="center"
       flex="1"
     >
-      <UndoRedo viewerId={viewerId} />
+      {/* <UndoRedo viewerId={viewerId} /> */}
       <Spacer />
     </Flex>
   );

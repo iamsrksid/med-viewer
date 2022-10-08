@@ -260,6 +260,7 @@ const ReportHelper = ({
 
       {showReport ? (
         <Report
+          userInfo={userInfo}
           handleReport={handleReport}
           report={showReport}
           reportData={reportData}

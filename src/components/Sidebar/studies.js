@@ -28,14 +28,22 @@ const Studies = ({ project, caseInfo }) => {
     "Specimen Size": caseInfo?.organs[1].organSize,
     Hospital: caseInfo?.treatingHospitalDetails?.hospitalName,
     Clinician: `Dr. ${caseInfo?.treatingDoctor}`,
-    "Clinician's No.": `+91-${caseInfo?.patient?.contactNumber}`,
+    "Helpline No.": caseInfo?.patient?.contactNumber
+      ? `+91-${caseInfo?.patient?.contactNumber}`
+      : "-",
   };
 
   const patientDetails = {
+    UHID: `${caseInfo?.patient?.uhid}`,
     "Patient Name": `${caseInfo?.patient?.patientName.firstName} ${caseInfo?.patient?.patientName.lastName}`,
-    "Gender/Age": `${caseInfo?.patient?.gender}/${caseInfo?.patient?.age?.years}`,
-    "Contact No.": `+91-${caseInfo?.patient?.contactNumber}`,
-    Address: caseInfo?.patient?.patientAddress,
+    Gender: caseInfo?.patient?.gender ?? "-",
+    Age: caseInfo?.patient?.age?.years ?? "-",
+    "Contact No.": caseInfo?.patient?.contactNumber
+      ? `+91-${caseInfo?.patient?.contactNumber}`
+      : "-",
+    Address: caseInfo?.patient?.patientAddress
+      ? caseInfo?.patient?.patientAddress
+      : "-",
   };
 
   return caseInfo ? (
