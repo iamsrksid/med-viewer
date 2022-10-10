@@ -53,7 +53,7 @@ const LayoutApp = ({
 
   const handleFeedBar = () => {
     setShowFeedBar(true);
-    setFeedBar(1);
+    setFeedBar(0);
   };
   const handleFeedBarClose = () => {
     setShowFeedBar(false);
@@ -65,7 +65,7 @@ const LayoutApp = ({
     setShowAnnotationsBar(!showAnnotationsBar);
     setShowFeedBar(true);
 
-    setFeedBar(2);
+    setFeedBar(1);
   };
   return (
     <Flex
