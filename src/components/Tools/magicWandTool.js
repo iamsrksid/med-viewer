@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { IconButton, Image, useToast } from "@chakra-ui/react";
+import { IconButton, useToast } from "@chakra-ui/react";
 import { VscWand } from "react-icons/vsc";
-import TypeButton from "../typeButton";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateTool,
@@ -17,7 +16,6 @@ import {
   createContour,
   getViewportBounds,
 } from "../../utility";
-import Loading from "../Loading/loading";
 
 const cellColor = {
   Neutrophil: { hex: "#9800FF" },
@@ -36,8 +34,8 @@ const MagicWandTool = ({
   onVhutViewportAnalysis,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
-  const { color, viewerWindow, activeTool } = fabricOverlayState;
-  const { fabricOverlay, viewer, activityFeed, slideId, tile } =
+  const { viewerWindow, activeTool } = fabricOverlayState;
+  const { fabricOverlay, viewer, slideId, originalFileUrl } =
     viewerWindow[viewerId];
   const [zoomValue, setZoomValue] = useState(1);
   const toast = useToast();
@@ -84,8 +82,8 @@ const MagicWandTool = ({
 
     const { x: left, y: top, width, height } = getViewportBounds(viewer);
 
-    // get s3 folder key of tile
-    const key = getFileBucketFolder(tile);
+    // get s3 folder key of originalFileUrl
+    const key = getFileBucketFolder(originalFileUrl);
 
     // initiate analysis, sending viewport coordinates and s3 folder key
     const initiateAnalysis = async (body) => {

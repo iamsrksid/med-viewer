@@ -19,6 +19,7 @@ const defaultViewerWindow = {
   tile: "",
   slideName: "",
   slideId: "",
+  originalFileUrl: "",
 };
 
 const fabricOverlayReducer = (state, action) => {
@@ -124,6 +125,7 @@ const fabricOverlayReducer = (state, action) => {
           tile: w.tile,
           slideName: w.slideName,
           slideId: w.slideId,
+          originalFileUrl: w.originalFileUrl,
         };
       });
       return {
@@ -161,6 +163,7 @@ const fabricOverlayReducer = (state, action) => {
             tile: action.payload.tile,
             slideName: action.payload.slideName,
             parent: action.payload.viewerId,
+            originalFileUrl: action.payload.originalFileUrl,
           },
         },
       };
@@ -194,6 +197,7 @@ const fabricOverlayReducer = (state, action) => {
             tile: action.payload.tile,
             slideName: action.payload.slideName,
             slideId: action.payload.slideId,
+            originalFileUrl: action.originalFileUrl,
             activityFeed: [],
           },
         },

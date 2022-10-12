@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Flex, HStack, IconButton, Image, Text } from "@chakra-ui/react";
 import {
   MdOutlineKeyboardArrowLeft,
@@ -58,6 +58,7 @@ const Navigator = ({
             tile: slide.awsImageBucketUrl,
             slideName: slide.accessionId,
             slideId: slide._id,
+            originalFileUrl: slide.originalFileUrl,
           })
         );
         v.open(slide.awsImageBucketUrl);
@@ -71,6 +72,7 @@ const Navigator = ({
               tile: slide.awsImageBucketUrl,
               slideName: slide.accessionId,
               slideId: slide._id,
+              originalFileUrl: slide.originalFileUrl,
             },
           ])
         );
@@ -83,6 +85,7 @@ const Navigator = ({
           tile: slide.awsImageBucketUrl,
           slideName: slide.accessionId,
           slideId: slide._id,
+          originalFileUrl: slide.originalFileUrl,
         })
       );
       viewer.open(slide.awsImageBucketUrl);

@@ -39,6 +39,7 @@ const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
         tile: nextSlide.awsImageBucketUrl,
         slideName: nextSlide.accessionId,
         slideId: nextSlide._id,
+        originalFileUrl: nextSlide.originalFileUrl,
       })
     );
     viewer.open(nextSlide.awsImageBucketUrl);

@@ -57,7 +57,8 @@ const ViewerControls = ({
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, isViewportAnalysing } = fabricOverlayState;
-  const { viewer, fabricOverlay, slideId, tile } = viewerWindow[viewerId];
+  const { viewer, fabricOverlay, slideId, originalFileUrl } =
+    viewerWindow[viewerId];
   const { updateAnnotation, deleteAnnotation } = useCanvasHelpers(viewerId);
 
   const [isAnnotationLoaded, setIsAnnotationLoaded] = useState(false);
@@ -117,8 +118,8 @@ const ViewerControls = ({
   const handleVhutAnalysis = async () => {
     if (!fabricOverlay || !annotationObject) return;
 
-    // get s3 folder key from the tile
-    const key = getFileBucketFolder(tile);
+    // get s3 folder key from the originalFileUrl
+    const key = getFileBucketFolder(originalFileUrl);
 
     const { left, top, width, height, type } = annotationObject;
     let body = {

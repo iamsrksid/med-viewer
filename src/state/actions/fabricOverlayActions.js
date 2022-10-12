@@ -48,9 +48,15 @@ export const removeViewerWindow = ({ id }) => ({
   payload: { id },
 });
 
-export const addViewerInstance = ({ id, viewerId, tile, slideName }) => ({
+export const addViewerInstance = ({
+  id,
+  viewerId,
+  tile,
+  slideName,
+  originalFileUrl,
+}) => ({
   type: "addViewerInstance",
-  payload: { id, viewerId, tile, slideName },
+  payload: { id, viewerId, tile, slideName, originalFileUrl },
 });
 
 export const removeViewerInstance = ({ id, viewerId }) => ({
@@ -62,9 +68,15 @@ export const resetFabricOverlay = () => ({
   type: "resetFabricOverlay",
 });
 
-export const changeTile = ({ id, tile, slideId, slideName }) => ({
+export const changeTile = ({
+  id,
+  tile,
+  slideId,
+  slideName,
+  originalFileUrl,
+}) => ({
   type: "changeTile",
-  payload: { id, tile, slideId, slideName },
+  payload: { id, tile, slideId, slideName, originalFileUrl },
 });
 
 export const toggleSync = () => ({

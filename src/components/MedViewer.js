@@ -38,10 +38,11 @@ const MedViewer = ({ viewerIds, ...props }) => {
         tile: slide.awsImageBucketUrl,
         slideName: slide.accessionId,
         slideId: slide._id,
+        originalFileUrl: slide.originalFileUrl,
       });
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));
-    const key = getFileBucketFolder(viewerIds[0].awsImageBucketUrl);
+    const key = getFileBucketFolder(viewerIds[0].originalFileUrl);
     axios.post("https://development-morphometry-api.prr.ai/vhut/download", {
       key,
       bucket_name: "med-ai-image-processor",
