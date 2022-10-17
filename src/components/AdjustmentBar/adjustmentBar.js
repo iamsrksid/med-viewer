@@ -39,6 +39,10 @@ const AdjustmentBar = ({
   handleReport,
   showReport,
   setShowReport,
+  clinicalStudy,
+  questions,
+  responseHandler,
+  questionnaireResponse,
 }) => {
   const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const { fabricOverlayState } = useFabricOverlayState();
@@ -140,6 +144,10 @@ const AdjustmentBar = ({
         showReport={showReport}
         setShowReport={setShowReport}
         userInfo={userInfo}
+        clinicalStudy={clinicalStudy}
+        questions={questions}
+        responseHandler={responseHandler}
+        questionnaireResponse={questionnaireResponse}
       />
     </Flex>
   );

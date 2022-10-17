@@ -13,6 +13,8 @@ import ReportHelper from "../Report/ReportHelper";
 import Popup from "../Popup/popup";
 import DownloadImage from "../downloadImage";
 import ImageFilter from "../ImageFilter/imageFilter";
+import CLSReport from "../CLSReport/CLSReport";
+import CLSReportHelper from "../CLSReport/CLSReportHelper";
 
 const ScreenTools = ({
   viewerId,
@@ -26,6 +28,10 @@ const ScreenTools = ({
   showReport,
   setShowReport,
   userInfo,
+  clinicalStudy,
+  questions,
+  responseHandler,
+  questionnaireResponse,
 }) => {
   const [popup, setPopup] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
@@ -147,18 +153,28 @@ const ScreenTools = ({
           disabled
         />
       </Tooltip> */}
-
-      <ReportHelper
-        caseInfo={caseInfo}
-        saveReport={saveReport}
-        viewerId={viewerId}
-        mediaUpload={mediaUpload}
-        slideInfo={slideInfo}
-        handleReport={handleReport}
-        showReport={showReport}
-        setShowReport={setShowReport}
-        userInfo={userInfo}
-      />
+      {clinicalStudy ? (
+        <CLSReportHelper
+          questions={questions}
+          caseInfo={caseInfo}
+          userInfo={userInfo}
+          responseHandler={responseHandler}
+          viewerId={viewerId}
+          questionnaireResponse={questionnaireResponse}
+        />
+      ) : (
+        <ReportHelper
+          caseInfo={caseInfo}
+          saveReport={saveReport}
+          viewerId={viewerId}
+          mediaUpload={mediaUpload}
+          slideInfo={slideInfo}
+          handleReport={handleReport}
+          showReport={showReport}
+          setShowReport={setShowReport}
+          userInfo={userInfo}
+        />
+      )}
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
         {/* <ToolbarButton
           icon={<BiDotsVertical size={20} color="#151C25" />}

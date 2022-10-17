@@ -34,6 +34,10 @@ const LayoutApp = ({
   saveReport,
   mediaUpload,
   slideInfo,
+  clinicalStudy,
+  questions,
+  responseHandler,
+  questionnaireResponse,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -99,6 +103,10 @@ const LayoutApp = ({
           handleReport={handleReport}
           showReport={showReport}
           setShowReport={setShowReport}
+          clinicalStudy={clinicalStudy}
+          questions={questions}
+          responseHandler={responseHandler}
+          questionnaireResponse={questionnaireResponse}
         />
 
         {isNavigatorActive && (
