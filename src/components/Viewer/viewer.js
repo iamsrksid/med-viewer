@@ -29,6 +29,9 @@ const osdOptions = {
   showNavigator: false,
   showNavigationControl: false,
   navigatorPosition: "BOTTOM_RIGHT",
+  navigatorHeight: "130px",
+  navigatorWidth: "220px",
+  navigatorAutoFade: false,
   springStiffness: isBrowser ? 20 : 10,
   viewportMargin: {
     left: 100,
