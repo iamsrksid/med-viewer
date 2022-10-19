@@ -2,7 +2,6 @@ import React, { memo } from "react";
 import { Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Move from "../Move/move";
-import ChangeCase from "../Case/changeCase";
 import ActionTools from "../Toolbar/ActionTools";
 import ScreenTools from "../Toolbar/ScreenTools";
 import "../../styles/viewer.css";
@@ -15,9 +14,11 @@ import TooltipLabel from "./ToolTipLabel";
 
 const AdjustmentBar = ({
   userInfo,
-  project,
   caseInfo,
   slide,
+  report,
+  application,
+  enableAI,
   currentViewer,
   annotations,
   changeCaseHandler,
@@ -53,6 +54,8 @@ const AdjustmentBar = ({
     showSidebar();
   };
 
+  console.log(caseInfo);
+
   return (
     <Flex
       className="adjustmentbar"
@@ -65,38 +68,32 @@ const AdjustmentBar = ({
       zIndex={2}
     >
       <Flex alignItems="center" ml="18px" mr="20px" minW="150px">
-        <ToolbarButton
-          onClick={handleSidebar}
-          backgroundColor={sidebar ? "#E4E5E8" : ""}
-          outline={sidebar ? "0.5px solid rgba(0, 21, 63, 1)" : ""}
-          icon={<GiHamburgerMenu size={IconSize()} color="#151C25" />}
-          label={<TooltipLabel heading="Case Info" />}
-        />
+        {application === "hospital" ? (
+          <ToolbarButton
+            onClick={handleSidebar}
+            backgroundColor={sidebar ? "#E4E5E8" : ""}
+            outline={sidebar ? "0.5px solid rgba(0, 21, 63, 1)" : ""}
+            icon={<GiHamburgerMenu size={IconSize()} color="#151C25" />}
+            label={<TooltipLabel heading="Case Info" />}
+          />
+        ) : null}
         <Text color="#151C25" ml="12px" fontSize="14px" fontFamily="inter">
-          {caseInfo?.caseName}
+          {caseInfo?.caseName || caseInfo?.name}
         </Text>
       </Flex>
+
       <Flex
         borderLeft="2px solid #E4E5E8"
         borderRight="2px solid #E4E5E8"
         px="18px"
         align="center"
       >
-        {project ? (
-          <ChangeCase
-            project={project}
+        {Object.keys(viewerWindow).length === 1 && (
+          <ChangeSlide
             caseInfo={caseInfo}
-            slide={slide}
-            changeCaseHandler={changeCaseHandler}
+            viewerId={currentViewer}
+            slideUrl={tile}
           />
-        ) : (
-          Object.keys(viewerWindow).length === 1 && (
-            <ChangeSlide
-              caseInfo={caseInfo}
-              viewerId={currentViewer}
-              slideUrl={tile}
-            />
-          )
         )}
         <ToolbarButton
           icon={<SlideNavigatorIcon isNavigatorActive={isNavigatorActive} />}
@@ -121,6 +118,7 @@ const AdjustmentBar = ({
         userInfo={userInfo}
         sidebar={sidebar}
         annotations={annotations}
+        enableAI={enableAI}
         viewerId={currentViewer}
         isMultiview={isMultiview}
         setIsMultiview={setIsMultiview}
@@ -134,6 +132,8 @@ const AdjustmentBar = ({
       <ActionTools viewerId={currentViewer} />
       <ScreenTools
         viewerId={currentViewer}
+        report={report}
+        application={application}
         handleAnnotationBar={handleAnnotationBar}
         caseInfo={caseInfo}
         saveReport={saveReport}

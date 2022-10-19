@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Alert,
@@ -6,8 +6,6 @@ import {
   AlertTitle,
   AlertDescription,
   Box,
-  Flex,
-  VStack,
 } from "@chakra-ui/react";
 import Viewer from "./viewer";
 import { useFabricOverlayState } from "../../state/store";
@@ -15,8 +13,8 @@ import { useFabricOverlayState } from "../../state/store";
 const ViewerContainer = ({
   viewerId,
   slideName,
-  slideType,
   userInfo,
+  enableAI,
   onLoadAnnotations,
   onSaveAnnotation,
   onDeleteAnnotation,
@@ -27,10 +25,9 @@ const ViewerContainer = ({
 }) => {
   const location = useLocation();
 
-  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { fabricOverlay, userCanvases, tile } = viewerWindow[viewerId];
-  const [tileSource, setTileSource] = useState({});
 
   const newCanvasTitle =
     location.state && location.state.canvasTitle
@@ -57,7 +54,7 @@ const ViewerContainer = ({
   }, [newCanvasTitle]);
 
   // Handle no match
-  if (tileSource == {}) {
+  if (!tile) {
     return (
       <Box w="100%" p={8}>
         <Alert status="error">
@@ -77,7 +74,7 @@ const ViewerContainer = ({
       viewerId={viewerId}
       tile={tile}
       slideName={slideName}
-      slideType={slideType}
+      enableAI={enableAI}
       onLoadAnnotations={onLoadAnnotations}
       onSaveAnnotation={onSaveAnnotation}
       onDeleteAnnotation={onDeleteAnnotation}

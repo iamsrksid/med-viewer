@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BsCursorFill, BsCursor } from "react-icons/bs";
-import { RiNavigationFill, RiPencilRulerLine } from "react-icons/ri";
-import { AiOutlineSliders } from "react-icons/ai";
 import { Flex, IconButton, useMediaQuery, Tooltip } from "@chakra-ui/react";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import md5 from "md5";
 import ToolbarButton from "../ViewerToolbar/button";
 import Rotate from "../Rotate/Rotate";
 import TypeTools from "../AdjustmentBar/typeTools";
-import ColorOptionsPanel from "../Color/optionsPanel";
-import ToolbarPointerControl from "../ViewerToolbar/pointerControl";
 import Popup from "../Popup/popup";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useFabricOverlayState } from "../../state/store";
@@ -22,6 +16,7 @@ const Move = ({
   userInfo,
   viewerId,
   annotations,
+  enableAI,
   sidebar,
   isMultiview,
   setIsMultiview,
@@ -33,10 +28,8 @@ const Move = ({
   onVhutViewportAnalysis,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
-  const [ifMiddleScreen] = useMediaQuery("(min-width:1560px)");
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   const [typeToolsToggle, setTypeToolsToggle] = useState(false);
-  const [colorBar, setColorBar] = useState(false);
   const [popup, setPopup] = useState(false);
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow } = fabricOverlayState;
@@ -184,6 +177,7 @@ const Move = ({
       >
         {typeToolsToggle ? (
           <TypeTools
+            enableAI={enableAI}
             userInfo={userInfo}
             viewerId={viewerId}
             setTotalCells={setTotalCells}
@@ -192,7 +186,6 @@ const Move = ({
             onVhutViewportAnalysis={onVhutViewportAnalysis}
           />
         ) : null}
-        {colorBar ? <ColorOptionsPanel /> : null}
       </Flex>
 
       {/* Dummy component */}

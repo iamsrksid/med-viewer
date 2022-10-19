@@ -5,8 +5,8 @@ import { useFabricOverlayState } from "../../state/store";
 import ViewerHeader from "./viewerHeader";
 
 const ViewerFactory = ({
+  enableAI,
   viewerIds,
-  slideType,
   caseInfo,
   userInfo,
   setCurrentViewer,
@@ -77,8 +77,8 @@ const ViewerFactory = ({
           <ViewerContainer
             viewerId={viewer}
             slideName={viewerWindow[viewer]?.slideName}
-            slideType={slideType}
             userInfo={userInfo}
+            enableAI={enableAI}
             onLoadAnnotations={onLoadAnnotations}
             onSaveAnnotation={onSaveAnnotation}
             onDeleteAnnotation={onDeleteAnnotation}

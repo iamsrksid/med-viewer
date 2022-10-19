@@ -45,8 +45,8 @@ import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 const ViewerControls = ({
   viewerId,
   slideName,
-  slideType,
   userInfo,
+  enableAI,
   onLoadAnnotations,
   onSaveAnnotation,
   onDeleteAnnotation,
@@ -369,26 +369,6 @@ const ViewerControls = ({
 
   return (
     <>
-      {slideType ? (
-        <Box
-          position="absolute"
-          left="1.01vh"
-          top="0.937vw"
-          zIndex="1"
-          minW="7.65vw"
-          minH="3.88vh"
-        >
-          <Box minW="7.65vw" minH="0.370vh" bgColor="#ECECEC" />
-
-          <HStack bgColor="#F8F8F5" fontSize="1.25vw">
-            <Text
-              fontFamily="fira sans"
-              fontWeight="500"
-              px="0.820vw"
-            >{`${slideName}-${slideType}`}</Text>
-          </HStack>
-        </Box>
-      ) : null}
       {!isAnnotationLoaded || isViewportAnalysing ? (
         <Loading position="absolute" w="100%" zIndex="3" h="79vh" />
       ) : null}
@@ -452,6 +432,7 @@ const ViewerControls = ({
         top={menuPosition.top}
         onHandleVhutAnalysis={handleVhutAnalysis}
         setZoom={handleZoomLevel}
+        enableAI={enableAI}
         isMorphometryDisabled={isMorphometryDisabled}
         isAnnotationSelected={annotationObject}
         isAnalysed={annotationObject?.isAnalysed}

@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { fabric, initFabricJSOverlay } from "openseadragon-fabricjs-overlay";
 import OpenSeadragon from "openseadragon";
 import { isBrowser } from "react-device-detect";
-import { Box, Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import ViewerControls from "./controls";
 import { useFabricOverlayState } from "../../state/store";
 import { updateOverlay } from "../../state/actions/fabricOverlayActions";
 import "../../utility/fabricUtility";
-
-const minZoomLevel = isBrowser ? 0.4 : 0.8;
 
 const osdOptions = {
   constrainDuringPan: !!isBrowser,
@@ -48,8 +46,8 @@ const Viewer = ({
   viewerId,
   tile,
   slideName,
-  slideType,
   userInfo,
+  enableAI,
   onLoadAnnotations,
   onSaveAnnotation,
   onDeleteAnnotation,
@@ -120,8 +118,8 @@ const Viewer = ({
         <ViewerControls
           viewerId={viewerId}
           slideName={slideName}
-          slideType={slideType}
           userInfo={userInfo}
+          enableAI={enableAI}
           onLoadAnnotations={onLoadAnnotations}
           onSaveAnnotation={onSaveAnnotation}
           onDeleteAnnotation={onDeleteAnnotation}
