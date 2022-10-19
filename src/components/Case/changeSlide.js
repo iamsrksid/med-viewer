@@ -28,7 +28,7 @@ const ChangeSlide = ({ caseInfo, slideUrl, viewerId, ...restProps }) => {
     currentIndex + 1 === maxIndex ||
     caseInfo?.slides[currentIndex + 1].awsImageBucketUrl === "";
 
-  const title = `${caseInfo?.caseName}-${currentIndex + 1}`;
+  const title = `${caseInfo?.caseName || caseInfo?.name}-${currentIndex + 1}`;
 
   const clickHandler = (position) => {
     const nextSlide = caseInfo.slides[currentIndex + position];

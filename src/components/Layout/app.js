@@ -16,13 +16,13 @@ const LayoutApp = ({
   viewerIds,
   questionnaire,
   report,
+  application,
   annotations,
+  enableAI,
   userIdToQuery,
-  project,
   response,
   finalSubmitHandler,
   changeCaseHandler,
-  goToHomeHandler,
   onSaveAnnotation,
   onUpdateAnnotation,
   onDeleteAnnotation,
@@ -34,6 +34,10 @@ const LayoutApp = ({
   saveReport,
   mediaUpload,
   slideInfo,
+  clinicalStudy,
+  questions,
+  responseHandler,
+  questionnaireResponse,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -75,11 +79,13 @@ const LayoutApp = ({
       <LayoutOuterBody>
         <AdjustmentBar
           userInfo={userInfo}
-          project={project}
           caseInfo={caseInfo}
           slide={viewerIds?.[0]}
           annotations={annotations}
           changeCaseHandler={changeCaseHandler}
+          report={report}
+          enableAI={enableAI}
+          application={application}
           currentViewer={currentViewer}
           showSidebar={() => showSidebar()}
           sidebar={sidebar}
@@ -99,6 +105,10 @@ const LayoutApp = ({
           handleReport={handleReport}
           showReport={showReport}
           setShowReport={setShowReport}
+          clinicalStudy={clinicalStudy}
+          questions={questions}
+          responseHandler={responseHandler}
+          questionnaireResponse={questionnaireResponse}
         />
 
         {isNavigatorActive && (
@@ -121,7 +131,6 @@ const LayoutApp = ({
         <LayoutInnerBody>
           {sidebar ? (
             <LayoutAppSidebar
-              project={project}
               caseInfo={caseInfo}
               questionnaire={questionnaire}
               annotations={annotations}
@@ -156,8 +165,8 @@ const LayoutApp = ({
           ) : null}
           <LayoutAppBody>
             <ViewerFactory
+              enableAI={enableAI}
               viewerIds={viewerIds}
-              slideType={project?.slideType}
               caseInfo={caseInfo}
               userInfo={userInfo}
               onLoadAnnotations={onLoadAnnotations}

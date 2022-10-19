@@ -3,45 +3,35 @@ import RadioType from "./radioType";
 import TextType from "./textType";
 import CheckboxType from "./checkboxType";
 
-const QuestionType = ({
-  question,
-  direction,
-  response,
-  setQnaResponse,
-  slideQna,
-  isSecondDisable,
-  isLastDisable,
-}) => {
-  const handleChange = ({ questionId, choiceId, choiceText, choiceType }) => {
-    setQnaResponse({ questionId, choiceId, choiceText, choiceType });
+const QuestionType = ({ question, response, setQnaResponse, slideQna }) => {
+  const handleChange = ({ question_id, choice }) => {
+    setQnaResponse({ question_id, choice });
   };
 
-  if (question?.questionType === "radio")
+  if (question?.question_type === "multiple choice")
     return (
       <RadioType
         question={question}
-        direction={direction}
         response={response}
         handleChange={handleChange}
         slideQna={slideQna}
-        isSecondDisable={isSecondDisable}
+        // setQnaResponse={setQnaResponse}
       />
     );
-  if (question?.questionType === "text")
+  if (question?.question_type === "text")
     return (
       <TextType
         question={question}
         response={response}
         handleChange={handleChange}
         slideQna={slideQna}
-        isLastDisable={isLastDisable}
+        // setQnaResponse={setQnaResponse}
       />
     );
-  if (question?.questionType === "checkbox")
+  if (question?.question_type === "checkbox")
     return (
       <CheckboxType
         question={question}
-        direction={direction}
         response={response}
         setQnaResponse={setQnaResponse}
         slideQna={slideQna}

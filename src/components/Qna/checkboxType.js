@@ -2,13 +2,7 @@ import { Stack, Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import React from "react";
 import _ from "lodash";
 
-const CheckboxType = ({
-  question,
-  direction,
-  response,
-  setQnaResponse,
-  slideQna,
-}) => {
+const CheckboxType = ({ question, response, setQnaResponse, slideQna }) => {
   const handleChange = (value = []) => {
     const choiceText = [];
     if (value.length > 0)
@@ -34,21 +28,14 @@ const CheckboxType = ({
       ml="10px"
       onChange={handleChange}
     >
-      <Stack
-        direction={direction}
-        spacing={4}
-        wrap="wrap"
-        fontSize="14px"
-        fontFamily="roboto"
-      >
-        {question?.choices.map((choice, index) => (
+      <Stack spacing={4} wrap="wrap" fontSize="12px" fontFamily="inter">
+        {question?.choices?.map((choice, index) => (
           <Checkbox
             borderColor="#000"
             key={choice._id ? choice._id : index}
             value={choice._id ? choice._id : choice}
-            checked
-            fontSize="14px"
-            fontFamily="roboto"
+            checked={true}
+            borderWidth="thin"
           >
             {choice?.choiceText ? choice?.choiceText : choice}
           </Checkbox>

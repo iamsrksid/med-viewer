@@ -337,7 +337,7 @@ export const saveAnnotationToDB = async ({
   if (!slideId || !annotation || !onSaveAnnotation) return false;
   const annotationJSON = getAnnotationJSON(annotation);
   try {
-    await onSaveAnnotation({ slideId, data: [annotationJSON] });
+    await onSaveAnnotation({ slideId, data: annotationJSON });
   } catch (error) {
     return false;
   }
@@ -392,12 +392,12 @@ export const loadAnnotationsFromDB = async ({
   if (!slideId || !canvas || !viewer || !onLoadAnnotations)
     return { feed: null, status: "error", message: "Invalid parameters" };
   try {
-    const { data } = await onLoadAnnotations({ slideId });
-    if (data) {
+    const { data, success } = await onLoadAnnotations({ slideId }).unwrap();
+    if (success) {
       const feed = addAnnotationsToCanvas({
         canvas,
         viewer,
-        annotations: data.annotationsAutoSave,
+        annotations: data,
       });
 
       return { feed, status: "success" };

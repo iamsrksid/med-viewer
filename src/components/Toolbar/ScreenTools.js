@@ -9,13 +9,15 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { BiDotsVertical } from "react-icons/bi";
-import ReportHelper from "../Report/ReportHelper";
 import Popup from "../Popup/popup";
 import DownloadImage from "../downloadImage";
 import ImageFilter from "../ImageFilter/imageFilter";
+import ShowReport from "./ShowReport";
 
 const ScreenTools = ({
   viewerId,
+  report,
+  application,
   handleAnnotationBar,
   caseInfo,
   saveReport,
@@ -26,6 +28,9 @@ const ScreenTools = ({
   showReport,
   setShowReport,
   userInfo,
+  questions,
+  responseHandler,
+  questionnaireResponse,
 }) => {
   const [popup, setPopup] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
@@ -147,18 +152,23 @@ const ScreenTools = ({
           disabled
         />
       </Tooltip> */}
-
-      <ReportHelper
-        caseInfo={caseInfo}
-        saveReport={saveReport}
-        viewerId={viewerId}
-        mediaUpload={mediaUpload}
-        slideInfo={slideInfo}
-        handleReport={handleReport}
-        showReport={showReport}
-        setShowReport={setShowReport}
-        userInfo={userInfo}
-      />
+      {report ? (
+        <ShowReport
+          caseInfo={caseInfo}
+          application={application}
+          saveReport={saveReport}
+          viewerId={viewerId}
+          mediaUpload={mediaUpload}
+          slideInfo={slideInfo}
+          handleReport={handleReport}
+          showReport={showReport}
+          setShowReport={setShowReport}
+          userInfo={userInfo}
+          questions={questions}
+          responseHandler={responseHandler}
+          questionnaireResponse={questionnaireResponse}
+        />
+      ) : null}
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
         {/* <ToolbarButton
           icon={<BiDotsVertical size={20} color="#151C25" />}

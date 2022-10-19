@@ -155,6 +155,7 @@ export const CustomMenu = ({
   left,
   top,
   setZoom,
+  enableAI,
   onHandleVhutAnalysis,
   onHandleShowAnalysis,
   isMorphometryDisabled,
@@ -184,30 +185,32 @@ export const CustomMenu = ({
           <MenuItem _hover={{ bgColor: "#DEDEDE" }}>
             <DisplayMenu setZoom={setZoom} />
           </MenuItem>
-          {!isAnalysed ? (
-            <MenuItem
-              _hover={{ bgColor: "#DEDEDE" }}
-              onClick={() => {
-                onHandleVhutAnalysis();
-                closeMenu();
-              }}
-              closeOnSelect
-              isDisabled={isMorphometryDisabled}
-            >
-              Run Morphometry
-            </MenuItem>
-          ) : (
-            <MenuItem
-              _hover={{ bgColor: "#DEDEDE" }}
-              onClick={() => {
-                onHandleShowAnalysis();
-                closeMenu();
-              }}
-              closeOnSelect
-            >
-              Show Analysis
-            </MenuItem>
-          )}
+          {enableAI ? (
+            !isAnalysed ? (
+              <MenuItem
+                _hover={{ bgColor: "#DEDEDE" }}
+                onClick={() => {
+                  onHandleVhutAnalysis();
+                  closeMenu();
+                }}
+                closeOnSelect
+                isDisabled={isMorphometryDisabled}
+              >
+                Run Morphometry
+              </MenuItem>
+            ) : (
+              <MenuItem
+                _hover={{ bgColor: "#DEDEDE" }}
+                onClick={() => {
+                  onHandleShowAnalysis();
+                  closeMenu();
+                }}
+                closeOnSelect
+              >
+                Show Analysis
+              </MenuItem>
+            )
+          ) : null}
           <MenuItem
             _hover={{ bgColor: "#DEDEDE" }}
             onClick={handleEditOpen}

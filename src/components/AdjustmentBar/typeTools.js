@@ -12,6 +12,7 @@ import { useFabricOverlayState } from "../../state/store";
 import MagicWandTool from "../Tools/magicWandTool";
 
 const TypeTools = ({
+  enableAI,
   userInfo,
   viewerId,
   onSaveAnnotation,
@@ -46,13 +47,15 @@ const TypeTools = ({
         <Flex h="12px" bgColor="rgba(236, 236, 236, 1)" cursor="crosshair" />
         <SimpleGrid columns={2} px="8px" bgColor="#fff" py="8px" spacing={2}>
           <Line viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
-          <MagicWandTool
-            userInfo={userInfo}
-            viewerId={viewerId}
-            setTotalCells={setTotalCells}
-            onSaveAnnotation={onSaveAnnotation}
-            onVhutViewportAnalysis={onVhutViewportAnalysis}
-          />
+          {enableAI ? (
+            <MagicWandTool
+              userInfo={userInfo}
+              viewerId={viewerId}
+              setTotalCells={setTotalCells}
+              onSaveAnnotation={onSaveAnnotation}
+              onVhutViewportAnalysis={onVhutViewportAnalysis}
+            />
+          ) : null}
           <Square viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
           <Circle viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
           <Polygon viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />
