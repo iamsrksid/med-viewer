@@ -24,7 +24,7 @@ const osdOptions = {
     pinchToZoom: true,
     scrollToZoom: true,
   },
-  showNavigator: false,
+  showNavigator: true,
   showNavigationControl: false,
   navigatorPosition: "BOTTOM_RIGHT",
   navigatorHeight: "130px",
