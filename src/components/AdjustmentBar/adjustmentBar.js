@@ -54,8 +54,6 @@ const AdjustmentBar = ({
     showSidebar();
   };
 
-  console.log(caseInfo);
-
   return (
     <Flex
       className="adjustmentbar"

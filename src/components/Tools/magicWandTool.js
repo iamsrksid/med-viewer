@@ -115,7 +115,7 @@ const MagicWandTool = ({
       height,
       key,
       type: "rect",
-      userId: userInfo._id,
+      userId: userInfo._id || userInfo.userId,
     });
 
     // create annotation of cell
