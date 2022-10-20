@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-  Box,
   Button,
   IconButton,
   Image,
@@ -16,10 +15,6 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import html2canvas from "html2canvas";
-import domtoimage from "dom-to-image";
-import { FiDownload } from "react-icons/fi";
-import { BiScreenshot } from "react-icons/bi";
-import ToolbarButton from "./ViewerToolbar/button";
 import IconSize from "./ViewerToolbar/IconSize";
 import { ScreenshotIcon, ScreenshotSelectedIcon } from "./Icons/CustomIcons";
 import TooltipLabel from "./AdjustmentBar/ToolTipLabel";
@@ -29,6 +24,7 @@ const DownloadImage = () => {
   const [img, setImg] = useState();
   const [screenshotHover, setScreenshotHover] = useState(false);
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
+  const modalRef = useRef(null);
 
   const handleClick = () => {
     html2canvas(document.querySelector(".openseadragon-canvas"), {
@@ -45,7 +41,8 @@ const DownloadImage = () => {
   return (
     <>
       <Tooltip
-        label={<TooltipLabel heading="Download Image" />}
+        ref={modalRef}
+        label={<TooltipLabel heading="Screenshot" />}
         aria-label="Screenshot"
         placement="bottom"
         openDelay={0}
@@ -89,9 +86,10 @@ const DownloadImage = () => {
       <Modal
         isOpen={isOpen}
         onClose={() => {
-          onClose();
           setScreenshotHover(false);
+          onClose();
         }}
+        finalFocusRef={modalRef}
       >
         <ModalOverlay />
         <ModalContent>

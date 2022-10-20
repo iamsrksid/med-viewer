@@ -117,8 +117,6 @@ const Square = ({ viewerId, onSaveAnnotation }) => {
         top: origY,
         width: 0,
         height: 0,
-        lockScalingX: true,
-        lockScalingY: true,
       };
 
       // Stroke fill
