@@ -130,7 +130,7 @@ const ViewerControls = ({
       width,
       height,
       hash: annotationObject.hash,
-      subClaim: userInfo.subClaim,
+      userId: userInfo._id || userInfo.userId,
     };
 
     // if annoatation is a freehand, send the coordinates of the path
