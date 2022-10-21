@@ -48,20 +48,26 @@ const Questionnaire = ({
             // whiteSpace="nowrap"
             // fontSize="14px"
             color={question?.question_id === questions[1]?.question_id}
-          >{`Q${index + 1}. ${question.question_text}`}</Text>
-
-          <Box>
-            <QuestionType
-              question={question}
-              direction={direction}
-              response={response}
-              setQnaResponse={setQnaResponse}
-              projectQnaType={projectQnaType}
-              slideQna={slideQna}
-            />
-          </Box>
+          >{`Q${index + 1}: ${question?.question_text}`}</Text>
+          {response ? null : (
+            <Box>
+              <QuestionType
+                question={question}
+                direction={direction}
+                response={response}
+                setQnaResponse={setQnaResponse}
+                projectQnaType={projectQnaType}
+                slideQna={slideQna}
+              />
+            </Box>
+          )}
           {response && (
-            <Text>{`Your response: ${response[index]?.choice}`}</Text>
+            <Text>
+              Your response:{" "}
+              {response[question?.question_id]
+                ? response[question?.question_id]?.choice
+                : response[index]?.choice}
+            </Text>
           )}
         </Stack>
       ))}

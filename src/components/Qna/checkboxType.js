@@ -7,22 +7,19 @@ const CheckboxType = ({ question, response, setQnaResponse, slideQna }) => {
     const choiceText = [];
     if (value.length > 0)
       question?.choices.forEach((choice) => {
-        if (value.includes(choice._id)) choiceText.push(choice?.choiceText);
+        if (value.includes(choice)) choiceText.push(choice);
       });
     setQnaResponse({
-      questionId: question?._id,
-      choiceId: value,
-      choiceType: "id",
+      question_id: question?.question_id,
+      choice: choiceText,
     });
   };
 
   return (
     <CheckboxGroup
-      name={question?._id}
+      name={question?.question_id}
       defaultValue={
-        !_.isEmpty(response)
-          ? response[question?._id]?.choiceId
-          : slideQna?.response[question?._id] ?? ""
+        !_.isEmpty(response) ? response[question?.question_id]?.choice_id : ""
       }
       isDisabled={!_.isEmpty(response)}
       ml="10px"
@@ -32,12 +29,18 @@ const CheckboxType = ({ question, response, setQnaResponse, slideQna }) => {
         {question?.choices?.map((choice, index) => (
           <Checkbox
             borderColor="#000"
-            key={choice._id ? choice._id : index}
-            value={choice._id ? choice._id : choice}
+            key={choice}
+            value={choice}
             checked={true}
-            borderWidth="thin"
+            // borderWidth="thin"
+            // onChange={(e) =>
+            //   handleChange({
+            //     question_id: question?.question_id,
+            //     choice: e.target.value,
+            //   })
+            // }
           >
-            {choice?.choiceText ? choice?.choiceText : choice}
+            {choice}
           </Checkbox>
         ))}
       </Stack>

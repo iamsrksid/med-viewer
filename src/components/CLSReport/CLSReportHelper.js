@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Tooltip } from "@chakra-ui/react";
+import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../../state/store";
 import CLSReport from "./CLSReport";
 import _ from "lodash";
@@ -17,33 +17,60 @@ const CLSReportHelper = ({
   const { viewerWindow } = fabricOverlayState;
   const { slideId } = viewerWindow[viewerId];
   const [showCLSreport, setShowCLSReport] = useState(false);
-
   const [questionsResponse, setQuestionsResponse] = useState();
+  const [slideQuestions, setSlideQuestions] = useState();
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const [slideQna, setSlideQna] = useState({
+    qna: {},
+  });
+  //get questions and response
   useEffect(() => {
-    async function fetchData() {
+    async function fetchResponse() {
       const response = await questionnaireResponse({
         slide_id: slideId,
         case_id: caseInfo?.caseId,
       });
       setQuestionsResponse(response?.data?.data?.finalQuestionnaireResponse);
     }
-    fetchData();
-  }, [slideId, caseInfo?.caseId]);
-  const [slideQna, setSlideQna] = useState({
-    qna: {},
-  });
+    fetchResponse();
+    async function fetchQuestions() {
+      const response = await questions({ studyId: caseInfo?.caseId });
+      setSlideQuestions(response?.data?.data?.desiredQuestionsInfo);
+    }
+    fetchQuestions();
+  }, [slideId, caseInfo?.caseId, showCLSreport]);
+
   const handleCLSReport = () => {
     setShowCLSReport(!showCLSreport);
     setSlideQna({ qna: {} });
   };
   const response = Object.values(slideQna?.qna);
-
   const submitQnaReport = async () => {
-    await responseHandler({
-      slide_id: viewerId,
-      response: response,
-      case_id: caseInfo?.caseId,
-    });
+    try {
+      setLoading(true);
+      await responseHandler({
+        slide_id: slideId,
+        response: response,
+        case_id: caseInfo?.caseId,
+      });
+      setShowCLSReport(!showCLSreport);
+      setLoading(false);
+      toast({
+        status: "success",
+        title: "Successfully Reported",
+        duration: 1500,
+        isClosable: true,
+      });
+    } catch (err) {
+      toast({
+        status: "error",
+        title: "Reporting Failed",
+        description: "Something went wrong, try again!",
+        duration: 1500,
+        isClosable: true,
+      });
+    }
   };
   return (
     <>
@@ -80,7 +107,7 @@ const CLSReportHelper = ({
             Report
           </Button>
         </Tooltip>
-      ) : !questionsResponse?.length > 0 ? (
+      ) : !questionsResponse ? (
         <Tooltip
           label="Submit-Report"
           placement="bottom"
@@ -114,19 +141,19 @@ const CLSReportHelper = ({
             Submit Report
           </Button>
         </Tooltip>
-      ) : (
-        ""
-      )}
+      ) : null}
       {showCLSreport && (
         <CLSReport
-          questions={questions}
+          questions={slideQuestions}
           caseInfo={caseInfo}
           userInfo={userInfo}
           responseHandler={responseHandler}
           handleCLSReport={handleCLSReport}
           slideQna={slideQna}
           setSlideQna={setSlideQna}
-          response={questionsResponse}
+          questionsResponse={questionsResponse}
+          slideId={slideId}
+          loading={loading}
         />
       )}
     </>

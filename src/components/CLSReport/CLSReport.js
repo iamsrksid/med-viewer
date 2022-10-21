@@ -1,26 +1,24 @@
-import { Flex, IconButton, useMediaQuery } from "@chakra-ui/react";
+import {
+  Flex,
+  IconButton,
+  useMediaQuery,
+  Text,
+  Spinner,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Questionnaire from "../Qna/questionnaire";
 
 function CLSReport({
   questions,
-  caseInfo,
   handleCLSReport,
   slideQna,
   setSlideQna,
-  response,
+  questionsResponse,
+  loading,
 }) {
   const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
 
-  const [slideQuestions, setSlideQuestions] = useState();
-  useEffect(() => {
-    async function fetchData() {
-      const response = await questions({ studyId: caseInfo?.caseId });
-      setSlideQuestions(response?.data);
-    }
-    fetchData();
-  }, [caseInfo]);
   return (
     <Flex
       fontSize="12px"
@@ -34,22 +32,46 @@ function CLSReport({
       bg="#FCFCFC"
       flexDirection="column"
     >
-      <Flex w="100%" justifyContent="flex-end">
-        <IconButton
-          icon={<AiOutlineClose />}
-          onClick={handleCLSReport}
-          borderRadius="0"
-          background="#fcfcfc"
-          size="sm"
-          _focus={{}}
-        />
-      </Flex>
-      <Questionnaire
-        questions={slideQuestions?.data?.desiredQuestionsInfo}
-        slideQna={slideQna}
-        setSlideQna={setSlideQna}
-        response={response}
-      />
+      {loading ? (
+        <Flex
+          w="100%"
+          height="100%"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Spinner color="#3965C5" size="xl" thickness="4px" speed="0.65s" />
+        </Flex>
+      ) : (
+        <>
+          <Flex w="100%" justifyContent="flex-end">
+            <IconButton
+              icon={<AiOutlineClose />}
+              onClick={handleCLSReport}
+              borderRadius="0"
+              background="#fcfcfc"
+              size="sm"
+              _focus={{}}
+            />
+          </Flex>
+          <Flex
+            w="100%"
+            justifyContent="center"
+            alignItems="center"
+            // h="4vh"
+            minH="5vh"
+            border="1px solid #000"
+          >
+            <Text fontSize="16px">Questions</Text>
+          </Flex>
+
+          <Questionnaire
+            questions={questions}
+            slideQna={slideQna}
+            setSlideQna={setSlideQna}
+            response={questionsResponse}
+          />
+        </>
+      )}
     </Flex>
   );
 }

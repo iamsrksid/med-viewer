@@ -35,6 +35,7 @@ const QuestionType = ({ question, response, setQnaResponse, slideQna }) => {
         response={response}
         setQnaResponse={setQnaResponse}
         slideQna={slideQna}
+        handleChange={handleChange}
       />
     );
   return null;
