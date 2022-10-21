@@ -136,7 +136,7 @@ const CLSReportHelper = ({
             fontWeight="500"
             {...restProps}
             onClick={submitQnaReport}
-            disabled={questions?.length !== response?.length}
+            disabled={slideQuestions?.length !== response?.length}
           >
             Submit Report
           </Button>
