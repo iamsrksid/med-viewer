@@ -9,6 +9,7 @@ export const getAnnotationJSON = (annotation) => {
     "slide",
     "hash",
     "text",
+    "title",
     "zoomLevel",
     "points",
     "timeStamp",
@@ -28,6 +29,7 @@ export const getCanvasJSON = (canvas) => {
     "slide",
     "hash",
     "text",
+    "title",
     "zoomLevel",
     "points",
     "timeStamp",
@@ -63,6 +65,7 @@ export const createAnnotationMessage = ({
       slide,
       hash,
       text,
+      title,
       zoomLevel,
       points,
       timeStamp,
@@ -80,6 +83,7 @@ export const createAnnotationMessage = ({
         slide,
         hash,
         text,
+        title,
         zoomLevel,
         points,
         timeStamp,
@@ -95,6 +99,7 @@ export const createAnnotationMessage = ({
         slide,
         hash,
         text,
+        title,
         zoomLevel,
         points,
         timeStamp,
@@ -368,6 +373,7 @@ export const updateAnnotationInDB = async ({
   annotation,
   onUpdateAnnotation,
 }) => {
+  console.log({ annotation, onUpdateAnnotation });
   if (!annotation || !onUpdateAnnotation) return false;
   const annotationJSON = getAnnotationJSON(annotation);
   try {

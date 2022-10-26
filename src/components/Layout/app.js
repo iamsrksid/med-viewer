@@ -161,6 +161,7 @@ const LayoutApp = ({
               handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
               feedTab={feedTab}
+              onUpdateAnnotation={onUpdateAnnotation}
             />
           ) : null}
           <LayoutAppBody>

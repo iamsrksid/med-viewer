@@ -19,6 +19,7 @@ const SlideFeed = ({
   showFeedBar,
   showReport,
   feedTab,
+  onUpdateAnnotation,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -78,7 +79,11 @@ const SlideFeed = ({
             <KeyPoints activityFeed={activityFeed} />
           </TabPanel>
           <TabPanel p="0">
-            <ActivityFeed viewerId={viewerId} showFeedBar={showFeedBar} />
+            <ActivityFeed
+              viewerId={viewerId}
+              showFeedBar={showFeedBar}
+              onUpdateAnnotation={onUpdateAnnotation}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

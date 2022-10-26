@@ -30,6 +30,7 @@ const osdOptions = {
   navigatorHeight: "130px",
   navigatorWidth: "220px",
   navigatorAutoFade: false,
+  navigatorAutoResize: false,
   springStiffness: isBrowser ? 20 : 10,
   viewportMargin: {
     left: 100,
@@ -40,6 +41,7 @@ const osdOptions = {
   visibilityRatio: isBrowser ? 1 : 0.5,
   zoomPerClick: 1.5,
   crossOriginPolicy: "Anonymous",
+  timeout: 60000,
 };
 
 const Viewer = ({
@@ -93,6 +95,7 @@ const Viewer = ({
 
     // Create the fabric.js overlay, and set it on a sharable context
     // viewer.open(tile.source);
+
     setFabricOverlayState(
       updateOverlay({
         id: viewerId,

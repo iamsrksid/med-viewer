@@ -78,9 +78,4 @@ const ToolbarButton = ({
   );
 };
 
-ToolbarButton.propTypes = {
-  label: PropTypes.string,
-  isActive: PropTypes.bool,
-};
-
 export default memo(ToolbarButton);
