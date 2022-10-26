@@ -1,5 +1,12 @@
-import React, { useRef } from "react";
-import { Flex, HStack, IconButton, Image, Text } from "@chakra-ui/react";
+import React, { useRef, useState } from "react";
+import {
+  Flex,
+  HStack,
+  IconButton,
+  Image,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
@@ -41,6 +48,7 @@ const Navigator = ({
   const { tile, viewer, fabricOverlay } = viewerWindow[viewerId];
 
   const scrollbarRef = useRef(null);
+  const [lines, setLines] = useState(1);
 
   const changeSlide = (slide) => {
     if (isMultiview) {
@@ -128,41 +136,67 @@ const Navigator = ({
         autoHide
       >
         <HStack spacing="20px" px="12px" justify="center">
-          {caseInfo.slides.map((slide) => {
+          {caseInfo.slides.map((slide, index) => {
             const url = getSlideUrl(slide.awsImageBucketUrl);
             return (
-              <Flex key={slide._id} direction="column">
-                <Image
-                  minW="111px"
-                  h="111px"
-                  px="8px"
-                  py="26px"
-                  src={url}
-                  alt="wsi slide"
-                  fit="cover"
+              <Tooltip
+                key={slide._id}
+                bg="#F6F6F6"
+                color="black"
+                w="150px"
+                label={
+                  slide.slideName ||
+                  slide.originalName ||
+                  `${caseInfo.caseName}-${index}`
+                }
+              >
+                <Flex
+                  direction="column"
+                  bg="#FFFFFF"
+                  flex="1"
+                  p={1}
+                  border="0.5px solid #F2F2F2"
+                  boxShadow="0px 0px 2px rgba(0, 0, 0, 0.25)"
                   background={
-                    tile === slide.awsImageBucketUrl ? "#DEDEDE" : "#FFFFFF"
+                    tile === slide.awsImageBucketUrl ? "#F2F2F2" : "#FFFFFF"
                   }
-                  boxShadow="0px 1px 1px rgba(176, 200, 214, 0.05);"
-                  onClick={() => changeSlide(slide)}
-                  cursor="pointer"
-                />
-                <Text fontSize="12px" alignSelf="center">
-                  {slide.accessionId}
-                </Text>
-                {isMultiview && tile === slide.awsImageBucketUrl ? (
-                  <Flex
-                    w="28px"
-                    h="28px"
-                    background="#FFFFFF"
-                    justify="center"
-                    align="center"
-                    position="absolute"
+                >
+                  <Image
+                    minW="111px"
+                    h="111px"
+                    px="8px"
+                    py="26px"
+                    src={url}
+                    alt="wsi slide"
+                    fit="cover"
+                    boxShadow="0px 1px 1px rgba(176, 200, 214, 0.05);"
+                    onClick={() => changeSlide(slide)}
+                    cursor="pointer"
+                  />
+                  <Text
+                    px="4px"
+                    fontSize="12px"
+                    alignSelf="center"
+                    noOfLines={1}
                   >
-                    1.
-                  </Flex>
-                ) : null}
-              </Flex>
+                    {slide.slideName ||
+                      slide.originalName ||
+                      `${caseInfo.caseName}-${index}`}
+                  </Text>
+                  {isMultiview && tile === slide.awsImageBucketUrl ? (
+                    <Flex
+                      w="28px"
+                      h="28px"
+                      background="#FFFFFF"
+                      justify="center"
+                      align="center"
+                      position="absolute"
+                    >
+                      1.
+                    </Flex>
+                  ) : null}
+                </Flex>
+              </Tooltip>
             );
           })}
         </HStack>

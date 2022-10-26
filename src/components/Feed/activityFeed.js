@@ -29,6 +29,7 @@ import { FaDrawPolygon } from "react-icons/fa";
 import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
 import { updateAnnotationInDB } from "../../utility";
+import { updateFeedInAnnotationFeed } from "../../state/actions/fabricOverlayActions";
 
 const EditTextButton = ({ feed, handleEditClick, ...restProps }) => {
   return (
@@ -181,15 +182,16 @@ const ActivityFeed = ({
     setAnnotationsDetails(feed.object);
   };
 
-  const handleSave = ({ text, tag }) => {
-    if (!text || !tag) return;
-    annotationObject.text = text;
-    annotationObject.tag = tag;
-    updateAnnotationInDB({
-      slideId,
-      annotation: annotationObject,
-      onUpdateAnnotation,
-    });
+  const handleSave = ({ text, title }) => {
+    if (text) annotationObject.text = text;
+    if (title) annotationObject.title = title;
+    if (text || title) {
+      updateAnnotationInDB({
+        slideId,
+        annotation: annotationObject,
+        onUpdateAnnotation,
+      });
+    }
     setAnnotationObject(null);
     onClose();
   };
@@ -273,7 +275,9 @@ const ActivityFeed = ({
                       <BsSlash color="#E23636" />
                     )}
                     <Text ml="0.8vw">
-                      {feed.object?.type === "group"
+                      {feed.object?.title
+                        ? feed.object.title
+                        : feed.object?.type === "group"
                         ? "ROI"
                         : feed.object?.type === "viewport"
                         ? `Viewport ${index + 1}`
@@ -369,6 +373,7 @@ const ActivityFeed = ({
                       {annotationDetails.analysedData.data.map((cell) => {
                         return (
                           <AccordionItem
+                            key={cell}
                             color="black"
                             isDisabled={cell.status !== "detected"}
                           >
@@ -441,7 +446,8 @@ const ActivityFeed = ({
           <EditText
             isOpen={isOpen}
             onClose={onClose}
-            value={annotationObject?.text ? annotationObject.text : ""}
+            textValue={annotationObject?.text ? annotationObject.text : ""}
+            titleValue={annotationObject?.title ? annotationObject.title : ""}
             handleClose={onClose}
             handleSave={handleSave}
           />

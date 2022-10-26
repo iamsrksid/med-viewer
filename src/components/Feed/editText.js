@@ -7,27 +7,31 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Input,
   useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
-const EditText = ({ isOpen, onClose, value, handleClose, handleSave }) => {
-  const [text, setText] = useState(value);
-  const [tag, setTag] = useState([]);
+const EditText = ({
+  isOpen,
+  onClose,
+  textValue,
+  titleValue,
+  handleClose,
+  handleSave,
+}) => {
+  const [text, setText] = useState(textValue);
+  const [title, setTitle] = useState(titleValue);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
-
-  useEffect(() => {
-    setText(value);
-  }, [value]);
 
   const handleTextChange = (e) => {
     setText(e.target.value);
   };
 
   const handleSaveButton = () => {
-    handleSave({ text, tag });
+    handleSave({ text, title });
     setText("");
-    setTag("");
+    setTitle("");
   };
 
   return (
@@ -41,6 +45,15 @@ const EditText = ({ isOpen, onClose, value, handleClose, handleSave }) => {
       <ModalContent left="10px" borderRadius="0px">
         <ModalHeader>Text Annotation</ModalHeader>
         <ModalBody>
+          <Input
+            type="text"
+            value={title}
+            borderRadius="0px"
+            placeholder="Add Title"
+            mt={1}
+            _focus={{ borderColor: "#00153F" }}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <Textarea
             resize="none"
             value={text}
@@ -49,15 +62,6 @@ const EditText = ({ isOpen, onClose, value, handleClose, handleSave }) => {
             onChange={handleTextChange}
             borderRadius="0px"
           />
-          {/* <Input
-            type="text"
-            value={tag}
-            borderRadius="0px"
-            placeholder="Add tag"
-            mt={1}
-            _focus={{ borderColor: "#00153F" }}
-            onChange={(e) => setTag(e.target.value)}
-          /> */}
         </ModalBody>
         <ModalFooter>
           <ButtonGroup size="sm" color="white">
