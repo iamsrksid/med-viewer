@@ -1,5 +1,11 @@
 .thumb-vertical {
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+.thumb-vertical-dark {
+  background-color: #cdcdcd;
   border-radius: inherit;
   cursor: pointer;
 }
@@ -9,5 +15,5 @@
 }
 
 .thumb-hide {
-    background: none;
+  background: none;
 }

@@ -313,24 +313,40 @@ const ActivityFeed = ({
               </TabList>
               <TabPanels px={0}>
                 <CustomTabPanel title="Annotation Values">
-                  {annotationDetails ? (
-                    <>
-                      <CardDetailsRow
-                        title="Annotation"
-                        value={
-                          annotationDetails?.type ? annotationDetails.type : "-"
-                        }
-                      />
-                      <CardDetailsRow
-                        title="Description"
-                        value={
-                          annotationDetails?.text ? annotationDetails.text : "-"
-                        }
-                      />
+                  <Scrollbars
+                    ref={scrollbar}
+                    style={{
+                      width: "100%",
+                      height: annotationDetails ? "30vh" : "62vh",
+                      borderWidth: "0px",
+                    }}
+                    renderThumbVertical={(props) => (
+                      <div className="thumb-vertical-dark" />
+                    )}
+                    autoHide
+                  >
+                    {annotationDetails ? (
+                      <>
+                        <CardDetailsRow
+                          title="Annotation"
+                          value={
+                            annotationDetails?.type
+                              ? annotationDetails.type
+                              : "-"
+                          }
+                        />
+                        <CardDetailsRow
+                          title="Description"
+                          value={
+                            annotationDetails?.text
+                              ? annotationDetails.text
+                              : "-"
+                          }
+                        />
 
-                      {annotationDetails?.area ? (
-                        <>
-                          {/* <CardDetailsRow
+                        {annotationDetails?.area ? (
+                          <>
+                            {/* <CardDetailsRow
                             title="Centroid X"
                             value={
                               <>{annotationDetails.centroid?.[0][0]}</>
@@ -342,102 +358,117 @@ const ActivityFeed = ({
                               <>{annotationDetails.centroid?.[0][1]}</>
                             }
                           /> */}
-                          <CardDetailsRow
-                            title="Class"
-                            value={annotationDetails?.classType}
-                          />
-                          <CardDetailsRow
-                            title="Perimeter"
-                            value={
-                              <>{annotationDetails.perimeter.toFixed(2)}</>
-                            }
-                          />
-                          <CardDetailsRow
-                            title="Area"
-                            value={annotationDetails.area}
-                          />
-                          {/* <CardDetailsRow
+                            <CardDetailsRow
+                              title="Class"
+                              value={annotationDetails?.classType}
+                            />
+                            <CardDetailsRow
+                              title="Perimeter"
+                              value={
+                                <>{annotationDetails.perimeter.toFixed(2)}</>
+                              }
+                            />
+                            <CardDetailsRow
+                              title="Area"
+                              value={annotationDetails.area}
+                            />
+                            {/* <CardDetailsRow
                             title="Total Cells"
                             value={totalCells || "-"}
                           /> */}
-                        </>
-                      ) : null}
-                    </>
-                  ) : null}
+                          </>
+                        ) : null}
+                      </>
+                    ) : null}
+                  </Scrollbars>
                 </CustomTabPanel>
                 <CustomTabPanel title="Morphometry Values">
-                  {annotationDetails?.analysedData &&
-                  annotationDetails.analysedData.data.length > 0 ? (
-                    <Accordion allowToggle>
-                      {annotationDetails.analysedData.data.map((cell) => {
-                        return (
-                          <AccordionItem
-                            key={cell}
-                            color="black"
-                            isDisabled={cell.status !== "detected"}
-                          >
-                            <h2>
-                              <AccordionButton _focus={{ outline: "none" }}>
-                                <HStack
-                                  flex="1"
-                                  textAlign="left"
-                                  align="center"
-                                >
-                                  <Text fontSize="14px">{cell.type}</Text>
-                                  {cell.status === "detected" ? (
-                                    <Circle size="12px" bg={cell.color} />
-                                  ) : null}
-                                </HStack>
-                                <AccordionIcon />
-                              </AccordionButton>
-                            </h2>
-                            {cell.status === "detected" ? (
-                              <AccordionPanel pb={4}>
-                                {/* <CardDetailsRow
+                  <Scrollbars
+                    ref={scrollbar}
+                    style={{
+                      width: "100%",
+                      height: annotationDetails ? "30vh" : "62vh",
+                      borderWidth: "0px",
+                    }}
+                    renderThumbVertical={(props) => (
+                      <div className="thumb-vertical-dark" />
+                    )}
+                    autoHide
+                  >
+                    {annotationDetails?.analysedData &&
+                    annotationDetails.analysedData.data.length > 0 ? (
+                      <Accordion allowToggle>
+                        {annotationDetails.analysedData.data.map((cell) => {
+                          return (
+                            <AccordionItem
+                              key={cell}
+                              color="black"
+                              isDisabled={cell.status !== "detected"}
+                            >
+                              <h2>
+                                <AccordionButton _focus={{ outline: "none" }}>
+                                  <HStack
+                                    flex="1"
+                                    textAlign="left"
+                                    align="center"
+                                  >
+                                    <Text fontSize="14px">{cell.type}</Text>
+                                    {cell.status === "detected" ? (
+                                      <Circle size="12px" bg={cell.color} />
+                                    ) : null}
+                                  </HStack>
+                                  <AccordionIcon />
+                                </AccordionButton>
+                              </h2>
+                              {cell.status === "detected" ? (
+                                <AccordionPanel pb={4}>
+                                  {/* <CardDetailsRow
                                   title="Total Cells"
                                   value={
                                     annotationDetails.analysedData.totalCells
                                   }
                                 /> */}
-                                <CardDetailsRow
-                                  title="Nucleus Count"
-                                  value={cell.count}
-                                />
-                                <CardDetailsRow
-                                  title="Nucleus Cytoplasm Ratio"
-                                  value={cell.ratio.toFixed(2)}
-                                />
-                                <CardDetailsRow
-                                  title="Min. Perimeter"
-                                  value={<>{cell.min_perimeter.toFixed(2)}</>}
-                                />
-                                <CardDetailsRow
-                                  title="Max. Perimeter"
-                                  value={<>{cell.max_perimeter.toFixed(2)}</>}
-                                />
-                                <CardDetailsRow
-                                  title="Avg. Perimeter"
-                                  value={<>{cell.avg_perimeter.toFixed(2)}</>}
-                                />
-                                <CardDetailsRow
-                                  title="Min. Area"
-                                  value={<>{cell.min_area.toFixed(2)}</>}
-                                />
-                                <CardDetailsRow
-                                  title="Max. Area"
-                                  value={<>{cell.max_area.toFixed(2)}</>}
-                                />
-                                <CardDetailsRow
-                                  title="Avg. Area"
-                                  value={<>{cell.avg_area.toFixed(2)}</>}
-                                />
-                              </AccordionPanel>
-                            ) : null}
-                          </AccordionItem>
-                        );
-                      })}
-                    </Accordion>
-                  ) : null}
+                                  <CardDetailsRow
+                                    title="Nucleus Count"
+                                    value={cell.count}
+                                  />
+                                  <CardDetailsRow
+                                    title="Nucleus Cytoplasm Ratio"
+                                    value={cell.ratio.toFixed(2)}
+                                  />
+                                  <CardDetailsRow
+                                    title="Min. Perimeter"
+                                    value={<>{cell.min_perimeter.toFixed(2)}</>}
+                                  />
+                                  <CardDetailsRow
+                                    title="Max. Perimeter"
+                                    value={<>{cell.max_perimeter.toFixed(2)}</>}
+                                  />
+                                  <CardDetailsRow
+                                    title="Avg. Perimeter"
+                                    value={<>{cell.avg_perimeter.toFixed(2)}</>}
+                                  />
+                                  <CardDetailsRow
+                                    title="Min. Area"
+                                    value={<>{cell.min_area.toFixed(2)}</>}
+                                  />
+                                  <CardDetailsRow
+                                    title="Max. Area"
+                                    value={<>{cell.max_area.toFixed(2)}</>}
+                                  />
+                                  <CardDetailsRow
+                                    title="Avg. Area"
+                                    value={<>{cell.avg_area.toFixed(2)}</>}
+                                  />
+                                </AccordionPanel>
+                              ) : null}
+                            </AccordionItem>
+                          );
+                        })}
+                      </Accordion>
+                    ) : null}
+                    <Flex h="15px" />
+                  </Scrollbars>
                 </CustomTabPanel>
               </TabPanels>
             </Tabs>
