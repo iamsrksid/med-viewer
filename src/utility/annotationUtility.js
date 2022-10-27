@@ -373,7 +373,6 @@ export const updateAnnotationInDB = async ({
   annotation,
   onUpdateAnnotation,
 }) => {
-  console.log({ annotation, onUpdateAnnotation });
   if (!annotation || !onUpdateAnnotation) return false;
   const annotationJSON = getAnnotationJSON(annotation);
   try {

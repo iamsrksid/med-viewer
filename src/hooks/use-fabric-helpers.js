@@ -71,7 +71,7 @@ const useCanvasHelpers = (viewerId) => {
   };
 
   // update annotation
-  const updateAnnotation = ({ text, tag, onUpdateAnnotation }) => {
+  const updateAnnotation = ({ text, title, onUpdateAnnotation }) => {
     if (!canvas) return;
 
     const annotation = canvas.getActiveObject();
@@ -79,7 +79,7 @@ const useCanvasHelpers = (viewerId) => {
     if (!annotation) return;
 
     annotation.text = text;
-    annotation.tag = tag;
+    annotation.title = title;
 
     updateAnnotationInDB({ slideId, annotation, onUpdateAnnotation });
   };

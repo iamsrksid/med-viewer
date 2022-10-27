@@ -19,6 +19,7 @@ const ChangeHelper = ({
       alignItems="center"
       height="18px"
       minW="140px"
+      maxW="800px"
       {...restProps}
     >
       <HStack>
@@ -58,6 +59,8 @@ const ChangeHelper = ({
           lineHeight="17px"
           letterSpacing="0.0025em"
           fontFamily="Inter"
+          wordBreak="break-word"
+          noOfLines={1}
         >
           {title}
         </Text>

@@ -105,8 +105,8 @@ const ViewerControls = ({
     closeMenu();
   };
 
-  const handleSave = ({ text, tag }) => {
-    updateAnnotation({ text, tag, onUpdateAnnotation });
+  const handleSave = ({ text, title }) => {
+    updateAnnotation({ text, title, onUpdateAnnotation });
     closeEdit();
   };
 
@@ -445,7 +445,8 @@ const ViewerControls = ({
         onClose={closeEdit}
         handleClose={closeEdit}
         handleSave={handleSave}
-        value={annotationObject?.text}
+        textValue={annotationObject?.text ? annotationObject.text : ""}
+        titleValue={annotationObject?.title ? annotationObject.title : ""}
       />
     </>
   );

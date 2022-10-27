@@ -183,15 +183,14 @@ const ActivityFeed = ({
   };
 
   const handleSave = ({ text, title }) => {
-    if (text) annotationObject.text = text;
-    if (title) annotationObject.title = title;
-    if (text || title) {
-      updateAnnotationInDB({
-        slideId,
-        annotation: annotationObject,
-        onUpdateAnnotation,
-      });
-    }
+    annotationObject.text = text;
+    annotationObject.title = title;
+
+    updateAnnotationInDB({
+      slideId,
+      annotation: annotationObject,
+      onUpdateAnnotation,
+    });
     setAnnotationObject(null);
     onClose();
   };

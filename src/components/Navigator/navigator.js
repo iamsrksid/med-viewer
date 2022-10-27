@@ -146,14 +146,14 @@ const Navigator = ({
                 w="150px"
                 label={
                   slide.slideName ||
-                  slide.originalName ||
+                  slide.originalName?.split(".")?.[0] ||
                   `${caseInfo.caseName}-${index}`
                 }
               >
                 <Flex
+                  w="150px"
                   direction="column"
                   bg="#FFFFFF"
-                  flex="1"
                   p={1}
                   border="0.5px solid #F2F2F2"
                   boxShadow="0px 0px 2px rgba(0, 0, 0, 0.25)"
@@ -162,8 +162,8 @@ const Navigator = ({
                   }
                 >
                   <Image
-                    minW="111px"
-                    h="111px"
+                    w="100%"
+                    h="110px"
                     px="8px"
                     py="26px"
                     src={url}

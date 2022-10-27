@@ -9,6 +9,7 @@ import {
   ModalFooter,
   Input,
   useMediaQuery,
+  VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
@@ -20,9 +21,14 @@ const EditText = ({
   handleClose,
   handleSave,
 }) => {
-  const [text, setText] = useState(textValue);
-  const [title, setTitle] = useState(titleValue);
+  const [text, setText] = useState("");
+  const [title, setTitle] = useState("");
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
+
+  useEffect(() => {
+    setText(textValue);
+    setTitle(titleValue);
+  }, [textValue, titleValue]);
 
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -45,23 +51,25 @@ const EditText = ({
       <ModalContent left="10px" borderRadius="0px">
         <ModalHeader>Text Annotation</ModalHeader>
         <ModalBody>
-          <Input
-            type="text"
-            value={title}
-            borderRadius="0px"
-            placeholder="Add Title"
-            mt={1}
-            _focus={{ borderColor: "#00153F" }}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Textarea
-            resize="none"
-            value={text}
-            _focus={{ borderColor: "#00153F" }}
-            placeholder="Add description"
-            onChange={handleTextChange}
-            borderRadius="0px"
-          />
+          <VStack spacing={1}>
+            <Input
+              type="text"
+              value={title}
+              borderRadius="0px"
+              placeholder="Add Title"
+              mt={1}
+              _focus={{ borderColor: "#00153F" }}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Textarea
+              resize="none"
+              value={text}
+              _focus={{ borderColor: "#00153F" }}
+              placeholder="Add description"
+              onChange={handleTextChange}
+              borderRadius="0px"
+            />
+          </VStack>
         </ModalBody>
         <ModalFooter>
           <ButtonGroup size="sm" color="white">
