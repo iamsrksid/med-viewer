@@ -248,8 +248,9 @@ const ActivityFeed = ({
             height: annotationDetails ? "30vh" : "62vh",
             borderWidth: "0px",
           }}
-          renderThumbVertical={(props) => <div className="thumb-vertical" />}
-          autoHide
+          renderThumbVertical={(props) => (
+            <div className="thumb-vertical-dark" />
+          )}
         >
           <Flex direction="column">
             {activityFeed.map((feed, index) => {
@@ -323,7 +324,6 @@ const ActivityFeed = ({
                     renderThumbVertical={(props) => (
                       <div className="thumb-vertical-dark" />
                     )}
-                    autoHide
                   >
                     {annotationDetails ? (
                       <>
@@ -386,14 +386,13 @@ const ActivityFeed = ({
                   <Scrollbars
                     ref={scrollbar}
                     style={{
-                      width: "100%",
+                      width: "99%",
                       height: annotationDetails ? "30vh" : "62vh",
-                      borderWidth: "0px",
+                      borderWidth: "2px",
                     }}
                     renderThumbVertical={(props) => (
                       <div className="thumb-vertical-dark" />
                     )}
-                    autoHide
                   >
                     {annotationDetails?.analysedData &&
                     annotationDetails.analysedData.data.length > 0 ? (
