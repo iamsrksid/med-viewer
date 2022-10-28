@@ -289,12 +289,13 @@ export const groupAnnotationAndCells = ({
   optionalData,
 }) => {
   if (!cells || !enclosingAnnotation) return null;
-  const { slide, hash, text, zoomLevel, points, timeStamp, path } =
+  const { slide, hash, title, text, zoomLevel, points, timeStamp, path } =
     enclosingAnnotation;
   enclosingAnnotation.set({ fill: "" });
   const group = new fabric.Group([enclosingAnnotation, ...cells]).set({
     slide,
     hash,
+    title,
     text,
     zoomLevel,
     points,
@@ -370,16 +371,16 @@ export const saveAnnotationsToDB = async ({
 /** Update annotation details in feed and also update DB */
 export const updateAnnotationInDB = async ({
   slideId,
-  annotation,
+  hash,
+  updateObject,
   onUpdateAnnotation,
 }) => {
-  if (!annotation || !onUpdateAnnotation) return false;
-  const annotationJSON = getAnnotationJSON(annotation);
+  if (!hash || !updateObject || !onUpdateAnnotation) return false;
   try {
     await onUpdateAnnotation({
       slideId,
-      hash: annotationJSON.hash,
-      updateObject: annotationJSON,
+      hash,
+      updateObject,
     });
   } catch (error) {
     return false;

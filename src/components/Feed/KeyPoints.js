@@ -11,7 +11,7 @@ const KeyPoints = ({ activityFeed }) => {
 
       <Box mt="0.9vh">
         {activityFeed?.map((feed) => {
-          return (
+          return feed?.object ? (
             <VStack
               key={feed.object?.hash}
               alignItems="flex-start"
@@ -33,7 +33,7 @@ const KeyPoints = ({ activityFeed }) => {
                 <Text>{feed.object?.text}</Text>
               </HStack>
             </VStack>
-          );
+          ) : null;
         })}
       </Box>
     </Box>

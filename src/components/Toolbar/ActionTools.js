@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Spacer } from "@chakra-ui/react";
 import UndoRedo from "../UndoRedo/undoredo";
-import ImageFilter from "../ImageFilter/imageFilter";
+import ToggleAnnotations from "../Annotations/ToggleAnnotations";
 
 const ActionsToolbar = ({ viewerId }) => {
   return (
@@ -12,6 +12,7 @@ const ActionsToolbar = ({ viewerId }) => {
       flex="1"
     >
       {/* <UndoRedo viewerId={viewerId} /> */}
+      <ToggleAnnotations viewerId={viewerId} />
       <Spacer />
     </Flex>
   );
