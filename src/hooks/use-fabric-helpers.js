@@ -81,7 +81,12 @@ const useCanvasHelpers = (viewerId) => {
     annotation.text = text;
     annotation.title = title;
 
-    updateAnnotationInDB({ slideId, annotation, onUpdateAnnotation });
+    updateAnnotationInDB({
+      slideId,
+      hash: annotation.hash,
+      updateObject: { text, title },
+      onUpdateAnnotation,
+    });
   };
 
   // is annotation active/selected
@@ -101,17 +106,29 @@ const useCanvasHelpers = (viewerId) => {
     if (!canvas) return;
 
     fabricObjects.forEach((obj) => {
-      obj.set({ opacity: 0 });
+      obj.set({ visible: false });
     });
 
     canvas.requestRenderAll();
   };
 
   const makeAnnotationsVisible = (fabricObjects = []) => {
+    if (!canvas) return;
+
     fabricObjects.forEach((obj) => {
       obj.set({ opacity: 1 });
     });
     canvas.requestRenderAll();
+  };
+
+  const toggleAnnotationVisibility = (visible) => {
+    if (!canvas) return;
+
+    canvas.getObjects().forEach((obj) => {
+      obj.set({ visible });
+    });
+
+    deselectAll();
   };
 
   const updateCursor = () => {
@@ -129,6 +146,7 @@ const useCanvasHelpers = (viewerId) => {
     makeAnnotationsInvisible,
     makeAnnotationsVisible,
     updateCursor,
+    toggleAnnotationVisibility,
     isAnnotationSelected,
   };
 };
