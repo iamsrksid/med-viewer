@@ -380,10 +380,10 @@ const ActivityFeed = ({
                                 title="Nucleus Count"
                                 value={cell.count}
                               />
-                              <CardDetailsRow
+                              {/* <CardDetailsRow
                                 title="Nucleus Cytoplasm Ratio"
                                 value={cell.ratio.toFixed(2)}
-                              />
+                              /> */}
                               <CardDetailsRow
                                 title="Min. Perimeter"
                                 value={<>{cell.min_perimeter.toFixed(2)}</>}
