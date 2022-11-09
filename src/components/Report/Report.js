@@ -494,6 +494,30 @@ const Report = ({
                 Upload Images
               </Flex>
             )}
+            {reportedData ? (
+              <Flex flexDir="column" gap="8px">
+                <Image
+                  w="100px"
+                  h="50px"
+                  fit="contain"
+                  src={userInfo?.signature}
+                />
+                <VStack align="flex-start" spacing={0}>
+                  <Text
+                    color="#3B5D7C"
+                    fontSize="16px"
+                    fontWeight="500"
+                  >{`Dr. ${userInfo?.firstName} ${userInfo?.lastName}`}</Text>
+                  <Text>
+                    {userInfo?.highestDegree
+                      ?.split("")
+                      ?.join(".")
+                      ?.toUpperCase()}
+                  </Text>
+                  <Text>{`${userInfo?.organization?.name}, ${userInfo?.organization?.address}`}</Text>
+                </VStack>
+              </Flex>
+            ) : null}
           </VStack>
         </Flex>
       </Flex>
