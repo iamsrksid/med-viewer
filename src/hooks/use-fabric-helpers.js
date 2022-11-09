@@ -5,7 +5,10 @@ import {
   deleteAnnotationFromDB,
   updateAnnotationInDB,
 } from "../utility/annotationUtility";
-import { removeFromActivityFeed } from "../state/actions/fabricOverlayActions";
+import {
+  removeFromActivityFeed,
+  updateActivityFeed,
+} from "../state/actions/fabricOverlayActions";
 
 const useCanvasHelpers = (viewerId) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -89,6 +92,36 @@ const useCanvasHelpers = (viewerId) => {
     });
   };
 
+  const deleteAllAnnotations = async (onDeleteAnnotation) => {
+    if (!canvas || !onDeleteAnnotation) return;
+
+    if (
+      await deleteAnnotationFromDB({
+        slideId,
+        onDeleteAnnotation,
+      })
+    ) {
+      setFabricOverlayState(updateActivityFeed({ id: viewerId, fullFeed: [] }));
+
+      canvas.clear().requestRenderAll();
+
+      toast({
+        title: "Annotations deleted",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Annotations could not be deleted",
+        description: "server error",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+    }
+  };
+
   // is annotation active/selected
   const isAnnotationSelected = () => {
     if (!canvas) return false;
@@ -148,6 +181,7 @@ const useCanvasHelpers = (viewerId) => {
     updateCursor,
     toggleAnnotationVisibility,
     isAnnotationSelected,
+    deleteAllAnnotations,
   };
 };
 
