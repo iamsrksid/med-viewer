@@ -325,13 +325,14 @@ export const deleteAnnotationFromDB = async ({
   hash,
   onDeleteAnnotation,
 }) => {
-  if (!hash || !onDeleteAnnotation) return false;
+  if (!onDeleteAnnotation) return false;
   try {
-    await onDeleteAnnotation({ hash, slideId });
+    const resp = await onDeleteAnnotation({ hash, slideId });
+    if (resp.data.success) return true;
   } catch (error) {
-    return false;
+    console.error(error);
   }
-  return true;
+  return false;
 };
 
 /** Save annotation to the database */
