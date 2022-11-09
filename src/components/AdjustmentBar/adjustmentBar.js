@@ -134,6 +134,7 @@ const AdjustmentBar = ({
         application={application}
         handleAnnotationBar={handleAnnotationBar}
         caseInfo={caseInfo}
+        slide={slide}
         saveReport={saveReport}
         mediaUpload={mediaUpload}
         slideInfo={slideInfo}

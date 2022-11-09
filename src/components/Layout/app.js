@@ -162,6 +162,7 @@ const LayoutApp = ({
               showReport={showReport}
               feedTab={feedTab}
               onUpdateAnnotation={onUpdateAnnotation}
+              onDeleteAnnotation={onDeleteAnnotation}
             />
           ) : null}
           <LayoutAppBody>

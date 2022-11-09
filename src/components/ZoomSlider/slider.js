@@ -61,6 +61,14 @@ const ZoomSlider = ({ viewerId }) => {
       // );
       // console.log({ x, y, width, height });
       adjustAnnotations(value);
+      // const tiledImage = viewer.world.getItemAt(0);
+      // const ssValue = tiledImage._scaleSpring.current.value;
+      // const cValue = tiledImage.viewport._containerInnerSize.x;
+      // const srcX = tiledImage.source.dimensions.x;
+      // const zoom = viewer.viewport.getZoom(true);
+      // const imageZoom = zoom * ((ssValue * cValue) / srcX);
+      // const cPPM = imageZoom * 4000000;
+      // console.log({ ssValue, cValue, srcX, zoom, imageZoom, cPPM });
     };
     viewer.addHandler("zoom", handler);
     return () => {

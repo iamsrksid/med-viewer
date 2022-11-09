@@ -279,7 +279,7 @@ const ViewerControls = ({
     if (!viewer) return;
     viewer.scalebar({
       type: 1,
-      pixelsPerMeter: 250000,
+      pixelsPerMeter: 4000000,
       minWidth: "75px",
       maxWidth: "75px",
       location: 4,
