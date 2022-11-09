@@ -18,9 +18,10 @@ import {
   AccordionPanel,
   AccordionIcon,
   Circle,
+  IconButton,
 } from "@chakra-ui/react";
 import { BiRectangle } from "react-icons/bi";
-import { MdModeEditOutline } from "react-icons/md";
+import { MdModeEditOutline, MdDelete } from "react-icons/md";
 import { BsCircle, BsSlash } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
 import { FaDrawPolygon } from "react-icons/fa";
@@ -29,6 +30,8 @@ import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
 import { updateAnnotationInDB } from "../../utility";
 import ScrollBar from "../ScrollBar";
+import useCanvasHelpers from "../../hooks/use-fabric-helpers";
+import DeleteConfirmation from "../Annotations/DeleteConfirmation";
 
 const EditTextButton = ({ feed, handleEditClick, ...restProps }) => {
   return (
@@ -118,14 +121,22 @@ const ActivityFeed = ({
   saveAnnotationsHandler,
   showFeedBar,
   onUpdateAnnotation,
+  onDeleteAnnotation,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow } = fabricOverlayState;
   const { fabricOverlay, activityFeed, viewer, tile, slideId } =
     viewerWindow[viewerId];
+  const { deleteAllAnnotations } = useCanvasHelpers(viewerId);
 
   const scrollbar = useRef(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const {
+    isOpen: isDeleteConfirmationOpen,
+    onClose: onDeleteConfirmationClose,
+    onOpen: onDeleteConfirmationOpen,
+  } = useDisclosure();
+
   const [annotationObject, setAnnotationObject] = useState(null);
   const [annotationDetails, setAnnotationsDetails] = useState(null);
   const [ifScreenlessthan1660px] = useMediaQuery("(max-width:1660px)");
@@ -192,6 +203,11 @@ const ActivityFeed = ({
     onOpen();
   };
 
+  const deleteAnnotations = () => {
+    deleteAllAnnotations(onDeleteAnnotation);
+    onDeleteConfirmationClose();
+  };
+
   return (
     <Flex
       as="section"
@@ -235,9 +251,20 @@ const ActivityFeed = ({
         overflowY="auto"
         flex="1"
       >
-        <Text fontSize="1rem" pb="3px">
-          Annotation List
-        </Text>
+        <HStack justify="space-between">
+          <Text fontSize="1rem" pb="3px">
+            Annotation List
+          </Text>
+          <IconButton
+            icon={<MdDelete size={18} />}
+            size="sm"
+            variant="unstyled"
+            cursor="pointer"
+            isDisabled={activityFeed.length === 0}
+            _focus={{ border: "none", outline: "none" }}
+            onClick={onDeleteConfirmationOpen}
+          />
+        </HStack>
         <ScrollBar>
           <Flex direction="column">
             {activityFeed.map((feed, index) => {
@@ -427,6 +454,11 @@ const ActivityFeed = ({
         titleValue={annotationObject?.title ? annotationObject.title : ""}
         handleClose={onClose}
         handleSave={handleSave}
+      />
+      <DeleteConfirmation
+        isOpen={isDeleteConfirmationOpen}
+        onClose={onDeleteConfirmationClose}
+        handleConfirmation={deleteAnnotations}
       />
     </Flex>
   );

@@ -20,6 +20,7 @@ const SlideFeed = ({
   showReport,
   feedTab,
   onUpdateAnnotation,
+  onDeleteAnnotation,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -83,6 +84,7 @@ const SlideFeed = ({
               viewerId={viewerId}
               showFeedBar={showFeedBar}
               onUpdateAnnotation={onUpdateAnnotation}
+              onDeleteAnnotation={onDeleteAnnotation}
             />
           </TabPanel>
         </TabPanels>
