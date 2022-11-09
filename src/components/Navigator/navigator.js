@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   Tooltip,
+  VStack,
 } from "@chakra-ui/react";
 import {
   MdOutlineKeyboardArrowLeft,
@@ -49,6 +50,9 @@ const Navigator = ({
 
   const scrollbarRef = useRef(null);
   const [lines, setLines] = useState(1);
+  const curIndex = caseInfo?.slides?.findIndex(
+    (slide) => tile === slide.awsImageBucketUrl
+  );
 
   const changeSlide = (slide) => {
     if (isMultiview) {
@@ -112,100 +116,104 @@ const Navigator = ({
   };
 
   return isActive ? (
-    <HStack
+    <VStack
       w="100%"
       background="#FCFCFC"
       boxShadow="0px 1px 2px rgba(176, 200, 214, 0.1)"
       align="center"
       py="12px"
-      justify="space-between"
     >
-      <SideNavigationButton
-        icon={<MdOutlineKeyboardArrowLeft color="#151C25" />}
-        onClick={() => handleScroll("left")}
-        pl="20px"
-      />
-      <Scrollbars
-        ref={scrollbarRef}
-        style={{ width: "100%", borderWidth: "0px" }}
-        autoHeight
-        autoHeightMin="111px"
-        renderThumbHorizontal={(props) => (
-          <div {...props} className="thumb-hide" />
-        )}
-        autoHide
-      >
-        <HStack spacing="20px" px="12px" justify="center">
-          {caseInfo.slides.map((slide, index) => {
-            const url = getSlideUrl(slide.awsImageBucketUrl);
-            return (
-              <Tooltip
-                key={slide._id}
-                bg="#F6F6F6"
-                color="black"
-                w="150px"
-                label={
-                  slide.slideName ||
-                  slide.originalName?.split(".")?.[0] ||
-                  `${caseInfo.caseName}-${index}`
-                }
-              >
-                <Flex
+      <HStack w="100%" align="center" justify="space-between">
+        <SideNavigationButton
+          icon={<MdOutlineKeyboardArrowLeft color="#151C25" />}
+          onClick={() => handleScroll("left")}
+          pl="20px"
+        />
+        <Scrollbars
+          ref={scrollbarRef}
+          style={{ width: "100%", borderWidth: "0px" }}
+          autoHeight
+          autoHeightMin="111px"
+          renderThumbHorizontal={(props) => (
+            <div {...props} className="thumb-hide" />
+          )}
+          autoHide
+        >
+          <HStack spacing="20px" px="12px" justify="center">
+            {caseInfo.slides.map((slide, index) => {
+              const url = getSlideUrl(slide.awsImageBucketUrl);
+              return (
+                <Tooltip
+                  key={slide._id}
+                  bg="#F6F6F6"
+                  color="black"
                   w="150px"
-                  direction="column"
-                  bg="#FFFFFF"
-                  p={1}
-                  border="0.5px solid #F2F2F2"
-                  boxShadow="0px 0px 2px rgba(0, 0, 0, 0.25)"
-                  background={
-                    tile === slide.awsImageBucketUrl ? "#F2F2F2" : "#FFFFFF"
+                  label={
+                    slide.slideName ||
+                    slide.originalName?.split(".")?.[0] ||
+                    `${caseInfo.caseName}-${index}`
                   }
                 >
-                  <Image
-                    w="100%"
-                    h="110px"
-                    px="8px"
-                    py="26px"
-                    src={url}
-                    alt="wsi slide"
-                    fit="cover"
-                    boxShadow="0px 1px 1px rgba(176, 200, 214, 0.05);"
-                    onClick={() => changeSlide(slide)}
-                    cursor="pointer"
-                  />
-                  <Text
-                    px="4px"
-                    fontSize="12px"
-                    alignSelf="center"
-                    noOfLines={1}
+                  <Flex
+                    w="150px"
+                    direction="column"
+                    bg="#FFFFFF"
+                    p={1}
+                    border="0.5px solid #F2F2F2"
+                    boxShadow="0px 0px 2px rgba(0, 0, 0, 0.25)"
+                    background={
+                      tile === slide.awsImageBucketUrl ? "#F2F2F2" : "#FFFFFF"
+                    }
                   >
-                    {slide.slideName ||
-                      slide.originalName ||
-                      `${caseInfo.caseName}-${index}`}
-                  </Text>
-                  {isMultiview && tile === slide.awsImageBucketUrl ? (
-                    <Flex
-                      w="28px"
-                      h="28px"
-                      background="#FFFFFF"
-                      justify="center"
-                      align="center"
-                      position="absolute"
+                    <Image
+                      w="100%"
+                      h="110px"
+                      px="8px"
+                      py="26px"
+                      src={url}
+                      alt="wsi slide"
+                      fit="cover"
+                      boxShadow="0px 1px 1px rgba(176, 200, 214, 0.05);"
+                      onClick={() => changeSlide(slide)}
+                      cursor="pointer"
+                    />
+                    <Text
+                      px="4px"
+                      fontSize="12px"
+                      alignSelf="center"
+                      noOfLines={1}
                     >
-                      1.
-                    </Flex>
-                  ) : null}
-                </Flex>
-              </Tooltip>
-            );
-          })}
-        </HStack>
-      </Scrollbars>
-      <SideNavigationButton
-        icon={<MdOutlineKeyboardArrowRight color="#151C25" />}
-        onClick={() => handleScroll("right")}
-      />
-    </HStack>
+                      {slide.slideName ||
+                        slide.originalName ||
+                        `${caseInfo.caseName}-${index}`}
+                    </Text>
+                    {isMultiview && tile === slide.awsImageBucketUrl ? (
+                      <Flex
+                        w="28px"
+                        h="28px"
+                        background="#FFFFFF"
+                        justify="center"
+                        align="center"
+                        position="absolute"
+                      >
+                        1.
+                      </Flex>
+                    ) : null}
+                  </Flex>
+                </Tooltip>
+              );
+            })}
+          </HStack>
+        </Scrollbars>
+        <SideNavigationButton
+          icon={<MdOutlineKeyboardArrowRight color="#151C25" />}
+          onClick={() => handleScroll("right")}
+        />
+      </HStack>
+      <Text fontSize="14px">{`${curIndex + 1} of ${
+        caseInfo?.slides?.length
+      } slides`}</Text>
+    </VStack>
   ) : null;
 };
 
