@@ -1,5 +1,6 @@
 import { fabric } from "openseadragon-fabricjs-overlay";
 import md5 from "md5";
+import { normalizeUnits } from "./utility";
 
 /** Get annotation JSON */
 export const getAnnotationJSON = (annotation) => {
@@ -515,4 +516,28 @@ export const getVhutAnalysisData = async ({ canvas, vhut, left, top }) => {
   });
 
   return { analysedData, cells, totalCells };
+};
+
+export const getAnnotationMetric = (annotation) => {
+  if (!annotation) return null;
+
+  let metric = { type: "", value: "", unit: "μm" };
+
+  if (annotation.type === "line") {
+    const [x1, y1, x2, y2] = annotation.points;
+    metric = { type: "length", value: Math.hypot(x2 - x1, y2 - y1) * 0.25 };
+  } else if (annotation.type === "rectang") {
+    metric = {
+      type: "area",
+      value: annotation.width * annotation.height * 0.25 * 0.25,
+    };
+  } else if (annotation.type === "ellipsesph") {
+    metric = { type: "area", value: 9 };
+  }
+
+  if (metric.value) {
+    const res = normalizeUnits(metric);
+    metric = { ...metric, ...res };
+  }
+  return metric;
 };

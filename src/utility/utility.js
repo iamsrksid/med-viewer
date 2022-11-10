@@ -142,3 +142,39 @@ export const convertToZoomValue = ({ level, viewer }) => {
   if (!viewer) return null;
   return parseInt(Math.ceil((level * 40) / viewer.viewport.getMaxZoom()), 10);
 };
+
+// normalize measurement units
+export const normalizeUnits = ({ type, value }) => {
+  const res = { unit: "μm" };
+  if (type === "length") {
+    if (value >= 100) {
+      value /= 1000;
+      res.unit = "mm";
+    }
+    if (res.unit === "mm" && value >= 10) {
+      value /= 10;
+      res.unit = "cm";
+    }
+    if (res.unit === "cm" && value >= 100) {
+      value /= 100;
+      res.unit = "m";
+    }
+  } else {
+    if (value >= 100000) {
+      value /= 1000000;
+      res.unit = "mm";
+    }
+    if (res.unit === "mm" && value >= 100) {
+      value /= 100;
+      res.unit = "cm";
+    }
+    if (res.unit === "cm" && value >= 1000) {
+      value /= 10000;
+      res.unit = "m";
+    }
+  }
+
+  res.value = value.toFixed(3);
+
+  return res;
+};

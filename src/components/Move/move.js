@@ -11,12 +11,14 @@ import { updateTool } from "../../state/actions/fabricOverlayActions";
 import Multiview from "../Multiview/multiview";
 import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
+import FilterAdjustments from "../ImageFilter/FilterAdjustments";
 
 const Move = ({
   userInfo,
   viewerId,
   annotations,
   enableAI,
+  enableFilters,
   sidebar,
   isMultiview,
   setIsMultiview,
@@ -159,6 +161,8 @@ const Move = ({
             />
           </Tooltip>
         ) : null}
+
+        <FilterAdjustments viewerId={viewerId} />
       </Flex>
 
       <Flex

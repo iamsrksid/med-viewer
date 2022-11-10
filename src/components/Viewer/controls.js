@@ -41,6 +41,7 @@ import {
 } from "../../utility";
 import EditText from "../Feed/editText";
 import useCanvasHelpers from "../../hooks/use-fabric-helpers";
+import ShowMetric from "../Annotations/ShowMetric";
 
 const ViewerControls = ({
   viewerId,
@@ -321,6 +322,8 @@ const ViewerControls = ({
         setIsMorphometryDisabled(true);
       }
 
+      console.log({ left: event.pointer.x, top: event.pointer.y });
+
       setMenuPosition({ left: event.pointer.x, top: event.pointer.y });
       openMenu();
     };
@@ -448,6 +451,7 @@ const ViewerControls = ({
         textValue={annotationObject?.text ? annotationObject.text : ""}
         titleValue={annotationObject?.title ? annotationObject.title : ""}
       />
+      <ShowMetric viewerId={viewerId} />
     </>
   );
 };
