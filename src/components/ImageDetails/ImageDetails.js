@@ -1,14 +1,18 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
   Flex,
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
-  SimpleGrid,
   Text,
   VStack,
+  Box,
+  AccordionPanel,
 } from "@chakra-ui/react";
 import React from "react";
 import ScrollBar from "../ScrollBar";
@@ -29,8 +33,8 @@ const metadata = {
     "5465x8093 [0,0 5465x8093] [256x256] JPEG/YCbCr Q = 75|AppMag = 40|MPP = 0.482315",
   orientation: 1,
   scanner: "Aperio Image Library v10.2.24",
-  AppMag: "40",
-  MPP: "0.482315",
+  appMag: "40",
+  mpp: "0.482315",
   type: ".svs",
   additional: "5465x8093 [0,0 5465x8093] [256x256] JPEG/YCbCr Q = 75",
 };
@@ -69,12 +73,35 @@ const ImageDetails = ({ caseInfo, slideInfo, isOpen, onClose }) => {
                 }
               />
               <DetailsRow label="Case Title" value={caseInfo?.caseName} />
-              <DetailsRow label="Type" value={metadata["type"]} />
-              <DetailsRow label="WSI Scanner" value={metadata["scanner"]} />
-              <DetailsRow label="Width" value={metadata["width"] + " px"} />
-              <DetailsRow label="Height" value={metadata["height"] + " px"} />
-              <DetailsRow label="Magification" value={metadata["AppMag"]} />
-              <DetailsRow label="MPP" value={<>{metadata["MPP"]} &micro;m</>} />
+              <DetailsRow label="Type" value={metadata.type} />
+              <DetailsRow label="WSI Scanner" value={metadata.scanner} />
+              <DetailsRow label="Width" value={`${metadata.width} px`} />
+              <DetailsRow label="Height" value={`${metadata.height} px`} />
+              <DetailsRow label="Magification" value={metadata.appMag} />
+              <DetailsRow label="MPP" value={<>{metadata.mpp} &micro;m</>} />
+              <Flex w="100%" h="2px" bg="#DEDEDE50" />
+              <Accordion w="100%" allowToggle>
+                <AccordionItem border="none">
+                  <AccordionButton
+                    _hover={{ bg: "none" }}
+                    _focus={{ border: "none" }}
+                    px={0}
+                  >
+                    <Box flex="1" textAlign="left" color="#3B5D7C">
+                      Other Details
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel px={0}>
+                    <Flex flexDir="column" gap="4px">
+                      <Text>Shared With</Text>
+                      <Flex p={2} border="2px solid #dedede80">
+                        <Text>None</Text>
+                      </Flex>
+                    </Flex>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
             </VStack>
           </ScrollBar>
         </ModalBody>

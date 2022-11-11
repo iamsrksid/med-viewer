@@ -43,6 +43,7 @@ const FilterAdjustments = ({ viewerId }) => {
   });
 
   const sliderStateRef = useRef(sliderInputs);
+  const modalRef = useRef(null);
 
   const toast = useToast();
 
@@ -98,6 +99,7 @@ const FilterAdjustments = ({ viewerId }) => {
   return (
     <>
       <ToolbarButton
+        ref={modalRef}
         icon={<HiAdjustments color="#3B5D7C" size={IconSize()} />}
         label={<TooltipLabel heading="Filters" />}
         backgroundColor={!isActive ? "" : "#E4E5E8"}
@@ -110,7 +112,13 @@ const FilterAdjustments = ({ viewerId }) => {
         onClick={handleClick}
         _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
       />
-      <Modal isOpen={isOpen} onClose={handleOnClose} size="md">
+      <Modal
+        isOpen={isOpen}
+        onClose={handleOnClose}
+        size="md"
+        finalFocusRef={modalRef}
+        closeOnOverlayClick={false}
+      >
         <ModalContent borderRadius={0} top="40px" left="40px">
           <ModalHeader
             borderBottom="1px solid rgba(0, 0, 0, 0.25)"
