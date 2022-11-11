@@ -9,6 +9,7 @@ const ViewerFactory = ({
   viewerIds,
   caseInfo,
   userInfo,
+  slide,
   setCurrentViewer,
   onLoadAnnotations,
   onSaveAnnotation,
@@ -79,6 +80,7 @@ const ViewerFactory = ({
             slideName={viewerWindow[viewer]?.slideName}
             userInfo={userInfo}
             enableAI={enableAI}
+            slide={slide}
             onLoadAnnotations={onLoadAnnotations}
             onSaveAnnotation={onSaveAnnotation}
             onDeleteAnnotation={onDeleteAnnotation}

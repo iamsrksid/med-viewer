@@ -171,6 +171,7 @@ const LayoutApp = ({
               viewerIds={viewerIds}
               caseInfo={caseInfo}
               userInfo={userInfo}
+              slide={viewerIds?.[0]}
               onLoadAnnotations={onLoadAnnotations}
               onSaveAnnotation={onSaveAnnotation}
               onDeleteAnnotation={onDeleteAnnotation}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useFabricOverlayState } from "../../state/store";
 import { getAnnotationJSON, getAnnotationMetric } from "../../utility";
 
-const ShowMetric = ({ viewerId }) => {
+const ShowMetric = ({ viewerId, slide }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { viewer, fabricOverlay } = viewerWindow[viewerId];
@@ -30,7 +30,8 @@ const ShowMetric = ({ viewerId }) => {
 
       const { offsetX: x, offsetY: y } = event.e;
       const annotation = getAnnotationJSON(event.target);
-      setMetric(getAnnotationMetric(annotation));
+      const mpp = slide?.metadata?.mpp || 0.25;
+      setMetric(getAnnotationMetric(annotation, mpp));
       setPosition({ left: x + 10, top: y + 10 });
     };
 

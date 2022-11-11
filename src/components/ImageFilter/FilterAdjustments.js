@@ -99,7 +99,6 @@ const FilterAdjustments = ({ viewerId }) => {
   return (
     <>
       <ToolbarButton
-        ref={modalRef}
         icon={<HiAdjustments color="#3B5D7C" size={IconSize()} />}
         label={<TooltipLabel heading="Filters" />}
         backgroundColor={!isActive ? "" : "#E4E5E8"}

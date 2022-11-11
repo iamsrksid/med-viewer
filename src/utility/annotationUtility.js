@@ -518,18 +518,18 @@ export const getVhutAnalysisData = async ({ canvas, vhut, left, top }) => {
   return { analysedData, cells, totalCells };
 };
 
-export const getAnnotationMetric = (annotation) => {
+export const getAnnotationMetric = (annotation, mpp) => {
   if (!annotation) return null;
 
   let metric = { type: "", value: "", unit: "μm" };
 
   if (annotation.type === "line") {
     const [x1, y1, x2, y2] = annotation.points;
-    metric = { type: "length", value: Math.hypot(x2 - x1, y2 - y1) * 0.25 };
+    metric = { type: "length", value: Math.hypot(x2 - x1, y2 - y1) * mpp };
   } else if (annotation.type === "rectang") {
     metric = {
       type: "area",
-      value: annotation.width * annotation.height * 0.25 * 0.25,
+      value: annotation.width * annotation.height * mpp * mpp,
     };
   } else if (annotation.type === "ellipsesph") {
     metric = { type: "area", value: 9 };

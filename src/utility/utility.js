@@ -178,3 +178,8 @@ export const normalizeUnits = ({ type, value }) => {
 
   return res;
 };
+
+export const getPPMfromMPP = (mpp) => {
+  if (!mpp) mpp = 0.25;
+  return Math.round(1000000 / mpp);
+};

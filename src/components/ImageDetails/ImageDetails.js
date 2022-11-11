@@ -34,7 +34,7 @@ const metadata = {
   orientation: 1,
   scanner: "Aperio Image Library v10.2.24",
   appMag: "40",
-  mpp: "0.482315",
+  mpp: "0.25",
   type: ".svs",
   additional: "5465x8093 [0,0 5465x8093] [256x256] JPEG/YCbCr Q = 75",
 };
@@ -73,12 +73,30 @@ const ImageDetails = ({ caseInfo, slideInfo, isOpen, onClose }) => {
                 }
               />
               <DetailsRow label="Case Title" value={caseInfo?.caseName} />
-              <DetailsRow label="Type" value={metadata.type} />
-              <DetailsRow label="WSI Scanner" value={metadata.scanner} />
-              <DetailsRow label="Width" value={`${metadata.width} px`} />
-              <DetailsRow label="Height" value={`${metadata.height} px`} />
-              <DetailsRow label="Magification" value={metadata.appMag} />
-              <DetailsRow label="MPP" value={<>{metadata.mpp} &micro;m</>} />
+              <DetailsRow
+                label="Type"
+                value={slideInfo?.metadata?.type || metadata.type}
+              />
+              <DetailsRow
+                label="WSI Scanner"
+                value={slideInfo?.metadata?.scanner || metadata.scanner}
+              />
+              <DetailsRow
+                label="Width"
+                value={`${slideInfo?.metadata?.width || metadata.width} px`}
+              />
+              <DetailsRow
+                label="Height"
+                value={`${slideInfo?.metadata?.height || metadata.height} px`}
+              />
+              <DetailsRow
+                label="Magification"
+                value={slideInfo?.metadata?.appMag || metadata.appMag}
+              />
+              <DetailsRow
+                label="MPP"
+                value={<>{slideInfo?.metadata?.mpp || metadata.mpp} &micro;m</>}
+              />
               <Flex w="100%" h="2px" bg="#DEDEDE50" />
               <Accordion w="100%" allowToggle>
                 <AccordionItem border="none">

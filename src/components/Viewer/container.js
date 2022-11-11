@@ -15,6 +15,7 @@ const ViewerContainer = ({
   slideName,
   userInfo,
   enableAI,
+  slide,
   onLoadAnnotations,
   onSaveAnnotation,
   onDeleteAnnotation,
@@ -75,6 +76,7 @@ const ViewerContainer = ({
       tile={tile}
       slideName={slideName}
       enableAI={enableAI}
+      slide={slide}
       onLoadAnnotations={onLoadAnnotations}
       onSaveAnnotation={onSaveAnnotation}
       onDeleteAnnotation={onDeleteAnnotation}

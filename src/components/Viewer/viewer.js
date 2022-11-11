@@ -50,6 +50,7 @@ const Viewer = ({
   slideName,
   userInfo,
   enableAI,
+  slide,
   onLoadAnnotations,
   onSaveAnnotation,
   onDeleteAnnotation,
@@ -123,6 +124,7 @@ const Viewer = ({
           slideName={slideName}
           userInfo={userInfo}
           enableAI={enableAI}
+          slide={slide}
           onLoadAnnotations={onLoadAnnotations}
           onSaveAnnotation={onSaveAnnotation}
           onDeleteAnnotation={onDeleteAnnotation}

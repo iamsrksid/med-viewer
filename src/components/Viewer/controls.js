@@ -38,6 +38,7 @@ import {
   getZoomValue,
   createAnnotationMessage,
   saveAnnotationToDB,
+  getPPMfromMPP,
 } from "../../utility";
 import EditText from "../Feed/editText";
 import useCanvasHelpers from "../../hooks/use-fabric-helpers";
@@ -48,6 +49,7 @@ const ViewerControls = ({
   slideName,
   userInfo,
   enableAI,
+  slide,
   onLoadAnnotations,
   onSaveAnnotation,
   onDeleteAnnotation,
@@ -280,7 +282,7 @@ const ViewerControls = ({
     if (!viewer) return;
     viewer.scalebar({
       type: 1,
-      pixelsPerMeter: 4000000,
+      pixelsPerMeter: getPPMfromMPP(slide?.metadata?.mpp),
       minWidth: "75px",
       maxWidth: "75px",
       location: 4,
@@ -413,7 +415,7 @@ const ViewerControls = ({
             outline: "none",
           }}
         />
-        <ZoomSlider viewerId={viewerId} />
+        <ZoomSlider viewerId={viewerId} slide={slide} />
         <ToolbarButton
           icon={<AiOutlineMinus color="#00153F" size={iconSize} />}
           // border="1px solid #3965C6"
@@ -451,7 +453,7 @@ const ViewerControls = ({
         textValue={annotationObject?.text ? annotationObject.text : ""}
         titleValue={annotationObject?.title ? annotationObject.title : ""}
       />
-      <ShowMetric viewerId={viewerId} />
+      <ShowMetric viewerId={viewerId} slide={slide} />
     </>
   );
 };
