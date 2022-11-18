@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import AdjustmentBar from "../AdjustmentBar/adjustmentBar";
@@ -71,6 +71,7 @@ const LayoutApp = ({
 
     setFeedBar(1);
   };
+
   return (
     <Flex
       h={ifBiggerScreen ? "calc(100vh - 5.5vh)" : "calc(100vh - 44px)"}
@@ -167,6 +168,7 @@ const LayoutApp = ({
           ) : null}
           <LayoutAppBody>
             <ViewerFactory
+              application={application}
               enableAI={enableAI}
               viewerIds={viewerIds}
               caseInfo={caseInfo}

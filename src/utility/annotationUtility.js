@@ -328,8 +328,11 @@ export const deleteAnnotationFromDB = async ({
 }) => {
   if (!onDeleteAnnotation) return false;
   try {
-    const resp = await onDeleteAnnotation({ hash, slideId });
-    if (resp.data.success) return true;
+    // const resp = await onDeleteAnnotation({ hash, slideId });
+    onDeleteAnnotation({ hash, slideId });
+
+    // if (resp.data.success) return true;
+    return true;
   } catch (error) {
     console.error(error);
   }
@@ -345,7 +348,14 @@ export const saveAnnotationToDB = async ({
   if (!slideId || !annotation || !onSaveAnnotation) return false;
   const annotationJSON = getAnnotationJSON(annotation);
   try {
-    await onSaveAnnotation({ slideId, data: annotationJSON });
+    console.log("annotationJson", annotationJSON);
+    annotationJSON.strokeWidth = annotationJSON.strokeWidth.toString();
+    delete annotationJSON?.strokeDashArray;
+    delete annotationJSON?.slide;
+    delete annotationJSON?.shadow;
+    delete annotationJSON?.timeStamp;
+
+    onSaveAnnotation({ slideId, data: annotationJSON });
   } catch (error) {
     return false;
   }
@@ -395,12 +405,15 @@ export const loadAnnotationsFromDB = async ({
   slideId,
   canvas,
   viewer,
-  onLoadAnnotations,
+  // onLoadAnnotations,
+  data,
+  success,
 }) => {
-  if (!slideId || !canvas || !viewer || !onLoadAnnotations)
+  // if (!slideId || !canvas || !viewer || !onLoadAnnotations)
+  if (!slideId || !canvas || !viewer)
     return { feed: null, status: "error", message: "Invalid parameters" };
   try {
-    const { data, success } = await onLoadAnnotations({ slideId }).unwrap();
+    // const { data, success } = await onLoadAnnotations({ slideId }).unwrap();
     if (success) {
       const feed = addAnnotationsToCanvas({
         canvas,

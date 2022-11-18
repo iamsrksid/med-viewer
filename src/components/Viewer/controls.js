@@ -43,6 +43,12 @@ import {
 import EditText from "../Feed/editText";
 import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 import ShowMetric from "../Annotations/ShowMetric";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import {
+  DELETE_ANNOTATION,
+  GET_ANNOTATION,
+  UPDATE_ANNOTATION,
+} from "../../graphql/annotaionsQuery";
 
 const ViewerControls = ({
   viewerId,
@@ -52,11 +58,12 @@ const ViewerControls = ({
   slide,
   onLoadAnnotations,
   onSaveAnnotation,
-  onDeleteAnnotation,
-  onUpdateAnnotation,
+  // onDeleteAnnotation,
+  // onUpdateAnnotation,
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
+  application,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, isViewportAnalysing } = fabricOverlayState;
@@ -220,8 +227,53 @@ const ViewerControls = ({
     setIsAnnotationLoaded(false);
   }, [slideId]);
 
+  const [getAnnotation, { data, loading, error }] =
+    useLazyQuery(GET_ANNOTATION);
+
+  //loading the annotation from db
+
+  useEffect(() => {
+    if (slideId)
+      getAnnotation({
+        variables: {
+          query: {
+            slideId: slideId,
+          },
+        },
+      });
+  }, [slideId]);
   // load saved annotations from the server
   // once viewer is initialized
+
+  const [
+    modifyAnnotation,
+    { data: updatedData, error: updateError, loading: updateLoading },
+  ] = useMutation(UPDATE_ANNOTATION);
+
+  //update Annotation in db
+  const onUpdateAnnotation = (data) => {
+    delete data?.slideId;
+    modifyAnnotation({
+      variables: { body: { ...data } },
+    });
+  };
+
+  const [removeAnnotation, { data: deletedData, error: deleteError }] =
+    useMutation(DELETE_ANNOTATION);
+  if (deleteError)
+    toast({
+      title: "Annotation could not be deleted",
+      description: "server error",
+      status: "error",
+      duration: 1000,
+      isClosable: true,
+    });
+
+  // delete Annotation from db
+  const onDeleteAnnotation = (data) => {
+    removeAnnotation({ variables: { body: data } });
+  };
+
   useEffect(() => {
     if (!fabricOverlay || !onLoadAnnotations) return;
     const canvas = fabricOverlay.fabricCanvas();
@@ -233,7 +285,9 @@ const ViewerControls = ({
           slideId,
           canvas,
           viewer,
-          onLoadAnnotations,
+          // onLoadAnnotations,
+          data: data?.loadAnnotation?.data,
+          success: data?.loadAnnotation?.success,
         });
 
         if (status === "success") {
@@ -265,9 +319,10 @@ const ViewerControls = ({
 
       setIsAnnotationLoaded(true);
     };
-
-    loadAnnotations();
-  }, [fabricOverlay, slideId]);
+    if (data) {
+      loadAnnotations();
+    }
+  }, [fabricOverlay, slideId, data]);
 
   // check if annotation is loaded or not
   // and then update fabricOverlayState

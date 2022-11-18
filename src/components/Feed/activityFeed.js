@@ -32,6 +32,11 @@ import { updateAnnotationInDB } from "../../utility";
 import ScrollBar from "../ScrollBar";
 import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 import DeleteConfirmation from "../Annotations/DeleteConfirmation";
+import { useMutation } from "@apollo/client";
+import {
+  DELETE_ANNOTATION,
+  UPDATE_ANNOTATION,
+} from "../../graphql/annotaionsQuery";
 
 const EditTextButton = ({ feed, handleEditClick, ...restProps }) => {
   return (
@@ -120,9 +125,45 @@ const ActivityFeed = ({
   popup,
   saveAnnotationsHandler,
   showFeedBar,
-  onUpdateAnnotation,
-  onDeleteAnnotation,
+  // onUpdateAnnotation,
+  // onDeleteAnnotation,
 }) => {
+  // const onUpdateAnnotation = (data) => {
+  //   console.log("activityfeed", data);
+  // };
+
+  const [
+    modifyAnnotation,
+    { data: updatedData, error: updateError, loading: updateLoading },
+  ] = useMutation(UPDATE_ANNOTATION);
+
+  const onUpdateAnnotation = (data) => {
+    console.log("====================================");
+    console.log("activity feed update");
+    console.log("====================================");
+    delete data?.slideId;
+    modifyAnnotation({
+      variables: { body: { ...data } },
+    });
+  };
+
+  const [removeAnnotation, { data: deletedData, error: deleteError }] =
+    useMutation(DELETE_ANNOTATION);
+  if (deleteError)
+    toast({
+      title: "Annotation could not be deleted",
+      description: "server error",
+      status: "error",
+      duration: 1000,
+      isClosable: true,
+    });
+  const onDeleteAnnotation = (data) => {
+    console.log("====================================");
+    console.log("activity feed delete", data);
+    console.log("====================================");
+    removeAnnotation({ variables: { body: data } });
+  };
+
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { activeTool, viewerWindow } = fabricOverlayState;
   const { fabricOverlay, activityFeed, viewer, tile, slideId } =

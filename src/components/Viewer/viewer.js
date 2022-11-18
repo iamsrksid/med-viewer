@@ -58,6 +58,7 @@ const Viewer = ({
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
+  application,
 }) => {
   const { setFabricOverlayState } = useFabricOverlayState();
   const [viewer, setViewer] = useState(null);
@@ -115,11 +116,12 @@ const Viewer = ({
       );
     };
   }, [viewer]);
-
+  console.log("viewer");
   return (
     <Box id={`viewer${viewerId}`} position="relative" w="100%" h="100%">
       {isBrowser && (
         <ViewerControls
+          application={application}
           viewerId={viewerId}
           slideName={slideName}
           userInfo={userInfo}

@@ -10,16 +10,29 @@ import Polygon from "../Shape/polygon";
 import RemoveObject from "../removeComponents";
 import { useFabricOverlayState } from "../../state/store";
 import MagicWandTool from "../Tools/magicWandTool";
+import { useMutation } from "@apollo/client";
+import { SAVE_ANNOTATION } from "../../graphql/annotaionsQuery";
 
 const TypeTools = ({
   enableAI,
   userInfo,
   viewerId,
-  onSaveAnnotation,
+  // onSaveAnnotation,
   onDeleteAnnotation,
   setTotalCells,
   onVhutViewportAnalysis,
+  application,
 }) => {
+  // save annotation in db
+  console.log("====================================");
+  console.log("application", application);
+  console.log("====================================");
+  const onSaveAnnotation = (data) => {
+    createAnnotation({ variables: { body: { ...data, app: application } } });
+  };
+  const [createAnnotation, { data, error, loading }] =
+    useMutation(SAVE_ANNOTATION);
+
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
 
