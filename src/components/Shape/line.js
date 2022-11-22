@@ -205,7 +205,7 @@ const Line = ({ viewerId, onSaveAnnotation }) => {
 
       const { x1, y1, x2, y2 } = message.object;
       message.object.set({
-        points: [x1, y1, x2, y2],
+        cords: [x1, y1, x2, y2],
       });
 
       saveAnnotationToDB({

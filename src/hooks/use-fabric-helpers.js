@@ -35,8 +35,8 @@ const useCanvasHelpers = (viewerId) => {
   // subscription sync delete annotation from canvas
   const subscriptionDeleteAnnotation = (hash) => {
     if (!canvas || !hash) return;
-
-    const target = objects.getObjectByHash(hash);
+    console.log("delete hook", hash);
+    const target = canvas.getObjectByHash(hash);
 
     setFabricOverlayState(
       removeFromActivityFeed({ id: viewerId, hash: target?.hash })
@@ -54,7 +54,7 @@ const useCanvasHelpers = (viewerId) => {
 
   //subscription sync clear annotations from canvas
   const subscriptionClearAnnotations = () => {
-    if (!canvas || !hash) return;
+    if (!canvas) return;
 
     setFabricOverlayState(updateActivityFeed({ id: viewerId, fullFeed: [] }));
 
@@ -74,8 +74,7 @@ const useCanvasHelpers = (viewerId) => {
 
     const target = canvas.getObjectByHash(annotation?.hash);
     if (target) return;
-
-    const feed = addAnnotationToCanvas({ canvas, annotation });
+    const feed = addAnnotationToCanvas({ canvas, viewer, annotation });
 
     setFabricOverlayState(addToActivityFeed({ id: viewerId, feed }));
 
@@ -103,12 +102,11 @@ const useCanvasHelpers = (viewerId) => {
       isClosable: true,
     });
   };
-
   // delete annotation/object from canvas
   const deleteAnnotation = async (onDeleteAnnotation) => {
     if (!canvas || !onDeleteAnnotation) return;
     const activeObject = canvas.getActiveObject();
-
+    console.log("active....", activeObject);
     // // Object has children (ie. arrow has children objects triangle and line)
     // if (activeObject.getObjects) {
     //   const objs = activeObject.getObjects();

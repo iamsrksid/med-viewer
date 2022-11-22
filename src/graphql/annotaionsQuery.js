@@ -1,10 +1,10 @@
 import { gql } from "@apollo/client";
 
 export const GET_ANNOTATION = gql`
-  query LoadAnnotation($query: LoadAnnotationInput) {
+  query Query($query: LoadAnnotationInput) {
     loadAnnotation(query: $query) {
-      message
       success
+      message
       data {
         slideId
         type
@@ -47,10 +47,11 @@ export const GET_ANNOTATION = gql`
         x2
         y2
         points {
-          y
           x
+          y
         }
         path
+        cords
         area
         perimeter
         centroid
@@ -68,10 +69,8 @@ export const GET_ANNOTATION = gql`
 `;
 
 export const SAVE_ANNOTATION = gql`
-  mutation AutoSaveAnnotation($body: CreateAnnotationInput!) {
+  mutation Mutation($body: CreateAnnotationInput!) {
     autoSaveAnnotation(body: $body) {
-      success
-      message
       data {
         slideId
         type
@@ -118,6 +117,7 @@ export const SAVE_ANNOTATION = gql`
           y
         }
         path
+        cords
         area
         perimeter
         centroid
@@ -130,6 +130,8 @@ export const SAVE_ANNOTATION = gql`
         createdAt
         updatedAt
       }
+      message
+      success
     }
   }
 `;
@@ -206,6 +208,77 @@ export const DELETE_ANNOTATION = gql`
     deleteAnnotation(body: $body) {
       success
       message
+    }
+  }
+`;
+
+export const ANNOTATIONS_SUBSCRIPTION = gql`
+  subscription ChangedAnnotations($slideId: ID!) {
+    changedAnnotations(slideId: $slideId) {
+      data {
+        slideId
+        type
+        version
+        originX
+        originY
+        left
+        top
+        width
+        height
+        fill
+        stroke
+        strokeWidth
+        strokeLineCap
+        strokeDashOffset
+        strokeLineJoin
+        strokeMiterLimit
+        scaleX
+        scaleY
+        angle
+        flipX
+        flipY
+        opacity
+        visible
+        backgroundColor
+        fillRule
+        paintFirst
+        globalCompositeOperation
+        skewX
+        skewY
+        rx
+        ry
+        hash
+        text
+        zoomLevel
+        tag
+        title
+        x1
+        y1
+        x2
+        y2
+        points {
+          x
+          y
+        }
+        path
+        cords
+        area
+        perimeter
+        centroid
+        end_points
+        isAnalysed
+        analysedROI
+        classType
+        isDeleted
+        belongsToApp
+        createdAt
+        updatedAt
+      }
+      status {
+        isCreated
+        isUpdated
+        isDeleted
+      }
     }
   }
 `;

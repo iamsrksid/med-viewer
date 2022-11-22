@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
 import {
@@ -43,8 +43,14 @@ import {
 import EditText from "../Feed/editText";
 import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 import ShowMetric from "../Annotations/ShowMetric";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import {
+  useLazyQuery,
+  useMutation,
+  useQuery,
+  useSubscription,
+} from "@apollo/client";
+import {
+  ANNOTATIONS_SUBSCRIPTION,
   DELETE_ANNOTATION,
   GET_ANNOTATION,
   UPDATE_ANNOTATION,
@@ -69,7 +75,14 @@ const ViewerControls = ({
   const { viewerWindow, isViewportAnalysing } = fabricOverlayState;
   const { viewer, fabricOverlay, slideId, originalFileUrl } =
     viewerWindow[viewerId];
-  const { updateAnnotation, deleteAnnotation } = useCanvasHelpers(viewerId);
+  const {
+    updateAnnotation,
+    deleteAnnotation,
+    subscriptionAddAnnotation,
+    subscriptionClearAnnotations,
+    subscriptionDeleteAnnotation,
+    subscriptionUpdateAnnotation,
+  } = useCanvasHelpers(viewerId);
 
   const [isAnnotationLoaded, setIsAnnotationLoaded] = useState(false);
   const [isRightClickActive, setIsRightClickActive] = useState(false);
@@ -232,6 +245,44 @@ const ViewerControls = ({
 
   //loading the annotation from db
 
+  const { data: subscriptionData, error: subscription_error } = useSubscription(
+    ANNOTATIONS_SUBSCRIPTION,
+    {
+      variables: {
+        slideId: slideId,
+      },
+    }
+  );
+
+  useEffect(() => {
+    console.log("subscribed");
+    // if (subscriptionData && data) {
+    //   console.log("====================================");
+    //   console.log("subscriptionData", subscriptionData);
+    //   console.log("====================================");
+    //   data?.loadAnnotation?.data.forEach((annotation, index) => {
+    //     console.log("anno", annotation.hash);
+    //     console.log(" annnnnnnno   ", subscriptionData.changedAnnotations.hash);
+    //     if (annotation.hash === subscriptionData.changedAnnotations.hash) {
+    //     }
+    //   });
+
+    // }
+    if (subscriptionData && data) {
+      console.log("kkkkkkkgggg", subscriptionData);
+
+      // if annotation has been deleted
+      if (subscriptionData.changedAnnotations.status.isDeleted) {
+        const received_hash = subscriptionData.changedAnnotations.data.hash;
+        if (received_hash) subscriptionDeleteAnnotation(received_hash);
+        else subscriptionClearAnnotations();
+      } else if (subscriptionData.changedAnnotations.status.isCreated) {
+        subscriptionAddAnnotation(subscriptionData.changedAnnotations.data);
+      } else if (subscriptionData.changedAnnotations.status.isUpdated) {
+        subscriptionUpdateAnnotation(subscriptionData.changedAnnotations.data);
+      }
+    }
+  }, [subscriptionData]);
   useEffect(() => {
     if (slideId)
       getAnnotation({

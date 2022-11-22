@@ -5,6 +5,9 @@ import { normalizeUnits } from "./utility";
 /** Get annotation JSON */
 export const getAnnotationJSON = (annotation) => {
   if (!annotation) return null;
+  console.log("====================================");
+  console.log("annotationssss", annotation);
+  console.log("====================================");
   if (annotation.type === "viewport") return annotation;
   return annotation.toJSON([
     "slide",
@@ -13,6 +16,7 @@ export const getAnnotationJSON = (annotation) => {
     "title",
     "zoomLevel",
     "points",
+    "cords",
     "timeStamp",
     "area",
     "perimeter",
@@ -195,7 +199,7 @@ export const createAnnotation = (annotation) => {
       break;
 
     case "line":
-      shape = new fabric.Line(annotation.points, {
+      shape = new fabric.Line(annotation.cords, {
         color: annotation.color,
         stroke: annotation.stroke,
         strokeWidth: annotation.strokeWidth,
@@ -214,9 +218,8 @@ export const createAnnotation = (annotation) => {
   return shape;
 };
 
-// add annotation to the canvas
-export const addAnnotationToCanvas = ({ canvas, user, annotation }) => {
-  if (!canvas || annotation) return null;
+export const addAnnotationToCanvas = ({ canvas, user, viewer, annotation }) => {
+  if (!canvas || !annotation || !viewer) return null;
 
   const shape = createAnnotation(annotation);
 
@@ -233,7 +236,7 @@ export const addAnnotationToCanvas = ({ canvas, user, annotation }) => {
   return message;
 };
 
-// add annotations to the canvas
+// add annotation to the canvas
 export const addAnnotationsToCanvas = ({
   canvas,
   viewer,
@@ -556,7 +559,20 @@ export const getAnnotationMetric = (annotation, mpp) => {
   let metric = { type: "", value: "", unit: "μm" };
 
   if (annotation.type === "line") {
-    const [x1, y1, x2, y2] = annotation.points;
+    console.log("====================================");
+    console.log("annotation", annotation);
+    console.log("====================================");
+    let x1, y1, x2, y2;
+    if (annotation.cords) {
+      [x1, y1, x2, y2] = annotation.cords;
+    } else {
+      //  var {x1, y1, x2, y2} = annotation
+      x1 = annotation.x1;
+      x2 = annotation.x2;
+      y1 = annotation.y1;
+      y2 = annotation.y2;
+    }
+    // const [x1, y1, x2, y2] = annotation.cords || annotation;
     metric = { type: "length", value: Math.hypot(x2 - x1, y2 - y1) * mpp };
   } else if (annotation.type === "rectang") {
     metric = {
