@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../state/store";
 import {
+  addAnnotationsToCanvas,
+  addAnnotationToCanvas,
   deleteAnnotationFromDB,
   updateAnnotationInDB,
 } from "../utility/annotationUtility";
 import {
+  addToActivityFeed,
   removeFromActivityFeed,
   updateActivityFeed,
 } from "../state/actions/fabricOverlayActions";
@@ -13,7 +16,7 @@ import {
 const useCanvasHelpers = (viewerId) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
-  const { fabricOverlay, slideId } = viewerWindow[viewerId];
+  const { fabricOverlay, viewer, slideId } = viewerWindow[viewerId];
 
   const [canvas, setCanvas] = useState(null);
   const toast = useToast();
@@ -27,6 +30,75 @@ const useCanvasHelpers = (viewerId) => {
   const clearCanvas = () => {
     if (!canvas) return;
     canvas.clear();
+  };
+
+  // subscription sync delete annotation from canvas
+  const subscriptionDeleteAnnotation = (hash) => {
+    if (!canvas || !hash) return;
+
+    const target = objects.getObjectByHash(hash);
+
+    setFabricOverlayState(
+      removeFromActivityFeed({ id: viewerId, hash: target?.hash })
+    );
+
+    canvas.remove(target).requestRenderAll();
+
+    toast({
+      title: "Annotation deleted",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
+
+  //subscription sync clear annotations from canvas
+  const subscriptionClearAnnotations = () => {
+    if (!canvas || !hash) return;
+
+    setFabricOverlayState(updateActivityFeed({ id: viewerId, fullFeed: [] }));
+
+    canvas.clear().requestRenderAll();
+
+    toast({
+      title: "Annotations deleted",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
+
+  // subscription sync add annotation to canvas
+  const subscriptionAddAnnotation = (annotation) => {
+    if (!canvas || !annotation) return;
+
+    const feed = addAnnotationToCanvas({ canvas, annotation });
+
+    setFabricOverlayState(addToActivityFeed({ id: viewerId, feed }));
+
+    canvas.requestRenderAll();
+
+    toast({
+      title: "Annotation created",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
+
+  // subscription sync update annotation
+  const subscriptionUpdateAnnotation = (annotation) => {
+    if (!canvas || !annotation) return;
+
+    const target = canvas.getObjectByHash(annotation?.hash);
+    target.set(annotation);
+
+    toast({
+      title: "Annotation updated",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
   };
 
   // delete annotation/object from canvas
@@ -182,6 +254,10 @@ const useCanvasHelpers = (viewerId) => {
     toggleAnnotationVisibility,
     isAnnotationSelected,
     deleteAllAnnotations,
+    subscriptionAddAnnotation,
+    subscriptionClearAnnotations,
+    subscriptionDeleteAnnotation,
+    subscriptionUpdateAnnotation,
   };
 };
 
