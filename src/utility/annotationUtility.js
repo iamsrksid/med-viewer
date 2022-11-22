@@ -215,6 +215,25 @@ export const createAnnotation = (annotation) => {
 };
 
 // add annotation to the canvas
+export const addAnnotationToCanvas = ({ canvas, user, annotation }) => {
+  if (!canvas || annotation) return null;
+
+  const shape = createAnnotation(annotation);
+
+  // add shape to canvas and to activity feed
+  if (shape && shape.type !== "viewport") canvas.add(shape);
+
+  const message = createAnnotationMessage({
+    shape,
+    viewer,
+    annotation,
+    user,
+  });
+
+  return message;
+};
+
+// add annotations to the canvas
 export const addAnnotationsToCanvas = ({
   canvas,
   viewer,
