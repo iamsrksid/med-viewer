@@ -72,6 +72,9 @@ const useCanvasHelpers = (viewerId) => {
   const subscriptionAddAnnotation = (annotation) => {
     if (!canvas || !annotation) return;
 
+    const target = canvas.getObjectByHash(annotation?.hash);
+    if (target) return;
+
     const feed = addAnnotationToCanvas({ canvas, annotation });
 
     setFabricOverlayState(addToActivityFeed({ id: viewerId, feed }));
@@ -115,26 +118,12 @@ const useCanvasHelpers = (viewerId) => {
     // }
 
     if (
-      await deleteAnnotationFromDB({
+      !(await deleteAnnotationFromDB({
         slideId,
         hash: activeObject?.hash,
         onDeleteAnnotation,
-      })
+      }))
     ) {
-      setFabricOverlayState(
-        removeFromActivityFeed({ id: viewerId, hash: activeObject?.hash })
-      );
-
-      canvas.remove(activeObject);
-      canvas.renderAll();
-
-      toast({
-        title: "Annotation deleted",
-        status: "success",
-        duration: 1000,
-        isClosable: true,
-      });
-    } else {
       toast({
         title: "Annotation could not be deleted",
         description: "server error",
@@ -168,22 +157,11 @@ const useCanvasHelpers = (viewerId) => {
     if (!canvas || !onDeleteAnnotation) return;
 
     if (
-      await deleteAnnotationFromDB({
+      !(await deleteAnnotationFromDB({
         slideId,
         onDeleteAnnotation,
-      })
+      }))
     ) {
-      setFabricOverlayState(updateActivityFeed({ id: viewerId, fullFeed: [] }));
-
-      canvas.clear().requestRenderAll();
-
-      toast({
-        title: "Annotations deleted",
-        status: "success",
-        duration: 1000,
-        isClosable: true,
-      });
-    } else {
       toast({
         title: "Annotations could not be deleted",
         description: "server error",
