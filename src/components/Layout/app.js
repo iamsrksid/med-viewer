@@ -13,6 +13,7 @@ import SlideFeed from "../Feed/feed";
 const LayoutApp = ({
   userInfo,
   caseInfo,
+  slides,
   viewerIds,
   questionnaire,
   report,
@@ -81,6 +82,7 @@ const LayoutApp = ({
           userInfo={userInfo}
           caseInfo={caseInfo}
           slide={viewerIds?.[0]}
+          slides={slides}
           annotations={annotations}
           changeCaseHandler={changeCaseHandler}
           report={report}
@@ -114,6 +116,7 @@ const LayoutApp = ({
         {isNavigatorActive && (
           <Navigator
             caseInfo={caseInfo}
+            slides={slides}
             viewerId={currentViewer}
             isActive={isNavigatorActive}
             setIsNavigatorActive={setIsNavigatorActive}
@@ -122,6 +125,7 @@ const LayoutApp = ({
         {isMultiview && (
           <Navigator
             caseInfo={caseInfo}
+            slides={slides}
             viewerId={currentViewer}
             isActive={isMultiview}
             isMultiview={isMultiview}

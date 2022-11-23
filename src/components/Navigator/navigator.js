@@ -36,6 +36,7 @@ const SideNavigationButton = (props) => (
 
 const Navigator = ({
   caseInfo,
+  slides,
   isActive,
   isMultiview,
   clickHandler,
@@ -50,7 +51,7 @@ const Navigator = ({
 
   const scrollbarRef = useRef(null);
   const [lines, setLines] = useState(1);
-  const curIndex = caseInfo?.slides?.findIndex(
+  const curIndex = slides?.findIndex(
     (slide) => tile === slide.awsImageBucketUrl
   );
 
@@ -68,7 +69,7 @@ const Navigator = ({
           changeTile({
             id: vKeys[1],
             tile: slide.awsImageBucketUrl,
-            slideName: slide.accessionId,
+            slideName: slide.slideName,
             slideId: slide._id,
             originalFileUrl: slide.originalFileUrl,
           })
@@ -82,7 +83,7 @@ const Navigator = ({
             {
               id,
               tile: slide.awsImageBucketUrl,
-              slideName: slide.accessionId,
+              slideName: slide.slideName,
               slideId: slide._id,
               originalFileUrl: slide.originalFileUrl,
             },
@@ -140,7 +141,7 @@ const Navigator = ({
           autoHide
         >
           <HStack spacing="20px" px="12px" justify="center">
-            {caseInfo.slides.map((slide, index) => {
+            {slides.map((slide, index) => {
               const url = getSlideUrl(slide.awsImageBucketUrl);
               return (
                 <Tooltip
@@ -211,7 +212,7 @@ const Navigator = ({
         />
       </HStack>
       <Text fontSize="14px">{`${curIndex + 1} of ${
-        caseInfo?.slides?.length
+        slides?.length
       } slides`}</Text>
     </VStack>
   ) : null;

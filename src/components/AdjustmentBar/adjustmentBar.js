@@ -15,6 +15,7 @@ import TooltipLabel from "./ToolTipLabel";
 const AdjustmentBar = ({
   userInfo,
   caseInfo,
+  slides,
   slide,
   report,
   application,
@@ -89,6 +90,7 @@ const AdjustmentBar = ({
         {Object.keys(viewerWindow).length === 1 && (
           <ChangeSlide
             caseInfo={caseInfo}
+            slides={slides}
             viewerId={currentViewer}
             slideUrl={tile}
           />
