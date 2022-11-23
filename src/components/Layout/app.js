@@ -170,7 +170,7 @@ const LayoutApp = ({
             />
           ) : null}
           <LayoutAppBody>
-            {/* <ViewerFactory
+            <ViewerFactory
               enableAI={enableAI}
               viewerIds={viewerIds}
               caseInfo={caseInfo}
@@ -184,7 +184,7 @@ const LayoutApp = ({
               onVhutAnalysis={onVhutAnalysis}
               onGetVhutAnalysis={onGetVhutAnalysis}
               onMessageListener={onMessageListener}
-            /> */}
+            />
           </LayoutAppBody>
 
           {/* <ViewerImport /> */}
