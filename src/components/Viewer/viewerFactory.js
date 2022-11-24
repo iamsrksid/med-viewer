@@ -6,7 +6,6 @@ import ViewerHeader from "./viewerHeader";
 
 const ViewerFactory = ({
   enableAI,
-  viewerIds,
   caseInfo,
   userInfo,
   slide,

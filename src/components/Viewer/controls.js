@@ -416,7 +416,7 @@ const ViewerControls = ({
             outline: "none",
           }}
         />
-        <ZoomSlider viewerId={viewerId} slide={slide} />
+        <ZoomSlider viewerId={viewerId} />
         <ToolbarButton
           icon={<AiOutlineMinus color="#00153F" size={iconSize} />}
           // border="1px solid #3965C6"

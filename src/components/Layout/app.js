@@ -172,7 +172,6 @@ const LayoutApp = ({
           <LayoutAppBody>
             <ViewerFactory
               enableAI={enableAI}
-              viewerIds={viewerIds}
               caseInfo={caseInfo}
               userInfo={userInfo}
               slide={viewerIds?.[0]}
