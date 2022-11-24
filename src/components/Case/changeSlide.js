@@ -27,12 +27,12 @@ const ChangeSlide = ({
   const disabledLeft =
     isAnnotationLoading ||
     currentIndex - 1 < 0 ||
-    slides?.[currentIndex - 1].awsImageBucketUrl === "";
+    slides?.[currentIndex - 1]?.awsImageBucketUrl === "";
 
   const disabledRight =
     isAnnotationLoading ||
     currentIndex + 1 === maxIndex ||
-    slides?.[currentIndex + 1].awsImageBucketUrl === "";
+    slides?.[currentIndex + 1]?.awsImageBucketUrl === "";
 
   const title =
     slides?.[currentIndex]?.slideName ||

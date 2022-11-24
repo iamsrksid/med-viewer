@@ -73,7 +73,7 @@ const ChangeCase = ({
                     project?.type,
                     project?.cases[currentIndex - 1].slides.length
                   )
-                : slides[currentIndex - 1].awsImageBucketUrl === "")
+                : slides?.[currentIndex - 1].awsImageBucketUrl === "")
             }
             onClick={() => changeCaseHandler(currentIndex - 1)}
           />
@@ -112,7 +112,7 @@ const ChangeCase = ({
                     project?.type,
                     project?.cases[currentIndex + 1].slides.length
                   )
-                : slides[currentIndex + 1].awsImageBucketUrl === "")
+                : slides?.[currentIndex + 1]?.awsImageBucketUrl === "")
             }
             onClick={() => changeCaseHandler(currentIndex + 1)}
           />
