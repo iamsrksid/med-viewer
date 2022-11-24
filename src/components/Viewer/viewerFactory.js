@@ -62,8 +62,6 @@ const ViewerFactory = ({
     };
   }, [sync]);
 
-  console.log({ viewerWindow });
-
   return (
     <>
       {Object.keys(viewerWindow).map((viewer) => (

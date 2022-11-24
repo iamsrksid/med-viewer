@@ -223,51 +223,50 @@ const ViewerControls = ({
   // load saved annotations from the server
   // once viewer is initialized
   useEffect(() => {
-    // if (!fabricOverlay || !onLoadAnnotations) return;
-    // const canvas = fabricOverlay.fabricCanvas();
+    if (!fabricOverlay || !onLoadAnnotations) return;
+    const canvas = fabricOverlay.fabricCanvas();
 
-    // const loadAnnotations = async () => {
-    //   // check if the annotations is already loaded
-    //   if (canvas.toJSON().objects.length === 0) {
-    //     const { feed, status } = await loadAnnotationsFromDB({
-    //       slideId,
-    //       canvas,
-    //       viewer,
-    //       onLoadAnnotations,
-    //     });
+    const loadAnnotations = async () => {
+      // check if the annotations is already loaded
+      if (canvas.toJSON().objects.length === 0) {
+        const { feed, status } = await loadAnnotationsFromDB({
+          slideId,
+          canvas,
+          viewer,
+          onLoadAnnotations,
+        });
 
-    //     if (status === "success") {
-    //       if (feed)
-    //         setFabricOverlayState(
-    //           updateActivityFeed({ id: viewerId, fullFeed: feed })
-    //         );
-    //       canvas.requestRenderAll();
-    //       toast({
-    //         title: "Annotations loaded",
-    //         status: "success",
-    //         duration: 1000,
-    //         isClosable: true,
-    //       });
-    //     } else {
-    //       setFabricOverlayState(
-    //         updateActivityFeed({ id: viewerId, fullFeed: [] })
-    //       );
-    //       canvas.requestRenderAll();
-    //       toast({
-    //         title: "Annotation load failed",
-    //         description: "Please try again",
-    //         status: "error",
-    //         duration: 1500,
-    //         isClosable: true,
-    //       });
-    //     }
-    //   }
+        if (status === "success") {
+          if (feed)
+            setFabricOverlayState(
+              updateActivityFeed({ id: viewerId, fullFeed: feed })
+            );
+          canvas.requestRenderAll();
+          toast({
+            title: "Annotations loaded",
+            status: "success",
+            duration: 1000,
+            isClosable: true,
+          });
+        } else {
+          setFabricOverlayState(
+            updateActivityFeed({ id: viewerId, fullFeed: [] })
+          );
+          canvas.requestRenderAll();
+          toast({
+            title: "Annotation load failed",
+            description: "Please try again",
+            status: "error",
+            duration: 1500,
+            isClosable: true,
+          });
+        }
+      }
 
-    //   setIsAnnotationLoaded(true);
-    // };
+      setIsAnnotationLoaded(true);
+    };
 
-    // loadAnnotations();
-    setIsAnnotationLoaded(true);
+    loadAnnotations();
   }, [fabricOverlay, slideId]);
 
   // check if annotation is loaded or not
