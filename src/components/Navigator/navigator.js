@@ -70,7 +70,7 @@ const Navigator = ({
             id: vKeys[1],
             tile: slide.awsImageBucketUrl,
             slideName: slide.slideName,
-            slideId: slide._id,
+            slideId: slide?._id || slide?.slideId,
             originalFileUrl: slide.originalFileUrl,
           })
         );
@@ -84,7 +84,7 @@ const Navigator = ({
               id,
               tile: slide.awsImageBucketUrl,
               slideName: slide.slideName,
-              slideId: slide._id,
+              slideId: slide?._id || slide?.slideId,
               originalFileUrl: slide.originalFileUrl,
             },
           ])
@@ -97,7 +97,7 @@ const Navigator = ({
           id: viewerId,
           tile: slide.awsImageBucketUrl,
           slideName: slide.accessionId,
-          slideId: slide._id,
+          slideId: slide?._id || slide?.slideId,
           originalFileUrl: slide.originalFileUrl,
         })
       );

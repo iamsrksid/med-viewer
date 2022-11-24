@@ -102,10 +102,10 @@ const MedViewer = ({ viewerIds, ...props }) => {
     viewerIds.forEach((slide) => {
       viewerWindows.push({
         id: slide?._id || slide?.slideId,
-        tile: slide.awsImageBucketUrl,
-        slideName: slide.accessionId,
+        tile: slide?.awsImageBucketUrl,
+        slideName: slide?.slideName,
         slideId: slide?._id || slide?.slideId,
-        originalFileUrl: slide.originalFileUrl,
+        originalFileUrl: slide?.originalFileUrl,
       });
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));

@@ -47,7 +47,7 @@ const ChangeSlide = ({
         id: viewerId,
         tile: nextSlide.awsImageBucketUrl,
         slideName: nextSlide.accessionId,
-        slideId: nextSlide._id,
+        slideId: nextSlide?._id || nextSlide?.slideId,
         originalFileUrl: nextSlide.originalFileUrl,
       })
     );
