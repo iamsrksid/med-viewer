@@ -74,20 +74,17 @@ const Viewer = ({
   });
 
   useEffect(() => {
-    if (viewer) viewer.destroy();
-
     // Initialize OpenSeadragon instance and set to viewer
-    setViewer(
-      OpenSeadragon({
-        ...osdOptions,
-        tileSources: tile,
-        id: `viewer${viewerId}`,
-      })
-    );
+    // setViewer(
+    //   OpenSeadragon({
+    //     ...osdOptions,
+    //     tileSources: tile,
+    //     id: `viewer${viewerId}`,
+    //   })
+    // );
     initFabricJSOverlay(OpenSeadragon, fabric);
     return () => {
       if (viewer) viewer.destroy();
-      setViewer(null);
     };
   }, []);
 
