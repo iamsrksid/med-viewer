@@ -73,8 +73,6 @@ const Viewer = ({
     evented: true,
   });
 
-  console.log({ tile });
-
   useEffect(() => {
     if (viewer) viewer.destroy();
 
@@ -89,6 +87,7 @@ const Viewer = ({
     initFabricJSOverlay(OpenSeadragon, fabric);
     return () => {
       if (viewer) viewer.destroy();
+      setViewer(null);
     };
   }, []);
 
