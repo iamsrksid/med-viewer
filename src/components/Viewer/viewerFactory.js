@@ -23,7 +23,7 @@ const ViewerFactory = ({
   const { viewerWindow, sync } = fabricOverlayState;
 
   useEffect(() => {
-    if (!sync) return null;
+    if (!sync) return;
 
     let isLeading1 = false;
     let isLeading2 = false;

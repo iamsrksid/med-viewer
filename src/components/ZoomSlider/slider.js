@@ -30,7 +30,7 @@ const ZoomSlider = ({ viewerId }) => {
   };
 
   useEffect(() => {
-    if (!viewer) return null;
+    if (!viewer) return;
     const adjustAnnotations = () => {
       // const value = parseInt((e.zoom * 40) / viewer.viewport.getMaxZoom(), 10);
       // const scaleFactor = value !== 0 ? value / 40 : 1 / 40;

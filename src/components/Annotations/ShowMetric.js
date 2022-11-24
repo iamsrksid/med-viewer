@@ -19,7 +19,7 @@ const ShowMetric = ({ viewerId, slide }) => {
   });
 
   useEffect(() => {
-    if (!viewer || !fabricOverlay) return null;
+    if (!viewer || !fabricOverlay) return;
 
     const canvas = fabricOverlay.fabricCanvas();
 

@@ -92,7 +92,7 @@ const Viewer = ({
 
   // Show the results.
   useEffect(() => {
-    if (!viewer) return null;
+    if (!viewer) return;
 
     // Create the fabric.js overlay, and set it on a sharable context
     // viewer.open(tile.source);

@@ -299,7 +299,7 @@ const ViewerControls = ({
 
   // add right click event
   useEffect(() => {
-    if (!viewer || !fabricOverlay) return null;
+    if (!viewer || !fabricOverlay) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     const handleMouseDown = (event) => {
