@@ -46,7 +46,7 @@ const theme = extendTheme({
     },
   },
   fonts: {
-    body: "Inter, arial",
+    body: "Inter, sans-serif",
   },
   fontSizes: {
     xs: "0.75rem",
