@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { fabric, initFabricJSOverlay } from "openseadragon-fabricjs-overlay";
 import OpenSeadragon from "openseadragon";
 import { isBrowser } from "react-device-detect";
@@ -11,7 +11,7 @@ import "../../utility/fabricUtility";
 
 const osdOptions = {
   constrainDuringPan: !!isBrowser,
-  debugMode: false,
+  debugMode: true,
   gestureSettingsMouse: {
     clickToZoom: false,
     flickEnabled: true,
@@ -61,6 +61,7 @@ const Viewer = ({
 }) => {
   const { setFabricOverlayState } = useFabricOverlayState();
   const [viewer, setViewer] = useState(null);
+  const boxRef = useRef();
 
   // Customize Fabric selection handles
   fabric.Object.prototype.set({
@@ -75,7 +76,10 @@ const Viewer = ({
 
   useEffect(() => {
     // Initialize OpenSeadragon instance and set to viewer
-    console.log("initialize viewer");
+    console.log("initialize viewer: ", viewer);
+
+    if (viewer) viewer.destroy();
+
     setViewer(
       OpenSeadragon({
         ...osdOptions,
@@ -116,7 +120,13 @@ const Viewer = ({
   }, [viewer]);
 
   return (
-    <Box id={`viewer${viewerId}`} position="relative" w="100%" h="100%">
+    <Box
+      ref={boxRef}
+      id={`viewer${viewerId}`}
+      position="relative"
+      w="100%"
+      h="100%"
+    >
       {isBrowser && (
         <ViewerControls
           viewerId={viewerId}
