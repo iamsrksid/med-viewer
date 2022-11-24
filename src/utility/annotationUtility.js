@@ -329,6 +329,7 @@ export const deleteAnnotationFromDB = async ({
   if (!onDeleteAnnotation) return false;
   try {
     const resp = await onDeleteAnnotation({ hash, slideId });
+    console.log({ resp });
     if (resp.data.success) return true;
   } catch (error) {
     console.error(error);
@@ -401,6 +402,7 @@ export const loadAnnotationsFromDB = async ({
     return { feed: null, status: "error", message: "Invalid parameters" };
   try {
     const { data, success } = await onLoadAnnotations({ slideId }).unwrap();
+    console.log({ data });
     if (success) {
       const feed = addAnnotationsToCanvas({
         canvas,
