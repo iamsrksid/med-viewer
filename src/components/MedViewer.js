@@ -101,10 +101,10 @@ const MedViewer = ({ viewerIds, ...props }) => {
     const viewerWindows = [];
     viewerIds.forEach((slide) => {
       viewerWindows.push({
-        id: slide._id,
+        id: slide?._id || slide?.slideId,
         tile: slide.awsImageBucketUrl,
         slideName: slide.accessionId,
-        slideId: slide._id,
+        slideId: slide?._id || slide?.slideId,
         originalFileUrl: slide.originalFileUrl,
       });
     });
