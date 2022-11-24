@@ -48,7 +48,7 @@ const MagicWandTool = ({
   }, [isActive, setFabricOverlayState]);
 
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return null;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
     canvas.defaultCursor = "crosshair";
 
@@ -64,7 +64,7 @@ const MagicWandTool = ({
   }, [isActive, fabricOverlay]);
 
   useEffect(() => {
-    if (!viewer) return null;
+    if (!viewer) return;
     const handleZoomValueChange = () => {
       setZoomValue(getZoomValue(viewer));
     };
@@ -77,7 +77,7 @@ const MagicWandTool = ({
   }, [viewer]);
 
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return null;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     const { x: left, y: top, width, height } = getViewportBounds(viewer);

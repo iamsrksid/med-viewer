@@ -87,7 +87,7 @@ const Square = ({ viewerId, onSaveAnnotation }) => {
    * Add shapes and handle mouse events
    */
   useEffect(() => {
-    if (!fabricOverlay) return null;
+    if (!fabricOverlay) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     /**

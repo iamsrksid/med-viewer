@@ -13,7 +13,7 @@ const RemoveObject = ({ viewerId, onDeleteAnnotation }) => {
   const [isActiveObject, setIsActiveObject] = useState();
 
   useEffect(() => {
-    if (!fabricOverlay) return null;
+    if (!fabricOverlay) return;
 
     const canvas = fabricOverlay.fabricCanvas();
 

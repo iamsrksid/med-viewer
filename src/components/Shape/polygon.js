@@ -51,7 +51,7 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
   }, [color.hex]);
 
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return null;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
     canvas.defaultCursor = "crosshair";
 
@@ -67,7 +67,7 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
   }, [isActive, fabricOverlay]);
 
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return null;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     const generatePolygon = async () => {

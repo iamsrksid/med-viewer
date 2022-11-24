@@ -68,7 +68,7 @@ const Draw = ({ viewerId, onSaveAnnotation }) => {
   }, [isActive]);
 
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return null;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     // // Create new Textbox instance and add it to canvas

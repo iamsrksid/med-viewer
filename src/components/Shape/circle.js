@@ -89,7 +89,7 @@ const Circle = ({ viewerId, onSaveAnnotation }) => {
    * Add shapes and handle mouse events
    */
   useEffect(() => {
-    if (!fabricOverlay || !isActive) return null;
+    if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     /**
