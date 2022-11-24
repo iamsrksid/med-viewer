@@ -75,7 +75,7 @@ const LayoutApp = ({
     setFeedBar(1);
   };
 
-  console.log({ userInfo, lessonInfo, slides });
+  console.log({ userInfo, caseInfo, slides });
   return (
     <Flex
       h={ifBiggerScreen ? "calc(100vh - 5.5vh)" : "calc(100vh - 44px)"}
