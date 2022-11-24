@@ -72,7 +72,7 @@ const ViewerFactory = ({
             <ViewerHeader
               caseInfo={caseInfo}
               viewerId={viewer}
-              slideUrl={viewerWindow[viewer].tile}
+              slideUrl={viewerWindow?.[viewer]?.tile}
               setCurrentViewer={setCurrentViewer}
             />
           ) : null}

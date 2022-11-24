@@ -47,7 +47,9 @@ const LayoutApp = ({
   const [isMultiview, setIsMultiview] = useState(false);
   const [totalCells, setTotalCells] = useState(0);
   const [ifBiggerScreen] = useMediaQuery("(min-width:1920px)");
-  const [currentViewer, setCurrentViewer] = useState(viewerIds?.[0]?._id);
+  const [currentViewer, setCurrentViewer] = useState(
+    viewerIds?.[0]?._id || viewerIds?.[0]?.slideId
+  );
   const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
   const [showFeedBar, setShowFeedBar] = useState(false);
   const [showReport, setShowReport] = useState(false);
