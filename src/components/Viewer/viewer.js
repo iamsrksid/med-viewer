@@ -11,7 +11,7 @@ import "../../utility/fabricUtility";
 
 const osdOptions = {
   constrainDuringPan: !!isBrowser,
-  debugMode: true,
+  debugMode: false,
   gestureSettingsMouse: {
     clickToZoom: false,
     flickEnabled: true,
@@ -76,8 +76,6 @@ const Viewer = ({
 
   useEffect(() => {
     // Initialize OpenSeadragon instance and set to viewer
-    console.log("initialize viewer: ", viewer);
-
     if (viewer) viewer.destroy();
 
     setViewer(

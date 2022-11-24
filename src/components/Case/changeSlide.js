@@ -40,7 +40,7 @@ const ChangeSlide = ({
     `${caseInfo?.caseName}-${currentIndex + 1}`;
 
   const clickHandler = (position) => {
-    const nextSlide = slides[currentIndex + position];
+    const nextSlide = slides?.[currentIndex + position];
     setFabricOverlayState(updateTool({ tool: "Move" }));
     setFabricOverlayState(
       changeTile({

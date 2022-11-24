@@ -14,6 +14,7 @@ const ChangeCase = ({
   project,
   caseInfo,
   slide,
+  slides,
   changeCaseHandler,
   closeToggle,
 }) => {
@@ -21,11 +22,11 @@ const ChangeCase = ({
     ? project?.cases.findIndex(
         (projectCase) => projectCase._id === caseInfo?._id
       )
-    : caseInfo?.slides.findIndex(
+    : slides?.findIndex(
         (s) => s.awsImageBucketUrl === slide?.awsImageBucketUrl
       );
 
-  const maxIndex = project ? project?.cases?.length : caseInfo?.slides?.length;
+  const maxIndex = project ? project?.cases?.length : slides?.length;
   const [closeButton, setCloseButton] = useState(true);
   const handleCloseButtonClick = () => {
     setCloseButton(false);
@@ -72,7 +73,7 @@ const ChangeCase = ({
                     project?.type,
                     project?.cases[currentIndex - 1].slides.length
                   )
-                : caseInfo?.slides[currentIndex - 1].awsImageBucketUrl === "")
+                : slides[currentIndex - 1].awsImageBucketUrl === "")
             }
             onClick={() => changeCaseHandler(currentIndex - 1)}
           />
@@ -81,7 +82,7 @@ const ChangeCase = ({
         <Text mr="24px">
           {project
             ? project?.cases[currentIndex]?.name
-            : caseInfo?.slides[currentIndex]?.accessionId}
+            : slides[currentIndex]?.accessionId}
         </Text>
         <Tooltip
           label={
@@ -111,7 +112,7 @@ const ChangeCase = ({
                     project?.type,
                     project?.cases[currentIndex + 1].slides.length
                   )
-                : caseInfo?.slides[currentIndex + 1].awsImageBucketUrl === "")
+                : slides[currentIndex + 1].awsImageBucketUrl === "")
             }
             onClick={() => changeCaseHandler(currentIndex + 1)}
           />

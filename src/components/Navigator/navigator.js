@@ -141,7 +141,7 @@ const Navigator = ({
           autoHide
         >
           <HStack spacing="20px" px="12px" justify="center">
-            {slides.map((slide, index) => {
+            {slides?.map((slide, index) => {
               const url = getSlideUrl(slide.awsImageBucketUrl);
               return (
                 <Tooltip
