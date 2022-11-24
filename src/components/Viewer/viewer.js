@@ -75,13 +75,13 @@ const Viewer = ({
 
   useEffect(() => {
     // Initialize OpenSeadragon instance and set to viewer
-    // setViewer(
-    //   OpenSeadragon({
-    //     ...osdOptions,
-    //     tileSources: tile,
-    //     id: `viewer${viewerId}`,
-    //   })
-    // );
+    setViewer(
+      OpenSeadragon({
+        ...osdOptions,
+        tileSources: tile,
+        id: `viewer${viewerId}`,
+      })
+    );
     initFabricJSOverlay(OpenSeadragon, fabric);
     return () => {
       if (viewer) viewer.destroy();
