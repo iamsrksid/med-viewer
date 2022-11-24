@@ -75,6 +75,7 @@ const Viewer = ({
 
   useEffect(() => {
     // Initialize OpenSeadragon instance and set to viewer
+    console.log("initialize viewer");
     setViewer(
       OpenSeadragon({
         ...osdOptions,
