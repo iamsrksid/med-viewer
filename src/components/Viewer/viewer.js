@@ -73,6 +73,8 @@ const Viewer = ({
     evented: true,
   });
 
+  console.log({ tile });
+
   useEffect(() => {
     if (viewer) viewer.destroy();
 
