@@ -9,6 +9,7 @@ const ViewerFactory = ({
   caseInfo,
   userInfo,
   slide,
+  slides,
   setCurrentViewer,
   onLoadAnnotations,
   onSaveAnnotation,
@@ -70,6 +71,7 @@ const ViewerFactory = ({
           {Object.keys(viewerWindow).length > 1 ? (
             <ViewerHeader
               caseInfo={caseInfo}
+              slides={slides}
               viewerId={viewer}
               slideUrl={viewerWindow?.[viewer]?.tile}
               setCurrentViewer={setCurrentViewer}

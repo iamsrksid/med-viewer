@@ -22,7 +22,13 @@ const MenuItemCustom = ({ title, ...restProps }) => (
   </MenuItem>
 );
 
-const ViewerHeader = ({ caseInfo, viewerId, slideUrl, setCurrentViewer }) => {
+const ViewerHeader = ({
+  caseInfo,
+  slides,
+  viewerId,
+  slideUrl,
+  setCurrentViewer,
+}) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, sync } = fabricOverlayState;
 
@@ -49,6 +55,7 @@ const ViewerHeader = ({ caseInfo, viewerId, slideUrl, setCurrentViewer }) => {
     >
       <ChangeSlide
         caseInfo={caseInfo}
+        slides={slides}
         viewerId={viewerId}
         slideUrl={slideUrl}
       />
