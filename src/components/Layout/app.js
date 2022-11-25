@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import AdjustmentBar from "../AdjustmentBar/adjustmentBar";
@@ -174,6 +174,7 @@ const LayoutApp = ({
           ) : null}
           <LayoutAppBody>
             <ViewerFactory
+              application={application}
               enableAI={enableAI}
               caseInfo={caseInfo}
               userInfo={userInfo}

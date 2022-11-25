@@ -23,6 +23,7 @@ const ViewerContainer = ({
   onVhutAnalysis,
   onGetVhutAnalysis,
   onMessageListener,
+  application,
 }) => {
   const location = useLocation();
 
@@ -72,6 +73,7 @@ const ViewerContainer = ({
 
   return (
     <Viewer
+      application={application}
       viewerId={viewerId}
       tile={tile}
       slideName={slideName}

@@ -115,6 +115,7 @@ const AdjustmentBar = ({
         />
       </Flex>
       <Move
+        application={application}
         userInfo={userInfo}
         sidebar={sidebar}
         annotations={annotations}

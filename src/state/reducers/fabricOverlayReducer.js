@@ -75,7 +75,7 @@ const fabricOverlayReducer = (state, action) => {
 
     case "removeFromActivityFeed": {
       const newFeed = state.viewerWindow[action.payload.id].activityFeed.filter(
-        (af) => af.object.hash !== action.payload.hash
+        (af) => af?.object?.hash !== action.payload.hash
       );
       return {
         ...state,

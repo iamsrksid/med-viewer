@@ -48,26 +48,42 @@ const RemoveObject = ({ viewerId, onDeleteAnnotation }) => {
     //   });
     // }
 
+    // if (
+    //   await deleteAnnotationFromDB({
+    //     slideId,
+    //     hash: activeObject?.hash,
+    //     onDeleteAnnotation,
+    //   })
+    // ) {
+    //   setFabricOverlayState(
+    //     removeFromActivityFeed({ id: viewerId, hash: activeObject?.hash })
+    //   );
+
+    //   canvas.remove(activeObject);
+    //   canvas.renderAll();
+    //   toast({
+    //     title: "Annotation deleted",
+    //     status: "success",
+    //     duration: 1000,
+    //     isClosable: true,
+    //   });
+    // } else {
+    //   toast({
+    //     title: "Annotation could not be deleted",
+    //     description: "server error",
+    //     status: "error",
+    //     duration: 1000,
+    //     isClosable: true,
+    //   });
+    // }
+
     if (
-      await deleteAnnotationFromDB({
+      !(await deleteAnnotationFromDB({
         slideId,
         hash: activeObject?.hash,
         onDeleteAnnotation,
-      })
+      }))
     ) {
-      setFabricOverlayState(
-        removeFromActivityFeed({ id: viewerId, hash: activeObject?.hash })
-      );
-
-      canvas.remove(activeObject);
-      canvas.renderAll();
-      toast({
-        title: "Annotation deleted",
-        status: "success",
-        duration: 1000,
-        isClosable: true,
-      });
-    } else {
       toast({
         title: "Annotation could not be deleted",
         description: "server error",

@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../state/store";
 import {
+  addAnnotationsToCanvas,
+  addAnnotationToCanvas,
   deleteAnnotationFromDB,
   updateAnnotationInDB,
 } from "../utility/annotationUtility";
 import {
+  addToActivityFeed,
   removeFromActivityFeed,
   updateActivityFeed,
 } from "../state/actions/fabricOverlayActions";
@@ -13,7 +16,7 @@ import {
 const useCanvasHelpers = (viewerId) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
-  const { fabricOverlay, slideId } = viewerWindow[viewerId];
+  const { fabricOverlay, viewer, slideId } = viewerWindow[viewerId];
 
   const [canvas, setCanvas] = useState(null);
   const toast = useToast();
@@ -29,11 +32,81 @@ const useCanvasHelpers = (viewerId) => {
     canvas.clear();
   };
 
+  // subscription sync delete annotation from canvas
+  const subscriptionDeleteAnnotation = (hash) => {
+    if (!canvas || !hash) return;
+    console.log("delete hook", hash);
+    const target = canvas.getObjectByHash(hash);
+
+    setFabricOverlayState(
+      removeFromActivityFeed({ id: viewerId, hash: target?.hash })
+    );
+
+    canvas.remove(target).requestRenderAll();
+
+    toast({
+      title: "Annotation deleted",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
+
+  //subscription sync clear annotations from canvas
+  const subscriptionClearAnnotations = () => {
+    if (!canvas) return;
+
+    setFabricOverlayState(updateActivityFeed({ id: viewerId, fullFeed: [] }));
+
+    canvas.clear().requestRenderAll();
+
+    toast({
+      title: "Annotations deleted",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
+
+  // subscription sync add annotation to canvas
+  const subscriptionAddAnnotation = (annotation) => {
+    if (!canvas || !annotation) return;
+
+    const target = canvas.getObjectByHash(annotation?.hash);
+    if (target) return;
+    const feed = addAnnotationToCanvas({ canvas, viewer, annotation });
+
+    setFabricOverlayState(addToActivityFeed({ id: viewerId, feed }));
+
+    canvas.requestRenderAll();
+
+    toast({
+      title: "Annotation created",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
+
+  // subscription sync update annotation
+  const subscriptionUpdateAnnotation = (annotation) => {
+    if (!canvas || !annotation) return;
+
+    const target = canvas.getObjectByHash(annotation?.hash);
+    target.set(annotation);
+
+    toast({
+      title: "Annotation updated",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
   // delete annotation/object from canvas
   const deleteAnnotation = async (onDeleteAnnotation) => {
     if (!canvas || !onDeleteAnnotation) return;
     const activeObject = canvas.getActiveObject();
-
+    console.log("active....", activeObject);
     // // Object has children (ie. arrow has children objects triangle and line)
     // if (activeObject.getObjects) {
     //   const objs = activeObject.getObjects();
@@ -43,26 +116,12 @@ const useCanvasHelpers = (viewerId) => {
     // }
 
     if (
-      await deleteAnnotationFromDB({
+      !(await deleteAnnotationFromDB({
         slideId,
         hash: activeObject?.hash,
         onDeleteAnnotation,
-      })
+      }))
     ) {
-      setFabricOverlayState(
-        removeFromActivityFeed({ id: viewerId, hash: activeObject?.hash })
-      );
-
-      canvas.remove(activeObject);
-      canvas.renderAll();
-
-      toast({
-        title: "Annotation deleted",
-        status: "success",
-        duration: 1000,
-        isClosable: true,
-      });
-    } else {
       toast({
         title: "Annotation could not be deleted",
         description: "server error",
@@ -96,22 +155,11 @@ const useCanvasHelpers = (viewerId) => {
     if (!canvas || !onDeleteAnnotation) return;
 
     if (
-      await deleteAnnotationFromDB({
+      !(await deleteAnnotationFromDB({
         slideId,
         onDeleteAnnotation,
-      })
+      }))
     ) {
-      setFabricOverlayState(updateActivityFeed({ id: viewerId, fullFeed: [] }));
-
-      canvas.clear().requestRenderAll();
-
-      toast({
-        title: "Annotations deleted",
-        status: "success",
-        duration: 1000,
-        isClosable: true,
-      });
-    } else {
       toast({
         title: "Annotations could not be deleted",
         description: "server error",
@@ -182,6 +230,10 @@ const useCanvasHelpers = (viewerId) => {
     toggleAnnotationVisibility,
     isAnnotationSelected,
     deleteAllAnnotations,
+    subscriptionAddAnnotation,
+    subscriptionClearAnnotations,
+    subscriptionDeleteAnnotation,
+    subscriptionUpdateAnnotation,
   };
 };
 

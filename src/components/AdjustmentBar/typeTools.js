@@ -10,16 +10,27 @@ import Polygon from "../Shape/polygon";
 import RemoveObject from "../removeComponents";
 import { useFabricOverlayState } from "../../state/store";
 import MagicWandTool from "../Tools/magicWandTool";
+import { useMutation } from "@apollo/client";
+import {
+  DELETE_ANNOTATION,
+  SAVE_ANNOTATION,
+} from "../../graphql/annotaionsQuery";
 
 const TypeTools = ({
   enableAI,
   userInfo,
   viewerId,
-  onSaveAnnotation,
-  onDeleteAnnotation,
+  // onSaveAnnotation,
+  // onDeleteAnnotation,
   setTotalCells,
   onVhutViewportAnalysis,
+  application,
 }) => {
+  // save annotation in db
+  console.log("====================================");
+  console.log("application", application);
+  console.log("====================================");
+
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];
 
@@ -28,6 +39,37 @@ const TypeTools = ({
       fabricOverlay.fabricCanvas().discardActiveObject();
     }
   };
+
+  const [removeAnnotation, { data: deletedData, error: deleteError }] =
+    useMutation(DELETE_ANNOTATION);
+  if (deleteError)
+    toast({
+      title: "Annotation could not be deleted",
+      description: "server error",
+      status: "error",
+      duration: 1000,
+      isClosable: true,
+    });
+
+  // delete Annotation from db
+  const onDeleteAnnotation = (data) => {
+    removeAnnotation({ variables: { body: data } });
+  };
+
+  const onSaveAnnotation = (data) => {
+    createAnnotation({ variables: { body: { ...data, app: application } } });
+  };
+  const [createAnnotation, { data, error, loading }] =
+    useMutation(SAVE_ANNOTATION);
+
+  if (error)
+    toast({
+      title: "Annotation could not be created",
+      description: "server error",
+      status: "error",
+      duration: 1000,
+      isClosable: true,
+    });
 
   return (
     <Draggable

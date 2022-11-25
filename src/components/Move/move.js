@@ -28,6 +28,7 @@ const Move = ({
   onSaveAnnotation,
   onDeleteAnnotation,
   onVhutViewportAnalysis,
+  application,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
@@ -181,6 +182,7 @@ const Move = ({
       >
         {typeToolsToggle ? (
           <TypeTools
+            application={application}
             enableAI={enableAI}
             userInfo={userInfo}
             viewerId={viewerId}

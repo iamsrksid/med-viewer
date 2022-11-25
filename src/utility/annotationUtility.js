@@ -5,6 +5,9 @@ import { normalizeUnits } from "./utility";
 /** Get annotation JSON */
 export const getAnnotationJSON = (annotation) => {
   if (!annotation) return null;
+  console.log("====================================");
+  console.log("annotationssss", annotation);
+  console.log("====================================");
   if (annotation.type === "viewport") return annotation;
   return annotation.toJSON([
     "slide",
@@ -13,6 +16,7 @@ export const getAnnotationJSON = (annotation) => {
     "title",
     "zoomLevel",
     "points",
+    "cords",
     "timeStamp",
     "area",
     "perimeter",
@@ -195,7 +199,7 @@ export const createAnnotation = (annotation) => {
       break;
 
     case "line":
-      shape = new fabric.Line(annotation.points, {
+      shape = new fabric.Line(annotation.cords, {
         color: annotation.color,
         stroke: annotation.stroke,
         strokeWidth: annotation.strokeWidth,
@@ -212,6 +216,24 @@ export const createAnnotation = (annotation) => {
       shape = null;
   }
   return shape;
+};
+
+export const addAnnotationToCanvas = ({ canvas, user, viewer, annotation }) => {
+  if (!canvas || !annotation || !viewer) return null;
+
+  const shape = createAnnotation(annotation);
+
+  // add shape to canvas and to activity feed
+  if (shape && shape.type !== "viewport") canvas.add(shape);
+
+  const message = createAnnotationMessage({
+    shape,
+    viewer,
+    annotation,
+    user,
+  });
+
+  return message;
 };
 
 // add annotation to the canvas
@@ -328,9 +350,11 @@ export const deleteAnnotationFromDB = async ({
 }) => {
   if (!onDeleteAnnotation) return false;
   try {
-    const resp = await onDeleteAnnotation({ hash, slideId });
-    console.log({ resp });
-    if (resp.data.success) return true;
+    // const resp = await onDeleteAnnotation({ hash, slideId });
+    onDeleteAnnotation({ hash, slideId });
+
+    // if (resp.data.success) return true;
+    return true;
   } catch (error) {
     console.error(error);
   }
@@ -346,7 +370,14 @@ export const saveAnnotationToDB = async ({
   if (!slideId || !annotation || !onSaveAnnotation) return false;
   const annotationJSON = getAnnotationJSON(annotation);
   try {
-    await onSaveAnnotation({ slideId, data: annotationJSON });
+    console.log("annotationJson", annotationJSON);
+    annotationJSON.strokeWidth = annotationJSON.strokeWidth.toString();
+    delete annotationJSON?.strokeDashArray;
+    delete annotationJSON?.slide;
+    delete annotationJSON?.shadow;
+    delete annotationJSON?.timeStamp;
+
+    onSaveAnnotation({ slideId, data: annotationJSON });
   } catch (error) {
     return false;
   }
@@ -396,13 +427,15 @@ export const loadAnnotationsFromDB = async ({
   slideId,
   canvas,
   viewer,
-  onLoadAnnotations,
+  // onLoadAnnotations,
+  data,
+  success,
 }) => {
-  if (!slideId || !canvas || !viewer || !onLoadAnnotations)
+  // if (!slideId || !canvas || !viewer || !onLoadAnnotations)
+  if (!slideId || !canvas || !viewer)
     return { feed: null, status: "error", message: "Invalid parameters" };
   try {
-    const { data, success } = await onLoadAnnotations({ slideId }).unwrap();
-    console.log({ data });
+    // const { data, success } = await onLoadAnnotations({ slideId }).unwrap();
     if (success) {
       const feed = addAnnotationsToCanvas({
         canvas,
@@ -526,7 +559,20 @@ export const getAnnotationMetric = (annotation, mpp) => {
   let metric = { type: "", value: "", unit: "μm" };
 
   if (annotation.type === "line") {
-    const [x1, y1, x2, y2] = annotation.points;
+    console.log("====================================");
+    console.log("annotation", annotation);
+    console.log("====================================");
+    let x1, y1, x2, y2;
+    if (annotation.cords) {
+      [x1, y1, x2, y2] = annotation.cords;
+    } else {
+      //  var {x1, y1, x2, y2} = annotation
+      x1 = annotation.x1;
+      x2 = annotation.x2;
+      y1 = annotation.y1;
+      y2 = annotation.y2;
+    }
+    // const [x1, y1, x2, y2] = annotation.cords || annotation;
     metric = { type: "length", value: Math.hypot(x2 - x1, y2 - y1) * mpp };
   } else if (annotation.type === "rectang") {
     metric = {
