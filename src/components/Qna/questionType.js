@@ -4,11 +4,11 @@ import TextType from "./textType";
 import CheckboxType from "./checkboxType";
 
 const QuestionType = ({ question, response, setQnaResponse, slideQna }) => {
-  const handleChange = ({ question_id, choice }) => {
-    setQnaResponse({ question_id, choice });
+  const handleChange = ({ questionId, choice }) => {
+    setQnaResponse({ questionId, choice });
   };
 
-  if (question?.question_type === "multiple choice")
+  if (question?.questionType === "multiple choice")
     return (
       <RadioType
         question={question}
@@ -18,7 +18,7 @@ const QuestionType = ({ question, response, setQnaResponse, slideQna }) => {
         // setQnaResponse={setQnaResponse}
       />
     );
-  if (question?.question_type === "text")
+  if (question?.questionType === "text")
     return (
       <TextType
         question={question}
@@ -28,7 +28,7 @@ const QuestionType = ({ question, response, setQnaResponse, slideQna }) => {
         // setQnaResponse={setQnaResponse}
       />
     );
-  if (question?.question_type === "checkbox")
+  if (question?.questionType === "checkbox")
     return (
       <CheckboxType
         question={question}

@@ -14,13 +14,13 @@ const Questionnaire = ({
   ...restProps
 }) => {
   const setQnaResponse = ({
-    question_id = null,
+    questionId = null,
     choice = null,
     choiceType = null,
   }) => {
     setSlideQna((state) => {
       const { qna } = state;
-      const newQna = { ...qna, [question_id]: { question_id, choice } };
+      const newQna = { ...qna, [questionId]: { questionId, choice } };
       return { qna: newQna };
     });
   };
@@ -39,7 +39,7 @@ const Questionnaire = ({
     >
       {questions?.map((question, index) => (
         <Stack
-          key={question?.question_id ? question?.question_id : index}
+          key={question?.questionId ? question?.questionId : index}
           direction={direction}
           spacing={4}
           mt="15px"
@@ -47,8 +47,8 @@ const Questionnaire = ({
           <Text
             // whiteSpace="nowrap"
             // fontSize="14px"
-            color={question?.question_id === questions[1]?.question_id}
-          >{`Q${index + 1}: ${question?.question_text}`}</Text>
+            color={question?.questionId === questions[1]?.questionId}
+          >{`Q${index + 1}: ${question?.questionText}`}</Text>
           {response ? null : (
             <Box>
               <QuestionType
@@ -64,8 +64,8 @@ const Questionnaire = ({
           {response && (
             <Text>
               Your response:{" "}
-              {response[question?.question_id]
-                ? response[question?.question_id]?.choice
+              {response[question?.questionId]
+                ? response[question?.questionId]?.choice
                 : response[index]?.choice}
             </Text>
           )}

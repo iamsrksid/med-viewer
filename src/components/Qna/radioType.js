@@ -5,9 +5,9 @@ import _ from "lodash";
 const RadioType = ({ question, response, handleChange, slideQna }) => {
   return (
     <RadioGroup
-      name={question?.question_id}
+      name={question?.questionId}
       defaultValue={
-        !_.isEmpty(response) ? response[question?.question_id]?.choice_id : ""
+        !_.isEmpty(response) ? response[question?.questionId]?.choiceId : ""
       }
       isDisabled={!_.isEmpty(response)}
       ml="10px"
@@ -20,7 +20,7 @@ const RadioType = ({ question, response, handleChange, slideQna }) => {
             value={choice}
             onChange={(e) =>
               handleChange({
-                question_id: question?.question_id,
+                questionId: question?.questionId,
                 choice: e.target.value,
               })
             }

@@ -10,7 +10,7 @@ const CheckboxType = ({ question, response, setQnaResponse, slideQna }) => {
         if (value.includes(choice)) choiceText.push(choice);
       });
     setQnaResponse({
-      question_id: question?.question_id,
+      questionId: question?.questionId,
       choice: choiceText,
     });
   };
@@ -19,7 +19,7 @@ const CheckboxType = ({ question, response, setQnaResponse, slideQna }) => {
     <CheckboxGroup
       name={question?.question_id}
       defaultValue={
-        !_.isEmpty(response) ? response[question?.question_id]?.choice_id : ""
+        !_.isEmpty(response) ? response[question?.questionId]?.choiceId : ""
       }
       isDisabled={!_.isEmpty(response)}
       ml="10px"

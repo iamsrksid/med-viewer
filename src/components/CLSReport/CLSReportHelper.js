@@ -28,18 +28,18 @@ const CLSReportHelper = ({
   useEffect(() => {
     async function fetchResponse() {
       const response = await questionnaireResponse({
-        slide_id: slideId,
-        case_id: caseInfo?.caseId,
+        slideId,
+        caseId: caseInfo?.caseId,
       });
       setQuestionsResponse(response?.data?.data?.finalQuestionnaireResponse);
     }
     fetchResponse();
     async function fetchQuestions() {
-      const response = await questions({ studyId: caseInfo?.caseId });
-      setSlideQuestions(response?.data?.data?.desiredQuestionsInfo);
+      const response = await questions({ slideId });
+      setSlideQuestions(response?.data?.data?.finalQuestionnaireResponse);
     }
     fetchQuestions();
-  }, [slideId, caseInfo?.caseId, showCLSreport]);
+  }, [slideId, caseInfo?.id, showCLSreport]);
 
   const handleCLSReport = () => {
     setShowCLSReport(!showCLSreport);
@@ -50,9 +50,8 @@ const CLSReportHelper = ({
     try {
       setLoading(true);
       await responseHandler({
-        slide_id: slideId,
-        response: response,
-        case_id: caseInfo?.caseId,
+        slideId,
+        response,
       });
       setShowCLSReport(!showCLSreport);
       setLoading(false);

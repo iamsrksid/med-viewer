@@ -11,16 +11,16 @@ const TextType = ({
 }) => {
   useEffect(() => {
     if (!isLastDisable) return;
-    handleChange({ questionId: question?._id });
+    handleChange({ questionId: question?.id });
   }, [isLastDisable]);
 
   return isLastDisable ? null : (
     <Input
-      name={question?._id}
+      name={question?.id}
       value={
         !_.isEmpty(response)
-          ? response[question?._id]?.choiceText
-          : slideQna?.response?.[question?._id]?.choiceText ?? ""
+          ? response[question?.id]?.choiceText
+          : slideQna?.response?.[question?.id]?.choiceText ?? ""
       }
       isDisabled={!_.isEmpty(response)}
       border="none"
