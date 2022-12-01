@@ -295,12 +295,13 @@ export const VHUT_ANALYSIS_SUBSCRIPTION = gql`
         userId
         slideId
       }
+      analysisType
     }
   }
 `;
 
 export const VHUT_ANALTSIS = gql`
-  mutation Mutation($body: VhutBodyInput) {
+  mutation VhutAnalysis($body: VhutBodyInput!) {
     vhutAnalysis(body: $body)
   }
 `;

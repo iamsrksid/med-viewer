@@ -141,6 +141,7 @@ const ViewerControls = ({
     openEdit();
   };
 
+  // ########## RUN MORPHOMETRY ##########################
   const [onVhutAnalysis, { data: analysis_data, error: analysis_error }] =
     useMutation(VHUT_ANALTSIS);
   const handleVhutAnalysis = async () => {
@@ -200,6 +201,8 @@ const ViewerControls = ({
       });
     }
   };
+
+  // ######## SHOW ANALYSIS AFTER RUNNING MORPHOMETRY ##############
 
   const [onGetVhutAnalysis, { data: responseData, error: responseError }] =
     useLazyQuery(GET_VHUT_ANALYSIS);
@@ -305,10 +308,11 @@ const ViewerControls = ({
     setIsAnnotationLoaded(false);
   }, [slideId]);
 
+  // ############### LOAD_ANNOTATION ####################
   const [getAnnotation, { data, loading, error }] =
     useLazyQuery(GET_ANNOTATION);
 
-  //loading the annotation from db
+  // ############### ANNOTATION_SUBSCRIPTION ########################
 
   const { data: subscriptionData, error: subscription_error } = useSubscription(
     ANNOTATIONS_SUBSCRIPTION,
@@ -318,7 +322,7 @@ const ViewerControls = ({
       },
     }
   );
-
+  // #################### VHUT_ANALYSIS_SUBSCRIPTION ##############
   const { data: vhutSubscriptionData, error: vhutSubscription_error } =
     useSubscription(VHUT_ANALYSIS_SUBSCRIPTION, {
       variables: {
@@ -332,35 +336,37 @@ const ViewerControls = ({
   useEffect(() => {
     if (vhutSubscriptionData) {
       console.log("subscribed", vhutSubscriptionData);
-      const { data, status, message } = vhutSubscriptionData.analysisStatus;
-      if (!data && !status)
-        toast({
-          title: message,
-          status: "success",
-          duration: 1500,
-          isClosable: true,
-        });
+      const {
+        data,
+        status,
+        message,
+        analysisType: type,
+      } = vhutSubscriptionData.analysisStatus;
+      if (type === "VHUT_ANALYSIS") {
+        if (!status)
+          toast({
+            title: message,
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+        else if (data) {
+          toast({
+            title: message,
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+          const canvas = fabricOverlay.fabricCanvas();
+          const { hash, analysedROI } = data;
+          const annotation = canvas.getObjectByHash(hash);
 
-      if (data && !data.slideId && !data.userId) {
-        toast({
-          title: message,
-          status: "success",
-          duration: 1500,
-          isClosable: true,
-        });
-        const canvas = fabricOverlay.fabricCanvas();
-        const { hash, analysedROI } = data;
-        const annotation = canvas.getObjectByHash(hash);
-        if (annotation) {
-          annotation.set({ isAnalysed: true, analysedROI });
+          if (annotation) {
+            annotation.set({ isAnalysed: true, analysedROI });
+          }
         }
-      }
-
-      console.log("====================================");
-      console.log("dataaaaa.", data);
-      console.log("====================================");
-      if (data && data.slideId && data.userId) {
-        setFabricOverlayState(updateIsViewportAnalysing(false));
+      } else if (type === "VIEWPORT_ANALYSIS") {
+        if (data) setFabricOverlayState(updateIsViewportAnalysing(false));
 
         toast({
           title: message || "ViewPort Ready",
@@ -372,6 +378,8 @@ const ViewerControls = ({
       }
     }
   }, [vhutSubscriptionData]);
+
+  // ################ UPDATING ANNOTATION VIA SUBSCRIPTION #######################
   useEffect(() => {
     if (subscriptionData && data) {
       console.log("Subscribed Changed Annotation", subscriptionData);
@@ -388,6 +396,8 @@ const ViewerControls = ({
       }
     }
   }, [subscriptionData]);
+
+  // ######### FETCHING ANNOTATION #######################
   useEffect(() => {
     if (slideId)
       getAnnotation({
