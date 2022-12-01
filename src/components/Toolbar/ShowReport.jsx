@@ -14,6 +14,8 @@ const ShowReport = ({
   setShowReport,
   saveReport,
   questions,
+  app,
+  setSlideId,
   responseHandler,
   questionnaireResponse,
 }) => {
@@ -40,6 +42,8 @@ const ShowReport = ({
         userInfo={userInfo}
         responseHandler={responseHandler}
         viewerId={viewerId}
+        app={app}
+        setSlideId={setSlideId}
         questionnaireResponse={questionnaireResponse}
       />
     );

@@ -32,6 +32,8 @@ const ScreenTools = ({
   setShowReport,
   userInfo,
   questions,
+  app,
+  setSlideId,
   responseHandler,
   questionnaireResponse,
 }) => {
@@ -64,6 +66,8 @@ const ScreenTools = ({
           setShowReport={setShowReport}
           userInfo={userInfo}
           questions={questions}
+          app={app}
+          setSlideId={setSlideId}
           responseHandler={responseHandler}
           questionnaireResponse={questionnaireResponse}
         />

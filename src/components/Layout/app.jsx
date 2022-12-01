@@ -37,6 +37,7 @@ const LayoutApp = ({
   slideInfo,
   clinicalStudy,
   questions,
+  setSlideId,
   responseHandler,
   questionnaireResponse,
 }) => {
@@ -112,6 +113,8 @@ const LayoutApp = ({
           setShowReport={setShowReport}
           clinicalStudy={clinicalStudy}
           questions={questions}
+          app={application}
+          setSlideId={setSlideId}
           responseHandler={responseHandler}
           questionnaireResponse={questionnaireResponse}
         />

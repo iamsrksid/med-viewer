@@ -43,6 +43,8 @@ const AdjustmentBar = ({
   setShowReport,
   clinicalStudy,
   questions,
+  app,
+  setSlideId,
   responseHandler,
   questionnaireResponse,
 }) => {
@@ -148,6 +150,8 @@ const AdjustmentBar = ({
         userInfo={userInfo}
         clinicalStudy={clinicalStudy}
         questions={questions}
+        app={app}
+        setSlideId={setSlideId}
         responseHandler={responseHandler}
         questionnaireResponse={questionnaireResponse}
       />
