@@ -53,7 +53,10 @@ import {
   ANNOTATIONS_SUBSCRIPTION,
   DELETE_ANNOTATION,
   GET_ANNOTATION,
+  GET_VHUT_ANALYSIS,
   UPDATE_ANNOTATION,
+  VHUT_ANALTSIS,
+  VHUT_ANALYSIS_SUBSCRIPTION,
 } from "../../graphql/annotaionsQuery";
 
 const ViewerControls = ({
@@ -66,8 +69,8 @@ const ViewerControls = ({
   onSaveAnnotation,
   // onDeleteAnnotation,
   // onUpdateAnnotation,
-  onVhutAnalysis,
-  onGetVhutAnalysis,
+  // onVhutAnalysis,
+  // onGetVhutAnalysis,
   onMessageListener,
   application,
 }) => {
@@ -138,6 +141,8 @@ const ViewerControls = ({
     openEdit();
   };
 
+  const [onVhutAnalysis, { data: analysis_data, error: analysis_error }] =
+    useMutation(VHUT_ANALTSIS);
   const handleVhutAnalysis = async () => {
     if (!fabricOverlay || !annotationObject) return;
 
@@ -173,15 +178,18 @@ const ViewerControls = ({
       body = { ...body, points: annotationObject.points };
     }
 
+    console.log("body....", body);
     try {
-      const resp = await onVhutAnalysis(body);
-
-      toast({
-        title: resp.data.message,
-        status: "success",
-        duration: 1500,
-        isClosable: true,
+      // const resp = await onVhutAnalysis(body);
+      onVhutAnalysis({
+        variables: { body: { ...body } },
       });
+      // toast({
+      //   title: resp.data.message,
+      //   status: "success",
+      //   duration: 1500,
+      //   isClosable: true,
+      // });
     } catch (err) {
       toast({
         title: "Server Unavailable",
@@ -193,17 +201,24 @@ const ViewerControls = ({
     }
   };
 
-  const handleShowAnalysis = async () => {
-    if (!annotationObject) return;
+  const [onGetVhutAnalysis, { data: responseData, error: responseError }] =
+    useLazyQuery(GET_VHUT_ANALYSIS);
 
+  useEffect(() => {
+    if (responseData) {
+      console.log("====================================");
+      console.log("analysis...", responseData);
+      console.log("====================================");
+
+      showAnalysisData(responseData);
+    }
+  }, [responseData]);
+
+  const showAnalysisData = async (resp) => {
     const canvas = fabricOverlay.fabricCanvas();
 
-    const resp = await onGetVhutAnalysis({
-      analysisId: annotationObject?.analysedROI,
-    });
-
-    if (resp.data && typeof resp.data === "object") {
-      const { vhut } = resp.data;
+    if (resp && typeof resp === "object") {
+      const { data: vhut } = resp.getVhutAnalysis;
       const { left, top } = annotationObject;
       const { analysedData, cells, totalCells } = await getVhutAnalysisData({
         canvas,
@@ -235,6 +250,56 @@ const ViewerControls = ({
       }
     }
   };
+  const handleShowAnalysis = async () => {
+    if (!annotationObject) return;
+
+    const canvas = fabricOverlay.fabricCanvas();
+
+    // const resp = await onGetVhutAnalysis({
+    //   analysisId: annotationObject?.analysedROI,
+    // });
+
+    onGetVhutAnalysis({
+      variables: {
+        query: {
+          analysisId: annotationObject?.analysedROI,
+        },
+      },
+    });
+
+    // if (resp.data && typeof resp.data === "object") {
+    //   const { vhut } = resp.data;
+    //   const { left, top } = annotationObject;
+    //   const { analysedData, cells, totalCells } = await getVhutAnalysisData({
+    //     canvas,
+    //     vhut,
+    //     left,
+    //     top,
+    //   });
+
+    //   // group enclosing annotation and cells
+    //   const feedMessage = groupAnnotationAndCells({
+    //     enclosingAnnotation: annotationObject,
+    //     cells,
+    //     optionalData: {
+    //       data: analysedData,
+    //       totalCells,
+    //     },
+    //   });
+
+    //   // remove enclosing annotation
+    //   // and group to canvas
+    //   if (feedMessage.object) {
+    //     // remove enclosing annotation and add new one to canvas
+    //     canvas.remove(annotationObject);
+    //     canvas.add(feedMessage.object).requestRenderAll();
+
+    //     setFabricOverlayState(
+    //       updateFeedInAnnotationFeed({ id: viewerId, feed: feedMessage })
+    //     );
+    //   }
+    // }
+  };
 
   useEffect(() => {
     setIsAnnotationLoaded(false);
@@ -254,22 +319,62 @@ const ViewerControls = ({
     }
   );
 
-  useEffect(() => {
-    console.log("subscribed");
-    // if (subscriptionData && data) {
-    //   console.log("====================================");
-    //   console.log("subscriptionData", subscriptionData);
-    //   console.log("====================================");
-    //   data?.loadAnnotation?.data.forEach((annotation, index) => {
-    //     console.log("anno", annotation.hash);
-    //     console.log(" annnnnnnno   ", subscriptionData.changedAnnotations.hash);
-    //     if (annotation.hash === subscriptionData.changedAnnotations.hash) {
-    //     }
-    //   });
+  const { data: vhutSubscriptionData, error: vhutSubscription_error } =
+    useSubscription(VHUT_ANALYSIS_SUBSCRIPTION, {
+      variables: {
+        body: {
+          slideId: slideId,
+          userId: userInfo._id,
+        },
+      },
+    });
 
-    // }
+  useEffect(() => {
+    if (vhutSubscriptionData) {
+      console.log("subscribed", vhutSubscriptionData);
+      const { data, status, message } = vhutSubscriptionData.analysisStatus;
+      if (!data && !status)
+        toast({
+          title: message,
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+
+      if (data && !data.slideId && !data.userId) {
+        toast({
+          title: message,
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+        const canvas = fabricOverlay.fabricCanvas();
+        const { hash, analysedROI } = data;
+        const annotation = canvas.getObjectByHash(hash);
+        if (annotation) {
+          annotation.set({ isAnalysed: true, analysedROI });
+        }
+      }
+
+      console.log("====================================");
+      console.log("dataaaaa.", data);
+      console.log("====================================");
+      if (data && data.slideId && data.userId) {
+        setFabricOverlayState(updateIsViewportAnalysing(false));
+
+        toast({
+          title: message || "ViewPort Ready",
+
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    }
+  }, [vhutSubscriptionData]);
+  useEffect(() => {
     if (subscriptionData && data) {
-      console.log("kkkkkkkgggg", subscriptionData);
+      console.log("Subscribed Changed Annotation", subscriptionData);
 
       // if annotation has been deleted
       if (subscriptionData.changedAnnotations.status.isDeleted) {
