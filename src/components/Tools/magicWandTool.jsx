@@ -16,6 +16,8 @@ import {
   createContour,
   getViewportBounds,
 } from "../../utility";
+import { useMutation } from "@apollo/client";
+import { VHUT_VIEWPORT_ANALYSIS } from "../../graphql/annotaionsQuery";
 
 const cellColor = {
   Neutrophil: { hex: "#9800FF" },
@@ -31,7 +33,7 @@ const MagicWandTool = ({
   viewerId,
   onSaveAnnotation,
   setTotalCells,
-  onVhutViewportAnalysis,
+  // onVhutViewportAnalysis,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, activeTool } = fabricOverlayState;
@@ -76,6 +78,7 @@ const MagicWandTool = ({
     };
   }, [viewer]);
 
+  const [onVhutViewportAnalysis] = useMutation(VHUT_VIEWPORT_ANALYSIS);
   useEffect(() => {
     if (!fabricOverlay || !isActive) return;
     const canvas = fabricOverlay.fabricCanvas();
@@ -88,9 +91,16 @@ const MagicWandTool = ({
     // initiate analysis, sending viewport coordinates and s3 folder key
     const initiateAnalysis = async (body) => {
       try {
-        const resp = await onVhutViewportAnalysis(body);
+        // const resp = await onVhutViewportAnalysis(body);
+        const { data: resp } = await onVhutViewportAnalysis({
+          variables: { body: body },
+        });
+
+        console.log("====================================");
+        console.log("viewport", resp);
+        console.log("====================================");
         toast({
-          title: resp.data?.message || "Viewport Ready",
+          title: resp.data?.message || "Viewport Processing",
           status: "success",
           duration: 1500,
           isClosable: true,

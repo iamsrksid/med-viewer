@@ -213,7 +213,7 @@ export const DELETE_ANNOTATION = gql`
 `;
 
 export const ANNOTATIONS_SUBSCRIPTION = gql`
-  subscription ChangedAnnotations($slideId: ID!) {
+  subscription Subscription($slideId: ID!) {
     changedAnnotations(slideId: $slideId) {
       data {
         slideId
@@ -277,6 +277,65 @@ export const ANNOTATIONS_SUBSCRIPTION = gql`
       status {
         isCreated
         isUpdated
+        isDeleted
+      }
+    }
+  }
+`;
+export const VHUT_ANALYSIS_SUBSCRIPTION = gql`
+  subscription Subscription($body: AnalysisInput) {
+    analysisStatus(body: $body) {
+      status
+      message
+      data {
+        isAnalysed
+        analysedROI
+        hash
+        annotationId
+        userId
+        slideId
+      }
+      analysisType
+    }
+  }
+`;
+
+export const VHUT_ANALTSIS = gql`
+  mutation VhutAnalysis($body: VhutBodyInput!) {
+    vhutAnalysis(body: $body)
+  }
+`;
+
+export const VHUT_VIEWPORT_ANALYSIS = gql`
+  mutation VhutViewportAnalysis($body: ViewportBodyInput) {
+    vhutViewportAnalysis(body: $body)
+  }
+`;
+
+export const GET_VHUT_ANALYSIS = gql`
+  query Query($query: GetAnalysisInput) {
+    getVhutAnalysis(query: $query) {
+      status
+      message
+      data {
+        analysedData {
+          type
+          status
+          count
+          ratio
+          total_area
+          min_area
+          max_area
+          avg_area
+          total_perimeter
+          min_perimeter
+          max_perimeter
+          avg_perimeter
+          centroid_list
+          end_points_list
+          contours
+        }
+        annotation
         isDeleted
       }
     }
