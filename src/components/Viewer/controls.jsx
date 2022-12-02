@@ -324,21 +324,9 @@ const ViewerControls = ({
         message,
         analysisType: type,
       } = vhutSubscriptionData.analysisStatus;
+
       if (type === "VHUT_ANALYSIS") {
-        if (!status)
-          toast({
-            title: message,
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
-        else if (data) {
-          toast({
-            title: message,
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-          });
+        if (data) {
           const canvas = fabricOverlay.fabricCanvas();
           const { hash, analysedROI } = data;
           const annotation = canvas.getObjectByHash(hash);
@@ -347,12 +335,17 @@ const ViewerControls = ({
             annotation.set({ isAnalysed: true, analysedROI });
           }
         }
+        toast({
+          title: message,
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
       } else if (type === "VIEWPORT_ANALYSIS") {
         if (data) setFabricOverlayState(updateIsViewportAnalysing(false));
 
         toast({
           title: message || "ViewPort Ready",
-
           status: "success",
           duration: 2000,
           isClosable: true,

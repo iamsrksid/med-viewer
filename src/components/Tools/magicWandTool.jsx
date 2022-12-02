@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IconButton, useToast } from "@chakra-ui/react";
 import { VscWand } from "react-icons/vsc";
+import { useMutation } from "@apollo/client";
 import { useFabricOverlayState } from "../../state/store";
 import {
   updateTool,
@@ -16,7 +17,6 @@ import {
   createContour,
   getViewportBounds,
 } from "../../utility";
-import { useMutation } from "@apollo/client";
 import { VHUT_VIEWPORT_ANALYSIS } from "../../graphql/annotaionsQuery";
 
 const cellColor = {
@@ -93,7 +93,7 @@ const MagicWandTool = ({
       try {
         // const resp = await onVhutViewportAnalysis(body);
         const { data: resp } = await onVhutViewportAnalysis({
-          variables: { body: body },
+          variables: { body },
         });
 
         console.log("====================================");
@@ -126,6 +126,7 @@ const MagicWandTool = ({
       key,
       type: "rect",
       userId: userInfo._id || userInfo.userId,
+      slideId,
     });
 
     // create annotation of cell
