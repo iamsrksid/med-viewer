@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, {  useEffect, useState, useRef } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
 import {
@@ -72,6 +72,7 @@ const ViewerControls = ({
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
   const [annotationObject, setAnnotationObject] = useState(null);
   const [isMorphometryDisabled, setIsMorphometryDisabled] = useState(true);
+  const slideRef = useRef(null);
 
   const toast = useToast();
   const iconSize = IconSize();
@@ -233,6 +234,7 @@ const ViewerControls = ({
       }
     }
   };
+
   const handleShowAnalysis = async () => {
     if (!annotationObject) return;
 
@@ -293,7 +295,6 @@ const ViewerControls = ({
     useLazyQuery(GET_ANNOTATION);
 
   // ############### ANNOTATION_SUBSCRIPTION ########################
-
   const { data: subscriptionData, error: subscription_error } = useSubscription(
     ANNOTATIONS_SUBSCRIPTION,
     {
@@ -302,6 +303,7 @@ const ViewerControls = ({
       },
     }
   );
+
   // #################### VHUT_ANALYSIS_SUBSCRIPTION ##############
   const { data: vhutSubscriptionData, error: vhutSubscription_error } =
     useSubscription(VHUT_ANALYSIS_SUBSCRIPTION, {
@@ -406,6 +408,7 @@ const ViewerControls = ({
 
   const [removeAnnotation, { data: deletedData, error: deleteError }] =
     useMutation(DELETE_ANNOTATION);
+
   if (deleteError)
     toast({
       title: "Annotation could not be deleted",
@@ -421,7 +424,8 @@ const ViewerControls = ({
   };
 
   useEffect(() => {
-    if (!fabricOverlay || !data?.loadAnnotation?.success) return;
+    if (!fabricOverlay) return;
+
     const canvas = fabricOverlay.fabricCanvas();
 
     const loadAnnotations = async () => {
@@ -466,10 +470,11 @@ const ViewerControls = ({
       setIsAnnotationLoaded(true);
     };
 
-    if (data) {
+    if (slideRef.current !== slideId && data) {
       loadAnnotations();
+      slideRef.current = slideId;
     }
-  }, [fabricOverlay, slideId, data]);
+  }, [fabricOverlay, data]);
 
   // check if annotation is loaded or not
   // and then update fabricOverlayState
