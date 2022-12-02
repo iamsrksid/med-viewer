@@ -11,13 +11,6 @@ const ViewerFactory = ({
   slide,
   slides,
   setCurrentViewer,
-  onLoadAnnotations,
-  onSaveAnnotation,
-  onDeleteAnnotation,
-  onUpdateAnnotation,
-  onVhutAnalysis,
-  onGetVhutAnalysis,
-  onMessageListener,
   application,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
@@ -80,17 +73,9 @@ const ViewerFactory = ({
           <ViewerContainer
             application={application}
             viewerId={viewer}
-            slideName={viewerWindow[viewer]?.slideName}
             userInfo={userInfo}
             enableAI={enableAI}
             slide={slide}
-            onLoadAnnotations={onLoadAnnotations}
-            onSaveAnnotation={onSaveAnnotation}
-            onDeleteAnnotation={onDeleteAnnotation}
-            onUpdateAnnotation={onUpdateAnnotation}
-            onVhutAnalysis={onVhutAnalysis}
-            onGetVhutAnalysis={onGetVhutAnalysis}
-            onMessageListener={onMessageListener}
           />
         </Flex>
       ))}

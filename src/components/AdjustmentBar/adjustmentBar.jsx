@@ -20,9 +20,9 @@ const AdjustmentBar = ({
   report,
   application,
   enableAI,
+  enableFilters,
   currentViewer,
   annotations,
-  changeCaseHandler,
   showSidebar,
   sidebar,
   isNavigatorActive,
@@ -30,8 +30,6 @@ const AdjustmentBar = ({
   isMultiview,
   setIsMultiview,
   setTotalCells,
-  onSaveAnnotation,
-  onDeleteAnnotation,
   handleAnnotationBar,
   onVhutViewportAnalysis,
   saveReport,
@@ -122,14 +120,13 @@ const AdjustmentBar = ({
         sidebar={sidebar}
         annotations={annotations}
         enableAI={enableAI}
+        enableFilters={enableFilters}
         viewerId={currentViewer}
         isMultiview={isMultiview}
         setIsMultiview={setIsMultiview}
         isNavigatorActive={isNavigatorActive}
         setIsNavigatorActive={setIsNavigatorActive}
         setTotalCells={setTotalCells}
-        onSaveAnnotation={onSaveAnnotation}
-        onDeleteAnnotation={onDeleteAnnotation}
         onVhutViewportAnalysis={onVhutViewportAnalysis}
       />
       <ActionTools viewerId={currentViewer} />

@@ -20,18 +20,11 @@ const LayoutApp = ({
   application,
   annotations,
   enableAI,
+  enableFilters,
   userIdToQuery,
   response,
   finalSubmitHandler,
-  changeCaseHandler,
-  onSaveAnnotation,
-  onUpdateAnnotation,
-  onDeleteAnnotation,
-  onLoadAnnotations,
-  onVhutAnalysis,
   onVhutViewportAnalysis,
-  onGetVhutAnalysis,
-  onMessageListener,
   saveReport,
   mediaUpload,
   slideInfo,
@@ -88,9 +81,9 @@ const LayoutApp = ({
           slide={viewerIds?.[0]}
           slides={slides}
           annotations={annotations}
-          changeCaseHandler={changeCaseHandler}
           report={report}
           enableAI={enableAI}
+          enableFilters={enableFilters}
           application={application}
           currentViewer={currentViewer}
           showSidebar={() => showSidebar()}
@@ -100,8 +93,6 @@ const LayoutApp = ({
           setIsNavigatorActive={setIsNavigatorActive}
           isMultiview={isMultiview}
           setIsMultiview={setIsMultiview}
-          onSaveAnnotation={onSaveAnnotation}
-          onDeleteAnnotation={onDeleteAnnotation}
           handleAnnotationBar={handleAnnotationBar}
           onVhutViewportAnalysis={onVhutViewportAnalysis}
           saveReport={saveReport}
@@ -154,16 +145,6 @@ const LayoutApp = ({
               setSidebar={setSidebar}
             />
           ) : null}
-          {/* {showAnnotationsBar && !showFeedBar && !showReport ? (
-            <ActivityFeed
-              viewerId={currentViewer}
-              userInfo={userInfo}
-              handlePopup={setShowAnnotationsBar}
-              totalCells={totalCells}
-              popup={showAnnotationsBar}
-              onUpdateAnnotation={onUpdateAnnotation}
-            />
-          ) : null} */}
           {showFeedBar ? (
             <SlideFeed
               viewerId={currentViewer}
@@ -171,8 +152,6 @@ const LayoutApp = ({
               handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
               feedTab={feedTab}
-              onUpdateAnnotation={onUpdateAnnotation}
-              onDeleteAnnotation={onDeleteAnnotation}
             />
           ) : null}
           <LayoutAppBody>
@@ -183,18 +162,9 @@ const LayoutApp = ({
               userInfo={userInfo}
               slide={viewerIds?.[0]}
               slides={slides}
-              onLoadAnnotations={onLoadAnnotations}
-              onSaveAnnotation={onSaveAnnotation}
-              onDeleteAnnotation={onDeleteAnnotation}
-              onUpdateAnnotation={onUpdateAnnotation}
               setCurrentViewer={setCurrentViewer}
-              onVhutAnalysis={onVhutAnalysis}
-              onGetVhutAnalysis={onGetVhutAnalysis}
-              onMessageListener={onMessageListener}
             />
           </LayoutAppBody>
-
-          {/* <ViewerImport /> */}
         </LayoutInnerBody>
       </LayoutOuterBody>
     </Flex>

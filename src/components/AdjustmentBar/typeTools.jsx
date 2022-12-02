@@ -20,8 +20,6 @@ const TypeTools = ({
   enableAI,
   userInfo,
   viewerId,
-  // onSaveAnnotation,
-  // onDeleteAnnotation,
   setTotalCells,
   onVhutViewportAnalysis,
   application,

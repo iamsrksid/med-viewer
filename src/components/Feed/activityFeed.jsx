@@ -123,10 +123,7 @@ const ActivityFeed = ({
   totalCells,
   handlePopup,
   popup,
-  saveAnnotationsHandler,
   showFeedBar,
-  // onUpdateAnnotation,
-  // onDeleteAnnotation,
 }) => {
   // const onUpdateAnnotation = (data) => {
   //   console.log("activityfeed", data);

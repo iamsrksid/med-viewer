@@ -76,17 +76,9 @@ const ViewerContainer = ({
       application={application}
       viewerId={viewerId}
       tile={tile}
-      slideName={slideName}
       enableAI={enableAI}
       slide={slide}
-      onLoadAnnotations={onLoadAnnotations}
-      onSaveAnnotation={onSaveAnnotation}
-      onDeleteAnnotation={onDeleteAnnotation}
-      onUpdateAnnotation={onUpdateAnnotation}
       userInfo={userInfo}
-      onVhutAnalysis={onVhutAnalysis}
-      onGetVhutAnalysis={onGetVhutAnalysis}
-      onMessageListener={onMessageListener}
     />
   );
 };

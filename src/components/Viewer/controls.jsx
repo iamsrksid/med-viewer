@@ -1,23 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
 import {
-  Box,
-  HStack,
   VStack,
-  Text,
   useToast,
   useDisclosure,
 } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import axios from "axios";
 import ZoomSlider from "../ZoomSlider/slider";
 import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import FullScreen from "../Fullscreen/Fullscreen";
 import { useFabricOverlayState } from "../../state/store";
 import {
-  addToActivityFeed,
   updateIsAnnotationLoading,
   updateActivityFeed,
   updateFeedInAnnotationFeed,
@@ -27,17 +22,11 @@ import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
 import {
   convertToZoomValue,
-  createContours,
   getFileBucketFolder,
-  getViewportBounds,
   groupAnnotationAndCells,
   loadAnnotationsFromDB,
-  updateAnnotationInDB,
   zoomToLevel,
   getVhutAnalysisData,
-  getZoomValue,
-  createAnnotationMessage,
-  saveAnnotationToDB,
   getPPMfromMPP,
 } from "../../utility";
 import EditText from "../Feed/editText";
@@ -46,7 +35,6 @@ import ShowMetric from "../Annotations/ShowMetric";
 import {
   useLazyQuery,
   useMutation,
-  useQuery,
   useSubscription,
 } from "@apollo/client";
 import {
@@ -61,17 +49,9 @@ import {
 
 const ViewerControls = ({
   viewerId,
-  slideName,
   userInfo,
   enableAI,
   slide,
-  onLoadAnnotations,
-  onSaveAnnotation,
-  // onDeleteAnnotation,
-  // onUpdateAnnotation,
-  // onVhutAnalysis,
-  // onGetVhutAnalysis,
-  onMessageListener,
   application,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -441,7 +421,7 @@ const ViewerControls = ({
   };
 
   useEffect(() => {
-    if (!fabricOverlay || !onLoadAnnotations) return;
+    if (!fabricOverlay || !data?.loadAnnotation?.success) return;
     const canvas = fabricOverlay.fabricCanvas();
 
     const loadAnnotations = async () => {
@@ -485,6 +465,7 @@ const ViewerControls = ({
 
       setIsAnnotationLoaded(true);
     };
+
     if (data) {
       loadAnnotations();
     }
@@ -556,42 +537,6 @@ const ViewerControls = ({
       canvas.on("mouse:down", handleMouseDown);
     };
   }, [viewer, fabricOverlay]);
-
-  // firbase message listener
-  onMessageListener()
-    .then((payload) => {
-      if (payload.notification) {
-        const { title, body } = payload.notification;
-        if (title === "Viewport Analysis") {
-          setFabricOverlayState(updateIsViewportAnalysing(false));
-        }
-        toast({
-          title: title || "Notification",
-          description: body || "",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
-      }
-      if (payload.data && payload.data.type === "vhut_analysis") {
-        const canvas = fabricOverlay.fabricCanvas();
-        const { hash, analysedROI } = payload.data;
-        const annotation = canvas.getObjectByHash(hash);
-        if (annotation) {
-          annotation.set({ isAnalysed: true, analysedROI });
-        }
-      }
-    })
-    .catch((err) => {
-      toast({
-        title: "Server Error",
-        description: err.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      console.error(err);
-    });
 
   return (
     <>

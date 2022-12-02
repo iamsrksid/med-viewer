@@ -47,17 +47,9 @@ const osdOptions = {
 const Viewer = ({
   viewerId,
   tile,
-  slideName,
   userInfo,
   enableAI,
   slide,
-  onLoadAnnotations,
-  onSaveAnnotation,
-  onDeleteAnnotation,
-  onUpdateAnnotation,
-  onVhutAnalysis,
-  onGetVhutAnalysis,
-  onMessageListener,
   application,
 }) => {
   const { setFabricOverlayState } = useFabricOverlayState();
@@ -130,17 +122,9 @@ const Viewer = ({
         <ViewerControls
           application={application}
           viewerId={viewerId}
-          slideName={slideName}
           userInfo={userInfo}
           enableAI={enableAI}
           slide={slide}
-          onLoadAnnotations={onLoadAnnotations}
-          onSaveAnnotation={onSaveAnnotation}
-          onDeleteAnnotation={onDeleteAnnotation}
-          onUpdateAnnotation={onUpdateAnnotation}
-          onVhutAnalysis={onVhutAnalysis}
-          onGetVhutAnalysis={onGetVhutAnalysis}
-          onMessageListener={onMessageListener}
         />
       )}
       {/* <Button onClick={selection}>Select</Button> */}

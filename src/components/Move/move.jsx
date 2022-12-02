@@ -25,8 +25,6 @@ const Move = ({
   isNavigatorActive,
   setIsNavigatorActive,
   setTotalCells,
-  onSaveAnnotation,
-  onDeleteAnnotation,
   onVhutViewportAnalysis,
   application,
 }) => {
@@ -163,7 +161,7 @@ const Move = ({
           </Tooltip>
         ) : null}
 
-        <FilterAdjustments viewerId={viewerId} />
+        {enableFilters ? <FilterAdjustments viewerId={viewerId} /> : null}
       </Flex>
 
       <Flex
@@ -187,8 +185,6 @@ const Move = ({
             userInfo={userInfo}
             viewerId={viewerId}
             setTotalCells={setTotalCells}
-            onSaveAnnotation={onSaveAnnotation}
-            onDeleteAnnotation={onDeleteAnnotation}
             onVhutViewportAnalysis={onVhutViewportAnalysis}
           />
         ) : null}
