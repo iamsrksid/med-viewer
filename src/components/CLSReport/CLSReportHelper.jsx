@@ -113,7 +113,7 @@ function CLSReportHelper({
 						Report
 					</Button>
 				</Tooltip>
-			) : !questionsResponse ? (
+			) : !questionsResponse && userInfo?.userType !== "professor" ? (
 				<Tooltip
 					label="Submit-Report"
 					placement="bottom"
