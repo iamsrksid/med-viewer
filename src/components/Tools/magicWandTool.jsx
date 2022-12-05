@@ -33,7 +33,6 @@ const MagicWandTool = ({
   viewerId,
   onSaveAnnotation,
   setTotalCells,
-  // onVhutViewportAnalysis,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, activeTool } = fabricOverlayState;
@@ -213,7 +212,7 @@ const MagicWandTool = ({
         toast({
           title: "Magic wand tool selected",
           status: "success",
-          duration: 1500,
+          duration: 500,
           isClosable: true,
         });
       }}

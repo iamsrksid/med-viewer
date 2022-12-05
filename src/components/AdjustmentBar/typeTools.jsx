@@ -21,7 +21,6 @@ const TypeTools = ({
   userInfo,
   viewerId,
   setTotalCells,
-  onVhutViewportAnalysis,
   application,
 }) => {
   // save annotation in db
@@ -93,7 +92,6 @@ const TypeTools = ({
               viewerId={viewerId}
               setTotalCells={setTotalCells}
               onSaveAnnotation={onSaveAnnotation}
-              onVhutViewportAnalysis={onVhutViewportAnalysis}
             />
           ) : null}
           <Square viewerId={viewerId} onSaveAnnotation={onSaveAnnotation} />

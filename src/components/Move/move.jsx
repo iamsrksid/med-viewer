@@ -25,7 +25,6 @@ const Move = ({
   isNavigatorActive,
   setIsNavigatorActive,
   setTotalCells,
-  onVhutViewportAnalysis,
   application,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
@@ -185,7 +184,6 @@ const Move = ({
             userInfo={userInfo}
             viewerId={viewerId}
             setTotalCells={setTotalCells}
-            onVhutViewportAnalysis={onVhutViewportAnalysis}
           />
         ) : null}
       </Flex>

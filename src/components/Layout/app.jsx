@@ -24,7 +24,6 @@ const LayoutApp = ({
   userIdToQuery,
   response,
   finalSubmitHandler,
-  onVhutViewportAnalysis,
   saveReport,
   mediaUpload,
   slideInfo,
@@ -94,7 +93,6 @@ const LayoutApp = ({
           isMultiview={isMultiview}
           setIsMultiview={setIsMultiview}
           handleAnnotationBar={handleAnnotationBar}
-          onVhutViewportAnalysis={onVhutViewportAnalysis}
           saveReport={saveReport}
           mediaUpload={mediaUpload}
           slideInfo={slideInfo}

@@ -31,7 +31,6 @@ const AdjustmentBar = ({
   setIsMultiview,
   setTotalCells,
   handleAnnotationBar,
-  onVhutViewportAnalysis,
   saveReport,
   mediaUpload,
   slideInfo,
@@ -127,7 +126,6 @@ const AdjustmentBar = ({
         isNavigatorActive={isNavigatorActive}
         setIsNavigatorActive={setIsNavigatorActive}
         setTotalCells={setTotalCells}
-        onVhutViewportAnalysis={onVhutViewportAnalysis}
       />
       <ActionTools viewerId={currentViewer} />
       <ScreenTools
