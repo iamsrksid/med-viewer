@@ -505,13 +505,11 @@ function ViewerControls({ viewerId, userInfo, enableAI, slide, application }) {
 					level: annotation.zoomLevel,
 					viewer,
 				});
-				setIsMorphometryDisabled(!(zoomValue >= 20));
+				setIsMorphometryDisabled(annotation.type === "line" || !(zoomValue >= 20));
 			} else {
 				setAnnotationObject(null);
 				setIsMorphometryDisabled(true);
 			}
-
-			console.log({ left: event.pointer.x, top: event.pointer.y });
 
 			setMenuPosition({ left: event.pointer.x, top: event.pointer.y });
 			openMenu();
