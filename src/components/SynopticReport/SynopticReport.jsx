@@ -8,10 +8,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { GrFormClose } from "react-icons/gr";
+import { VscBroadcast } from "react-icons/vsc";
 import BreastCancer from "./BreastCancer";
 import Lymphoma from "./Lymphoma";
 import ProstateCancer from "./ProstateCancer";
-import humanIcon from "../../assets/images/humanIcon.svg";
 
 const SynopticReport = ({ synopticType, caseInfo, setSynopticType }) => {
   const [ifwidthLessthan1920] = useMediaQuery("(max-width:1920px)");
@@ -66,7 +66,7 @@ const SynopticReport = ({ synopticType, caseInfo, setSynopticType }) => {
         backgroundImage="linear-gradient(#F7FBFD, rgba(247, 251, 253, 0))"
         borderBottom="1px solid #8F8F8F"
       >
-        <Image src={humanIcon} alt="human icon" />
+        <VscBroadcast size={40} />
         <Flex maxW="85%" direction="column">
           <Text textAlign="center" textTransform="uppercase">
             Lorem ipsum dolor sit amet consectetur. Arcu eu quis posuere iaculis
