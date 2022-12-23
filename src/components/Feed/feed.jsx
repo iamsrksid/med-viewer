@@ -19,6 +19,7 @@ const SlideFeed = ({
   showFeedBar,
   showReport,
   feedTab,
+  synopticType,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -28,7 +29,7 @@ const SlideFeed = ({
       w="15.88vw"
       minW="300px"
       position="fixed"
-      right={showReport ? "33.281vw" : "0"}
+      right={showReport ? "33.281vw" : synopticType !== "" ? "40vw" : "0"}
       zIndex={2}
       background="#FCFCFC"
     >
@@ -78,10 +79,7 @@ const SlideFeed = ({
             <KeyPoints activityFeed={activityFeed} />
           </TabPanel>
           <TabPanel p="0">
-            <ActivityFeed
-              viewerId={viewerId}
-              showFeedBar={showFeedBar}
-            />
+            <ActivityFeed viewerId={viewerId} showFeedBar={showFeedBar} />
           </TabPanel>
         </TabPanels>
       </Tabs>

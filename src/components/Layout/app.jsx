@@ -47,6 +47,8 @@ const LayoutApp = ({
   const [showFeedBar, setShowFeedBar] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [feedTab, setFeedBar] = useState(0);
+  const [synopticType, setSynopticType] = useState("");
+
   const showSidebar = () => {
     setSidebar(!sidebar);
   };
@@ -98,6 +100,8 @@ const LayoutApp = ({
           slideInfo={slideInfo}
           handleFeedBar={handleFeedBar}
           handleReport={handleReport}
+          synopticType={synopticType}
+          setSynopticType={setSynopticType}
           showReport={showReport}
           setShowReport={setShowReport}
           clinicalStudy={clinicalStudy}
@@ -150,6 +154,7 @@ const LayoutApp = ({
               handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
               feedTab={feedTab}
+              synopticType={synopticType}
             />
           ) : null}
           <LayoutAppBody>

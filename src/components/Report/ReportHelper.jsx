@@ -1,8 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Button, Tooltip, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  Tooltip,
+  useToast,
+} from "@chakra-ui/react";
+import { MdArrowForwardIos } from "react-icons/md";
 import Report from "./Report";
 import { useFabricOverlayState } from "../../state/store";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
+import BreastCancer from "../SynopticReport/BreastCancer";
+import ProstateCancer from "../SynopticReport/ProstateCancer";
+import Lymphoma from "../SynopticReport/Lymphoma";
+import SynopticReport from "../SynopticReport/SynopticReport";
 
 const ShowReport = ({ showReport, openReport }) => {
   return showReport ? (
@@ -132,6 +147,8 @@ const ReportHelper = ({
   showReport,
   setShowReport,
   userInfo,
+  synopticType,
+  setSynopticType,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -168,6 +185,7 @@ const ReportHelper = ({
   };
 
   const openReport = () => {
+    setSynopticType("");
     setShowReport(true);
   };
   // form
@@ -249,7 +267,59 @@ const ReportHelper = ({
       {slideData ? (
         <ShowReport showReport={showReport} openReport={openReport} />
       ) : !showReport ? (
-        <OpenReportButton openReport={openReport} />
+        <Menu autoSelect={false}>
+          <MenuButton>
+            <OpenReportButton openReport={openReport} />
+          </MenuButton>
+          <MenuList
+            borderRadius="0"
+            px="1.2vw"
+            fontSize="14px"
+            fontFamily="inter"
+          >
+            <MenuItem
+              onClick={() => openReport()}
+              borderBottom="1px solid #DEDEDE"
+            >
+              Standard Report
+            </MenuItem>
+
+            <Menu w="100%" placement="left" autoSelect={false}>
+              <MenuButton
+                as={Button}
+                fontWeight="400"
+                fontSize="14px"
+                borderRadius="0px"
+                _focus={{ outline: "none" }}
+                size="sm"
+                bg="none"
+                w="100%"
+              >
+                <Flex alignItems="center" justifyContent="space-between">
+                  <Text>Synoptic Report</Text>
+                  <MdArrowForwardIos />
+                </Flex>
+              </MenuButton>
+              <MenuList borderRadius="0px" mt="8vh" mx="1vw" px="1rem">
+                <MenuItem
+                  borderBottom="1px solid #DEDEDE"
+                  onClick={() => setSynopticType("breast-cancer")}
+                >
+                  Breast cancer
+                </MenuItem>
+                <MenuItem
+                  borderBottom="1px solid #DEDEDE"
+                  onClick={() => setSynopticType("prostate-cancer")}
+                >
+                  Prostate cancer
+                </MenuItem>
+                <MenuItem onClick={() => setSynopticType("lymphoma")}>
+                  Lymphoma
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </MenuList>
+        </Menu>
       ) : (
         <SubmitReportButton
           userInfo={userInfo}
@@ -269,6 +339,12 @@ const ReportHelper = ({
           handleUpload={handleUpload}
           annotedSlideImages={annotedSlideImages}
           reportedData={slideData}
+        />
+      ) : synopticType !== "" ? (
+        <SynopticReport
+          synopticType={synopticType}
+          caseInfo={caseInfo}
+          setSynopticType={setSynopticType}
         />
       ) : null}
     </>

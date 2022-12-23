@@ -36,6 +36,8 @@ const ScreenTools = ({
   setSlideId,
   responseHandler,
   questionnaireResponse,
+  synopticType,
+  setSynopticType,
 }) => {
   const [popup, setPopup] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
@@ -70,6 +72,8 @@ const ScreenTools = ({
           setSlideId={setSlideId}
           responseHandler={responseHandler}
           questionnaireResponse={questionnaireResponse}
+          synopticType={synopticType}
+          setSynopticType={setSynopticType}
         />
       ) : null}
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">

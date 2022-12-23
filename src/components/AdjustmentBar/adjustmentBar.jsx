@@ -44,6 +44,8 @@ const AdjustmentBar = ({
   setSlideId,
   responseHandler,
   questionnaireResponse,
+  synopticType,
+  setSynopticType,
 }) => {
   const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const { fabricOverlayState } = useFabricOverlayState();
@@ -149,6 +151,8 @@ const AdjustmentBar = ({
         setSlideId={setSlideId}
         responseHandler={responseHandler}
         questionnaireResponse={questionnaireResponse}
+        synopticType={synopticType}
+        setSynopticType={setSynopticType}
       />
     </Flex>
   );
