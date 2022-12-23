@@ -18,6 +18,8 @@ const ShowReport = ({
   setSlideId,
   responseHandler,
   questionnaireResponse,
+  synopticType,
+  setSynopticType,
 }) => {
   if (application === "hospital")
     return (
@@ -31,6 +33,8 @@ const ShowReport = ({
         showReport={showReport}
         setShowReport={setShowReport}
         userInfo={userInfo}
+        synopticType={synopticType}
+        setSynopticType={setSynopticType}
       />
     );
 
