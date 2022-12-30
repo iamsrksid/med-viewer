@@ -24,6 +24,7 @@ const ScreenTools = ({
   caseInfo,
   slide,
   saveReport,
+  saveSynopticReport,
   mediaUpload,
   slideInfo,
   handleFeedBar,
@@ -38,6 +39,7 @@ const ScreenTools = ({
   questionnaireResponse,
   synopticType,
   setSynopticType,
+  getSynopticReport,
 }) => {
   const [popup, setPopup] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
@@ -60,6 +62,7 @@ const ScreenTools = ({
           caseInfo={caseInfo}
           application={application}
           saveReport={saveReport}
+          saveSynopticReport={saveSynopticReport}
           viewerId={viewerId}
           mediaUpload={mediaUpload}
           slideInfo={slideInfo}
@@ -74,6 +77,7 @@ const ScreenTools = ({
           questionnaireResponse={questionnaireResponse}
           synopticType={synopticType}
           setSynopticType={setSynopticType}
+          getSynopticReport={getSynopticReport}
         />
       ) : null}
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
