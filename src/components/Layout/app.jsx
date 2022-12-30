@@ -25,6 +25,7 @@ const LayoutApp = ({
   response,
   finalSubmitHandler,
   saveReport,
+  saveSynopticReport,
   mediaUpload,
   slideInfo,
   clinicalStudy,
@@ -32,6 +33,7 @@ const LayoutApp = ({
   setSlideId,
   responseHandler,
   questionnaireResponse,
+  getSynopticReport,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -96,6 +98,7 @@ const LayoutApp = ({
           setIsMultiview={setIsMultiview}
           handleAnnotationBar={handleAnnotationBar}
           saveReport={saveReport}
+          saveSynopticReport={saveSynopticReport}
           mediaUpload={mediaUpload}
           slideInfo={slideInfo}
           handleFeedBar={handleFeedBar}
@@ -110,6 +113,7 @@ const LayoutApp = ({
           setSlideId={setSlideId}
           responseHandler={responseHandler}
           questionnaireResponse={questionnaireResponse}
+          getSynopticReport={getSynopticReport}
         />
 
         {isNavigatorActive && (

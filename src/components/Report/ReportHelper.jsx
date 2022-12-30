@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
   Button,
   Flex,
   Menu,
   MenuButton,
   MenuItem,
+  MenuItemOption,
   MenuList,
+  MenuOptionGroup,
   Text,
   Tooltip,
   useToast,
@@ -141,6 +149,7 @@ const SubmitReportButton = ({ userInfo, reportData, handleReportsubmit }) => {
 const ReportHelper = ({
   caseInfo,
   saveReport,
+  saveSynopticReport,
   viewerId,
   mediaUpload,
   slideInfo,
@@ -149,6 +158,7 @@ const ReportHelper = ({
   userInfo,
   synopticType,
   setSynopticType,
+  getSynopticReport,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -264,9 +274,7 @@ const ReportHelper = ({
 
   return (
     <>
-      {slideData ? (
-        <ShowReport showReport={showReport} openReport={openReport} />
-      ) : !showReport ? (
+      {!showReport ? (
         <Menu autoSelect={false}>
           <MenuButton>
             <OpenReportButton openReport={openReport} />
@@ -280,44 +288,49 @@ const ReportHelper = ({
             <MenuItem
               onClick={() => openReport()}
               borderBottom="1px solid #DEDEDE"
+              _hover={{ bg: "#f6f6f6" }}
             >
               Standard Report
             </MenuItem>
-
-            <Menu w="100%" placement="left" autoSelect={false}>
-              <MenuButton
-                as={Button}
-                fontWeight="400"
-                fontSize="14px"
-                borderRadius="0px"
-                _focus={{ outline: "none" }}
-                size="sm"
-                bg="none"
-                w="100%"
-              >
-                <Flex alignItems="center" justifyContent="space-between">
-                  <Text>Synoptic Report</Text>
-                  <MdArrowForwardIos />
-                </Flex>
-              </MenuButton>
-              <MenuList borderRadius="0px" mt="8vh" mx="1vw" px="1rem">
-                <MenuItem
+            <Accordion allowToggle>
+              <AccordionItem>
+                <AccordionButton
+                  _focus={{ outline: "none" }}
+                  justifyContent="space-between"
+                  alignItems="center"
                   borderBottom="1px solid #DEDEDE"
-                  onClick={() => setSynopticType("breast-cancer")}
                 >
-                  Breast cancer
-                </MenuItem>
-                <MenuItem
-                  borderBottom="1px solid #DEDEDE"
-                  onClick={() => setSynopticType("prostate-cancer")}
-                >
-                  Prostate cancer
-                </MenuItem>
-                <MenuItem onClick={() => setSynopticType("lymphoma")}>
-                  Lymphoma
-                </MenuItem>
-              </MenuList>
-            </Menu>
+                  <Text fontSize="14px">Synoptic Report</Text>
+                  <AccordionIcon />
+                </AccordionButton>
+                <AccordionPanel pb={4} px="0">
+                  <MenuItemOption
+                    value="breast-cancer"
+                    minH="32px"
+                    onClick={() => setSynopticType("breast-cancer")}
+                    _hover={{ bg: "#f6f6f6" }}
+                  >
+                    Breast cancer
+                  </MenuItemOption>
+                  <MenuItemOption
+                    value="prostate-cancer"
+                    minH="32px"
+                    onClick={() => setSynopticType("prostate-cancer")}
+                    _hover={{ bg: "#f6f6f6" }}
+                  >
+                    Prostate cancer
+                  </MenuItemOption>
+                  <MenuItemOption
+                    value="lymphoma"
+                    minH="32px"
+                    onClick={() => setSynopticType("lymphoma")}
+                    _hover={{ bg: "#f6f6f6" }}
+                  >
+                    Lymphoma
+                  </MenuItemOption>
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
           </MenuList>
         </Menu>
       ) : (
@@ -342,9 +355,12 @@ const ReportHelper = ({
         />
       ) : synopticType !== "" ? (
         <SynopticReport
+          saveSynopticReport={saveSynopticReport}
+          getSynopticReport={getSynopticReport}
           synopticType={synopticType}
           caseInfo={caseInfo}
           setSynopticType={setSynopticType}
+          slideId={slideId}
         />
       ) : null}
     </>

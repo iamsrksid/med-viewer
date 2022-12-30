@@ -13,6 +13,7 @@ const ShowReport = ({
   showReport,
   setShowReport,
   saveReport,
+  saveSynopticReport,
   questions,
   app,
   setSlideId,
@@ -20,12 +21,14 @@ const ShowReport = ({
   questionnaireResponse,
   synopticType,
   setSynopticType,
+  getSynopticReport,
 }) => {
   if (application === "hospital")
     return (
       <ReportHelper
         caseInfo={caseInfo}
         saveReport={saveReport}
+        saveSynopticReport={saveSynopticReport}
         viewerId={viewerId}
         mediaUpload={mediaUpload}
         slideInfo={slideInfo}
@@ -35,6 +38,7 @@ const ShowReport = ({
         userInfo={userInfo}
         synopticType={synopticType}
         setSynopticType={setSynopticType}
+        getSynopticReport={getSynopticReport}
       />
     );
 

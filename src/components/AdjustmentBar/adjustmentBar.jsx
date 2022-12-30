@@ -32,6 +32,7 @@ const AdjustmentBar = ({
   setTotalCells,
   handleAnnotationBar,
   saveReport,
+  saveSynopticReport,
   mediaUpload,
   slideInfo,
   handleFeedBar,
@@ -46,6 +47,7 @@ const AdjustmentBar = ({
   questionnaireResponse,
   synopticType,
   setSynopticType,
+  getSynopticReport,
 }) => {
   const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const { fabricOverlayState } = useFabricOverlayState();
@@ -138,6 +140,7 @@ const AdjustmentBar = ({
         caseInfo={caseInfo}
         slide={slide}
         saveReport={saveReport}
+        saveSynopticReport={saveSynopticReport}
         mediaUpload={mediaUpload}
         slideInfo={slideInfo}
         handleFeedBar={handleFeedBar}
@@ -153,6 +156,7 @@ const AdjustmentBar = ({
         questionnaireResponse={questionnaireResponse}
         synopticType={synopticType}
         setSynopticType={setSynopticType}
+        getSynopticReport={getSynopticReport}
       />
     </Flex>
   );

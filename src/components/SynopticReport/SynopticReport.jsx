@@ -13,7 +13,14 @@ import BreastCancer from "./BreastCancer";
 import Lymphoma from "./Lymphoma";
 import ProstateCancer from "./ProstateCancer";
 
-const SynopticReport = ({ synopticType, caseInfo, setSynopticType }) => {
+const SynopticReport = ({
+  synopticType,
+  caseInfo,
+  setSynopticType,
+  slideId,
+  saveSynopticReport,
+  getSynopticReport,
+}) => {
   const [ifwidthLessthan1920] = useMediaQuery("(max-width:1920px)");
 
   return (
@@ -125,11 +132,29 @@ const SynopticReport = ({ synopticType, caseInfo, setSynopticType }) => {
       </Flex>
       <Flex>
         {synopticType === "breast-cancer" ? (
-          <BreastCancer />
+          <BreastCancer
+            slideId={slideId}
+            caseId={caseInfo?._id}
+            saveSynopticReport={saveSynopticReport}
+            getSynopticReport={getSynopticReport}
+            setSynopticType={setSynopticType}
+          />
         ) : synopticType === "prostate-cancer" ? (
-          <ProstateCancer />
+          <ProstateCancer
+            slideId={slideId}
+            caseId={caseInfo?._id}
+            saveSynopticReport={saveSynopticReport}
+            getSynopticReport={getSynopticReport}
+            setSynopticType={setSynopticType}
+          />
         ) : synopticType === "lymphoma" ? (
-          <Lymphoma />
+          <Lymphoma
+            slideId={slideId}
+            caseId={caseInfo?._id}
+            saveSynopticReport={saveSynopticReport}
+            getSynopticReport={getSynopticReport}
+            setSynopticType={setSynopticType}
+          />
         ) : null}
       </Flex>
     </Flex>

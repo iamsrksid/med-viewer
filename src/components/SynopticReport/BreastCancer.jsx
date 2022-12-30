@@ -1,7 +1,311 @@
-import { Checkbox, Flex, HStack, Text, VStack } from "@chakra-ui/react";
-import React from "react";
+import {
+  Button,
+  Flex,
+  HStack,
+  Input,
+  Text,
+  Textarea,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 
-const BreastCancer = () => {
+import SRHelper from "./SRHelper";
+
+const BreastCancer = ({
+  saveSynopticReport,
+  slideId,
+  caseId,
+  getSynopticReport,
+  setSynopticType,
+}) => {
+  const toast = useToast();
+  const [synopticReportData, setSynopticReportData] = useState("");
+  useEffect(() => {
+    async function getData() {
+      const response = await getSynopticReport({
+        reportType: "breast-cancer",
+        caseId,
+      });
+      setSynopticReportData(response?.data?.data);
+    }
+    getData();
+  }, [caseId]);
+  const [inputData, setInputData] = useState({
+    dataRecieved: "",
+    specimenType: "",
+    specimenRadiographProvided: "",
+    radiologyAbnormalitySeen: "",
+    rGrade: "",
+    radiologyLesion: "",
+    specimenWeight: "",
+    ellipseOfSkin: "",
+    nipple: "",
+    histologicalClassificationPresent: "",
+    fibrofattyTissue: "",
+    lesionMeasures: "",
+    site: "",
+    macroscopicDistance: "",
+    comments: "",
+    invasiveTumourSize: "",
+    wholeTumourSize: "",
+    invasiveGrade: "",
+    tumourExtent: "",
+    type: "",
+    typeForComponents: "",
+    grade: "",
+    associatedDcis: "",
+    dcisGrade: "",
+    isSituLobularNeoplasia: "",
+    isPagetDisease: "",
+    pureDcisSize: "",
+    pureDcisGrade: "",
+    dcisArchitecture: "",
+    dcisNecrosis: "",
+    isLcis: "",
+    microInvasion: "",
+    pagetDisease: "",
+  });
+  const reportData = [
+    {
+      title: "DATA RECEIVED",
+      inputName: "dataRecieved",
+      options: ["Left", "Right"],
+    },
+    {
+      title: "SPECIMEN TYPE",
+      inputName: "specimenType",
+      options: [
+        "Diagnostic marker",
+        "Radical mastectomy",
+        "Wide local excision",
+        "Therapeutic marker",
+        "Simple mastectomy",
+        "Subcutaneous",
+        "Re-excision",
+        "Others",
+      ],
+    },
+    {
+      title: "SPECIMEN RADIOGRAPHY PROVIDED",
+      inputName: "specimenRadiographProvided",
+      options: ["Yes", "No"],
+    },
+    {
+      title: "RADIOLOGICAL ABNORMALITY SEEN",
+      inputName: "radiologyAbnormalitySeen",
+      options: ["Yes", "No", "Unsure"],
+    },
+    {
+      title: "R GRADE",
+      inputName: "rGrade",
+      options: ["1", "2", "3", "4", "5"],
+    },
+    {
+      title: "RADIOLOGICAL LESION",
+      inputName: "radiologyLesion",
+      options: [
+        "Circumscribed mass",
+        "Parenchymal deformity",
+        "Stellate lesion",
+        "Calcification",
+        "Other",
+      ],
+    },
+    {
+      title: "SPECIMEN WEIGHT",
+      inputName: "specimenWeight",
+    },
+    {
+      title: "ELLIPSE OF SKIN",
+      inputName: "ellipseOfSkin",
+    },
+    {
+      title: "NIPPLE",
+      inputName: "nipple",
+      options: ["Normal", "Indrawn", "Not assessable"],
+    },
+    {
+      title: "HISTOLOGICAL CLASIFICATION PRESENT",
+      inputName: "histologicalClassificationPresent",
+      options: ["Benign", "Benign and malignant", "Malignant", "absent"],
+    },
+    {
+      title: " FIBROFATTY TISSUE",
+      inputName: "fibrofattyTissue",
+    },
+    {
+      title: "LESION MEASURES",
+      inputName: "lesionMeasures",
+    },
+    {
+      title: "SITE",
+      inputName: "site",
+      options: ["OUQ", "OLQ", "IUQ", "LLQ", "Retroareolar", "Not know"],
+    },
+    {
+      title: "GRADE",
+      inputName: "invasiveGrade",
+      options: ["1", "2", "3", "4", "N/A"],
+    },
+    {
+      title: "TUMOUR EXTENT",
+      inputName: "tumourExtent",
+      options: ["Localised", "Multiple, evasive foc"],
+    },
+    {
+      title: "TYPE",
+      inputName: "type",
+      options: [
+        "No special type (ductal NST)",
+        "Pure special type (90% purity, specify components present below)",
+        "Mixed tumour type (50–90% special type component, specify components present below)",
+        "IUQ",
+        "Other malignant tumour (please specify)",
+        "Not know",
+      ],
+    },
+    {
+      title:
+        "SPECIFY TYPE COMPONENT(S) PRESENT FOR PURE SPECIAL TYPE AND MIXED TUMOUR TYPES:",
+      inputName: "typeForComponents",
+      options: [
+        "Tubular/cribriform",
+        "Lobular",
+        "Ductal/no special type",
+        "Mucinous",
+        "Medullary like",
+      ],
+    },
+    {
+      title: "GRADE",
+      inputName: "grade",
+      options: ["Not seen", "Possible"],
+    },
+    {
+      title: "ASSOCIATED DCIS",
+      inputName: "associatedDcis",
+      options: ["None", "Minimal", "Extensive"],
+    },
+    {
+      title: "DCIS GRADE",
+      inputName: "dcisGrade",
+      options: ["Low", "High", "Intermediate"],
+    },
+    {
+      title: "IN SITU LOBULAR NEOPLASIA PRESENT",
+      inputName: "isSituLobularNeoplasia",
+      options: ["Yes", "No"],
+    },
+    {
+      title: "PAGET'S DISEASE PRESENT",
+      inputName: "isPagetDisease",
+      options: ["Yes", "No"],
+    },
+    {
+      title: "DCIS GRADE",
+      inputName: "pureDcisGrade",
+      options: ["Low", "High", "Intermediate"],
+    },
+    {
+      title: "DCIS ARCHITECTURE",
+      inputName: "dcisArchitecture",
+      options: ["Solid", "Cribriform", "Micropapillary", "Papillary", "Other"],
+    },
+    {
+      title: "DCIS NERCROSIS",
+      inputName: "dcisNecrosis",
+      options: ["Yes", "No"],
+    },
+    {
+      title: "LCIS PRESENT",
+      inputName: "isLcis",
+      options: ["Yes", "No"],
+    },
+    {
+      title: "MICROINVASIVE",
+      inputName: "microInvasion",
+      options: ["Yes", "No"],
+    },
+    {
+      title: "PAGET'S DISEASE",
+      inputName: "pagetDisease",
+      options: ["Yes", "No"],
+    },
+  ];
+
+  const handleInput = (e) => {
+    setInputData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const submitReport = async () => {
+    try {
+      await saveSynopticReport({
+        macroscopy: {
+          dataRecieved: inputData.dataRecieved,
+          specimenType: inputData.specimenType,
+          specimenRadiographProvided: inputData.specimenRadiographProvided,
+          radiologyAbnormalitySeen: inputData.radiologyAbnormalitySeen,
+          rGrade: inputData.rGrade,
+          radiologyLesion: inputData.radiologyLesion,
+          specimenWeight: inputData.specimenWeight,
+          ellipseOfSkin: inputData.ellipseOfSkin,
+          nipple: inputData.nipple,
+          histologicalClassificationPresent:
+            inputData.histologicalClassificationPresent,
+          fibrofattyTissue: inputData.fibrofattyTissue,
+          lesionMeasures: inputData.lesionMeasures,
+          site: inputData.site,
+          macroscopicDistanceToMargin: inputData.macroscopicDistance,
+          comments: inputData.comments,
+        },
+
+        invasiveCarcinoma: {
+          invasiveTumourSize: inputData.invasiveTumourSize,
+          wholeTumourSize: inputData.wholeTumourSize,
+          invasiveGrade: inputData.invasiveGrade,
+          tumourExtent: inputData.tumourExtent,
+          type: inputData.type,
+        },
+
+        specifyTypeForComponentsPresentForSpecialtypeAndMixedTumourTypes: {
+          typeForComponents: inputData.typeForComponents,
+          grade: inputData.grade,
+          associatedDcis: inputData.associatedDcis,
+          isSituLobularNeoplasia: inputData.isSituLobularNeoplasia,
+          dcisGrade: inputData.dcisGrade,
+          isPagetDisease: inputData.isPagetDisease,
+        },
+
+        finalPathologyDcis: {
+          isLcis: inputData.isLcis,
+          pureDcisSize: inputData.pureDcisSize,
+          pureDcisGrade: inputData.pureDcisGrade,
+          dcisArchitecture: inputData.dcisArchitecture,
+          dcisNecrosis: inputData.dcisNecrosis,
+          microInvasion: inputData.microInvasion,
+          pagetDisease: inputData.pagetDisease,
+        },
+        slideId,
+        caseId,
+        reportType: "breast-cancer-report",
+      }).unwrap();
+      toast({
+        description: "Report submitted sucessfully",
+        status: "success",
+        duration: 2000,
+      });
+      setSynopticType("");
+    } catch (err) {
+      toast({
+        description: "Fill all the field's and try again!!",
+        status: "error",
+        duration: 2000,
+      });
+    }
+  };
   return (
     <Flex px="1.6vw" w="100%" fontSize="14px" direction="column">
       <Flex bg="#F7FBFD" h="3vh" minH="30px" w="100%" alignItems="center">
@@ -9,175 +313,54 @@ const BreastCancer = () => {
           MACROSCOPY
         </Text>
       </Flex>
+      <Flex w="100%" flex="1" flexWrap="wrap" justifyContent="space-between">
+        {reportData.slice(0, 13).map((inputField, index) => {
+          return (
+            <SRHelper
+              inputField={inputField}
+              key={`${index + 1}`}
+              handleInput={handleInput}
+              inputData={inputData}
+              macroscopicData={
+                synopticReportData?.macroscopy?.[inputField?.inputName]
+              }
+            />
+          );
+        })}
+      </Flex>
       <Flex direction="column">
-        <HStack flex="1" alignItems="flex-start">
-          <VStack minW="35%" alignItems="flex-start">
-            <Text fontWeight="600">DATA RECIEVED</Text>
-            <HStack mt="-0rem !important" color="#8F8F8F">
-              <Text>Slide</Text>
-              <Checkbox>left</Checkbox>
-              <Checkbox>Right</Checkbox>
-            </HStack>
-          </VStack>
-          <VStack alignItems="flex-start" minW="65%">
-            <Text fontWeight="600">SPECIMEN TYPE</Text>
-            <HStack
-              alignItems="flex-start"
-              mt="-0rem !important"
-              color="#8F8F8F"
-            >
-              <VStack alignItems="flex-start">
-                <Checkbox>Diagnostic marker</Checkbox>
-                <Checkbox>Therapeutic markert</Checkbox>
-                <Checkbox>Wide local excision</Checkbox>
-                <Checkbox>Simple mastectomy</Checkbox>
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Checkbox>Subcutaneous</Checkbox>
-                <Checkbox>Radical mastectomy</Checkbox>
-                <Checkbox>Wide local excision</Checkbox>
-                <Checkbox>Others</Checkbox>
-              </VStack>
-            </HStack>
-          </VStack>
-        </HStack>
-        <HStack flex="1" my="1vh" alignItems="flex-start">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">SPECIMEN RADIOGRAPHY PROVIDED</Text>
-            <HStack color="#8F8F8F">
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-            </HStack>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">RADIOLOGICAL ABNORMALITY SEEN</Text>
-            <HStack color="#8F8F8F">
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-              <Checkbox>Unsure</Checkbox>
-            </HStack>
-          </VStack>
-        </HStack>
-        <HStack flex="1" alignItems="flex-start">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">R GRADE</Text>
-            <HStack color="#8F8F8F">
-              <Checkbox>1</Checkbox>
-              <Checkbox>2</Checkbox>
-              <Checkbox>3</Checkbox>
-              <Checkbox>4</Checkbox>
-              <Checkbox>5</Checkbox>
-            </HStack>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">RADIOLOGICAL LESION</Text>
-            <HStack color="#8F8F8F" alignItems="flex-start">
-              <VStack alignItems="flex-start">
-                <Checkbox>Stellate lesion</Checkbox>
-                <Checkbox>Calcification</Checkbox>
-                <Checkbox>Other</Checkbox>
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Checkbox>Circumscribed mass</Checkbox>
-                <Checkbox>Parenchymal deformity</Checkbox>
-              </VStack>
-            </HStack>
-          </VStack>
-        </HStack>
-        <HStack flex="1" py="1vh">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">SPECIMEN WEIGHT</Text>
-            <Text mt="-0rem !important" color="#8F8F8F">
-              22 gm
-            </Text>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">ELLIPSE OF SKIN</Text>
-            <Text mt="-0rem !important" color="#8F8F8F">
-              22 X 11 mm
-            </Text>
-          </VStack>
-        </HStack>
-        <HStack flex="1" alignItems="flex-start">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">NIPPLE</Text>
-            <VStack
-              alignItems="flex-start"
-              mt="-0rem !important"
-              color="#8F8F8F"
-            >
-              <Checkbox>Normal</Checkbox>
-              <Checkbox>Benign</Checkbox>
-              <Checkbox>Not assessable</Checkbox>
-            </VStack>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">HISTOLOGICAL CLASIFICATION PRESENT</Text>
-            <HStack
-              alignItems="flex-start"
-              mt="-0rem !important"
-              color="#8F8F8F"
-            >
-              <VStack alignItems="flex-start">
-                <Checkbox>Benign</Checkbox>
-                <Checkbox>Benign and malignant</Checkbox>
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Checkbox>Malignant</Checkbox>
-                <Checkbox>absent</Checkbox>
-              </VStack>
-            </HStack>
-          </VStack>
-        </HStack>
-        <HStack flex="1">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">FIBROFATTY TISSUE</Text>
-            <Text mt="-0rem !important" color="#8F8F8F">
-              22 X 11 X 1 mm
-            </Text>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">LESION MEASURES</Text>
-            <Text mt="-0rem !important" color="#8F8F8F">
-              22 X 11 X 1 mm
-            </Text>
-          </VStack>
-        </HStack>
-        <HStack flex="1" py="1vh">
-          <VStack alignItems="flex-start" mt="-0rem !important">
-            <Text fontWeight="600">SITE</Text>
-            <HStack
-              mt="-0rem !important"
-              color="#8F8F8F"
-              alignItems="flex-start"
-            >
-              <VStack alignItems="flex-start">
-                <Checkbox>OUQ</Checkbox>
-                <Checkbox>OLQ</Checkbox>
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Checkbox>IUQ</Checkbox>
-                <Checkbox>LLQ</Checkbox>
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Checkbox>Retroareolar</Checkbox>
-                <Checkbox>Not know</Checkbox>
-              </VStack>
-            </HStack>
-          </VStack>
-        </HStack>
+        <HStack flex="1" py="1vh" />
         <Text fontWeight="600" py="1vh">
-          MACROSCOPIC DISTANCE TO NEAREST ( 12 ) MARGIN
+          MACROSCOPIC DISTANCE TO NEAREST{" "}
+          <Input
+            w="4vw"
+            size="sm"
+            value={
+              synopticReportData !== ""
+                ? synopticReportData?.macroscopy?.macroscopicDistanceToMargin
+                : inputData.macroscopicDistance
+            }
+            readOnly={
+              synopticReportData?.macroscopy?.macroscopicDistanceToMargin
+            }
+            name="macroscopicDistance"
+            onChange={handleInput}
+          />{" "}
+          MARGIN
         </Text>
         <VStack flex="1" alignItems="flex-start">
           <Text fontWeight="600">COMMENTS</Text>
-          <Text color="#8F8F8F">
-            Lorem ipsum dolor sit amet consectetur. Tellus venenatis eu nunc
-            lacus egestas. Id eget dui id euismod massa. Velit tellus libero
-            tellus in lectus velit imperdiet augue at. Iaculis nunc ut enim
-            pulvinar sit sodales egestas mauris ur urna facilisi integer
-            fringilla. Magna vestibulum mauris fringilla urna mauris.
-          </Text>
+          <Textarea
+            borderRadius="0"
+            name="comments"
+            onChange={handleInput}
+            value={
+              synopticReportData !== ""
+                ? synopticReportData?.macroscopy?.comments
+                : inputData.comments
+            }
+            readOnly={synopticReportData?.macroscopy?.comments}
+          />
         </VStack>
         <Flex
           bg="#F7FBFD"
@@ -190,126 +373,61 @@ const BreastCancer = () => {
         >
           <Text fontWeight="600">INVASIVE CARCINOMA</Text>
         </Flex>
-        <HStack flex="1" alignItems="flex-start" my="1vh">
-          <Text fontWeight="600" minW="40%">
-            INVASIVE TUMOUR SIZE 23 MM
-          </Text>
-          <Text fontWeight="600" minW="60%">
-            WHOLE TUMOUR (DCIS + INVASIVE) SIZE 91 MM
-          </Text>
-        </HStack>
         <HStack flex="1" alignItems="flex-start">
-          <VStack alignItems="flex-start" mt="-0rem !important" minW="40%">
-            <Text fontWeight="600">GRADE</Text>
-            <HStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>1</Checkbox>
-              <Checkbox>2</Checkbox>
-              <Checkbox>3</Checkbox>
-              <Checkbox>N/A</Checkbox>
-            </HStack>
-          </VStack>
-          <VStack alignItems="flex-start" mt="-0rem !important" minW="60%">
-            <Text fontWeight="600">TUMOUR EXTENT</Text>
-            <HStack
-              alignItems="flex-start"
-              mt="-0rem !important"
-              color="#8F8F8F"
-            >
-              <Checkbox>Localised</Checkbox>
-              <Checkbox>Multiple, evasive foc</Checkbox>
-            </HStack>
-          </VStack>
-        </HStack>
-        <VStack alignItems="flex-start">
-          <Text fontWeight="600">TYPE</Text>
-          <VStack alignItems="flex-start" mt="-0rem !important" color="#8F8F8F">
-            <Checkbox>No special type (ductal NST)</Checkbox>
-            <Checkbox>
-              Pure special type (90% purity, specify components present below)
-            </Checkbox>
-            <Checkbox>
-              Mixed tumour type (50–90% special type component, specify
-              components present below)
-            </Checkbox>
-            <Checkbox>IUQ</Checkbox>
-            <Checkbox>Other malignant tumour (please specify)</Checkbox>
-            <Checkbox>Not know</Checkbox>
-          </VStack>
-        </VStack>
-        <VStack alignItems="flex-start">
-          <Text fontWeight="600" pt="1vh">
-            SPECIFY TYPE COMPONENT(S) PRESENT FOR PURE SPECIAL TYPE AND MIXED
-            TUMOUR TYPES:
+          <Text fontWeight="600" minW="49%">
+            INVASIVE TUMOUR SIZE{" "}
+            <Input
+              w="4vw"
+              size="sm"
+              name="invasiveTumourSize"
+              value={
+                synopticReportData?.invasiveCarcinoma?.invasiveTumourSize ||
+                inputData.invasiveTumourSize
+              }
+              readOnly={
+                synopticReportData?.invasiveCarcinoma?.invasiveTumourSize
+              }
+              onChange={handleInput}
+            />
+            MM
           </Text>
-          <VStack alignItems="flex-start" mt="-0rem !important">
-            <HStack
-              mt="-0rem !important"
-              color="#8F8F8F"
-              alignItems="flex-start"
-            >
-              <VStack alignItems="flex-start">
-                <Checkbox>Tubular/cribriform</Checkbox>
-                <Checkbox>Lobular</Checkbox>
-                <Checkbox>Ductal/no special type</Checkbox>
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Checkbox>Mucinous</Checkbox>
-                <Checkbox>Medullary like</Checkbox>
-              </VStack>
-            </HStack>
-          </VStack>
-        </VStack>
-        <HStack flex="1" alignItems="flex-start" py="1vh">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">GRADE</Text>
-            <HStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Not seen</Checkbox>
-              <Checkbox>Not seen</Checkbox>
-            </HStack>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">ASSOCIATED DCIS</Text>
-            <HStack
-              alignItems="flex-start"
-              mt="-0rem !important"
-              color="#8F8F8F"
-            >
-              <Checkbox>None</Checkbox>
-              <Checkbox>Minimal</Checkbox>
-              <Checkbox>Extensive</Checkbox>
-            </HStack>
-          </VStack>
+          <Text fontWeight="600" minW="49%">
+            WHOLE TUMOUR (DCIS + INVASIVE) SIZE{" "}
+            <Input
+              w="4vw"
+              size="sm"
+              name="wholeTumourSize"
+              value={
+                synopticReportData?.invasiveCarcinoma?.wholeTumourSize ||
+                inputData.wholeTumourSize
+              }
+              readOnly={synopticReportData?.invasiveCarcinoma?.wholeTumourSize}
+              onChange={handleInput}
+            />{" "}
+            MM
+          </Text>
         </HStack>
-        <HStack flex="1" alignItems="flex-start">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">DCIS GRADE</Text>
-            <HStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Low</Checkbox>
-              <Checkbox>Intermediate</Checkbox>
-            </HStack>
-            <Checkbox color="#8F8F8F">High</Checkbox>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">IN SITU LOBULAR NEOPLASIA PRESENT</Text>
-            <HStack
-              alignItems="flex-start"
-              mt="-0rem !important"
-              color="#8F8F8F"
-            >
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-            </HStack>
-          </VStack>
-        </HStack>
-        <HStack flex="1" alignItems="flex-start" py="1vh">
-          <VStack alignItems="flex-start">
-            <Text fontWeight="600">PAGET&apos;S DISEASE PRESENT</Text>
-            <HStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-            </HStack>
-          </VStack>
-        </HStack>
+        <Flex w="100%" flex="1" flexWrap="wrap" justifyContent="space-between">
+          {reportData.slice(13, 22).map((inputField, index) => {
+            return (
+              <SRHelper
+                inputField={inputField}
+                key={`${index + 1}`}
+                handleInput={handleInput}
+                inputData={inputData}
+                invasiveCarcinoma={
+                  synopticReportData?.invasiveCarcinoma?.[inputField?.inputName]
+                }
+                tumourType={
+                  synopticReportData
+                    ?.specifyTypeForComponentsPresentForSpecialtypeAndMixedTumourTypes?.[
+                    inputField?.inputName
+                  ]
+                }
+              />
+            );
+          })}
+        </Flex>
         <Flex
           bg="#F7FBFD"
           h="3vh"
@@ -317,76 +435,59 @@ const BreastCancer = () => {
           w="100%"
           alignItems="center"
           px="0.3vw"
+          my="1vh"
         >
           <Text fontWeight="600">FINAL PATHOLOGY DCIS</Text>
         </Flex>
-        <Text fontWeight="600" py="1vh">
-          PURE DCIS SIZE 77 MM IN MAXIMUM EXTENT
+        <Text fontWeight="600">
+          PURE DCIS SIZE{" "}
+          <Input
+            w="4vw"
+            size="sm"
+            name="pureDcisSize"
+            onChange={handleInput}
+            value={
+              synopticReportData?.finalPathologyDcis?.pureDcisSize ||
+              inputData.pureDcisSize
+            }
+            readOnly={synopticReportData?.finalPathologyDcis?.pureDcisSize}
+          />{" "}
+          MM IN MAXIMUM EXTENT
         </Text>
-        <HStack flex="1" alignItems="flex-start">
-          <VStack alignItems="flex-start" minW="40%">
-            <Text fontWeight="600">DCIS GRADE</Text>
-            <HStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Low</Checkbox>
-              <Checkbox>Intermediate</Checkbox>
-            </HStack>
-            <Checkbox color="#8F8F8F">High</Checkbox>
-          </VStack>
-          <VStack alignItems="flex-start" minW="60%">
-            <Text fontWeight="600">DCIS ARCHITECTURE</Text>
-            <HStack
-              mt="-0rem !important"
-              color="#8F8F8F"
-              alignItems="flex-start"
-            >
-              <VStack alignItems="flex-start">
-                <Checkbox>Solid</Checkbox>
-                <Checkbox>Cribriform</Checkbox>
-                <Checkbox>Other</Checkbox>
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Checkbox>Micropapillary</Checkbox>
-                <Checkbox>Papillary</Checkbox>
-              </VStack>
-            </HStack>
-          </VStack>
-        </HStack>
-        <HStack
-          flex="1"
-          alignItems="flex-start"
-          justifyContent="space-between"
-          py="2vh"
-        >
-          <VStack alignItems="flex-start">
-            <Text fontWeight="600">DCIS NERCROSIS</Text>
-            <VStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-            </VStack>
-          </VStack>
-          <VStack alignItems="flex-start">
-            <Text fontWeight="600">LCIS PRESENT</Text>
-            <VStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-            </VStack>
-          </VStack>
-          <VStack alignItems="flex-start">
-            <Text fontWeight="600">MICROINVASIVE</Text>
-            <VStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-            </VStack>
-          </VStack>
-          <VStack alignItems="flex-start">
-            <Text fontWeight="600">PAGET&apos;S DISEASE</Text>
-            <VStack mt="-0rem !important" color="#8F8F8F">
-              <Checkbox>Yes</Checkbox>
-              <Checkbox>No</Checkbox>
-            </VStack>
-          </VStack>
-        </HStack>
+        <Flex w="100%" flex="1" flexWrap="wrap" justifyContent="space-between">
+          {reportData.slice(22, 29).map((inputField, index) => {
+            return (
+              <SRHelper
+                inputField={inputField}
+                key={`${index + 1}`}
+                handleInput={handleInput}
+                inputData={inputData}
+                synopticReportData={synopticReportData}
+                finalPathologyDcis={
+                  synopticReportData?.finalPathologyDcis?.[
+                    inputField?.inputName
+                  ]
+                }
+              />
+            );
+          })}
+        </Flex>
       </Flex>
+      {(synopticReportData === "" || synopticReportData === undefined) && (
+        <Flex justifyContent="flex-end" pb="2vh">
+          <Button
+            onClick={() => submitReport()}
+            borderRadius="0"
+            bg="#00153F"
+            color="#fff"
+            size="sm"
+            minW="100px"
+            _focus={{ outline: "none" }}
+          >
+            Submit
+          </Button>
+        </Flex>
+      )}
     </Flex>
   );
 };
