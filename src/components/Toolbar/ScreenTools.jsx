@@ -62,7 +62,7 @@ const ScreenTools = ({
       <Divider orientation="vertical" ml="5px" border="1px solid gray" />
       {report ? (
         <ShowReport
-          // caseInfo={caseInfo}
+          caseInfo={caseInfo}
           application={application}
           saveReport={saveReport}
           saveSynopticReport={saveSynopticReport}
