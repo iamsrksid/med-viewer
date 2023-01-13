@@ -24,16 +24,12 @@ import Environment from "../../../../environment";
 import { GrFormClose } from "react-icons/gr";
 import KeyPoints from "./KeyPoints";
 import { useFabricOverlayState } from "../../state/store";
-import ActivityFeed from "./activityFeed";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiFillLock } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { useEffect } from "react";
-import { useGetUserInfoQuery } from "../../../../state/API/HospitalApi";
 import { useAuth0 } from "@auth0/auth0-react";
-import ConversationHeader from "../../../../Features/Chats/ConversationHeader";
-import Conversation from "../../../../Features/Chats/Conversation";
 import ChatConversationFeed from "./ChatConversationFeed";
 
 const ChatFeed = ({
@@ -45,6 +41,8 @@ const ChatFeed = ({
   application,
   app,
   users,
+  userInfo,
+  mentionUsers,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -52,9 +50,6 @@ const ChatFeed = ({
   const [activeGroup, setActiveGroup] = useState();
   const [groupData, setGroupData] = useState();
   const { user } = useAuth0();
-  const { data: userInfo, isLoading } = useGetUserInfoQuery({
-    subClaim: user?.sub,
-  });
   console.log(application);
   useEffect(() => {
     setGroupData(caseInfo);
@@ -198,6 +193,7 @@ const ChatFeed = ({
                   app={application}
                   users={users}
                   groupChatId={groupData?._id}
+                  mentionUsers={mentionUsers}
                 />
               </>
             ) : (

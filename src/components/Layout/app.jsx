@@ -36,6 +36,7 @@ const LayoutApp = ({
   questionnaireResponse,
   getSynopticReport,
   users,
+  mentionUsers,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -176,6 +177,7 @@ const LayoutApp = ({
           {chatFeedBar ? (
             <ChatFeed
               viewerId={currentViewer}
+              userInfo={userInfo}
               chatFeedBar={chatFeedBar}
               handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
@@ -185,6 +187,7 @@ const LayoutApp = ({
               application={application}
               app={application}
               users={users}
+              mentionUsers={mentionUsers}
             />
           ) : null}
           <LayoutAppBody>

@@ -12,17 +12,15 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import { AiOutlineSend, AiOutlineUser } from "react-icons/ai";
-import { MdOutlineKeyboardVoice } from "react-icons/md";
-import { RiAttachment2 } from "react-icons/ri";
 import { v4 as uuidv4 } from "uuid";
-import defaultStyle from "../../../../Features/Chats/defaultStyle";
-import defaultMentionStyle from "../../../../Features/Chats/defautMentionStyle";
+import defaultStyle from "./defaultStyle";
+import defaultMentionStyle from "./defaultMention";
 import {
   CHAT_SUBSCRIPTION,
   FETCH_CONVERSATION,
   SEND_MESSAGE,
-} from "../../../../state/API/graphql/ChatQuery";
-import ScrollBar from "../../../other/Scrollbar";
+} from "../../state/API/graphql/ChatQuery";
+import ScrollBar from "../../other/Scrollbar";
 
 const formats = {
   sameDay: "[Today]",
@@ -111,6 +109,7 @@ const ChatConversationFeed = ({
   application,
   app,
   users,
+  mentionUsers,
 }) => {
   let lastDate = "1999-01-01";
   // console.log(userInfo);
@@ -413,7 +412,7 @@ const ChatConversationFeed = ({
             a11ySuggestionsListLabel="Suggested mentions"
             style={defaultStyle}
           >
-            <Mention data={users} style={defaultMentionStyle} />
+            <Mention data={mentionUsers} style={defaultMentionStyle} />
           </MentionsInput>
           <Button
             type="submit"
