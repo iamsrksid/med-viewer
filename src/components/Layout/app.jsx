@@ -36,6 +36,8 @@ const LayoutApp = ({
   questionnaireResponse,
   getSynopticReport,
   users,
+  mentionUsers,
+  Environment,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -180,11 +182,14 @@ const LayoutApp = ({
               handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
               feedTab={feedTab}
+              userInfo={userInfo}
               caseInfo={caseInfo}
               synopticType={synopticType}
               application={application}
               app={application}
               users={users}
+              mentionUsers={mentionUsers}
+              Environment={Environment}
             />
           ) : null}
           <LayoutAppBody>

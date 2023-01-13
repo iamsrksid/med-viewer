@@ -15,14 +15,14 @@ import { AiOutlineSend, AiOutlineUser } from "react-icons/ai";
 import { MdOutlineKeyboardVoice } from "react-icons/md";
 import { RiAttachment2 } from "react-icons/ri";
 import { v4 as uuidv4 } from "uuid";
-import defaultStyle from "../../../../Features/Chats/defaultStyle";
-import defaultMentionStyle from "../../../../Features/Chats/defaultMentionStyle";
+import defaultStyle from "./defaultStyle";
+import defaultMentionStyle from "./defaultMentionStyle";
 import {
   CHAT_SUBSCRIPTION,
   FETCH_CONVERSATION,
   SEND_MESSAGE,
-} from "../../../../state/API/graphql/ChatQuery";
-import ScrollBar from "../../../other/Scrollbar";
+} from "../../state/graphql/ChatQuery";
+import ScrollBar from "../others/ScrollBar";
 
 const formats = {
   sameDay: "[Today]",
@@ -111,6 +111,7 @@ const ChatConversationFeed = ({
   application,
   app,
   users,
+  mentionUsers,
 }) => {
   let lastDate = "1999-01-01";
   // console.log(userInfo);
@@ -120,6 +121,11 @@ const ChatConversationFeed = ({
   const [value, setValue] = useState("");
   const messageRef = useRef(null);
   const bottomRef = useRef(null);
+  const [messageInput, setMessageInput] = useState({
+    mentionedText: "",
+    text: "",
+    mentionedUsers: [],
+  });
   // console.log(value);
   const [
     fetchMessages,
@@ -210,6 +216,11 @@ const ChatConversationFeed = ({
     ]);
 
     e.target.reset();
+    setMessageInput({
+      mentionedText: "",
+      text: "",
+      mentionedUsers: [],
+    });
     setValue("");
     const { data } = await sendNewMessage({
       variables: {
@@ -222,8 +233,10 @@ const ChatConversationFeed = ({
             types: "message",
           },
           to: groupChatId,
+          toName: "",
           fromImage: "",
           fromName: `${userInfo.firstName}`,
+          mentionedUsers: messageInput.mentionedUsers,
         },
       },
     });
@@ -413,7 +426,7 @@ const ChatConversationFeed = ({
             a11ySuggestionsListLabel="Suggested mentions"
             style={defaultStyle}
           >
-            <Mention data={users} style={defaultMentionStyle} />
+            <Mention data={mentionUsers} style={defaultMentionStyle} />
           </MentionsInput>
           <Button
             type="submit"
