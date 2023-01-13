@@ -37,6 +37,7 @@ const LayoutApp = ({
   getSynopticReport,
   users,
   mentionUsers,
+  Environment,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -188,6 +189,7 @@ const LayoutApp = ({
               app={application}
               users={users}
               mentionUsers={mentionUsers}
+              Environment={Environment}
             />
           ) : null}
           <LayoutAppBody>

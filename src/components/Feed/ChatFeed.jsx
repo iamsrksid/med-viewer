@@ -20,7 +20,6 @@ import {
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
-import Environment from "../../../../environment";
 import { GrFormClose } from "react-icons/gr";
 import KeyPoints from "./KeyPoints";
 import { useFabricOverlayState } from "../../state/store";
@@ -43,6 +42,7 @@ const ChatFeed = ({
   users,
   userInfo,
   mentionUsers,
+  Environment,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
