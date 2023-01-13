@@ -20,14 +20,17 @@ import {
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
+import Environment from "../../../../environment";
 import { GrFormClose } from "react-icons/gr";
 import KeyPoints from "./KeyPoints";
 import { useFabricOverlayState } from "../../state/store";
+import ActivityFeed from "./activityFeed";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiFillLock } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { useEffect } from "react";
+import { useGetUserInfoQuery } from "../../../../state/API/HospitalApi";
 import { useAuth0 } from "@auth0/auth0-react";
 import ChatConversationFeed from "./ChatConversationFeed";
 
@@ -40,9 +43,6 @@ const ChatFeed = ({
   application,
   app,
   users,
-  userInfo,
-  mentionUsers,
-  Environment,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -50,6 +50,9 @@ const ChatFeed = ({
   const [activeGroup, setActiveGroup] = useState();
   const [groupData, setGroupData] = useState();
   const { user } = useAuth0();
+  const { data: userInfo, isLoading } = useGetUserInfoQuery({
+    subClaim: user?.sub,
+  });
   console.log(application);
   useEffect(() => {
     setGroupData(caseInfo);
@@ -193,7 +196,6 @@ const ChatFeed = ({
                   app={application}
                   users={users}
                   groupChatId={groupData?._id}
-                  mentionUsers={mentionUsers}
                 />
               </>
             ) : (

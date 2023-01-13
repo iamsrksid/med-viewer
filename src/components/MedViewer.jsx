@@ -110,7 +110,7 @@ const MedViewer = ({ viewerIds, ...props }) => {
     });
     setFabricOverlayState(addViewerWindow(viewerWindows));
     const key = getFileBucketFolder(viewerIds[0].originalFileUrl);
-    axios.post("https://backup-quantize-vhut.prr.ai/vhut/download", {
+    axios.post("https://development-morphometry-api.prr.ai/vhut/download", {
       key,
       bucket_name: "med-ai-image-processor",
     });

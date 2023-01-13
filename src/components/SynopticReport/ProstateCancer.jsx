@@ -252,45 +252,67 @@ const ProstateCancer = ({
   const submitReport = async () => {
     try {
       await saveSynopticReport({
-        isPreviousHistory: inputData.isPreviousHistory,
-        previousBiopsy: inputData.previousBiopsy,
-        previousTherapy: inputData.previousTherapy,
-        preBiopsySerumPSA: inputData.preBiopsySerumPSA,
-        clinicalSymptoms: inputData.clinicalSymptoms,
-        clinicalStage: inputData.clinicalStage,
-        leftBaseCores: inputData.leftBaseCores,
-        leftBaseLength: inputData.leftBaseLength,
-        leftBaseHistologicalTumourType:
-          inputData.leftBaseHistologicalTumourType,
-        coExistentPathology: inputData.coExistentPathology,
-        leftMidCores: inputData.leftMidCores,
-        leftMidLength: inputData.leftMidLength,
-        leftMidHistologicalTumourType: inputData.leftMidHistologicalTumourType,
-        leftMidGleasonScore: inputData.leftMidGleasonScore,
-        isUpGrade: inputData.isUpGrade,
-        gleasonPattern: inputData.gleasonPattern,
-        leftMidPerineuralInvasion: inputData.leftMidPerineuralInvasion,
-        leftMidSeminalInvasion: inputData.leftMidSeminalInvasion,
-        leftMidLymphovascularInvasion: inputData.leftMidLymphovascularInvasion,
-        leftMidExtraprostateExtension: inputData.leftMidExtraprostateExtension,
-        leftMidIntraductualProstate: inputData.leftMidIntraductualProstate,
-        leftMidCoexistentExtension: inputData.leftMidCoexistentExtension,
-        leftApexCores: inputData.leftApexCores,
-        leftApexLength: inputData.leftApexLength,
-        leftApexPerineuralInvasion: inputData.leftApexPerineuralInvasion,
-        leftApexSeminalInvasion: inputData.leftApexSeminalInvasion,
-        leftApexLymphovascularInvasion:
-          inputData.leftApexLymphovascularInvasion,
-        leftApexExtraprostateExtension:
-          inputData.leftApexExtraprostateExtension,
-        leftApexIntraductualProstate: inputData.leftApexIntraductualProstate,
-        leftApexCoexistentExtension: inputData.leftApexCoexistentExtension,
-        rightBaseCores: inputData.rightBaseCores,
-        rightBaseLength: inputData.rightBaseLength,
-        rightMidCores: inputData.rightMidCores,
-        rightMidLength: inputData.rightMidLength,
-        rightApexCores: inputData.rightApexCores,
-        rightApexLength: inputData.rightApexLength,
+        clinical: {
+          isPreviousHistory: inputData.isPreviousHistory,
+          previousBiopsy: inputData.previousBiopsy,
+          previousTherapy: inputData.previousTherapy,
+          preBiopsySerumPSA: inputData.preBiopsySerumPSA,
+          clinicalSymptoms: inputData.clinicalSymptoms,
+          clinicalStage: inputData.clinicalStage,
+        },
+
+        macroscopic: {
+          leftBase: {
+            leftBaseCores: inputData.leftBaseCores,
+            leftBaseLength: inputData.leftBaseLength,
+            leftBaseHistologicalTumourType:
+              inputData.leftBaseHistologicalTumourType,
+            coExistentPathology: inputData.coExistentPathology,
+          },
+          leftMid: {
+            leftMidCores: inputData.leftMidCores,
+            leftMidLength: inputData.leftMidLength,
+            leftMidHistologicalTumourType:
+              inputData.leftMidHistologicalTumourType,
+            leftMidGleasonScore: inputData.leftMidGleasonScore,
+            isUpGrade: inputData.isUpGrade,
+            gleasonPattern: inputData.gleasonPattern,
+            leftMidPerineuralInvasion: inputData.leftMidPerineuralInvasion,
+            leftMidSeminalInvasion: inputData.leftMidSeminalInvasion,
+            leftMidLymphovascularInvasion:
+              inputData.leftMidLymphovascularInvasion,
+            leftMidExtraprostateExtension:
+              inputData.leftMidExtraprostateExtension,
+            leftMidIntraductualProstate: inputData.leftMidIntraductualProstate,
+            leftMidCoexistentExtension: inputData.leftMidCoexistentExtension,
+          },
+          leftApex: {
+            leftApexCores: inputData.leftApexCores,
+            leftApexLength: inputData.leftApexLength,
+            leftApexPerineuralInvasion: inputData.leftApexPerineuralInvasion,
+            leftApexSeminalInvasion: inputData.leftApexSeminalInvasion,
+            leftApexLymphovascularInvasion:
+              inputData.leftApexLymphovascularInvasion,
+            leftApexExtraprostateExtension:
+              inputData.leftApexExtraprostateExtension,
+            leftApexIntraductualProstate:
+              inputData.leftApexIntraductualProstate,
+            leftApexCoexistentExtension: inputData.leftApexCoexistentExtension,
+          },
+          rightBase: {
+            rightBaseCores: inputData.rightBaseCores,
+            rightBaseLength: inputData.rightBaseLength,
+          },
+          rightMid: {
+            rightMidCores: inputData.rightMidCores,
+            rightMidLength: inputData.rightMidLength,
+          },
+          rightApex: {
+            rightApexCores: inputData.rightApexCores,
+            rightApexLength: inputData.rightApexLength,
+          },
+        },
+
         comments: inputData.comments,
         slideId,
         caseId,
@@ -325,7 +347,7 @@ const ProstateCancer = ({
               key={`${index + 1}`}
               handleInput={handleInput}
               inputData={inputData}
-              synopticReportData={synopticReportData}
+              clinical={synopticReportData?.clinical?.[inputField?.inputName]}
             />
           );
         })}
@@ -351,7 +373,11 @@ const ProstateCancer = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                synopticReportData={synopticReportData}
+                macroscopicLeftBase={
+                  synopticReportData?.macroscopic?.leftBase?.[
+                    inputField?.inputName
+                  ]
+                }
               />
             );
           })}
@@ -365,7 +391,11 @@ const ProstateCancer = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                synopticReportData={synopticReportData}
+                macroscopicLeftMid={
+                  synopticReportData?.macroscopic?.leftMid?.[
+                    inputField?.inputName
+                  ]
+                }
               />
             );
           })}
@@ -379,7 +409,11 @@ const ProstateCancer = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                synopticReportData={synopticReportData}
+                macroscopicLeftApex={
+                  synopticReportData?.macroscopic?.leftApex?.[
+                    inputField?.inputName
+                  ]
+                }
               />
             );
           })}
@@ -392,9 +426,12 @@ const ProstateCancer = ({
             <HStack mt="-0rem !important" color="#8F8F8F">
               <RadioGroup
                 value={
-                  synopticReportData?.rightBaseCores || inputData.rightBaseCores
+                  synopticReportData?.macroscopic?.rightBase?.rightBaseCores ||
+                  inputData.rightBaseCores
                 }
-                isDisabled={synopticReportData?.rightBaseCores}
+                isDisabled={
+                  synopticReportData?.macroscopic?.rightBase?.rightBaseCores
+                }
               >
                 <Radio value="1" onChange={handleInput} name="rightBaseCores">
                   1
@@ -426,11 +463,14 @@ const ProstateCancer = ({
               size="sm"
               borderRadius="0"
               value={
-                synopticReportData?.rightBaseLength || inputData.rightBaseLength
+                synopticReportData?.macroscopic?.rightBase?.rightBaseLength ||
+                inputData.rightBaseLength
               }
               name="rightBaseLength"
               onChange={handleInput}
-              readOnly={synopticReportData?.rightBaseLength}
+              readOnly={
+                synopticReportData?.macroscopic?.rightBase?.rightBaseLength
+              }
             />
           </VStack>
         </HStack>
@@ -441,9 +481,12 @@ const ProstateCancer = ({
             <HStack mt="-0rem !important" color="#8F8F8F">
               <RadioGroup
                 value={
-                  synopticReportData?.rightMidCores || inputData.rightMidCores
+                  synopticReportData?.macroscopic?.rightMid?.rightMidCores ||
+                  inputData.rightMidCores
                 }
-                isDisabled={synopticReportData?.rightMidCores}
+                isDisabled={
+                  synopticReportData?.macroscopic?.rightMid?.rightMidCores
+                }
               >
                 <Radio
                   value="1"
@@ -481,11 +524,14 @@ const ProstateCancer = ({
               size="sm"
               borderRadius="0"
               value={
-                synopticReportData?.rightMidLength || inputData.rightMidLength
+                synopticReportData?.macroscopic?.rightMid?.rightMidLength ||
+                inputData.rightMidLength
               }
               name="rightMidLength"
               onChange={handleInput}
-              readOnly={synopticReportData?.rightMidLength}
+              readOnly={
+                synopticReportData?.macroscopic?.rightMid?.rightMidLength
+              }
             />
           </VStack>
         </HStack>
@@ -496,9 +542,12 @@ const ProstateCancer = ({
             <HStack mt="-0rem !important" color="#8F8F8F">
               <RadioGroup
                 value={
-                  synopticReportData?.rightApexCores || inputData.rightApexCores
+                  synopticReportData?.macroscopic?.rightApex?.rightApexCores ||
+                  inputData.rightApexCores
                 }
-                isDisabled={synopticReportData?.rightApexCores}
+                isDisabled={
+                  synopticReportData?.macroscopic?.rightApex?.rightApexCores
+                }
               >
                 <Radio
                   value="1"
@@ -535,11 +584,14 @@ const ProstateCancer = ({
               size="sm"
               borderRadius="0"
               value={
-                synopticReportData?.rightApexLength || inputData.rightApexLength
+                synopticReportData?.macroscopic?.rightApex?.rightApexLength ||
+                inputData.rightApexLength
               }
               name="rightApexLength"
               onChange={handleInput}
-              readOnly={synopticReportData?.rightApexLength}
+              readOnly={
+                synopticReportData?.macroscopic?.rightApex?.rightApexLength
+              }
             />
           </VStack>
         </HStack>

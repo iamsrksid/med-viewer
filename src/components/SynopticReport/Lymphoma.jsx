@@ -182,37 +182,43 @@ const Lymphoma = ({
   const submitReport = async () => {
     try {
       await saveSynopticReport({
-        typeOfSpecimen: inputData.typeOfSpecimen,
-        dateOfRequest: inputData.dateOfRequest,
-        principalClinician: inputData.principalClinician,
-        siteOfBiopsy: inputData.siteOfBiopsy,
-        laterability: inputData.laterability,
-        reasonForBiopsy: inputData.reasonForBiopsy,
-        wholeTumourSize: inputData.wholeTumourSize,
-        grade: inputData.grade,
-        involvedSiteOrPatternOfDiseasesSpread:
-          inputData.involvedSiteOrPatternOfDiseasesSpread,
-        clinicalOrStagesExtentOfDiseases:
-          inputData.clinicalOrStagesExtentOfDiseases,
-        constitutionalSymptoms: inputData.constitutionalSymptoms,
-        furtherClinicalInformation: inputData.furtherClinicalInformation,
-        specimenType: inputData.specimenType,
-        specimenSize: inputData.specimenSize,
-        narrativeOrMicroscopicDescription:
-          inputData.narrativeOrMicroscopicDescription,
-        abnormalCells: inputData.abnormalCells,
-        abnormalCellSize: inputData.abnormalCellSize,
-        abnormalCellCytomorphology: inputData.abnormalCellCytomorphology,
-        abnormalCellProLiferativeIndicators:
-          inputData.abnormalCellProLiferativeIndicators,
-        immunoHistoChemistry: inputData.immunoHistoChemistry,
-        flowStudies: inputData.flowStudies,
-        clonality: inputData.clonality,
-        whoDiseaseSubType: inputData.whoDiseaseSubType,
-        ancillaryAbnormalCellSize: inputData.ancillaryAbnormalCellSize,
-        ancillaryCytomorphology: inputData.ancillaryCytomorphology,
-        ancillaryProLiferativeIndicators:
-          inputData.ancillaryProLiferativeIndicators,
+        clinicalInfoSurgicalHandling: {
+          typeOfSpecimen: inputData.typeOfSpecimen,
+          dateOfRequest: inputData.dateOfRequest,
+          principalClinician: inputData.principalClinician,
+          siteOfBiopsy: inputData.siteOfBiopsy,
+          laterability: inputData.laterability,
+          reasonForBiopsy: inputData.reasonForBiopsy,
+          wholeTumourSize: inputData.wholeTumourSize,
+          grade: inputData.grade,
+          involvedSiteOrPatternOfDiseasesSpread:
+            inputData.involvedSiteOrPatternOfDiseasesSpread,
+          clinicalOrStagesExtentOfDiseases:
+            inputData.clinicalOrStagesExtentOfDiseases,
+          constitutionalSymptoms: inputData.constitutionalSymptoms,
+          furtherClinicalInformation: inputData.furtherClinicalInformation,
+        },
+        microscopicFinding: {
+          specimenType: inputData.specimenType,
+          specimenSize: inputData.specimenSize,
+          narrativeOrMicroscopicDescription:
+            inputData.narrativeOrMicroscopicDescription,
+          abnormalCells: inputData.abnormalCells,
+          abnormalCellSize: inputData.abnormalCellSize,
+          abnormalCellCytomorphology: inputData.abnormalCellCytomorphology,
+          abnormalCellProLiferativeIndicators:
+            inputData.abnormalCellProLiferativeIndicators,
+        },
+        ancillaryTestFindings: {
+          immunoHistoChemistry: inputData.immunoHistoChemistry,
+          flowStudies: inputData.flowStudies,
+          clonality: inputData.clonality,
+          whoDiseaseSubType: inputData.whoDiseaseSubType,
+          ancillaryAbnormalCellSize: inputData.ancillaryAbnormalCellSize,
+          ancillaryCytomorphology: inputData.ancillaryCytomorphology,
+          ancillaryProLiferativeIndicators:
+            inputData.ancillaryProLiferativeIndicators,
+        },
         slideId,
         caseId,
         reportType: "lymphoma-cancer-report",
@@ -246,7 +252,11 @@ const Lymphoma = ({
               key={`${index + 1}`}
               handleInput={handleInput}
               inputData={inputData}
-              synopticReportData={synopticReportData}
+              clinicalInformation={
+                synopticReportData?.clinicalInfoSurgicalHandling?.[
+                  inputField?.inputName
+                ]
+              }
             />
           );
         })}
@@ -263,9 +273,13 @@ const Lymphoma = ({
               size="sm"
               name="wholeTumourSize"
               value={
-                synopticReportData?.wholeTumourSize || inputData.wholeTumourSize
+                synopticReportData?.clinicalInfoSurgicalHandling
+                  ?.wholeTumourSize || inputData.wholeTumourSize
               }
-              readOnly={synopticReportData?.wholeTumourSize}
+              readOnly={
+                synopticReportData?.clinicalInfoSurgicalHandling
+                  ?.wholeTumourSize
+              }
               onChange={handleInput}
             />{" "}
             MM
@@ -279,7 +293,11 @@ const Lymphoma = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                synopticReportData={synopticReportData}
+                clinicalInformation={
+                  synopticReportData?.clinicalInfoSurgicalHandling?.[
+                    inputField?.inputName
+                  ]
+                }
               />
             );
           })}
@@ -304,7 +322,11 @@ const Lymphoma = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                synopticReportData={synopticReportData}
+                microscopicFinding={
+                  synopticReportData?.microscopicFinding?.[
+                    inputField?.inputName
+                  ]
+                }
               />
             );
           })}
@@ -330,7 +352,11 @@ const Lymphoma = ({
               key={`${index + 1}`}
               handleInput={handleInput}
               inputData={inputData}
-              synopticReportData={synopticReportData}
+              ancillaryTestFindings={
+                synopticReportData?.ancillaryTestFindings?.[
+                  inputField?.inputName
+                ]
+              }
             />
           );
         })}

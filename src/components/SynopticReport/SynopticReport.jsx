@@ -66,17 +66,19 @@ const SynopticReport = ({
         />
       </Flex>
       <Flex
+        justifyContent="space-between"
         alignItems="center"
         px="0.8vw"
         py="1.6vh"
         backgroundImage="linear-gradient(#F7FBFD, rgba(247, 251, 253, 0))"
         borderBottom="1px solid #8F8F8F"
-        w="100%"
       >
-        <Flex>
-          <VscBroadcast size={40} />
-        </Flex>
-        <Flex w="90%" justifyContent="center" alignContent="center">
+        <VscBroadcast size={40} />
+        <Flex maxW="85%" direction="column">
+          <Text textAlign="center" textTransform="uppercase">
+            Lorem ipsum dolor sit amet consectetur. Arcu eu quis posuere iaculis
+            pellentesque quam diam ut.
+          </Text>
           <Text fontSize="16px" textAlign="center" fontWeight="600">
             {synopticType === "breast-cancer"
               ? "BREAST CANCER SYNOPTIC REPORT"
