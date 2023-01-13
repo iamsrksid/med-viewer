@@ -2,22 +2,7 @@ import { Flex, Input, Radio, RadioGroup, Text, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import React from "react";
 
-const SRHelper = ({
-  inputField,
-  handleInput,
-  inputData,
-  finalPathologyDcis,
-  invasiveCarcinoma,
-  tumourType,
-  macroscopicData,
-  macroscopicLeftApex,
-  macroscopicLeftMid,
-  macroscopicLeftBase,
-  clinical,
-  clinicalInformation,
-  microscopicFinding,
-  ancillaryTestFindings,
-}) => {
+const SRHelper = ({ inputField, handleInput, synopticReportData }) => {
   return (
     <VStack alignItems="flex-start" minW="49%" mt="1vh">
       <Text fontWeight="600">{inputField.title}</Text>
@@ -30,32 +15,8 @@ const SRHelper = ({
         {inputField?.options ? (
           <RadioGroup
             pl="-16px"
-            value={
-              macroscopicData ||
-              finalPathologyDcis ||
-              invasiveCarcinoma ||
-              tumourType ||
-              macroscopicLeftApex ||
-              macroscopicLeftMid ||
-              macroscopicLeftBase ||
-              clinical ||
-              clinicalInformation ||
-              microscopicFinding ||
-              ancillaryTestFindings
-            }
-            isDisabled={
-              macroscopicData ||
-              finalPathologyDcis ||
-              invasiveCarcinoma ||
-              tumourType ||
-              macroscopicLeftApex ||
-              macroscopicLeftMid ||
-              macroscopicLeftBase ||
-              clinical ||
-              clinicalInformation ||
-              microscopicFinding ||
-              ancillaryTestFindings
-            }
+            value={synopticReportData?.[inputField?.inputName]}
+            isDisabled={synopticReportData?.[inputField?.inputName]}
           >
             {inputField?.options?.map((option, i) => {
               return (
@@ -77,32 +38,8 @@ const SRHelper = ({
             size="sm"
             borderRadius="0"
             name={inputField?.inputName}
-            value={
-              macroscopicData ||
-              finalPathologyDcis ||
-              invasiveCarcinoma ||
-              tumourType ||
-              macroscopicLeftApex ||
-              macroscopicLeftMid ||
-              macroscopicLeftBase ||
-              clinical ||
-              clinicalInformation ||
-              microscopicFinding ||
-              ancillaryTestFindings
-            }
-            readOnly={
-              macroscopicData ||
-              finalPathologyDcis ||
-              invasiveCarcinoma ||
-              tumourType ||
-              macroscopicLeftApex ||
-              macroscopicLeftMid ||
-              macroscopicLeftBase ||
-              clinical ||
-              clinicalInformation ||
-              microscopicFinding ||
-              ancillaryTestFindings
-            }
+            value={synopticReportData?.[inputField?.inputName]}
+            readOnly={synopticReportData?.[inputField?.inputName]}
             onChange={(e) => handleInput(e)}
           />
         )}

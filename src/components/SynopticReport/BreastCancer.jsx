@@ -243,51 +243,40 @@ const BreastCancer = ({
   const submitReport = async () => {
     try {
       await saveSynopticReport({
-        macroscopy: {
-          dataRecieved: inputData.dataRecieved,
-          specimenType: inputData.specimenType,
-          specimenRadiographProvided: inputData.specimenRadiographProvided,
-          radiologyAbnormalitySeen: inputData.radiologyAbnormalitySeen,
-          rGrade: inputData.rGrade,
-          radiologyLesion: inputData.radiologyLesion,
-          specimenWeight: inputData.specimenWeight,
-          ellipseOfSkin: inputData.ellipseOfSkin,
-          nipple: inputData.nipple,
-          histologicalClassificationPresent:
-            inputData.histologicalClassificationPresent,
-          fibrofattyTissue: inputData.fibrofattyTissue,
-          lesionMeasures: inputData.lesionMeasures,
-          site: inputData.site,
-          macroscopicDistanceToMargin: inputData.macroscopicDistance,
-          comments: inputData.comments,
-        },
-
-        invasiveCarcinoma: {
-          invasiveTumourSize: inputData.invasiveTumourSize,
-          wholeTumourSize: inputData.wholeTumourSize,
-          invasiveGrade: inputData.invasiveGrade,
-          tumourExtent: inputData.tumourExtent,
-          type: inputData.type,
-        },
-
-        specifyTypeForComponentsPresentForSpecialtypeAndMixedTumourTypes: {
-          typeForComponents: inputData.typeForComponents,
-          grade: inputData.grade,
-          associatedDcis: inputData.associatedDcis,
-          isSituLobularNeoplasia: inputData.isSituLobularNeoplasia,
-          dcisGrade: inputData.dcisGrade,
-          isPagetDisease: inputData.isPagetDisease,
-        },
-
-        finalPathologyDcis: {
-          isLcis: inputData.isLcis,
-          pureDcisSize: inputData.pureDcisSize,
-          pureDcisGrade: inputData.pureDcisGrade,
-          dcisArchitecture: inputData.dcisArchitecture,
-          dcisNecrosis: inputData.dcisNecrosis,
-          microInvasion: inputData.microInvasion,
-          pagetDisease: inputData.pagetDisease,
-        },
+        dataRecieved: inputData.dataRecieved,
+        specimenType: inputData.specimenType,
+        specimenRadiographProvided: inputData.specimenRadiographProvided,
+        radiologyAbnormalitySeen: inputData.radiologyAbnormalitySeen,
+        rGrade: inputData.rGrade,
+        radiologyLesion: inputData.radiologyLesion,
+        specimenWeight: inputData.specimenWeight,
+        ellipseOfSkin: inputData.ellipseOfSkin,
+        nipple: inputData.nipple,
+        histologicalClassificationPresent:
+          inputData.histologicalClassificationPresent,
+        fibrofattyTissue: inputData.fibrofattyTissue,
+        lesionMeasures: inputData.lesionMeasures,
+        site: inputData.site,
+        macroscopicDistanceToMargin: inputData.macroscopicDistance,
+        comments: inputData.comments,
+        invasiveTumourSize: inputData.invasiveTumourSize,
+        wholeTumourSize: inputData.wholeTumourSize,
+        invasiveGrade: inputData.invasiveGrade,
+        tumourExtent: inputData.tumourExtent,
+        type: inputData.type,
+        typeForComponents: inputData.typeForComponents,
+        grade: inputData.grade,
+        associatedDcis: inputData.associatedDcis,
+        isSituLobularNeoplasia: inputData.isSituLobularNeoplasia,
+        dcisGrade: inputData.dcisGrade,
+        isPagetDisease: inputData.isPagetDisease,
+        isLcis: inputData.isLcis,
+        pureDcisSize: inputData.pureDcisSize,
+        pureDcisGrade: inputData.pureDcisGrade,
+        dcisArchitecture: inputData.dcisArchitecture,
+        dcisNecrosis: inputData.dcisNecrosis,
+        microInvasion: inputData.microInvasion,
+        pagetDisease: inputData.pagetDisease,
         slideId,
         caseId,
         reportType: "breast-cancer-report",
@@ -321,9 +310,7 @@ const BreastCancer = ({
               key={`${index + 1}`}
               handleInput={handleInput}
               inputData={inputData}
-              macroscopicData={
-                synopticReportData?.macroscopy?.[inputField?.inputName]
-              }
+              synopticReportData={synopticReportData}
             />
           );
         })}
@@ -337,12 +324,10 @@ const BreastCancer = ({
             size="sm"
             value={
               synopticReportData !== ""
-                ? synopticReportData?.macroscopy?.macroscopicDistanceToMargin
+                ? synopticReportData?.macroscopicDistanceToMargin
                 : inputData.macroscopicDistance
             }
-            readOnly={
-              synopticReportData?.macroscopy?.macroscopicDistanceToMargin
-            }
+            readOnly={synopticReportData?.macroscopicDistanceToMargin}
             name="macroscopicDistance"
             onChange={handleInput}
           />{" "}
@@ -356,10 +341,10 @@ const BreastCancer = ({
             onChange={handleInput}
             value={
               synopticReportData !== ""
-                ? synopticReportData?.macroscopy?.comments
+                ? synopticReportData?.comments
                 : inputData.comments
             }
-            readOnly={synopticReportData?.macroscopy?.comments}
+            readOnly={synopticReportData?.comments}
           />
         </VStack>
         <Flex
@@ -381,12 +366,10 @@ const BreastCancer = ({
               size="sm"
               name="invasiveTumourSize"
               value={
-                synopticReportData?.invasiveCarcinoma?.invasiveTumourSize ||
+                synopticReportData?.invasiveTumourSize ||
                 inputData.invasiveTumourSize
               }
-              readOnly={
-                synopticReportData?.invasiveCarcinoma?.invasiveTumourSize
-              }
+              readOnly={synopticReportData?.invasiveTumourSize}
               onChange={handleInput}
             />
             MM
@@ -398,10 +381,9 @@ const BreastCancer = ({
               size="sm"
               name="wholeTumourSize"
               value={
-                synopticReportData?.invasiveCarcinoma?.wholeTumourSize ||
-                inputData.wholeTumourSize
+                synopticReportData?.wholeTumourSize || inputData.wholeTumourSize
               }
-              readOnly={synopticReportData?.invasiveCarcinoma?.wholeTumourSize}
+              readOnly={synopticReportData?.wholeTumourSize}
               onChange={handleInput}
             />{" "}
             MM
@@ -415,15 +397,7 @@ const BreastCancer = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                invasiveCarcinoma={
-                  synopticReportData?.invasiveCarcinoma?.[inputField?.inputName]
-                }
-                tumourType={
-                  synopticReportData
-                    ?.specifyTypeForComponentsPresentForSpecialtypeAndMixedTumourTypes?.[
-                    inputField?.inputName
-                  ]
-                }
+                synopticReportData={synopticReportData}
               />
             );
           })}
@@ -446,11 +420,8 @@ const BreastCancer = ({
             size="sm"
             name="pureDcisSize"
             onChange={handleInput}
-            value={
-              synopticReportData?.finalPathologyDcis?.pureDcisSize ||
-              inputData.pureDcisSize
-            }
-            readOnly={synopticReportData?.finalPathologyDcis?.pureDcisSize}
+            value={synopticReportData?.pureDcisSize || inputData.pureDcisSize}
+            readOnly={synopticReportData?.pureDcisSize}
           />{" "}
           MM IN MAXIMUM EXTENT
         </Text>
@@ -463,11 +434,6 @@ const BreastCancer = ({
                 handleInput={handleInput}
                 inputData={inputData}
                 synopticReportData={synopticReportData}
-                finalPathologyDcis={
-                  synopticReportData?.finalPathologyDcis?.[
-                    inputField?.inputName
-                  ]
-                }
               />
             );
           })}
