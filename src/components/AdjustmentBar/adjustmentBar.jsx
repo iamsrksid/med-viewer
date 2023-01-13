@@ -48,6 +48,7 @@ const AdjustmentBar = ({
   synopticType,
   setSynopticType,
   getSynopticReport,
+  handleChatFeedbar,
 }) => {
   const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const { fabricOverlayState } = useFabricOverlayState();
@@ -57,6 +58,8 @@ const AdjustmentBar = ({
   const handleSidebar = () => {
     showSidebar();
   };
+
+  // console.log(users);
 
   return (
     <Flex
@@ -144,6 +147,7 @@ const AdjustmentBar = ({
         mediaUpload={mediaUpload}
         slideInfo={slideInfo}
         handleFeedBar={handleFeedBar}
+        handleChatFeedbar={handleChatFeedbar}
         handleReport={handleReport}
         showReport={showReport}
         setShowReport={setShowReport}

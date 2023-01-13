@@ -15,6 +15,7 @@ import DownloadImage from "../downloadImage";
 import ImageFilter from "../ImageFilter/imageFilter";
 import ShowReport from "./ShowReport";
 import ImageDetails from "../ImageDetails/ImageDetails";
+import ViewerChat from "../ViewerChat";
 
 const ScreenTools = ({
   viewerId,
@@ -40,6 +41,7 @@ const ScreenTools = ({
   synopticType,
   setSynopticType,
   getSynopticReport,
+  handleChatFeedbar,
 }) => {
   const [popup, setPopup] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
@@ -56,7 +58,8 @@ const ScreenTools = ({
     <Flex px="20px" height="18px" alignItems="center">
       <ImageFilter viewerId={viewerId} />
       <DownloadImage />
-      <Divider orientation="vertical" border="1px solid gray" />
+      <ViewerChat handleChatFeedbar={handleChatFeedbar} />
+      <Divider orientation="vertical" ml="5px" border="1px solid gray" />
       {report ? (
         <ShowReport
           caseInfo={caseInfo}

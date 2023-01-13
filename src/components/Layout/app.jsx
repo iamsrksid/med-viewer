@@ -9,6 +9,7 @@ import LayoutAppSidebar from "./sidebar";
 import ViewerFactory from "../Viewer/viewerFactory";
 import Navigator from "../Navigator/navigator";
 import SlideFeed from "../Feed/feed";
+import ChatFeed from "../Feed/ChatFeed";
 
 const LayoutApp = ({
   userInfo,
@@ -34,6 +35,7 @@ const LayoutApp = ({
   responseHandler,
   questionnaireResponse,
   getSynopticReport,
+  users,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -47,6 +49,7 @@ const LayoutApp = ({
   );
   const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
   const [showFeedBar, setShowFeedBar] = useState(false);
+  const [chatFeedBar, setChatFeedBar] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [feedTab, setFeedBar] = useState(0);
   const [synopticType, setSynopticType] = useState("");
@@ -59,8 +62,16 @@ const LayoutApp = ({
     setShowFeedBar(true);
     setFeedBar(0);
   };
+  const handleChatFeedbar = () => {
+    setChatFeedBar(true);
+  };
+  const handleChatFeedbarClose = () => {
+    setChatFeedBar(false);
+  };
   const handleFeedBarClose = () => {
     setShowFeedBar(false);
+    setChatFeedBar(false);
+    localStorage.setItem("closeChat","closeChat");
   };
   const handleReport = () => {
     setShowReport(true);
@@ -102,6 +113,7 @@ const LayoutApp = ({
           mediaUpload={mediaUpload}
           slideInfo={slideInfo}
           handleFeedBar={handleFeedBar}
+          handleChatFeedbar={handleChatFeedbar}
           handleReport={handleReport}
           synopticType={synopticType}
           setSynopticType={setSynopticType}
@@ -159,6 +171,20 @@ const LayoutApp = ({
               showReport={showReport}
               feedTab={feedTab}
               synopticType={synopticType}
+            />
+          ) : null}
+          {chatFeedBar ? (
+            <ChatFeed
+              viewerId={currentViewer}
+              chatFeedBar={chatFeedBar}
+              handleFeedBarClose={handleFeedBarClose}
+              showReport={showReport}
+              feedTab={feedTab}
+              caseInfo={caseInfo}
+              synopticType={synopticType}
+              application={application}
+              app={application}
+              users={users}
             />
           ) : null}
           <LayoutAppBody>
