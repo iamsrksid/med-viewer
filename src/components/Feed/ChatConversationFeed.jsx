@@ -294,27 +294,15 @@ const ChatConversationFeed = ({
         transform="translate(-50%,-50%)"
       />
     );
-  // const fetchUsers = (query, callback) => {
-  //   if (!query) return;
+  const fetchUsers = (query, callback) => {
+    if (!query) return;
 
-  //   setTimeout(() => {
-  //     const filteredUsers = users.filter((user) =>
-  //       user.display.toLowerCase().includes(query)
-  //     );
-  //     callback(filteredUsers);
-  //   }, 2000);
-  // };
-
-  const handleInputChange = (e, mentionedText, text, mentions) => {
-    const mentionedUsers = mentions.map((mention) => ({
-      toId: mention.id,
-      toName: mention.display,
-    }));
-    setMessageInput({
-      mentionedText,
-      text,
-      mentionedUsers,
-    });
+    setTimeout(() => {
+      const filteredUsers = users.filter((user) =>
+        user.display.toLowerCase().includes(query)
+      );
+      callback(filteredUsers);
+    }, 2000);
   };
   return (
     <>
@@ -432,8 +420,8 @@ const ChatConversationFeed = ({
             allowSuggestionsAboveCursor
             appendSpaceOnAdd
             inputRef={messageRef}
-            value={messageInput.mentionedText}
-            onChange={handleInputChange}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
             // placeholder={"Mention people using '@'"}
             a11ySuggestionsListLabel="Suggested mentions"
             style={defaultStyle}
