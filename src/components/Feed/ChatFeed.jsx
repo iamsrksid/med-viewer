@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Box,
-  Flex,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import {
   ApolloClient,
   InMemoryCache,
@@ -21,9 +11,7 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
 import { GrFormClose } from "react-icons/gr";
-import KeyPoints from "./KeyPoints";
 import { useFabricOverlayState } from "../../state/store";
-import ActivityFeed from "./activityFeed";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiFillLock } from "react-icons/ai";
@@ -38,11 +26,10 @@ const ChatFeed = ({
   synopticType,
   caseInfo,
   application,
-  app,
   users,
   mentionUsers,
   Environment,
-  userInfo
+  userInfo,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -54,7 +41,7 @@ const ChatFeed = ({
     setGroupData(caseInfo);
     setActiveGroup(caseInfo?._id);
   });
-  const token = localStorage.getItem(Environment.AUTH0_TOKEN);
+  const token = localStorage.getItem(Environment?.AUTH0_TOKEN);
   let accessToken;
   if (token) {
     const { body } = JSON.parse(token);
@@ -95,7 +82,7 @@ const ChatFeed = ({
     link: splitLink,
     cache: new InMemoryCache(),
   });
-  const caseNo = caseInfo._id.slice(0,5);
+  const caseNo = caseInfo._id.slice(0, 5);
   return (
     <Box
       w="25.88vw"
@@ -116,14 +103,14 @@ const ChatFeed = ({
         borderBottom="1px solid #DEDEDE"
       >
         <Tooltip hasArrow label={caseInfo?._id}>
-        <Text
-          fontSize="14px"
-          css={{
-            fontWeight: "900",
-          }}
-        >
-          Chat- Case No- {caseNo}... -UHID
-        </Text>
+          <Text
+            fontSize="14px"
+            css={{
+              fontWeight: "900",
+            }}
+          >
+            Chat- Case No- {caseNo}..... -UHID
+          </Text>
         </Tooltip>
         <Flex w="30%" justifyContent="space-between" alignItems="center">
           <BsFillPeopleFill size="23px" cursor="pointer"></BsFillPeopleFill>
