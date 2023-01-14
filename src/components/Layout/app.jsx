@@ -88,7 +88,7 @@ const LayoutApp = ({
       direction="column"
     >
       <LayoutOuterBody>
-        {/* <AdjustmentBar
+        <AdjustmentBar
           userInfo={userInfo}
           caseInfo={caseInfo}
           slide={viewerIds?.[0]}
@@ -125,7 +125,7 @@ const LayoutApp = ({
           responseHandler={responseHandler}
           questionnaireResponse={questionnaireResponse}
           getSynopticReport={getSynopticReport}
-        /> */}
+        />
 
         {isNavigatorActive && (
           <Navigator
