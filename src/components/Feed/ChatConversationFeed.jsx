@@ -118,7 +118,6 @@ const ChatConversationFeed = ({
   const [groupMessages, setGroupMessages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-  const [value, setValue] = useState("");
   const messageRef = useRef(null);
   const bottomRef = useRef(null);
   const [messageInput, setMessageInput] = useState({
@@ -201,10 +200,10 @@ const ChatConversationFeed = ({
   }, [groupMessages]);
   const [sendNewMessage, { error: newMessageError }] =
     useMutation(SEND_MESSAGE);
-  console.log(messageRef?.current?.value);
+  // console.log(messageRef?.current?.value);
   const sendMessage = async (e) => {
     e.preventDefault();
-    const newMessage = messageRef.current.value.trim();
+    const newMessage = messageInput.text.trim();
     if (!newMessage) return;
     setGroupMessages([
       ...groupMessages,
@@ -221,7 +220,6 @@ const ChatConversationFeed = ({
       text: "",
       mentionedUsers: [],
     });
-    setValue("");
     const { data } = await sendNewMessage({
       variables: {
         body: {
@@ -303,6 +301,18 @@ const ChatConversationFeed = ({
       );
       callback(filteredUsers);
     }, 2000);
+  };
+
+  const handleInputChange = (e, mentionedText, text, mentions) => {
+    const mentionedUsers = mentions.map((mention) => ({
+      toId: mention.id,
+      toName: mention.display,
+    }));
+    setMessageInput({
+      mentionedText,
+      text,
+      mentionedUsers,
+    });
   };
   return (
     <>
@@ -420,8 +430,8 @@ const ChatConversationFeed = ({
             allowSuggestionsAboveCursor
             appendSpaceOnAdd
             inputRef={messageRef}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={messageInput.mentionedText}
+            onChange={handleInputChange}
             // placeholder={"Mention people using '@'"}
             a11ySuggestionsListLabel="Suggested mentions"
             style={defaultStyle}
@@ -436,7 +446,7 @@ const ChatConversationFeed = ({
             h="100%"
             borderRadius="0"
             _hover={{ bg: "#3b5d7c" }}
-            isDisabled={!value.trim()}
+            isDisabled={!messageInput.text.trim()}
           >
             Send &nbsp;&nbsp;{" "}
             <span>

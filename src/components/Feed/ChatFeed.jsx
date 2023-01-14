@@ -29,7 +29,6 @@ import { BiSearch } from "react-icons/bi";
 import { AiFillLock } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import ChatConversationFeed from "./ChatConversationFeed";
 
 const ChatFeed = ({
@@ -50,7 +49,6 @@ const ChatFeed = ({
   const { activityFeed } = viewerWindow[viewerId];
   const [activeGroup, setActiveGroup] = useState();
   const [groupData, setGroupData] = useState();
-  const { user } = useAuth0();
   console.log(application);
   useEffect(() => {
     setGroupData(caseInfo);
