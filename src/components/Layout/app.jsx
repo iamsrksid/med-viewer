@@ -67,9 +67,6 @@ const LayoutApp = ({
   const handleChatFeedbar = () => {
     setChatFeedBar(true);
   };
-  const handleChatFeedbarClose = () => {
-    setChatFeedBar(false);
-  };
   const handleFeedBarClose = () => {
     setShowFeedBar(false);
     setChatFeedBar(false);
