@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import {
   ApolloClient,
@@ -16,7 +16,6 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiFillLock } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import { useEffect } from "react";
 import ChatConversationFeed from "./ChatConversationFeed";
 
 const ChatFeed = ({

@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import { Mention, MentionsInput } from "react-mentions";
 import {
@@ -11,9 +11,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import moment from "moment";
-import { AiOutlineSend, AiOutlineUser } from "react-icons/ai";
-import { MdOutlineKeyboardVoice } from "react-icons/md";
-import { RiAttachment2 } from "react-icons/ri";
+import { AiOutlineSend } from "react-icons/ai";
 import { v4 as uuidv4 } from "uuid";
 import defaultStyle from "./defaultStyle";
 import defaultMentionStyle from "./defaultMentionStyle";

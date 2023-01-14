@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   IconButton,
@@ -14,14 +14,11 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import html2canvas from "html2canvas";
 import IconSize from "./ViewerToolbar/IconSize";
-import { ScreenshotIcon, ScreenshotSelectedIcon } from "./Icons/CustomIcons";
 import TooltipLabel from "./AdjustmentBar/ToolTipLabel";
 import { BsChatRightText, BsFillChatRightTextFill } from "react-icons/bs";
 
 const ViewerChat = ({ handleChatFeedbar }) => {
-  const [img, setImg] = useState();
   const [chatHover, setChatHover] = useState(false);
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   useEffect(() => {
