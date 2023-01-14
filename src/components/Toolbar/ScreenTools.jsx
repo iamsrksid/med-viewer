@@ -58,7 +58,7 @@ const ScreenTools = ({
     <Flex px="20px" height="18px" alignItems="center">
       <ImageFilter viewerId={viewerId} />
       <DownloadImage />
-      <ViewerChat handleChatFeedbar={handleChatFeedbar} />
+      {/* <ViewerChat handleChatFeedbar={handleChatFeedbar} /> */}
       <Divider orientation="vertical" ml="5px" border="1px solid gray" />
       {report ? (
         <ShowReport
