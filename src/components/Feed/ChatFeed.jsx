@@ -49,14 +49,14 @@ const ChatFeed = ({
     }
   }
   const httpLink = new HttpLink({
-    uri: "https://development-api.chat.prr.ai",
+    uri: "http://localhost:3500",
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
   const wsLink = new GraphQLWsLink(
     createClient({
-      url: "wss://development-api.chat.prr.ai",
+      url: "ws://localhost:3500",
     })
   );
 
