@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import AdjustmentBar from "../AdjustmentBar/adjustmentBar";
@@ -70,7 +70,7 @@ const LayoutApp = ({
   const handleFeedBarClose = () => {
     setShowFeedBar(false);
     setChatFeedBar(false);
-    localStorage.setItem("closeChat","closeChat");
+    localStorage.setItem("closeChat", "closeChat");
   };
   const handleReport = () => {
     setShowReport(true);
