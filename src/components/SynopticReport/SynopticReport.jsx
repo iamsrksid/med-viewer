@@ -20,6 +20,7 @@ const SynopticReport = ({
   slideId,
   saveSynopticReport,
   getSynopticReport,
+  userInfo,
 }) => {
   const [ifwidthLessthan1920] = useMediaQuery("(max-width:1920px)");
 
@@ -131,6 +132,7 @@ const SynopticReport = ({
       <Flex>
         {synopticType === "breast-cancer" ? (
           <BreastCancer
+            userInfo={userInfo}
             slideId={slideId}
             caseId={caseInfo?._id}
             saveSynopticReport={saveSynopticReport}
@@ -139,6 +141,7 @@ const SynopticReport = ({
           />
         ) : synopticType === "prostate-cancer" ? (
           <ProstateCancer
+            userInfo={userInfo}
             slideId={slideId}
             caseId={caseInfo?._id}
             saveSynopticReport={saveSynopticReport}
@@ -147,6 +150,7 @@ const SynopticReport = ({
           />
         ) : synopticType === "lymphoma" ? (
           <Lymphoma
+            userInfo={userInfo}
             slideId={slideId}
             caseId={caseInfo?._id}
             saveSynopticReport={saveSynopticReport}

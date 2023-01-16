@@ -19,6 +19,7 @@ const ProstateCancer = ({
   saveSynopticReport,
   getSynopticReport,
   setSynopticType,
+  userInfo,
 }) => {
   const toast = useToast();
   const [synopticReportData, setSynopticReportData] = useState("");
@@ -555,19 +556,23 @@ const ProstateCancer = ({
           />
         </VStack>
       </Flex>
-      {(synopticReportData === "" || synopticReportData === undefined) && (
+      {userInfo?.userType !== "technologist" && (
         <Flex justifyContent="flex-end" pb="2vh">
-          <Button
-            onClick={() => submitReport()}
-            borderRadius="0"
-            bg="#00153F"
-            color="#fff"
-            size="sm"
-            minW="100px"
-            _focus={{ outline: "none" }}
-          >
-            Submit
-          </Button>
+          {(synopticReportData === "" || synopticReportData === undefined) && (
+            <Flex>
+              <Button
+                onClick={() => submitReport()}
+                borderRadius="0"
+                bg="#00153F"
+                color="#fff"
+                size="sm"
+                minW="100px"
+                _focus={{ outline: "none" }}
+              >
+                Submit
+              </Button>
+            </Flex>
+          )}
         </Flex>
       )}
     </Flex>

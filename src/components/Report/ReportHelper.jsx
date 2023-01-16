@@ -355,6 +355,7 @@ const ReportHelper = ({
         />
       ) : synopticType !== "" ? (
         <SynopticReport
+          userInfo={userInfo}
           saveSynopticReport={saveSynopticReport}
           getSynopticReport={getSynopticReport}
           synopticType={synopticType}
