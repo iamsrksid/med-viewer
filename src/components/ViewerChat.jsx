@@ -12,7 +12,7 @@ const ViewerChat = ({ handleChatFeedbar }) => {
     if (localStorage.getItem("closeChat")) {
       setChatHover(false);
     }
-  });
+  },[]);
   return (
     <>
       <Tooltip
