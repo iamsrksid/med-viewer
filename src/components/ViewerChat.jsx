@@ -48,11 +48,12 @@ const ViewerChat = ({ handleChatFeedbar }) => {
           }}
           mr="7px"
           borderRadius={0}
-          onClick={() => {
-            handleChatFeedbar();
-            setChatHover(true);
-            localStorage.removeItem("closeChat");
-          }}
+          // onClick={() => {
+          //   handleChatFeedbar();
+          //   setChatHover(true);
+          //   localStorage.removeItem("closeChat");
+          // }}
+          onClick={handleChatFeedbar}
           backgroundColor="#F8F8F5"
           _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
         />
