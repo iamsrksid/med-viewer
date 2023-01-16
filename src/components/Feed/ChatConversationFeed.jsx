@@ -44,7 +44,7 @@ const DateSeperatorComponent = ({ messageSepratorDate }) => {
   );
 };
 const RightMessageComponent = ({ data }) => {
-  console.log(data.payload.body[4]);
+  console.log(data?.payload?.body[4]);
   return (
     <Box
       key={uuidv4()}
@@ -130,8 +130,8 @@ const ChatConversationFeed = ({
   ] = useLazyQuery(FETCH_CONVERSATION);
 
   useEffect(() => {
-    if (msgData && msgData.readChat.success) {
-      const totalPages = msgData.readChat?.meta?.totalPages;
+    if (msgData && msgData?.readChat?.success) {
+      const totalPages = msgData?.readChat?.meta?.totalPages;
       if (totalPages) {
         setTotalPage(totalPages);
       }
@@ -143,10 +143,10 @@ const ChatConversationFeed = ({
       // 		objA.createdAt.getTime() - objB.createdAt.getTime()
       // );
 
-      if (pageNumber === 1) setGroupMessages(msgData.readChat.data.reverse());
+      if (pageNumber === 1) setGroupMessages(msgData?.readChat?.data?.reverse());
       else {
-        const newData = [...msgData.readChat.data];
-        setGroupMessages(newData.reverse().concat(groupMessages));
+        const newData = [...msgData?.readChat?.data];
+        setGroupMessages(newData?.reverse()?.concat(groupMessages));
       }
     }
   }, [msgData]);
@@ -275,7 +275,7 @@ const ChatConversationFeed = ({
     if (subscribedMessageData) {
       const newMessages = [
         ...groupMessages,
-        subscribedMessageData.newChat.data,
+        subscribedMessageData?.newChat?.data,
       ];
 
       setGroupMessages(newMessages);
@@ -362,16 +362,16 @@ const ChatConversationFeed = ({
 						</Text>
 					)} */}
 
-            {groupMessages.map((data) => {
-              if (lastDate !== moment(data.createdAt).format("MM-DD-YYYY")) {
-                lastDate = moment(data.createdAt).format("MM-DD-YYYY");
+            {groupMessages?.map((data) => {
+              if (lastDate !== moment(data?.createdAt)?.format("MM-DD-YYYY")) {
+                lastDate = moment(data?.createdAt)?.format("MM-DD-YYYY");
 
                 return (
                   <>
                     <DateSeperatorComponent
                       messageSepratorDate={data.createdAt}
                     />
-                    {data.from === userInfo._id ? (
+                    {data?.from === userInfo?._id ? (
                       <RightMessageComponent data={data} key={uuidv4()} />
                     ) : (
                       <LeftMessageComponent data={data} key={uuidv4()} />
@@ -380,7 +380,7 @@ const ChatConversationFeed = ({
                 );
               }
 
-              return data.from === userInfo._id ? (
+              return data?.from === userInfo?._id ? (
                 <RightMessageComponent data={data} key={uuidv4()} />
               ) : (
                 <LeftMessageComponent data={data} key={uuidv4()} />
