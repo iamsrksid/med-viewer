@@ -77,7 +77,7 @@ const ChatFeed = ({
     wsLink,
     httpLink
   );
-  const apolloClient = new ApolloClient({
+  const apolloClient2 = new ApolloClient({
     link: splitLink,
     cache: new InMemoryCache(),
   });
@@ -160,7 +160,6 @@ const ChatFeed = ({
         </TabPanels>
       </Tabs> */}
       <Box w="100%" h="90%">
-        <ApolloProvider client={apolloClient}>
           <Flex
             bg="#fff"
             margin="0 0 0 5px"
@@ -177,6 +176,7 @@ const ChatFeed = ({
                   application={application}
                   app={application}
                   users={users}
+                  client={apolloClient2}
                   groupChatId={groupData?._id}
                   mentionUsers={mentionUsers}
                 />
@@ -212,7 +212,6 @@ const ChatFeed = ({
               </Flex>
             )}
           </Flex>
-        </ApolloProvider>
       </Box>
     </Box>
   );

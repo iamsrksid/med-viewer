@@ -110,6 +110,7 @@ const ChatConversationFeed = ({
   app,
   users,
   mentionUsers,
+  client,
 }) => {
   let lastDate = "1999-01-01";
   console.log("conversation");
@@ -127,7 +128,7 @@ const ChatConversationFeed = ({
   const [
     fetchMessages,
     { loading: isConversationLoading, data: msgData, error },
-  ] = useLazyQuery(FETCH_CONVERSATION);
+  ] = useLazyQuery(FETCH_CONVERSATION, {client:client});
 
   useEffect(() => {
     if (msgData && msgData?.readChat?.success) {
