@@ -38,6 +38,7 @@ const LayoutApp = ({
   users,
   mentionUsers,
   Environment,
+  client2,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -185,6 +186,7 @@ const LayoutApp = ({
               application={application}
               app={application}
               users={users}
+              client2={client2}
               mentionUsers={mentionUsers}
               Environment={Environment}
             />

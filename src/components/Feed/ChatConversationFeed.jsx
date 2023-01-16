@@ -110,10 +110,10 @@ const ChatConversationFeed = ({
   app,
   users,
   mentionUsers,
-  client,
+  client2,
 }) => {
   let lastDate = "1999-01-01";
-  console.log("conversation");
+  console.log("conversation", client2);
   const [groupMessages, setGroupMessages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -128,7 +128,7 @@ const ChatConversationFeed = ({
   const [
     fetchMessages,
     { loading: isConversationLoading, data: msgData, error },
-  ] = useLazyQuery(FETCH_CONVERSATION, {client:client});
+  ] = useLazyQuery(FETCH_CONVERSATION, {client:client2});
 
   useEffect(() => {
     if (msgData && msgData?.readChat?.success) {

@@ -29,6 +29,7 @@ const ChatFeed = ({
   mentionUsers,
   Environment,
   userInfo,
+  client2,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -40,47 +41,47 @@ const ChatFeed = ({
     setGroupData(caseInfo);
     setActiveGroup(caseInfo?._id);
   });
-  const token = localStorage.getItem(Environment?.AUTH0_TOKEN);
-  let accessToken;
-  if (token) {
-    const { body } = JSON.parse(token);
-    if (body && typeof body === "object") {
-      accessToken = body?.access_token;
-    }
-  }
-  const httpLink = new HttpLink({
-    uri: "https://development-api.chat.prr.ai",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  const wsLink = new GraphQLWsLink(
-    createClient({
-      url: "wss://development-api.chat.prr.ai",
-    })
-  );
+  // const token = localStorage.getItem(Environment?.AUTH0_TOKEN);
+  // let accessToken;
+  // if (token) {
+  //   const { body } = JSON.parse(token);
+  //   if (body && typeof body === "object") {
+  //     accessToken = body?.access_token;
+  //   }
+  // }
+  // const httpLink = new HttpLink({
+  //   uri: "https://development-api.chat.prr.ai",
+  //   headers: {
+  //     Authorization: `Bearer ${accessToken}`,
+  //   },
+  // });
+  // const wsLink = new GraphQLWsLink(
+  //   createClient({
+  //     url: "wss://development-api.chat.prr.ai",
+  //   })
+  // );
 
-  // The split function takes three parameters:
-  //
-  // * A function that's called for each operation to execute
-  // * The Link to use for an operation if the function returns a "truthy" value
-  // * The Link to use for an operation if the function returns a "falsy" value
+  // // The split function takes three parameters:
+  // //
+  // // * A function that's called for each operation to execute
+  // // * The Link to use for an operation if the function returns a "truthy" value
+  // // * The Link to use for an operation if the function returns a "falsy" value
 
-  const splitLink = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query);
-      return (
-        definition.kind === "OperationDefinition" &&
-        definition.operation === "subscription"
-      );
-    },
-    wsLink,
-    httpLink
-  );
-  const apolloClient2 = new ApolloClient({
-    link: splitLink,
-    cache: new InMemoryCache(),
-  });
+  // const splitLink = split(
+  //   ({ query }) => {
+  //     const definition = getMainDefinition(query);
+  //     return (
+  //       definition.kind === "OperationDefinition" &&
+  //       definition.operation === "subscription"
+  //     );
+  //   },
+  //   wsLink,
+  //   httpLink
+  // );
+  // const apolloClient2 = new ApolloClient({
+  //   link: splitLink,
+  //   cache: new InMemoryCache(),
+  // });
   const caseNo = caseInfo._id.slice(0, 5);
   return (
     <Box
@@ -176,7 +177,7 @@ const ChatFeed = ({
                   application={application}
                   app={application}
                   users={users}
-                  client={apolloClient2}
+                  client2={client2}
                   groupChatId={groupData?._id}
                   mentionUsers={mentionUsers}
                 />
