@@ -369,7 +369,7 @@ const ChatConversationFeed = ({
                 return (
                   <>
                     <DateSeperatorComponent
-                      messageSepratorDate={data.createdAt}
+                      messageSepratorDate={data?.createdAt}
                     />
                     {data?.from === userInfo?._id ? (
                       <RightMessageComponent data={data} key={uuidv4()} />
