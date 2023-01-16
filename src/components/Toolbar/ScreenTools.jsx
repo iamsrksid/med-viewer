@@ -10,7 +10,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { BiDotsVertical } from "react-icons/bi";
-import Popup from "../Popup/popup";
 import DownloadImage from "../downloadImage";
 import ImageFilter from "../ImageFilter/imageFilter";
 import ShowReport from "./ShowReport";

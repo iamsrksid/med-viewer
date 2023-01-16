@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  IconButton,
-  Image,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Tooltip,
-  useDisclosure,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import { IconButton, Tooltip, useMediaQuery } from "@chakra-ui/react";
 import IconSize from "./ViewerToolbar/IconSize";
 import TooltipLabel from "./AdjustmentBar/ToolTipLabel";
 import { BsChatRightText, BsFillChatRightTextFill } from "react-icons/bs";
 
 const ViewerChat = ({ handleChatFeedbar }) => {
+  console.log("calling chat component");
   const [chatHover, setChatHover] = useState(false);
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   useEffect(() => {
