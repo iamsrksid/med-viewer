@@ -45,7 +45,7 @@ const ChatFeed = ({
   if (token) {
     const { body } = JSON.parse(token);
     if (body && typeof body === "object") {
-      accessToken = body.access_token;
+      accessToken = body?.access_token;
     }
   }
   const httpLink = new HttpLink({
