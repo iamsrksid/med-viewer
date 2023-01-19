@@ -28,7 +28,6 @@ const CLSReportHelper = ({
   useEffect(() => {
     async function fetchResponse() {
       const response = await questionnaireResponse({
-        slide_id: slideId,
         case_id: caseInfo?.caseId,
       });
       setQuestionsResponse(response?.data?.data?.finalQuestionnaireResponse);
@@ -39,7 +38,7 @@ const CLSReportHelper = ({
       setSlideQuestions(response?.data?.data?.desiredQuestionsInfo);
     }
     fetchQuestions();
-  }, [slideId, caseInfo?.caseId, showCLSreport]);
+  }, [caseInfo?.caseId, showCLSreport]);
 
   const handleCLSReport = () => {
     setShowCLSReport(!showCLSreport);
@@ -107,7 +106,7 @@ const CLSReportHelper = ({
             Report
           </Button>
         </Tooltip>
-      ) : !questionsResponse ? (
+      ) : !questionsResponse && userInfo?.role !== "PI" ? (
         <Tooltip
           label="Submit-Report"
           placement="bottom"

@@ -63,7 +63,7 @@ const Questionnaire = ({
           )}
           {response && (
             <Text>
-              Your response:{" "}
+              Response:{" "}
               {response[question?.question_id]
                 ? response[question?.question_id]?.choice
                 : response[index]?.choice}
