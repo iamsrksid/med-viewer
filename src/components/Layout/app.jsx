@@ -10,6 +10,8 @@ import ViewerFactory from "../Viewer/viewerFactory";
 import Navigator from "../Navigator/navigator";
 import SlideFeed from "../Feed/feed";
 import ChatFeed from "../Feed/ChatFeed";
+import TILFeedBar from "../Feed/TILFeedBar";
+import { useEffect } from "react";
 
 const LayoutApp = ({
   userInfo,
@@ -35,10 +37,11 @@ const LayoutApp = ({
   responseHandler,
   questionnaireResponse,
   getSynopticReport,
+  client2,
   users,
   mentionUsers,
   Environment,
-  client2,
+  updateSynopticReport,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -50,9 +53,11 @@ const LayoutApp = ({
   const [currentViewer, setCurrentViewer] = useState(
     viewerIds?.[0]?._id || viewerIds?.[0]?.slideId
   );
+  // console.log('slideInfo',slideInfo);
   const [showAnnotationsBar, setShowAnnotationsBar] = useState(false);
   const [showFeedBar, setShowFeedBar] = useState(false);
   const [chatFeedBar, setChatFeedBar] = useState(false);
+  const [tILFedBar, setTILFedBar] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [feedTab, setFeedBar] = useState(0);
   const [synopticType, setSynopticType] = useState("");
@@ -68,8 +73,16 @@ const LayoutApp = ({
   const handleChatFeedbar = () => {
     setChatFeedBar(true);
   };
+  const handleTILFeedBar = () => {
+    setTILFedBar(true);
+  };
   const handleFeedBarClose = () => {
     setShowFeedBar(false);
+    setChatFeedBar(false);
+    setTILFedBar(false);
+    localStorage.setItem("closeChat", "closeChat");
+  };
+  const handleChatFeedBarClose = () => {
     setChatFeedBar(false);
     localStorage.setItem("closeChat", "closeChat");
   };
@@ -99,6 +112,7 @@ const LayoutApp = ({
           enableAI={enableAI}
           enableFilters={enableFilters}
           application={application}
+          tILFedBar={tILFedBar}
           currentViewer={currentViewer}
           showSidebar={() => showSidebar()}
           sidebar={sidebar}
@@ -114,6 +128,8 @@ const LayoutApp = ({
           slideInfo={slideInfo}
           handleFeedBar={handleFeedBar}
           handleChatFeedbar={handleChatFeedbar}
+          handleChatFeedBarClose={handleChatFeedBarClose}
+          handleTILFeedBar={handleTILFeedBar}
           handleReport={handleReport}
           synopticType={synopticType}
           setSynopticType={setSynopticType}
@@ -122,10 +138,12 @@ const LayoutApp = ({
           clinicalStudy={clinicalStudy}
           questions={questions}
           app={application}
+          viewerIds={viewerIds}
           setSlideId={setSlideId}
           responseHandler={responseHandler}
           questionnaireResponse={questionnaireResponse}
           getSynopticReport={getSynopticReport}
+          updateSynopticReport={updateSynopticReport}
         />
 
         {isNavigatorActive && (
@@ -177,6 +195,24 @@ const LayoutApp = ({
             <ChatFeed
               viewerId={currentViewer}
               chatFeedBar={chatFeedBar}
+              handleChatFeedBarClose={handleChatFeedBarClose}
+              showReport={showReport}
+              feedTab={feedTab}
+              userInfo={userInfo}
+              caseInfo={caseInfo}
+              synopticType={synopticType}
+              application={application}
+              app={application}
+              users={users}
+              client2={client2}
+              mentionUsers={mentionUsers}
+              Environment={Environment}
+            />
+          ) : null}
+          {tILFedBar ? (
+            <TILFeedBar
+              viewerId={currentViewer}
+              chatFeedBar={chatFeedBar}
               handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
               feedTab={feedTab}
@@ -185,6 +221,7 @@ const LayoutApp = ({
               synopticType={synopticType}
               application={application}
               app={application}
+              showFeedBar={showFeedBar}
               users={users}
               client2={client2}
               mentionUsers={mentionUsers}

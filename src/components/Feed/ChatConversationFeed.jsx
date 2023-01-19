@@ -44,7 +44,7 @@ const DateSeperatorComponent = ({ messageSepratorDate }) => {
   );
 };
 const RightMessageComponent = ({ data }) => {
-  console.log(data?.payload?.body[4]);
+  // console.log(data?.payload?.body[4]);
   return (
     <Box
       key={uuidv4()}
@@ -113,7 +113,7 @@ const ChatConversationFeed = ({
   client2,
 }) => {
   let lastDate = "1999-01-01";
-  console.log("conversation", client2);
+  console.log("conversation",client2);
   const [groupMessages, setGroupMessages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -129,7 +129,6 @@ const ChatConversationFeed = ({
     fetchMessages,
     { loading: isConversationLoading, data: msgData, error },
   ] = useLazyQuery(FETCH_CONVERSATION, {client:client2});
-
   useEffect(() => {
     if (msgData && msgData?.readChat?.success) {
       const totalPages = msgData?.readChat?.meta?.totalPages;

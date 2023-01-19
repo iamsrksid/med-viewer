@@ -159,6 +159,7 @@ const ReportHelper = ({
   synopticType,
   setSynopticType,
   getSynopticReport,
+  updateSynopticReport,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -355,12 +356,14 @@ const ReportHelper = ({
         />
       ) : synopticType !== "" ? (
         <SynopticReport
+          userInfo={userInfo}
           saveSynopticReport={saveSynopticReport}
           getSynopticReport={getSynopticReport}
           synopticType={synopticType}
           caseInfo={caseInfo}
           setSynopticType={setSynopticType}
           slideId={slideId}
+          updateSynopticReport={updateSynopticReport}
         />
       ) : null}
     </>

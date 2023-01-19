@@ -22,6 +22,7 @@ const ShowReport = ({
   synopticType,
   setSynopticType,
   getSynopticReport,
+  updateSynopticReport,
 }) => {
   if (application === "hospital")
     return (
@@ -39,6 +40,7 @@ const ShowReport = ({
         synopticType={synopticType}
         setSynopticType={setSynopticType}
         getSynopticReport={getSynopticReport}
+        updateSynopticReport={updateSynopticReport}
       />
     );
 

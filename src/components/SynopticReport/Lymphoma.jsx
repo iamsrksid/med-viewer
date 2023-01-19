@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Flex, HStack, Input, Text, useToast } from "@chakra-ui/react";
+import { Flex, HStack, Input, Text, useToast } from "@chakra-ui/react";
 import SRHelper from "./SRHelper";
+import Loading from "../Loading/loading";
+import SubmitHelper from "./SubmitHelper";
 
 const Lymphoma = ({
   slideId,
@@ -8,16 +10,26 @@ const Lymphoma = ({
   saveSynopticReport,
   getSynopticReport,
   setSynopticType,
+  userInfo,
+  updateSynopticReport,
 }) => {
   const toast = useToast();
   const [synopticReportData, setSynopticReportData] = useState("");
+  const [newInputData, setNewInputData] = useState("");
+  const [reportedStatus, setReportedStatus] = useState(false);
+
+  // get cancer report
   useEffect(() => {
     async function getData() {
+      setSynopticReportData("Loading");
       const response = await getSynopticReport({
         reportType: "lymphoma-cancer",
         caseId,
       });
       setSynopticReportData(response?.data?.data);
+      if (response?.status === "fulfilled") {
+        setReportedStatus(true);
+      }
     }
     getData();
   }, [caseId]);
@@ -49,6 +61,7 @@ const Lymphoma = ({
     ancillaryProLiferativeIndicators: "",
     wholeTumourSize: "",
   });
+
   const reportData = [
     {
       title: "TYPES OF SPECIMEN",
@@ -172,53 +185,53 @@ const Lymphoma = ({
       inputName: "ancillaryProLiferativeIndicators",
     },
   ];
-
+  // set input values
   const handleInput = (e) => {
-    setInputData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    if (reportedStatus === true) {
+      setNewInputData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    } else
+      setInputData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
   };
   const submitReport = async () => {
     try {
       await saveSynopticReport({
-        clinicalInfoSurgicalHandling: {
-          typeOfSpecimen: inputData.typeOfSpecimen,
-          dateOfRequest: inputData.dateOfRequest,
-          principalClinician: inputData.principalClinician,
-          siteOfBiopsy: inputData.siteOfBiopsy,
-          laterability: inputData.laterability,
-          reasonForBiopsy: inputData.reasonForBiopsy,
-          wholeTumourSize: inputData.wholeTumourSize,
-          grade: inputData.grade,
-          involvedSiteOrPatternOfDiseasesSpread:
-            inputData.involvedSiteOrPatternOfDiseasesSpread,
-          clinicalOrStagesExtentOfDiseases:
-            inputData.clinicalOrStagesExtentOfDiseases,
-          constitutionalSymptoms: inputData.constitutionalSymptoms,
-          furtherClinicalInformation: inputData.furtherClinicalInformation,
-        },
-        microscopicFinding: {
-          specimenType: inputData.specimenType,
-          specimenSize: inputData.specimenSize,
-          narrativeOrMicroscopicDescription:
-            inputData.narrativeOrMicroscopicDescription,
-          abnormalCells: inputData.abnormalCells,
-          abnormalCellSize: inputData.abnormalCellSize,
-          abnormalCellCytomorphology: inputData.abnormalCellCytomorphology,
-          abnormalCellProLiferativeIndicators:
-            inputData.abnormalCellProLiferativeIndicators,
-        },
-        ancillaryTestFindings: {
-          immunoHistoChemistry: inputData.immunoHistoChemistry,
-          flowStudies: inputData.flowStudies,
-          clonality: inputData.clonality,
-          whoDiseaseSubType: inputData.whoDiseaseSubType,
-          ancillaryAbnormalCellSize: inputData.ancillaryAbnormalCellSize,
-          ancillaryCytomorphology: inputData.ancillaryCytomorphology,
-          ancillaryProLiferativeIndicators:
-            inputData.ancillaryProLiferativeIndicators,
-        },
+        typeOfSpecimen: inputData.typeOfSpecimen,
+        dateOfRequest: inputData.dateOfRequest,
+        principalClinician: inputData.principalClinician,
+        siteOfBiopsy: inputData.siteOfBiopsy,
+        laterability: inputData.laterability,
+        reasonForBiopsy: inputData.reasonForBiopsy,
+        wholeTumourSize: inputData.wholeTumourSize,
+        grade: inputData.grade,
+        involvedSiteOrPatternOfDiseasesSpread:
+          inputData.involvedSiteOrPatternOfDiseasesSpread,
+        clinicalOrStagesExtentOfDiseases:
+          inputData.clinicalOrStagesExtentOfDiseases,
+        constitutionalSymptoms: inputData.constitutionalSymptoms,
+        furtherClinicalInformation: inputData.furtherClinicalInformation,
+        specimenType: inputData.specimenType,
+        specimenSize: inputData.specimenSize,
+        narrativeOrMicroscopicDescription:
+          inputData.narrativeOrMicroscopicDescription,
+        abnormalCells: inputData.abnormalCells,
+        abnormalCellSize: inputData.abnormalCellSize,
+        abnormalCellCytomorphology: inputData.abnormalCellCytomorphology,
+        abnormalCellProLiferativeIndicators:
+          inputData.abnormalCellProLiferativeIndicators,
+        immunoHistoChemistry: inputData.immunoHistoChemistry,
+        flowStudies: inputData.flowStudies,
+        clonality: inputData.clonality,
+        whoDiseaseSubType: inputData.whoDiseaseSubType,
+        ancillaryAbnormalCellSize: inputData.ancillaryAbnormalCellSize,
+        ancillaryCytomorphology: inputData.ancillaryCytomorphology,
+        ancillaryProLiferativeIndicators:
+          inputData.ancillaryProLiferativeIndicators,
         slideId,
         caseId,
         reportType: "lymphoma-cancer-report",
@@ -231,13 +244,54 @@ const Lymphoma = ({
       setSynopticType("");
     } catch (err) {
       toast({
-        description: "Fill all the field's and try again!!",
+        description: err?.data?.message
+          ? err?.data?.message
+          : "something went wrong",
         status: "error",
         duration: 2000,
       });
     }
   };
-  return (
+  // check the values of inputData
+  const answeredAll = Object.keys(inputData).every((k) => inputData[k] !== "");
+  // handle report update
+  const handleUpdate = async () => {
+    try {
+      if (newInputData === "") {
+        toast({
+          description: "No fields are changed.Try again updating fields",
+          status: "error",
+          duration: 2000,
+        });
+      } else {
+        const updatedData = {
+          ...newInputData,
+          caseId,
+          reportType: "lymphoma-cancer-synoptic-report",
+        };
+        await updateSynopticReport(updatedData).unwrap();
+        toast({
+          description: "Report submitted sucessfully",
+          status: "success",
+          duration: 2000,
+        });
+        setSynopticType("");
+      }
+    } catch (err) {
+      toast({
+        description: err?.data?.message
+          ? err?.data?.message
+          : "something went wrong",
+        status: "error",
+        duration: 2000,
+      });
+    }
+  };
+  return synopticReportData === "Loading" ? (
+    <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
+      <Loading />
+    </Flex>
+  ) : (
     <Flex px="1.6vw" w="100%" fontSize="14px" direction="column">
       <Flex bg="#F7FBFD" h="3vh" minH="30px" w="100%" alignItems="center">
         <Text fontWeight="600" pl="0.3vw">
@@ -252,11 +306,7 @@ const Lymphoma = ({
               key={`${index + 1}`}
               handleInput={handleInput}
               inputData={inputData}
-              clinicalInformation={
-                synopticReportData?.clinicalInfoSurgicalHandling?.[
-                  inputField?.inputName
-                ]
-              }
+              synopticReportData={synopticReportData}
             />
           );
         })}
@@ -272,14 +322,7 @@ const Lymphoma = ({
               w="4vw"
               size="sm"
               name="wholeTumourSize"
-              value={
-                synopticReportData?.clinicalInfoSurgicalHandling
-                  ?.wholeTumourSize || inputData.wholeTumourSize
-              }
-              readOnly={
-                synopticReportData?.clinicalInfoSurgicalHandling
-                  ?.wholeTumourSize
-              }
+              defaultValue={synopticReportData?.wholeTumourSize}
               onChange={handleInput}
             />{" "}
             MM
@@ -293,11 +336,7 @@ const Lymphoma = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                clinicalInformation={
-                  synopticReportData?.clinicalInfoSurgicalHandling?.[
-                    inputField?.inputName
-                  ]
-                }
+                synopticReportData={synopticReportData}
               />
             );
           })}
@@ -322,11 +361,7 @@ const Lymphoma = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                microscopicFinding={
-                  synopticReportData?.microscopicFinding?.[
-                    inputField?.inputName
-                  ]
-                }
+                synopticReportData={synopticReportData}
               />
             );
           })}
@@ -352,30 +387,19 @@ const Lymphoma = ({
               key={`${index + 1}`}
               handleInput={handleInput}
               inputData={inputData}
-              ancillaryTestFindings={
-                synopticReportData?.ancillaryTestFindings?.[
-                  inputField?.inputName
-                ]
-              }
+              synopticReportData={synopticReportData}
             />
           );
         })}
       </Flex>
-      {(synopticReportData === "" || synopticReportData === undefined) && (
-        <Flex justifyContent="flex-end" pb="2vh">
-          <Button
-            onClick={() => submitReport()}
-            borderRadius="0"
-            bg="#00153F"
-            color="#fff"
-            size="sm"
-            minW="100px"
-            _focus={{ outline: "none" }}
-          >
-            Submit
-          </Button>
-        </Flex>
-      )}
+      <SubmitHelper
+        userInfo={userInfo}
+        reportedStatus={reportedStatus}
+        answeredAll={answeredAll}
+        submitReport={submitReport}
+        newInputData={newInputData}
+        handleUpdate={handleUpdate}
+      />
     </Flex>
   );
 };

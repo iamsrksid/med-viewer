@@ -341,3 +341,21 @@ export const GET_VHUT_ANALYSIS = gql`
     }
   }
 `;
+
+export const GET_TILS_ANALYSIS = gql`
+query Query($query: GetTilInput) {
+  getTils(query: $query) {
+    data {
+      bucket_name
+      key_name
+      slideId
+      stroma_cords
+      tils_cords
+      tumor_cords
+    }
+    message
+    status
+  }
+}
+
+`;

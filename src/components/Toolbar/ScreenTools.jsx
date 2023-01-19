@@ -41,6 +41,9 @@ const ScreenTools = ({
   setSynopticType,
   getSynopticReport,
   handleChatFeedbar,
+  handleTILFeedBar,
+  updateSynopticReport,
+  handleChatFeedBarClose,
 }) => {
   const [popup, setPopup] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
@@ -57,7 +60,7 @@ const ScreenTools = ({
     <Flex px="20px" height="18px" alignItems="center">
       <ImageFilter viewerId={viewerId} />
       <DownloadImage />
-      <ViewerChat handleChatFeedbar={handleChatFeedbar} />
+      <ViewerChat handleChatFeedBarClose={handleChatFeedBarClose} handleChatFeedbar={handleChatFeedbar} />
       <Divider orientation="vertical" ml="5px" border="1px solid gray" />
       {report ? (
         <ShowReport
@@ -80,6 +83,7 @@ const ScreenTools = ({
           synopticType={synopticType}
           setSynopticType={setSynopticType}
           getSynopticReport={getSynopticReport}
+          updateSynopticReport={updateSynopticReport}
         />
       ) : null}
       <Flex borderLeft="2px solid #E4E5E8" ml="18px" pl="15px">
@@ -110,6 +114,9 @@ const ScreenTools = ({
             <MenuItem onClick={handleAnnotationBar}>
               Annotation Details
             </MenuItem>
+           {localStorage.getItem("til") ?  <MenuItem onClick={handleTILFeedBar}>
+              TIL
+            </MenuItem>: null}
           </MenuList>
         </Menu>
       </Flex>

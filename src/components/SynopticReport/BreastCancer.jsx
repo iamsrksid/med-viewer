@@ -1,5 +1,4 @@
 import {
-  Button,
   Flex,
   HStack,
   Input,
@@ -8,9 +7,11 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import _ from "lodash";
 import React, { useState, useEffect } from "react";
-
+import Loading from "../Loading/loading";
 import SRHelper from "./SRHelper";
+import SubmitHelper from "./SubmitHelper";
 
 const BreastCancer = ({
   saveSynopticReport,
@@ -18,16 +19,25 @@ const BreastCancer = ({
   caseId,
   getSynopticReport,
   setSynopticType,
+  userInfo,
+  updateSynopticReport,
 }) => {
   const toast = useToast();
   const [synopticReportData, setSynopticReportData] = useState("");
+  const [newInputData, setNewInputData] = useState("");
+  const [reportedStatus, setReportedStatus] = useState(false);
+
   useEffect(() => {
+    setSynopticReportData("Loading");
     async function getData() {
       const response = await getSynopticReport({
         reportType: "breast-cancer",
         caseId,
       });
       setSynopticReportData(response?.data?.data);
+      if (response?.status === "fulfilled") {
+        setReportedStatus(true);
+      }
     }
     getData();
   }, [caseId]);
@@ -233,61 +243,60 @@ const BreastCancer = ({
       options: ["Yes", "No"],
     },
   ];
+  // check the values of inputData
+  const answeredAll = Object.keys(inputData).every((k) => inputData[k] !== "");
 
+  // handle input onChange
   const handleInput = (e) => {
-    setInputData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    if (reportedStatus === true) {
+      setNewInputData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    } else
+      setInputData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
   };
+  // submit report handler
   const submitReport = async () => {
     try {
       await saveSynopticReport({
-        macroscopy: {
-          dataRecieved: inputData.dataRecieved,
-          specimenType: inputData.specimenType,
-          specimenRadiographProvided: inputData.specimenRadiographProvided,
-          radiologyAbnormalitySeen: inputData.radiologyAbnormalitySeen,
-          rGrade: inputData.rGrade,
-          radiologyLesion: inputData.radiologyLesion,
-          specimenWeight: inputData.specimenWeight,
-          ellipseOfSkin: inputData.ellipseOfSkin,
-          nipple: inputData.nipple,
-          histologicalClassificationPresent:
-            inputData.histologicalClassificationPresent,
-          fibrofattyTissue: inputData.fibrofattyTissue,
-          lesionMeasures: inputData.lesionMeasures,
-          site: inputData.site,
-          macroscopicDistanceToMargin: inputData.macroscopicDistance,
-          comments: inputData.comments,
-        },
-
-        invasiveCarcinoma: {
-          invasiveTumourSize: inputData.invasiveTumourSize,
-          wholeTumourSize: inputData.wholeTumourSize,
-          invasiveGrade: inputData.invasiveGrade,
-          tumourExtent: inputData.tumourExtent,
-          type: inputData.type,
-        },
-
-        specifyTypeForComponentsPresentForSpecialtypeAndMixedTumourTypes: {
-          typeForComponents: inputData.typeForComponents,
-          grade: inputData.grade,
-          associatedDcis: inputData.associatedDcis,
-          isSituLobularNeoplasia: inputData.isSituLobularNeoplasia,
-          dcisGrade: inputData.dcisGrade,
-          isPagetDisease: inputData.isPagetDisease,
-        },
-
-        finalPathologyDcis: {
-          isLcis: inputData.isLcis,
-          pureDcisSize: inputData.pureDcisSize,
-          pureDcisGrade: inputData.pureDcisGrade,
-          dcisArchitecture: inputData.dcisArchitecture,
-          dcisNecrosis: inputData.dcisNecrosis,
-          microInvasion: inputData.microInvasion,
-          pagetDisease: inputData.pagetDisease,
-        },
+        dataRecieved: inputData.dataRecieved,
+        specimenType: inputData.specimenType,
+        specimenRadiographProvided: inputData.specimenRadiographProvided,
+        radiologyAbnormalitySeen: inputData.radiologyAbnormalitySeen,
+        rGrade: inputData.rGrade,
+        radiologyLesion: inputData.radiologyLesion,
+        specimenWeight: inputData.specimenWeight,
+        ellipseOfSkin: inputData.ellipseOfSkin,
+        nipple: inputData.nipple,
+        histologicalClassificationPresent:
+          inputData.histologicalClassificationPresent,
+        fibrofattyTissue: inputData.fibrofattyTissue,
+        lesionMeasures: inputData.lesionMeasures,
+        site: inputData.site,
+        macroscopicDistanceToMargin: inputData.macroscopicDistance,
+        comments: inputData.comments,
+        invasiveTumourSize: inputData.invasiveTumourSize,
+        wholeTumourSize: inputData.wholeTumourSize,
+        invasiveGrade: inputData.invasiveGrade,
+        tumourExtent: inputData.tumourExtent,
+        type: inputData.type,
+        typeForComponents: inputData.typeForComponents,
+        grade: inputData.grade,
+        associatedDcis: inputData.associatedDcis,
+        isSituLobularNeoplasia: inputData.isSituLobularNeoplasia,
+        dcisGrade: inputData.dcisGrade,
+        isPagetDisease: inputData.isPagetDisease,
+        isLcis: inputData.isLcis,
+        pureDcisSize: inputData.pureDcisSize,
+        pureDcisGrade: inputData.pureDcisGrade,
+        dcisArchitecture: inputData.dcisArchitecture,
+        dcisNecrosis: inputData.dcisNecrosis,
+        microInvasion: inputData.microInvasion,
+        pagetDisease: inputData.pagetDisease,
         slideId,
         caseId,
         reportType: "breast-cancer-report",
@@ -300,13 +309,52 @@ const BreastCancer = ({
       setSynopticType("");
     } catch (err) {
       toast({
-        description: "Fill all the field's and try again!!",
+        description: err?.data?.message
+          ? err?.data?.message
+          : "something went wrong",
         status: "error",
         duration: 2000,
       });
     }
   };
-  return (
+  // handle report update
+  const handleUpdate = async () => {
+    try {
+      if (newInputData === "") {
+        toast({
+          description: "No fields are changed.Try again updating fields",
+          status: "error",
+          duration: 2000,
+        });
+      } else {
+        const updatedData = {
+          ...newInputData,
+          caseId,
+          reportType: "breast-cancer-synoptic-report",
+        };
+        await updateSynopticReport(updatedData).unwrap();
+        toast({
+          description: "Report submitted sucessfully",
+          status: "success",
+          duration: 2000,
+        });
+        setSynopticType("");
+      }
+    } catch (err) {
+      toast({
+        description: err?.data?.message
+          ? err?.data?.message
+          : "something went wrong",
+        status: "error",
+        duration: 2000,
+      });
+    }
+  };
+  return synopticReportData === "Loading" ? (
+    <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
+      <Loading />
+    </Flex>
+  ) : (
     <Flex px="1.6vw" w="100%" fontSize="14px" direction="column">
       <Flex bg="#F7FBFD" h="3vh" minH="30px" w="100%" alignItems="center">
         <Text fontWeight="600" pl="0.3vw">
@@ -321,9 +369,7 @@ const BreastCancer = ({
               key={`${index + 1}`}
               handleInput={handleInput}
               inputData={inputData}
-              macroscopicData={
-                synopticReportData?.macroscopy?.[inputField?.inputName]
-              }
+              synopticReportData={synopticReportData}
             />
           );
         })}
@@ -335,13 +381,10 @@ const BreastCancer = ({
           <Input
             w="4vw"
             size="sm"
-            value={
+            defaultValue={
               synopticReportData !== ""
-                ? synopticReportData?.macroscopy?.macroscopicDistanceToMargin
+                ? synopticReportData?.macroscopicDistanceToMargin
                 : inputData.macroscopicDistance
-            }
-            readOnly={
-              synopticReportData?.macroscopy?.macroscopicDistanceToMargin
             }
             name="macroscopicDistance"
             onChange={handleInput}
@@ -354,12 +397,11 @@ const BreastCancer = ({
             borderRadius="0"
             name="comments"
             onChange={handleInput}
-            value={
+            defaultValue={
               synopticReportData !== ""
-                ? synopticReportData?.macroscopy?.comments
+                ? synopticReportData?.comments
                 : inputData.comments
             }
-            readOnly={synopticReportData?.macroscopy?.comments}
           />
         </VStack>
         <Flex
@@ -380,12 +422,9 @@ const BreastCancer = ({
               w="4vw"
               size="sm"
               name="invasiveTumourSize"
-              value={
-                synopticReportData?.invasiveCarcinoma?.invasiveTumourSize ||
+              defaultValue={
+                synopticReportData?.invasiveTumourSize ||
                 inputData.invasiveTumourSize
-              }
-              readOnly={
-                synopticReportData?.invasiveCarcinoma?.invasiveTumourSize
               }
               onChange={handleInput}
             />
@@ -397,11 +436,9 @@ const BreastCancer = ({
               w="4vw"
               size="sm"
               name="wholeTumourSize"
-              value={
-                synopticReportData?.invasiveCarcinoma?.wholeTumourSize ||
-                inputData.wholeTumourSize
+              defaultValue={
+                synopticReportData?.wholeTumourSize || inputData.wholeTumourSize
               }
-              readOnly={synopticReportData?.invasiveCarcinoma?.wholeTumourSize}
               onChange={handleInput}
             />{" "}
             MM
@@ -415,15 +452,7 @@ const BreastCancer = ({
                 key={`${index + 1}`}
                 handleInput={handleInput}
                 inputData={inputData}
-                invasiveCarcinoma={
-                  synopticReportData?.invasiveCarcinoma?.[inputField?.inputName]
-                }
-                tumourType={
-                  synopticReportData
-                    ?.specifyTypeForComponentsPresentForSpecialtypeAndMixedTumourTypes?.[
-                    inputField?.inputName
-                  ]
-                }
+                synopticReportData={synopticReportData}
               />
             );
           })}
@@ -446,11 +475,9 @@ const BreastCancer = ({
             size="sm"
             name="pureDcisSize"
             onChange={handleInput}
-            value={
-              synopticReportData?.finalPathologyDcis?.pureDcisSize ||
-              inputData.pureDcisSize
+            defaultValue={
+              synopticReportData?.pureDcisSize || inputData.pureDcisSize
             }
-            readOnly={synopticReportData?.finalPathologyDcis?.pureDcisSize}
           />{" "}
           MM IN MAXIMUM EXTENT
         </Text>
@@ -463,30 +490,20 @@ const BreastCancer = ({
                 handleInput={handleInput}
                 inputData={inputData}
                 synopticReportData={synopticReportData}
-                finalPathologyDcis={
-                  synopticReportData?.finalPathologyDcis?.[
-                    inputField?.inputName
-                  ]
-                }
               />
             );
           })}
         </Flex>
       </Flex>
-      {(synopticReportData === "" || synopticReportData === undefined) && (
-        <Flex justifyContent="flex-end" pb="2vh">
-          <Button
-            onClick={() => submitReport()}
-            borderRadius="0"
-            bg="#00153F"
-            color="#fff"
-            size="sm"
-            minW="100px"
-            _focus={{ outline: "none" }}
-          >
-            Submit
-          </Button>
-        </Flex>
+      {userInfo?.userType !== "technologist" && (
+        <SubmitHelper
+          userInfo={userInfo}
+          reportedStatus={reportedStatus}
+          answeredAll={answeredAll}
+          submitReport={submitReport}
+          newInputData={newInputData}
+          handleUpdate={handleUpdate}
+        />
       )}
     </Flex>
   );

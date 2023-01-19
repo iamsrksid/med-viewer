@@ -12,6 +12,7 @@ import Multiview from "../Multiview/multiview";
 import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 import FilterAdjustments from "../ImageFilter/FilterAdjustments";
+import Til from "../TIL/Til";
 
 const Move = ({
   userInfo,
@@ -26,6 +27,10 @@ const Move = ({
   setIsNavigatorActive,
   setTotalCells,
   application,
+  viewerIds,
+  handleTILFeedBar,
+  slide,
+  mongoId,
 }) => {
   const [ifBiggerScreen] = useMediaQuery("(min-width:2000px)");
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
@@ -103,7 +108,6 @@ const Move = ({
           setIsMultiview={setIsMultiview}
           setIsNavigatorActive={setIsNavigatorActive}
         />
-
         {annotations ? (
           <Tooltip
             label={
@@ -161,8 +165,8 @@ const Move = ({
         ) : null}
 
         {enableFilters ? <FilterAdjustments viewerId={viewerId} /> : null}
+        <Til handleTILFeedBar={handleTILFeedBar} viewerIds={viewerIds} slide={slide} mongoId={mongoId} viewerId={viewerId} />
       </Flex>
-
       <Flex
         top={
           isNavigatorActive || isMultiview
