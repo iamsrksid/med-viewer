@@ -109,6 +109,7 @@ const LayoutApp = ({
           slides={slides}
           annotations={annotations}
           report={report}
+          Environment={Environment}
           enableAI={enableAI}
           enableFilters={enableFilters}
           application={application}

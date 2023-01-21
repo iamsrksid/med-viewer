@@ -11,7 +11,6 @@ import SlideNavigatorIcon from "../Navigator/slideNavigatorIcon";
 import ChangeSlide from "../Case/changeSlide";
 import { useFabricOverlayState } from "../../state/store";
 import TooltipLabel from "./ToolTipLabel";
-import Environment from "../../../../environment";
 import { useEffect } from "react";
 import axios from "axios";
 import { getFileBucketFolder, getScaleFactor } from "../../utility";
@@ -27,6 +26,7 @@ const AdjustmentBar = ({
   viewerIds,
   enableAI,
   enableFilters,
+  Environment,
   currentViewer,
   annotations,
   showSidebar,
@@ -164,6 +164,7 @@ const AdjustmentBar = ({
         viewerId={currentViewer}
         viewerIds={viewerIds}
         isMultiview={isMultiview}
+        Environment={Environment}
         setIsMultiview={setIsMultiview}
         isNavigatorActive={isNavigatorActive}
         setIsNavigatorActive={setIsNavigatorActive}

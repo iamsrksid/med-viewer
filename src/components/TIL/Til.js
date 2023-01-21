@@ -14,7 +14,6 @@ import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 import { BiTargetLock } from "react-icons/bi";
 import { ImTarget } from "react-icons/im";
 import IconSize from "../ViewerToolbar/IconSize";
-import Environment from "../../../../environment";
 import { useLazyQuery } from "@apollo/client/react";
 
 const Til = ({ viewerId, mongoId }) => {
