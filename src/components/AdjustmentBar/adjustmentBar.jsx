@@ -11,7 +11,7 @@ import SlideNavigatorIcon from "../Navigator/slideNavigatorIcon";
 import ChangeSlide from "../Case/changeSlide";
 import { useFabricOverlayState } from "../../state/store";
 import TooltipLabel from "./ToolTipLabel";
-import Environment from "../../../../environment";
+//import Environment from "../../../../environment";
 import { useEffect } from "react";
 import axios from "axios";
 import { getFileBucketFolder, getScaleFactor } from "../../utility";
