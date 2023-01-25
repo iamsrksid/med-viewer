@@ -14,7 +14,7 @@ import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 import { BiTargetLock } from "react-icons/bi";
 import { ImTarget } from "react-icons/im";
 import IconSize from "../ViewerToolbar/IconSize";
-import Environment from "../../../../environment";
+//import Environment from "../../../../environment";
 import { useLazyQuery } from "@apollo/client/react";
 import { getDataFromTree } from "@apollo/client/react/ssr";
 import { useSubscription } from "@apollo/client";
