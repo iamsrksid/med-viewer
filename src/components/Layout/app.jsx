@@ -195,25 +195,25 @@ const LayoutApp = ({
             />
           ) : null}
           {chatFeedBar ? (
-//             <ChatFeed
-//               viewerId={currentViewer}
-//               chatFeedBar={chatFeedBar}
-//               handleChatFeedBarClose={handleChatFeedBarClose}
-//               showReport={showReport}
-//               feedTab={feedTab}
-//               userInfo={userInfo}
-//               caseInfo={caseInfo}
-//               synopticType={synopticType}
-//               application={application}
-//               app={application}
-//               users={users}
-//               client2={client2}
-//               mentionUsers={mentionUsers}
-//               Environment={Environment}
-//             />
-            <Box fontSize="56px" pos="fixed" top="50%" left="50%" zIndex={999}>
-              hello ghgvhbj jbjnjn jbjbj
-            </Box>
+            <ChatFeed
+              viewerId={currentViewer}
+              chatFeedBar={chatFeedBar}
+              handleChatFeedBarClose={handleChatFeedBarClose}
+              showReport={showReport}
+              feedTab={feedTab}
+              userInfo={userInfo}
+              caseInfo={caseInfo}
+              synopticType={synopticType}
+              application={application}
+              app={application}
+              users={users}
+              client2={client2}
+              mentionUsers={mentionUsers}
+              Environment={Environment}
+            />
+//             <Box fontSize="56px" pos="fixed" top="50%" left="50%" zIndex={999}>
+//               hello ghgvhbj jbjnjn jbjbj
+//             </Box>
           ) : null}
           {tILFedBar ? (
             <TILFeedBar
