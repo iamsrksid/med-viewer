@@ -211,9 +211,9 @@ const LayoutApp = ({
 //               mentionUsers={mentionUsers}
 //               Environment={Environment}
 //             />
-            <Box pos="fixed" top="50%" left="50%" zIndex={999} fontSize="56px">
-              hello
-            </Box>
+            <h1>
+              hello ghgvhbj jbjnjn jbjbj
+            </h1>
           ) : null}
           {tILFedBar ? (
             <TILFeedBar
