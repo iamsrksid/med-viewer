@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import {
   ApolloClient,
