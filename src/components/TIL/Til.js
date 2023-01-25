@@ -112,7 +112,7 @@ if(tumorCords.length>0 || stromaCords.length>0 || tilCords.length>0 ){
   const color = "#2Aff00";
   const roi = tilCords.flat(2).map((TIL_cord) => {
     return new fabric.Rect({
-      top: TIL_cord[3],
+      top: TIL_cord[1],
       // bottom:TIL_cord[1],
       left: TIL_cord[0],
       // right:TIL_cord[2],

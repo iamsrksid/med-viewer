@@ -305,6 +305,7 @@ const ChatConversationFeed = ({
     const mentionedUsers = mentions.map((mention) => ({
       toId: mention.id,
       toName: mention.display,
+      message: mentionedText,
     }));
     setMessageInput({
       mentionedText,

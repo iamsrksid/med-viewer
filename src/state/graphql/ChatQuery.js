@@ -128,7 +128,7 @@ export const QUERY_SUBSCRIPTION = gql`
       toId
       toName
       isRead
-      isSeen
+      isResolved
       app
       createdAt
       updatedAt

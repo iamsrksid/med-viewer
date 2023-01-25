@@ -13,7 +13,6 @@ import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 import FilterAdjustments from "../ImageFilter/FilterAdjustments";
 import Til from "../TIL/Til";
-
 const Move = ({
   userInfo,
   viewerId,

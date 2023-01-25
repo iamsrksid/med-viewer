@@ -1,6 +1,6 @@
 {
   "name": "med-viewer",
-  "version": "1.1.8",
+  "version": "1.1.7",
   "description": "Viewer for working on WSI based upon openseadragon",
   "author": "med-ai-softsensor",
   "license": "MIT",
@@ -67,12 +67,12 @@
     "@apollo/client": "^3.7.1",
     "graphql": "^16.6.0",
     "graphql-ws": "^5.11.2",
-    "react": "^17.0.2 || ^18.0.0",
-    "react-dom": "^17.0.2 || ^18.0.0"
-  },
-  "resolutions": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "resolutions": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "main": "dist/index.js",
   "module": "dist/index.js",
