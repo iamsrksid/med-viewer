@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Flex, useMediaQuery } from "@chakra-ui/react";
+import { Box,Flex, useMediaQuery } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import AdjustmentBar from "../AdjustmentBar/adjustmentBar";
 import LayoutAppBody from "./body";
@@ -195,25 +195,25 @@ const LayoutApp = ({
             />
           ) : null}
           {chatFeedBar ? (
-            <ChatFeed
-              viewerId={currentViewer}
-              chatFeedBar={chatFeedBar}
-              handleChatFeedBarClose={handleChatFeedBarClose}
-              showReport={showReport}
-              feedTab={feedTab}
-              userInfo={userInfo}
-              caseInfo={caseInfo}
-              synopticType={synopticType}
-              application={application}
-              app={application}
-              users={users}
-              client2={client2}
-              mentionUsers={mentionUsers}
-              Environment={Environment}
-            />
-//             <h1>
-//               hello ghgvhbj jbjnjn jbjbj
-//             </h1>
+//             <ChatFeed
+//               viewerId={currentViewer}
+//               chatFeedBar={chatFeedBar}
+//               handleChatFeedBarClose={handleChatFeedBarClose}
+//               showReport={showReport}
+//               feedTab={feedTab}
+//               userInfo={userInfo}
+//               caseInfo={caseInfo}
+//               synopticType={synopticType}
+//               application={application}
+//               app={application}
+//               users={users}
+//               client2={client2}
+//               mentionUsers={mentionUsers}
+//               Environment={Environment}
+//             />
+            <Box fontSize="56px" pos="fixed" top="50%" left="50%" zIndex={999}>
+              hello ghgvhbj jbjnjn jbjbj
+            </Box>
           ) : null}
           {tILFedBar ? (
             <TILFeedBar
