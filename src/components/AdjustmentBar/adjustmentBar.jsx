@@ -11,6 +11,7 @@ import SlideNavigatorIcon from "../Navigator/slideNavigatorIcon";
 import ChangeSlide from "../Case/changeSlide";
 import { useFabricOverlayState } from "../../state/store";
 import TooltipLabel from "./ToolTipLabel";
+import Environment from "../../../../environment";
 import { useEffect } from "react";
 import axios from "axios";
 import { getFileBucketFolder, getScaleFactor } from "../../utility";
@@ -26,7 +27,6 @@ const AdjustmentBar = ({
   viewerIds,
   enableAI,
   enableFilters,
-  Environment,
   currentViewer,
   annotations,
   showSidebar,
@@ -41,6 +41,7 @@ const AdjustmentBar = ({
   saveSynopticReport,
   handleTILFeedBar,
   mediaUpload,
+  setChatHover,
   slideInfo,
   handleFeedBar,
   handleReport,
@@ -58,6 +59,7 @@ const AdjustmentBar = ({
   handleChatFeedbar,
   handleChatFeedBarClose,
   updateSynopticReport,
+  chatHover,
 }) => {
   const [ifWidthLessthan1920] = useMediaQuery("(max-width:1920px)");
   const { fabricOverlayState } = useFabricOverlayState();
@@ -72,7 +74,7 @@ const AdjustmentBar = ({
         {
           key: `${getFileBucketFolder(viewerIds[0].originalFileUrl)}`,
           bucket_name: "med-ai-image-processor",
-          notifyHook: `${Environment.USER_URL}/notify_viewport_analysis`,
+          notifyHook: `https://development-api.viewer.prr.ai/notify_til`,
           slideId: `${slide?._id}`,
         }
       );
@@ -164,7 +166,6 @@ const AdjustmentBar = ({
         viewerId={currentViewer}
         viewerIds={viewerIds}
         isMultiview={isMultiview}
-        Environment={Environment}
         setIsMultiview={setIsMultiview}
         isNavigatorActive={isNavigatorActive}
         setIsNavigatorActive={setIsNavigatorActive}
@@ -178,10 +179,12 @@ const AdjustmentBar = ({
         handleAnnotationBar={handleAnnotationBar}
         caseInfo={caseInfo}
         slide={slide}
+        setChatHover={setChatHover}
         saveReport={saveReport}
         saveSynopticReport={saveSynopticReport}
         mediaUpload={mediaUpload}
         slideInfo={slideInfo}
+        chatHover={chatHover}
         handleFeedBar={handleFeedBar}
         handleChatFeedbar={handleChatFeedbar}
         handleChatFeedBarClose={handleChatFeedBarClose}

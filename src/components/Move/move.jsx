@@ -17,7 +17,6 @@ import Til from "../TIL/Til";
 const Move = ({
   userInfo,
   viewerId,
-  Environment,
   annotations,
   enableAI,
   enableFilters,
@@ -166,7 +165,7 @@ const Move = ({
         ) : null}
 
         {enableFilters ? <FilterAdjustments viewerId={viewerId} /> : null}
-        <Til Environment={Environment} handleTILFeedBar={handleTILFeedBar} viewerIds={viewerIds} slide={slide} mongoId={mongoId} viewerId={viewerId} />
+        <Til handleTILFeedBar={handleTILFeedBar} viewerIds={viewerIds} slide={slide} mongoId={mongoId} viewerId={viewerId} />
       </Flex>
       <Flex
         top={

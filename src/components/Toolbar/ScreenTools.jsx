@@ -43,7 +43,9 @@ const ScreenTools = ({
   handleChatFeedbar,
   handleTILFeedBar,
   updateSynopticReport,
+  setChatHover,
   handleChatFeedBarClose,
+  chatHover,
 }) => {
   const [popup, setPopup] = useState(false);
   const [menuHover, setMenuHover] = useState(false);
@@ -60,7 +62,7 @@ const ScreenTools = ({
     <Flex px="20px" height="18px" alignItems="center">
       <ImageFilter viewerId={viewerId} />
       <DownloadImage />
-      <ViewerChat handleChatFeedBarClose={handleChatFeedBarClose} handleChatFeedbar={handleChatFeedbar} />
+      <ViewerChat chatHover={chatHover} setChatHover={setChatHover} handleChatFeedBarClose={handleChatFeedBarClose} handleChatFeedbar={handleChatFeedbar} />
       <Divider orientation="vertical" ml="5px" border="1px solid gray" />
       {report ? (
         <ShowReport

@@ -40,6 +40,7 @@ const FilterAdjustments = ({ viewerId }) => {
     brightness: 0,
     thresholding: -1,
     gamma: 1,
+    exposure: 0,
   });
 
   const sliderStateRef = useRef(sliderInputs);
@@ -99,7 +100,7 @@ const FilterAdjustments = ({ viewerId }) => {
   return (
     <>
       <ToolbarButton
-        icon={<HiAdjustments color="#3B5D7C" size={IconSize()} />}
+        icon={<HiAdjustments color={!isActive ? "black" : "#3B5D7C"} size={IconSize()} />}
         label={<TooltipLabel heading="Filters" />}
         backgroundColor={!isActive ? "" : "#E4E5E8"}
         outline={isActive ? " 0.5px solid rgba(0, 21, 63, 1)" : ""}
@@ -111,6 +112,7 @@ const FilterAdjustments = ({ viewerId }) => {
         onClick={handleClick}
         _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
       />
+
       <Modal
         isOpen={isOpen}
         onClose={handleOnClose}

@@ -4,16 +4,19 @@ import IconSize from "./ViewerToolbar/IconSize";
 import TooltipLabel from "./AdjustmentBar/ToolTipLabel";
 import { BsChatRightText, BsFillChatRightTextFill } from "react-icons/bs";
 
-const ViewerChat = ({ handleChatFeedbar, handleChatFeedBarClose }) => {
-  console.log("calling chat component");
-  
-  const [chatHover, setChatHover] = useState(false);
+const ViewerChat = ({
+  handleChatFeedbar,
+  handleChatFeedBarClose,
+  setChatHover,
+  chatHover,
+}) => {
+
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   useEffect(() => {
-    if(chatHover === false){
+    if (chatHover === false) {
       handleChatFeedBarClose();
-     }
-  },[chatHover]);
+    }
+  }, [chatHover]);
   return (
     <>
       <Tooltip
@@ -35,7 +38,7 @@ const ViewerChat = ({ handleChatFeedbar, handleChatFeedBarClose }) => {
           height={ifScreenlessthan1536px ? "26px" : "34px"}
           icon={
             chatHover ? (
-              <BsFillChatRightTextFill size={IconSize()} color="#151C25" />
+              <BsFillChatRightTextFill size={IconSize()} color="#3b5d7c" />
             ) : (
               <BsChatRightText size={IconSize()} color="#151C25" />
             )
@@ -51,8 +54,6 @@ const ViewerChat = ({ handleChatFeedbar, handleChatFeedBarClose }) => {
           borderRadius={0}
           onClick={() => {
             handleChatFeedbar();
-            setChatHover(!chatHover);
-            localStorage.removeItem("closeChat");
           }}
           backgroundColor="#F8F8F5"
           _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}

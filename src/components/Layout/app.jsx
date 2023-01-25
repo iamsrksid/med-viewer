@@ -61,6 +61,7 @@ const LayoutApp = ({
   const [showReport, setShowReport] = useState(false);
   const [feedTab, setFeedBar] = useState(0);
   const [synopticType, setSynopticType] = useState("");
+  const [chatHover, setChatHover] = useState(false);
 
   const showSidebar = () => {
     setSidebar(!sidebar);
@@ -72,6 +73,7 @@ const LayoutApp = ({
   };
   const handleChatFeedbar = () => {
     setChatFeedBar(true);
+    setChatHover(!chatHover)
   };
   const handleTILFeedBar = () => {
     setTILFedBar(true);
@@ -80,11 +82,10 @@ const LayoutApp = ({
     setShowFeedBar(false);
     setChatFeedBar(false);
     setTILFedBar(false);
-    localStorage.setItem("closeChat", "closeChat");
   };
   const handleChatFeedBarClose = () => {
     setChatFeedBar(false);
-    localStorage.setItem("closeChat", "closeChat");
+    setChatHover(false);
   };
   const handleReport = () => {
     setShowReport(true);
@@ -109,11 +110,12 @@ const LayoutApp = ({
           slides={slides}
           annotations={annotations}
           report={report}
-          Environment={Environment}
           enableAI={enableAI}
           enableFilters={enableFilters}
           application={application}
           tILFedBar={tILFedBar}
+          setChatHover={setChatHover}
+          chatHover={chatHover}
           currentViewer={currentViewer}
           showSidebar={() => showSidebar()}
           sidebar={sidebar}

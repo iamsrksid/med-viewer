@@ -36,7 +36,7 @@ const ChatFeed = ({
   const { activityFeed } = viewerWindow[viewerId];
   const [activeGroup, setActiveGroup] = useState();
   const [groupData, setGroupData] = useState();
-  console.log(application);
+  console.log(caseInfo);
   useEffect(() => {
     setGroupData(caseInfo);
     setActiveGroup(caseInfo?._id);
@@ -102,16 +102,14 @@ const ChatFeed = ({
         height="50px"
         borderBottom="1px solid #DEDEDE"
       >
-        <Tooltip hasArrow label={caseInfo?._id}>
           <Text
             fontSize="14px"
             css={{
               fontWeight: "900",
             }}
           >
-            Chat- Case No- {caseNo}..... -UHID
+            Chat- {caseInfo?.caseName}
           </Text>
-        </Tooltip>
         <Flex w="30%" justifyContent="space-between" alignItems="center">
           <BsFillPeopleFill size="23px" cursor="pointer"></BsFillPeopleFill>
           <BiSearch size="23px" cursor="pointer"></BiSearch>
