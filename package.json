@@ -1,6 +1,6 @@
 {
   "name": "med-viewer",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Viewer for working on WSI based upon openseadragon",
   "author": "med-ai-softsensor",
   "license": "MIT",
