@@ -1,4 +1,4 @@
-//import React from "react";
+import React from "react";
 import { Button, Box, Text, Flex, Spacer } from "@chakra-ui/react";
 
 const Popup = ({ handlePopup, popup }) => {
