@@ -17,9 +17,7 @@ const ZoomSlider = ({ viewerId }) => {
 
   const handleZoomLevel = (e) => {
     const { value } = e.target;
-
     zoomToLevel({ viewer, value });
-
     setZoomValue(value);
   };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
-import { VStack, useToast, useDisclosure } from "@chakra-ui/react";
+import { VStack, useToast, useDisclosure, Flex, Text } from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import ZoomSlider from "../ZoomSlider/slider";
@@ -17,6 +17,7 @@ import {
 } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
+import ZoomButton from "../ZoomButton/ZoomButton"
 import {
   convertToZoomValue,
   getFileBucketFolder,
@@ -600,6 +601,20 @@ const ViewerControls = ({
             outline: "none",
           }}
         />
+      </VStack>
+      <VStack
+        // w="fit-content"
+        backgroundColor="#F8F8F5"
+        border="1px solid #00153F"
+        // borderRadius="5px"
+        py={2}
+        px={1.5}
+        zIndex="1"
+        position="absolute"
+        right="20px"
+        top="25.6vh"
+      >
+        <ZoomButton viewerId={viewerId}></ZoomButton>
       </VStack>
       <CustomMenu
         isMenuOpen={isOpen}
