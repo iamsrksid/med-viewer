@@ -13,6 +13,7 @@ import {
   VStack,
   Box,
   AccordionPanel,
+  Link,
 } from "@chakra-ui/react";
 import React from "react";
 import ScrollBar from "../ScrollBar";
@@ -20,11 +21,17 @@ import ScrollBar from "../ScrollBar";
 const metadata = {
   width: 5465,
   height: 8093,
+  location: "My Folder/Cases/203-11-22-22-UHID/SLIDE 1",
   bands: 3,
   xoffset: 0,
   yoffset: 0,
   xres: 1,
   yres: 1,
+  size: "100 mb",
+  dimension: "1280 x 720 px",
+  resulation: "148 dpi",
+  scanner: "NanoZoomer S360",
+  doctor: "Dr. Sharma",
   "vips-loader": "tiffload",
   "n-pages": 3,
   "image-description":
@@ -39,10 +46,14 @@ const metadata = {
   additional: "5465x8093 [0,0 5465x8093] [256x256] JPEG/YCbCr Q = 75",
 };
 
-const DetailsRow = ({ label, value }) => (
+const DetailsRow = ({ label, value, isLink }) => (
   <Flex w="100%">
-    <Text flex="1">{label}: </Text>
-    <Text flex="2">{value}</Text>
+    <Text flex="1" fontSize="14px" p={0}>
+      {label}:{" "}
+    </Text>
+    <Text flex="2" fontSize="14px" p={0}>
+      {isLink ? <Link color="#3B5D7C">{value}</Link> : value}
+    </Text>
   </Flex>
 );
 
@@ -52,8 +63,11 @@ const ImageDetails = ({ caseInfo, slideInfo, isOpen, onClose }) => {
       <ModalContent borderRadius={0}>
         <ModalHeader
           borderBottom="1px solid rgba(0, 0, 0, 0.25)"
-          fontSize="16px"
+          fontSize="14px"
           fontWeight="400"
+          pt="12px"
+          pb="4px"
+          pl="26px"
         >
           Image Details
         </ModalHeader>
@@ -62,7 +76,7 @@ const ImageDetails = ({ caseInfo, slideInfo, isOpen, onClose }) => {
           outline="none"
           _focus={{ border: "none" }}
         />
-        <ModalBody>
+        <ModalBody pt="34.67px" pl="26.33px" pb="23px">
           <ScrollBar>
             <VStack align="flex-start">
               <DetailsRow
@@ -72,51 +86,78 @@ const ImageDetails = ({ caseInfo, slideInfo, isOpen, onClose }) => {
                   slideInfo?.originalName?.split(".")?.[0]
                 }
               />
+              <Box flex={1} height="12px" />
               <DetailsRow label="Case Title" value={caseInfo?.caseName} />
+              <Box flex={1} height="8px" />
+              <DetailsRow
+                label="Location"
+                value={slideInfo?.metadata?.location || metadata.location}
+                isLink="true"
+              />
+              <Box flex={1} height="8px" />
               <DetailsRow
                 label="Type"
-                value={slideInfo?.metadata?.type || metadata.type}
+                value={`.${slideInfo?.originalName?.split(".")?.[1]}`}
               />
+              <Box flex={1} height="8px" />
+              <DetailsRow
+                label="Size"
+                value={slideInfo?.metadata?.size || metadata.size}
+              />
+              <Box flex={1} height="10.67px" />
+              <Flex w="100%" h="2px" bg="#DEDEDE50" />
+              <Box flex={1} height="14.33px" />
               <DetailsRow
                 label="WSI Scanner"
                 value={slideInfo?.metadata?.scanner || metadata.scanner}
               />
-              <DetailsRow
-                label="Width"
-                value={`${slideInfo?.metadata?.width || metadata.width} px`}
-              />
-              <DetailsRow
-                label="Height"
-                value={`${slideInfo?.metadata?.height || metadata.height} px`}
-              />
-              <DetailsRow
-                label="Magification"
-                value={slideInfo?.metadata?.appMag || metadata.appMag}
-              />
-              <DetailsRow
-                label="MPP"
-                value={<>{slideInfo?.metadata?.mpp || metadata.mpp} &micro;m</>}
-              />
+              <Box flex={1} height="26.33px" />
               <Flex w="100%" h="2px" bg="#DEDEDE50" />
+              <Box flex={1} height="14.67px" />
               <Accordion w="100%" allowToggle>
                 <AccordionItem border="none">
                   <AccordionButton
                     _hover={{ bg: "none" }}
                     _focus={{ border: "none" }}
-                    px={0}
+                    p={0}
                   >
-                    <Box flex="1" textAlign="left" color="#3B5D7C">
+                    <Box
+                      flex="1"
+                      textAlign="left"
+                      color="#3B5D7C"
+                      fontSize="14px"
+                    >
                       Other Details
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
-                  <AccordionPanel px={0}>
-                    <Flex flexDir="column" gap="4px">
-                      <Text>Shared With</Text>
+                  <AccordionPanel p={0}>
+                    <Flex flexDir="column" p={0}>
+                      <Text mb="2px" mt="13.69px" fontSize="14px">
+                        Shared With
+                      </Text>
                       <Flex p={2} border="2px solid #dedede80">
-                        <Text>None</Text>
+                        <Text fontSize="14px">
+                          SYSTEM
+                          <br />
+                          {slideInfo?.metadata?.doctor || metadata.doctor}
+                        </Text>
                       </Flex>
                     </Flex>
+                    <Flex w="100%" h="2px" bg="#DEDEDE50" my="15px" />
+                    <DetailsRow
+                      label="Dimension"
+                      value={
+                        slideInfo?.metadata?.dimension || metadata.dimension
+                      }
+                    />
+                    <Box flex={1} height="8px" />
+                    <DetailsRow
+                      label="Resolution"
+                      value={
+                        slideInfo?.metadata?.resulation || metadata.resulation
+                      }
+                    />
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
