@@ -44,7 +44,17 @@ const osdOptions = {
   timeout: 60000,
 };
 
-const Viewer = ({ viewerId, tile, userInfo, enableAI, slide, application }) => {
+const Viewer = ({
+  viewerId,
+  tile,
+  userInfo,
+  enableAI,
+  slide,
+  application,
+  caseInfo,
+  client2,
+  mentionUsers,
+}) => {
   const { setFabricOverlayState } = useFabricOverlayState();
   const [viewer, setViewer] = useState(null);
   const boxRef = useRef();
@@ -117,6 +127,9 @@ const Viewer = ({ viewerId, tile, userInfo, enableAI, slide, application }) => {
           userInfo={userInfo}
           enableAI={enableAI}
           slide={slide}
+          client2={client2}
+          mentionUsers={mentionUsers}
+          caseInfo={caseInfo}
         />
       )}
       {/* <Button onClick={selection}>Select</Button> */}

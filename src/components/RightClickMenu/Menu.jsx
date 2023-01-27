@@ -163,6 +163,7 @@ export const CustomMenu = ({
   handleDeleteAnnotation,
   isAnnotationSelected,
   handleEditOpen,
+  handleAnnotationChat,
 }) => {
   return isMenuOpen ? (
     <Box>
@@ -217,6 +218,13 @@ export const CustomMenu = ({
             isDisabled={!isAnnotationSelected}
           >
             Edit
+          </MenuItem>
+          <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            onClick={handleAnnotationChat}
+            isDisabled={!isAnnotationSelected}
+          >
+            Create Chat
           </MenuItem>
           <MenuDivider />
           {/* <MenuItem

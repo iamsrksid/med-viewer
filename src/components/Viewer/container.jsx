@@ -24,6 +24,9 @@ const ViewerContainer = ({
   onGetVhutAnalysis,
   onMessageListener,
   application,
+  client2,
+  mentionUsers,
+  caseInfo,
 }) => {
   const location = useLocation();
 
@@ -79,6 +82,9 @@ const ViewerContainer = ({
       enableAI={enableAI}
       slide={slide}
       userInfo={userInfo}
+      client2={client2}
+      mentionUsers={mentionUsers}
+      caseInfo={caseInfo}
     />
   );
 };

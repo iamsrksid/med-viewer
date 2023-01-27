@@ -5,6 +5,7 @@ export const FETCH_CONVERSATION = gql`
     readChat(query: $query) {
       success
       data {
+        _id
         from
         to
         toName

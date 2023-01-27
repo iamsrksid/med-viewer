@@ -23,6 +23,9 @@ import {
   SEND_MESSAGE,
 } from "../../state/graphql/ChatQuery";
 import ScrollBar from "../others/ScrollBar";
+import QueryChat from "./QueryChat";
+// import AnnotationChat from "../AnnotationChat/AnnotationChat";
+
 const formats = {
   sameDay: "[Today]",
   nextDay: "[Tomorrow]",
@@ -44,8 +47,40 @@ const DateSeperatorComponent = ({ messageSepratorDate }) => {
     </Text>
   );
 };
-const RightMessageComponent = ({ data }) => {
-  return (
+const RightMessageComponent = ({ data, setQueryChat }) => {
+  return data?.mentionedUsers?.length > 0 ? (
+    <Box
+      key={uuidv4()}
+      p="0.7rem"
+      bg="rgba(176, 200, 214, 0.15)"
+      onClick={() => setQueryChat(data)}
+      cursor="pointer"
+      alignSelf="flex-end"
+      maxW="506px"
+      minW="220px"
+      borderRadius="0"
+    >
+      <Flex color="#3B5D7C" fontSize="12px" justifyContent="space-between">
+        <Text color="#3B5D7C" fontSize="12px">
+          QUERY
+        </Text>
+        <Flex>
+          <Text>{`Dr.${data.mentionedUsers[0].toName}`}</Text>
+          {data.mentionedUsers.length > 1 && (
+            <Text ml="0.3rem">{`  +${data.mentionedUsers.length - 1}`}</Text>
+          )}
+        </Flex>
+      </Flex>
+
+      <Text color="#52585D" fontSize="12px" fontWeight="bold">
+        {data.payload.body}
+      </Text>
+      <Text color="#212224" fontSize="10px" textAlign="right">
+        {/* {data.sendAt.fromNow()} */}
+        {moment(data.createdAt).format("HH:MM ")}
+      </Text>
+    </Box>
+  ) : (
     <Box
       key={uuidv4()}
       p="14px 19px"
@@ -59,13 +94,14 @@ const RightMessageComponent = ({ data }) => {
       </Text>
       <Text color="#212224" fontSize="10px" textAlign="right">
         {/* {data.sendAt.fromNow()} */}
-        {moment(data.createdAt).format("HH:mm")}
+        {moment(data.createdAt).format("HH:MM")}
       </Text>
     </Box>
   );
 };
 
-const LeftMessageComponent = ({ data }) => {
+const LeftMessageComponent = ({ data, setQueryChat }) => {
+  console.log(data);
   return (
     <Flex>
       <Avatar
@@ -79,26 +115,54 @@ const LeftMessageComponent = ({ data }) => {
         marginTop="-3px"
         // icon={<AiOutlineUser fontSize="1.5rem" />}
       />
-      <Box
-        key={uuidv4()}
-        p="14px 19px"
-        bg="rgba(140, 179, 255, 0.1)"
-        alignSelf="flex-start"
-        maxW="506px"
-        borderRadius=" 0px 14px 14px 14px"
-      >
-        {/* {index === 0 && <Text marginTop="-10px">user </Text>} */}
-        <Text marginTop="-10px" fontSize="14px" textTransform="capitalize">
-          {data.fromName}{" "}
-        </Text>
-        <Text color="#52585D" fontSize="12px">
-          {data.payload.body}
-        </Text>
+      {data?.mentionedUsers?.length > 0 ? (
+        <Box
+          key={uuidv4()}
+          p="0.7rem"
+          bg="rgba(176, 200, 214, 0.15)"
+          onClick={() => setQueryChat(data)}
+          cursor="pointer"
+          alignSelf="flex-end"
+          maxW="506px"
+          minW="220px"
+          borderRadius="0"
+        >
+          <Flex color="#3B5D7C" fontSize="12px" justifyContent="space-between">
+            <Text color="#3B5D7C" fontSize="12px">
+              QUERY
+            </Text>
+            <Text>{`${data.fromName}`}</Text>
+          </Flex>
+          <Text color="#52585D" fontSize="12px" fontWeight="bold">
+            {data.payload.body}
+          </Text>
+          <Text color="#212224" fontSize="10px" textAlign="right">
+            {/* {data.sendAt.fromNow()} */}
+            {moment(data.createdAt).format("HH:MM ")}
+          </Text>
+        </Box>
+      ) : (
+        <Box
+          key={uuidv4()}
+          p="14px 19px"
+          bg="rgba(140, 179, 255, 0.1)"
+          alignSelf="flex-start"
+          maxW="506px"
+          borderRadius=" 0px 14px 14px 14px"
+        >
+          {/* {index === 0 && <Text marginTop="-10px">user </Text>} */}
+          <Text marginTop="-10px" fontSize="14px" textTransform="capitalize">
+            {data.fromName}{" "}
+          </Text>
+          <Text color="#52585D" fontSize="12px">
+            {data.payload.body}
+          </Text>
 
-        <Text textAlign="right" fontSize="10px" color="#6588DE">
-          {moment(data.createdAt).format("HH:mm")}
-        </Text>
-      </Box>
+          <Text textAlign="right" fontSize="10px" color="#6588DE">
+            {moment(data.createdAt).format("HH:mm")}
+          </Text>
+        </Box>
+      )}
     </Flex>
   );
 };
@@ -122,6 +186,7 @@ const ChatConversationFeed = ({
     text: "",
     mentionedUsers: [],
   });
+  const [queryChat, setQueryChat] = useState("");
   const messageRef = useRef(null);
   const bottomRef = useRef(null);
 
@@ -291,7 +356,7 @@ const ChatConversationFeed = ({
     if (subscribedMessageData) {
       const newMessages = [
         ...groupMessages,
-        subscribedMessageData.newChat.data,
+        subscribedMessageData.queryChat.data,
       ];
 
       setGroupMessages(newMessages);
@@ -391,18 +456,38 @@ const ChatConversationFeed = ({
                       messageSepratorDate={data.createdAt}
                     />
                     {data.from === userInfo._id ? (
-                      <RightMessageComponent data={data} key={uuidv4()} />
+                      <RightMessageComponent
+                        data={data}
+                        key={uuidv4()}
+                        queryChat={queryChat}
+                        setQueryChat={setQueryChat}
+                      />
                     ) : (
-                      <LeftMessageComponent data={data} key={uuidv4()} />
+                      <LeftMessageComponent
+                        data={data}
+                        key={uuidv4()}
+                        queryChat={queryChat}
+                        setQueryChat={setQueryChat}
+                      />
                     )}
                   </>
                 );
               }
 
               return data.from === userInfo._id ? (
-                <RightMessageComponent data={data} key={uuidv4()} />
+                <RightMessageComponent
+                  data={data}
+                  key={uuidv4()}
+                  queryChat={queryChat}
+                  setQueryChat={setQueryChat}
+                />
               ) : (
-                <LeftMessageComponent data={data} key={uuidv4()} />
+                <LeftMessageComponent
+                  data={data}
+                  key={uuidv4()}
+                  queryChat={queryChat}
+                  setQueryChat={setQueryChat}
+                />
               );
             })}
 
@@ -471,6 +556,15 @@ const ChatConversationFeed = ({
             </span>
           </Button>
         </form>
+        {queryChat && (
+          <QueryChat
+            setQueryChat={setQueryChat}
+            queryChat={queryChat}
+            userInfo={userInfo}
+            client={client2}
+          />
+        )}
+        {/* <AnnotationChat /> */}
       </Box>
       {/* <Box h="5px" /> */}
     </>

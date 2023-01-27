@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import AdjustmentBar from "../AdjustmentBar/adjustmentBar";
@@ -11,7 +11,6 @@ import Navigator from "../Navigator/navigator";
 import SlideFeed from "../Feed/feed";
 import ChatFeed from "../Feed/ChatFeed";
 import TILFeedBar from "../Feed/TILFeedBar";
-import { useEffect } from "react";
 
 const LayoutApp = ({
   userInfo,
@@ -73,7 +72,7 @@ const LayoutApp = ({
   };
   const handleChatFeedbar = () => {
     setChatFeedBar(true);
-    setChatHover(!chatHover)
+    setChatHover(!chatHover);
   };
   const handleTILFeedBar = () => {
     setTILFedBar(true);
@@ -240,6 +239,8 @@ const LayoutApp = ({
               slide={viewerIds?.[0]}
               slides={slides}
               setCurrentViewer={setCurrentViewer}
+              client2={client2}
+              mentionUsers={mentionUsers}
             />
           </LayoutAppBody>
         </LayoutInnerBody>

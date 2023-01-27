@@ -12,6 +12,8 @@ const ViewerFactory = ({
   slides,
   setCurrentViewer,
   application,
+  client2,
+  mentionUsers,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, sync } = fabricOverlayState;
@@ -76,6 +78,9 @@ const ViewerFactory = ({
             userInfo={userInfo}
             enableAI={enableAI}
             slide={slide}
+            client2={client2}
+            mentionUsers={mentionUsers}
+            caseInfo={caseInfo}
           />
         </Flex>
       ))}
