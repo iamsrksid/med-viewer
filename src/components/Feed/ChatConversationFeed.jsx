@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { React, useEffect, useRef, useState } from "react";
 import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import { Mention, MentionsInput } from "react-mentions";
 import {
@@ -11,7 +11,9 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import moment from "moment";
-import { AiOutlineSend } from "react-icons/ai";
+import { AiOutlineSend, AiOutlineUser } from "react-icons/ai";
+import { MdOutlineKeyboardVoice } from "react-icons/md";
+import { RiAttachment2 } from "react-icons/ri";
 import { v4 as uuidv4 } from "uuid";
 import defaultStyle from "./defaultStyle";
 import defaultMentionStyle from "./defaultMentionStyle";
@@ -21,7 +23,6 @@ import {
   SEND_MESSAGE,
 } from "../../state/graphql/ChatQuery";
 import ScrollBar from "../others/ScrollBar";
-
 const formats = {
   sameDay: "[Today]",
   nextDay: "[Tomorrow]",
@@ -44,7 +45,6 @@ const DateSeperatorComponent = ({ messageSepratorDate }) => {
   );
 };
 const RightMessageComponent = ({ data }) => {
-  // console.log(data?.payload?.body[4]);
   return (
     <Box
       key={uuidv4()}
@@ -113,25 +113,41 @@ const ChatConversationFeed = ({
   client2,
 }) => {
   let lastDate = "1999-01-01";
-  console.log("conversation",client2);
+  console.log(client2);
   const [groupMessages, setGroupMessages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-  const messageRef = useRef(null);
-  const bottomRef = useRef(null);
   const [messageInput, setMessageInput] = useState({
     mentionedText: "",
     text: "",
     mentionedUsers: [],
   });
-  // console.log(value);
+  const messageRef = useRef(null);
+  const bottomRef = useRef(null);
+
+  // const users = [
+  //   {
+  //     id: "ASck",
+  //     display: "ack",
+  //   },
+  //   {
+  //     id: "jack",
+  //     display: "Jack",
+  //   },
+  //   {
+  //     id: "john",
+  //     display: "Dr. test test",
+  //   },
+  // ];
+
   const [
     fetchMessages,
     { loading: isConversationLoading, data: msgData, error },
-  ] = useLazyQuery(FETCH_CONVERSATION, {client:client2});
+  ] = useLazyQuery(FETCH_CONVERSATION, { client: client2 });
+
   useEffect(() => {
-    if (msgData && msgData?.readChat?.success) {
-      const totalPages = msgData?.readChat?.meta?.totalPages;
+    if (msgData && msgData.readChat.success) {
+      const totalPages = msgData.readChat?.meta?.totalPages;
       if (totalPages) {
         setTotalPage(totalPages);
       }
@@ -143,10 +159,10 @@ const ChatConversationFeed = ({
       // 		objA.createdAt.getTime() - objB.createdAt.getTime()
       // );
 
-      if (pageNumber === 1) setGroupMessages(msgData?.readChat?.data?.reverse());
+      if (pageNumber === 1) setGroupMessages(msgData.readChat.data.reverse());
       else {
-        const newData = [...msgData?.readChat?.data];
-        setGroupMessages(newData?.reverse()?.concat(groupMessages));
+        const newData = [...msgData.readChat.data];
+        setGroupMessages(newData.reverse().concat(groupMessages));
       }
     }
   }, [msgData]);
@@ -190,15 +206,15 @@ const ChatConversationFeed = ({
     setTotalPage(1);
   }, [groupChatId]);
 
-  const applicationName = `${application}`;
-
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     if (pageNumber === 1) bottomRef.current?.scrollIntoView();
   }, [groupMessages]);
-  const [sendNewMessage, { error: newMessageError }] =
-    useMutation(SEND_MESSAGE);
-  // console.log(messageRef?.current?.value);
+  const [sendNewMessage, { error: newMessageError }] = useMutation(
+    SEND_MESSAGE,
+    { client: client2 }
+  );
+
   const sendMessage = async (e) => {
     e.preventDefault();
     const newMessage = messageInput.text.trim();
@@ -221,7 +237,7 @@ const ChatConversationFeed = ({
     const { data } = await sendNewMessage({
       variables: {
         body: {
-          app: applicationName,
+          app: "hospital",
           from: userInfo?._id,
           isDeleted: false,
           payload: {
@@ -275,7 +291,7 @@ const ChatConversationFeed = ({
     if (subscribedMessageData) {
       const newMessages = [
         ...groupMessages,
-        subscribedMessageData?.newChat?.data,
+        subscribedMessageData.newChat.data,
       ];
 
       setGroupMessages(newMessages);
@@ -290,16 +306,17 @@ const ChatConversationFeed = ({
         transform="translate(-50%,-50%)"
       />
     );
-  const fetchUsers = (query, callback) => {
-    if (!query) return;
 
-    setTimeout(() => {
-      const filteredUsers = users.filter((user) =>
-        user.display.toLowerCase().includes(query)
-      );
-      callback(filteredUsers);
-    }, 2000);
-  };
+  // const fetchUsers = (query, callback) => {
+  //   if (!query) return;
+
+  //   setTimeout(() => {
+  //     const filteredUsers = users.filter((user) =>
+  //       user.display.toLowerCase().includes(query)
+  //     );
+  //     callback(filteredUsers);
+  //   }, 2000);
+  // };
 
   const handleInputChange = (e, mentionedText, text, mentions) => {
     const mentionedUsers = mentions.map((mention) => ({
@@ -313,6 +330,7 @@ const ChatConversationFeed = ({
       mentionedUsers,
     });
   };
+
   return (
     <>
       <ScrollBar>
@@ -363,16 +381,16 @@ const ChatConversationFeed = ({
 						</Text>
 					)} */}
 
-            {groupMessages?.map((data) => {
-              if (lastDate !== moment(data?.createdAt)?.format("MM-DD-YYYY")) {
-                lastDate = moment(data?.createdAt)?.format("MM-DD-YYYY");
+            {groupMessages.map((data) => {
+              if (lastDate !== moment(data.createdAt).format("MM-DD-YYYY")) {
+                lastDate = moment(data.createdAt).format("MM-DD-YYYY");
 
                 return (
                   <>
                     <DateSeperatorComponent
-                      messageSepratorDate={data?.createdAt}
+                      messageSepratorDate={data.createdAt}
                     />
-                    {data?.from === userInfo?._id ? (
+                    {data.from === userInfo._id ? (
                       <RightMessageComponent data={data} key={uuidv4()} />
                     ) : (
                       <LeftMessageComponent data={data} key={uuidv4()} />
@@ -381,7 +399,7 @@ const ChatConversationFeed = ({
                 );
               }
 
-              return data?.from === userInfo?._id ? (
+              return data.from === userInfo._id ? (
                 <RightMessageComponent data={data} key={uuidv4()} />
               ) : (
                 <LeftMessageComponent data={data} key={uuidv4()} />
