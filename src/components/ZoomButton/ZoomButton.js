@@ -17,27 +17,19 @@ const ZoomButton = ({ viewerId }) => {
   const [customZoom40, setCustomZoom40] = useState(false);
   useEffect(() => {
     if (customZoom10) {
-      setCustomZoom20(false);
-      setCustomZoom40(false);
-      setCustomZoom4(false);
+      console.log("10");
       const value = 10;
       zoomToLevel({ viewer, value });
     } else if (customZoom4) {
-      setCustomZoom20(false);
-      setCustomZoom40(false);
-      setCustomZoom10(false);
+      console.log("4");
       const value = 4;
       zoomToLevel({ viewer, value });
     } else if (customZoom20) {
-      setCustomZoom10(false);
-      setCustomZoom40(false);
-      setCustomZoom4(false);
+      console.log("20");
       const value = 20;
       zoomToLevel({ viewer, value });
     } else if (customZoom40) {
-      setCustomZoom20(false);
-      setCustomZoom10(false);
-      setCustomZoom4(false);
+      console.log("40");
       const value = 40;
       zoomToLevel({ viewer, value });
     } else {
@@ -45,6 +37,10 @@ const ZoomButton = ({ viewerId }) => {
       zoomToLevel({ viewer, value });
     }
   });
+  console.log(customZoom10,'10');
+  console.log(customZoom4,'4');
+  console.log(customZoom20,'20');
+  console.log(customZoom40,'40');
   return (
     <>
       <Box
@@ -54,7 +50,11 @@ const ZoomButton = ({ viewerId }) => {
         color={customZoom4 ? "#468" : ""}
         borderBottom="1px solid black"
         cursor="pointer"
-        onClick={() => setCustomZoom4(!customZoom4)}
+        onClick={() =>{ 
+          setCustomZoom10(false);
+          setCustomZoom20(false);
+          setCustomZoom40(false);
+          setCustomZoom4(!customZoom4)}}
       >
         4X
       </Box>
@@ -65,7 +65,11 @@ const ZoomButton = ({ viewerId }) => {
         color={customZoom10 ? "#468" : ""}
         borderBottom="1px solid black"
         cursor="pointer"
-        onClick={() => setCustomZoom10(!customZoom10)}
+        onClick={() =>{
+          setCustomZoom10(false);
+          setCustomZoom4(false);
+          setCustomZoom20(false);
+          setCustomZoom10(!customZoom10)} }
       >
         10X
       </Box>
@@ -76,7 +80,12 @@ const ZoomButton = ({ viewerId }) => {
         color={customZoom20 ? "#468" : ""}
         borderBottom="1px solid black"
         cursor="pointer"
-        onClick={() => setCustomZoom20(!customZoom20)}
+        onClick={() =>{
+          setCustomZoom10(false);
+          setCustomZoom4(false);
+          setCustomZoom40(false);
+         setCustomZoom20(!customZoom20)}
+        }
       >
         20X
       </Box>
@@ -87,7 +96,12 @@ const ZoomButton = ({ viewerId }) => {
         color={customZoom40 ? "#468" : ""}
         borderBottom="1px solid black"
         cursor="pointer"
-        onClick={() => setCustomZoom40(!customZoom40)}
+        onClick={() => {
+          setCustomZoom10(false);
+          setCustomZoom4(false);
+          setCustomZoom20(false);
+          setCustomZoom40(!customZoom40)}
+        }
       >
         40x
       </Box>
