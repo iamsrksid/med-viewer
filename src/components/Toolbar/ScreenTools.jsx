@@ -62,7 +62,12 @@ const ScreenTools = ({
     <Flex px="20px" height="18px" alignItems="center">
       <ImageFilter viewerId={viewerId} />
       <DownloadImage />
-      <ViewerChat chatHover={chatHover} setChatHover={setChatHover} handleChatFeedBarClose={handleChatFeedBarClose} handleChatFeedbar={handleChatFeedbar} />
+      <ViewerChat
+        chatHover={chatHover}
+        setChatHover={setChatHover}
+        handleChatFeedBarClose={handleChatFeedBarClose}
+        handleChatFeedbar={handleChatFeedbar}
+      />
       <Divider orientation="vertical" ml="5px" border="1px solid gray" />
       {report ? (
         <ShowReport
@@ -116,9 +121,11 @@ const ScreenTools = ({
             <MenuItem onClick={handleAnnotationBar}>
               Annotation Details
             </MenuItem>
-           {localStorage.getItem("til") ?  <MenuItem onClick={handleTILFeedBar}>
-              TIL
-            </MenuItem>: null}
+            <MenuItem>Morphomatery results</MenuItem>
+            <MenuItem>Hierarchy</MenuItem>
+            {localStorage.getItem("til") ? (
+              <MenuItem onClick={handleTILFeedBar}>TIL</MenuItem>
+            ) : null}
           </MenuList>
         </Menu>
       </Flex>
