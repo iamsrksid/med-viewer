@@ -128,7 +128,7 @@ const Til = ({ viewerId, viewerIds, slide }) => {
             strokeUniform: true,
           });
         });
-        const t = new fabric.Group([...roi2, ...roi, ...roi3], {
+        const t = new fabric.Group([...roi3, ...roi2, ...roi], {
             selectable: false,
             lockMovementX: true,
             lockMovementY: true,
@@ -205,7 +205,7 @@ const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map((stroma_cor
         strokeUniform: true,
       });
     });
-    const t = new fabric.Group([...roi2, ...roi, ...roi3], {
+    const t = new fabric.Group([...roi3, ...roi2, ...roi], {
         selectable: false,
         lockMovementX: true,
         lockMovementY: true,
