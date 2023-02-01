@@ -71,6 +71,7 @@ const Til = ({ viewerId, viewerIds, slide }) => {
       // getData();
     },[data])
 
+
   const handleTIL = () => {
     console.log(tumorCords);
               if (!fabricOverlay) {
@@ -128,7 +129,7 @@ const Til = ({ viewerId, viewerIds, slide }) => {
             strokeUniform: true,
           });
         });
-        const t = new fabric.Group([...roi3, ...roi2, ...roi], {
+        const t = new fabric.Group([...roi2, ...roi3, ...roi], {
             selectable: false,
             lockMovementX: true,
             lockMovementY: true,
@@ -153,17 +154,12 @@ const Til = ({ viewerId, viewerIds, slide }) => {
                   isClosable: true,
                 });
               }
-              if (TilHover === true) {
-                const canvas = fabricOverlay?.fabricCanvas();
-                canvas?.clear()?.requestRenderAll();
-                localStorage.removeItem("til", "til");
-              }
             }
-        if(tilSubscriptionData?.tilStatus?.data?.tils_cords?.length>0 || tilSubscriptionData?.tilStatus?.data?.stroma_cords?.length>0 || tilSubscriptionData?.tilStatus?.data?.tumor_cords?.length>0){
-            console.log("til is setting in canvas");
+         else if(tilSubscriptionData?.tilStatus?.data?.tumor_cords?.length>0 || tilSubscriptionData?.tilStatus?.data?.stroma_cords?.length>0 || tilSubscriptionData?.tilStatus?.data?.lymphocyte_cords?.length>0) {
+            // console.log("til is setting in canvas");
             const canvas = fabricOverlay.fabricCanvas();
             const color = "#2Aff00";
-            const roi = tilSubscriptionData?.tilStatus?.data?.lymphocyte_cords.map((TIL_cord) => {
+            const roi = tilSubscriptionData?.tilStatus?.data?.lymphocyte_cords.flat(2).map((TIL_cord) => {
                 return new fabric.Rect({
                     top: TIL_cord[1],
                     // bottom:TIL_cord[1],
@@ -205,7 +201,7 @@ const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map((stroma_cor
         strokeUniform: true,
       });
     });
-    const t = new fabric.Group([...roi3, ...roi2, ...roi], {
+    const t = new fabric.Group([...roi2, ...roi3, ...roi], {
         selectable: false,
         lockMovementX: true,
         lockMovementY: true,
@@ -230,13 +226,13 @@ const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map((stroma_cor
               isClosable: true,
             });
           }
-          if (TilHover === true) {
-            const canvas = fabricOverlay?.fabricCanvas();
-            canvas?.clear()?.requestRenderAll();
-            localStorage.removeItem("til", "til");
-          }
-        }
       };
+      if (TilHover === true) {
+        const canvas = fabricOverlay?.fabricCanvas();
+        canvas?.clear()?.requestRenderAll();
+        localStorage.removeItem("til", "til");
+      }
+    }
           return (
     <>
       <Tooltip
