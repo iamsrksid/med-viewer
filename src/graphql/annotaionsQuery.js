@@ -306,7 +306,7 @@ export const TIL_ANALYSIS_SUBSCRIPTION = gql`
       status
       message
       data {
-        tils_cords
+        lymphocyte_cords
         stroma_cords
         tumor_cords
         slideId
@@ -369,7 +369,7 @@ query Query($query: GetTilInput) {
       key_name
       slideId
       stroma_cords
-      tils_cords
+      lymphocyte_cords
       tumor_cords
     }
     message
