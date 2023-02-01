@@ -55,7 +55,6 @@ const Til = ({ viewerId, viewerIds, slide }) => {
           query: {
                     key: `${getFileBucketFolder(viewerIds[0].originalFileUrl)}`,
                     bucket_name: "med-ai-image-processor",
-                    notifyHook: `https://development-api.viewer.prr.ai/notify_til`,
                     slideId: `${slide?._id}`,
                   }
         },
