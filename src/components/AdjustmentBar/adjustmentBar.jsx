@@ -66,29 +66,6 @@ const AdjustmentBar = ({
   const { tile } = viewerWindow[currentViewer];
   const [mongoId, setMongoId] = useState("");
 
-  const getMongoDbId = async () => {
-    try {
-      const resp = await axios.post(
-        "https://backup-quantize-vhut.prr.ai/TILS",
-        {
-          key: `${getFileBucketFolder(viewerIds[0].originalFileUrl)}`,
-          bucket_name: "med-ai-image-processor",
-          notifyHook: `https://development-api.viewer.prr.ai/notify_til`,
-          slideId: `${slide?._id}`,
-        }
-      );
-      // console.log(resp.data.mongodb_id);
-      setMongoId(resp.data.mongodb_id);
-      // console.log(slide._id);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getMongoDbId();
-  }, [slide?._id]);
-
   const handleSidebar = () => {
     showSidebar();
   };
