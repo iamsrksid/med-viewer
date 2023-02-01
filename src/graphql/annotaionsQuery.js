@@ -300,6 +300,25 @@ export const VHUT_ANALYSIS_SUBSCRIPTION = gql`
   }
 `;
 
+export const TIL_ANALYSIS_SUBSCRIPTION = gql`
+  subscription Subscription($body: AnalysisInput) {
+    tilStatus(body: $body) {
+      status
+      message
+      data {
+        tils_cords
+        stroma_cords
+        tumor_cords
+        slideId
+        status
+        key_name
+        bucket_name
+      }
+      analysisType
+    }
+  }
+`;
+
 export const VHUT_ANALTSIS = gql`
   mutation VhutAnalysis($body: VhutBodyInput!) {
     vhutAnalysis(body: $body)
