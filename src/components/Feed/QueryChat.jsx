@@ -19,7 +19,6 @@ import QueryHelper from "./QueryHelper";
 
 const QueryChat = ({ setQueryChat, queryChat, userInfo, client }) => {
   const [groupMessages, setGroupMessages] = useState([]);
-  console.log(groupMessages);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [

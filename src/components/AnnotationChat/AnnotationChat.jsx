@@ -103,7 +103,7 @@ const AnnotationChat = ({
     const mentionedUsers = mentions.map((mention) => ({
       toId: mention.id,
       toName: mention.display,
-      message: mentionedText,
+      message: messageInput?.text,
     }));
     setMessageInput({
       mentionedText,
