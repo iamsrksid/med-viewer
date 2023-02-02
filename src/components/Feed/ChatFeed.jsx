@@ -11,11 +11,11 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
 import { GrFormClose } from "react-icons/gr";
-import { useFabricOverlayState } from "../../state/store";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiFillLock } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
+import { useFabricOverlayState } from "../../state/store";
 import ChatConversationFeed from "./ChatConversationFeed";
 
 const ChatFeed = ({
@@ -30,6 +30,7 @@ const ChatFeed = ({
   Environment,
   userInfo,
   client2,
+  addUsersToCase,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
@@ -102,17 +103,17 @@ const ChatFeed = ({
         height="50px"
         borderBottom="1px solid #DEDEDE"
       >
-          <Text
-            fontSize="14px"
-            css={{
-              fontWeight: "900",
-            }}
-          >
-            Chat- {caseInfo?.caseName}
-          </Text>
+        <Text
+          fontSize="14px"
+          css={{
+            fontWeight: "900",
+          }}
+        >
+          Chat- {caseInfo?.caseName}
+        </Text>
         <Flex w="30%" justifyContent="space-between" alignItems="center">
-          <BsFillPeopleFill size="23px" cursor="pointer"></BsFillPeopleFill>
-          <BiSearch size="23px" cursor="pointer"></BiSearch>
+          <BsFillPeopleFill size="23px" cursor="pointer" />
+          <BiSearch size="23px" cursor="pointer" />
           <GrFormClose
             size="23px"
             cursor="pointer"
@@ -159,58 +160,59 @@ const ChatFeed = ({
         </TabPanels>
       </Tabs> */}
       <Box w="100%" h="90%">
-          <Flex
-            bg="#fff"
-            margin="0 0 0 5px"
-            flexDir="column"
-            pos="relative"
-            w="100%"
-            h="100%"
-          >
-            {groupData?._id ? (
-              <>
-                {/* <ConversationHeader groupName={groupData?.caseName} /> */}
-                <ChatConversationFeed
-                  userInfo={userInfo}
-                  application={application}
-                  app={application}
-                  users={users}
-                  client2={client2}
-                  groupChatId={groupData?._id}
-                  mentionUsers={mentionUsers}
-                />
-              </>
-            ) : (
-              <Flex
-                w="100%"
-                h="100%"
-                justifyContent="center"
+        <Flex
+          bg="#fff"
+          margin="0 0 0 5px"
+          flexDir="column"
+          pos="relative"
+          w="100%"
+          h="100%"
+        >
+          {groupData?._id ? (
+            <>
+              {/* <ConversationHeader groupName={groupData?.caseName} /> */}
+              <ChatConversationFeed
+                userInfo={userInfo}
+                application={application}
+                app={application}
+                users={users}
+                client2={client2}
+                groupChatId={groupData?._id}
+                mentionUsers={mentionUsers}
+                addUsersToCase={addUsersToCase}
+              />
+            </>
+          ) : (
+            <Flex
+              w="100%"
+              h="100%"
+              justifyContent="center"
+              alignItems="center"
+              flexDir="column"
+              pos="relative"
+            >
+              <HiOutlineUserGroup fontSize="22px" />
+              <Text fontSize="24px" fontWeight="500">
+                Group Chat
+              </Text>
+              <Text fontSize="14px" color="#52585D">
+                Send and receive messages
+              </Text>
+              <Text
+                textAlign="center"
+                pos="absolute"
+                bottom="20px"
+                display="flex"
                 alignItems="center"
-                flexDir="column"
-                pos="relative"
+                gap="0.5rem"
+                color="#52585D"
+                fontSize="14px"
               >
-                <HiOutlineUserGroup fontSize="22px" />
-                <Text fontSize="24px" fontWeight="500">
-                  Group Chat
-                </Text>
-                <Text fontSize="14px" color="#52585D">
-                  Send and receive messages
-                </Text>
-                <Text
-                  textAlign="center"
-                  pos="absolute"
-                  bottom="20px"
-                  display="flex"
-                  alignItems="center"
-                  gap="0.5rem"
-                  color="#52585D"
-                  fontSize="14px"
-                >
-                  <AiFillLock /> Encrypted
-                </Text>
-              </Flex>
-            )}
-          </Flex>
+                <AiFillLock /> Encrypted
+              </Text>
+            </Flex>
+          )}
+        </Flex>
       </Box>
     </Box>
   );

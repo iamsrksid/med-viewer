@@ -1,4 +1,4 @@
-import React,{useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import { Mention, MentionsInput } from "react-mentions";
 import {
@@ -101,7 +101,6 @@ const RightMessageComponent = ({ data, setQueryChat }) => {
 };
 
 const LeftMessageComponent = ({ data, setQueryChat }) => {
-  console.log(data);
   return (
     <Flex>
       <Avatar
@@ -175,9 +174,9 @@ const ChatConversationFeed = ({
   users,
   mentionUsers,
   client2,
+  addUsersToCase,
 }) => {
   let lastDate = "1999-01-01";
-  console.log(client2);
   const [groupMessages, setGroupMessages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -207,7 +206,7 @@ const ChatConversationFeed = ({
 
   const [
     fetchMessages,
-    { loading: isConversationLoading, data: msgData, error },
+    { loading: isConversationLoading, refetch, data: msgData, error },
   ] = useLazyQuery(FETCH_CONVERSATION, { client: client2 });
 
   useEffect(() => {
@@ -282,6 +281,11 @@ const ChatConversationFeed = ({
 
   const sendMessage = async (e) => {
     e.preventDefault();
+    const ids = messageInput?.mentionedUsers?.map((item) => item.toId);
+    const newIds = [...new Set(ids)];
+    const userIds = mentionUsers
+      ?.filter((user) => newIds.includes(user?.id))
+      .map((user) => user.userId);
     const newMessage = messageInput.text.trim();
     if (!newMessage) return;
     setGroupMessages([
@@ -290,15 +294,11 @@ const ChatConversationFeed = ({
         from: userInfo?._id,
         createdAt: moment(),
         payload: { body: newMessage },
+        mentionedUsers: messageInput.mentionedUsers,
+        fromName: `${userInfo.firstName} ${userInfo.lastName}`,
       },
     ]);
 
-    e.target.reset();
-    setMessageInput({
-      mentionedText: "",
-      text: "",
-      mentionedUsers: [],
-    });
     const { data } = await sendNewMessage({
       variables: {
         body: {
@@ -312,11 +312,24 @@ const ChatConversationFeed = ({
           to: groupChatId,
           toName: "",
           fromImage: "",
-          fromName: `${userInfo.firstName}`,
+          fromName: `${userInfo.firstName} ${userInfo.lastName}`,
           mentionedUsers: messageInput.mentionedUsers,
         },
       },
     });
+    if (messageInput?.mentionedUsers?.length > 0) {
+      addUsersToCase({
+        caseId: groupChatId,
+        userIds,
+      });
+    }
+    e.target.reset();
+    setMessageInput({
+      mentionedText: "",
+      text: "",
+      mentionedUsers: [],
+    });
+    refetch();
   };
 
   // const handleScroll: any = (e: any) => {
@@ -387,7 +400,7 @@ const ChatConversationFeed = ({
     const mentionedUsers = mentions.map((mention) => ({
       toId: mention.id,
       toName: mention.display,
-      message: mentionedText,
+      message: messageInput?.text,
     }));
     setMessageInput({
       mentionedText,

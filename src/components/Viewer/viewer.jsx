@@ -54,6 +54,7 @@ const Viewer = ({
   caseInfo,
   client2,
   mentionUsers,
+  addUsersToCase,
 }) => {
   const { setFabricOverlayState } = useFabricOverlayState();
   const [viewer, setViewer] = useState(null);
@@ -130,6 +131,7 @@ const Viewer = ({
           client2={client2}
           mentionUsers={mentionUsers}
           caseInfo={caseInfo}
+          addUsersToCase={addUsersToCase}
         />
       )}
       {/* <Button onClick={selection}>Select</Button> */}

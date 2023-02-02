@@ -41,6 +41,7 @@ const LayoutApp = ({
   mentionUsers,
   Environment,
   updateSynopticReport,
+  addUsersToCase,
 }) => {
   // const { handleEvent } = useKeyboardEvents();
 
@@ -209,6 +210,7 @@ const LayoutApp = ({
               client2={client2}
               mentionUsers={mentionUsers}
               Environment={Environment}
+              addUsersToCase={addUsersToCase}
             />
           ) : null}
           {tILFedBar ? (
@@ -241,6 +243,7 @@ const LayoutApp = ({
               setCurrentViewer={setCurrentViewer}
               client2={client2}
               mentionUsers={mentionUsers}
+              addUsersToCase={addUsersToCase}
             />
           </LayoutAppBody>
         </LayoutInnerBody>

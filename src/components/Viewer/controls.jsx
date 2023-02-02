@@ -17,7 +17,7 @@ import {
 } from "../../state/actions/fabricOverlayActions";
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
-import ZoomButton from "../ZoomButton/ZoomButton"
+import ZoomButton from "../ZoomButton/ZoomButton";
 import {
   convertToZoomValue,
   getFileBucketFolder,
@@ -50,6 +50,7 @@ const ViewerControls = ({
   client2,
   mentionUsers,
   caseInfo,
+  addUsersToCase,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, isViewportAnalysing } = fabricOverlayState;
@@ -614,7 +615,7 @@ const ViewerControls = ({
         right="20px"
         top="25.6vh"
       >
-        <ZoomButton viewerId={viewerId}></ZoomButton>
+        <ZoomButton viewerId={viewerId} />
       </VStack>
       <CustomMenu
         isMenuOpen={isOpen}
@@ -649,6 +650,7 @@ const ViewerControls = ({
         client={client2}
         mentionUsers={mentionUsers}
         chatId={caseInfo?._id}
+        addUsersToCase={addUsersToCase}
       />
       <ShowMetric viewerId={viewerId} slide={slide} />
     </>

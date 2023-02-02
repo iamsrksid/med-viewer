@@ -14,6 +14,7 @@ const ViewerFactory = ({
   application,
   client2,
   mentionUsers,
+  addUsersToCase,
 }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, sync } = fabricOverlayState;
@@ -81,6 +82,7 @@ const ViewerFactory = ({
             client2={client2}
             mentionUsers={mentionUsers}
             caseInfo={caseInfo}
+            addUsersToCase={addUsersToCase}
           />
         </Flex>
       ))}

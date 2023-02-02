@@ -63,6 +63,7 @@ export const SEND_MESSAGE = gql`
         mentionedUsers {
           toId
           toName
+          message
         }
       }
     }

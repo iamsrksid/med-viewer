@@ -27,6 +27,7 @@ const ViewerContainer = ({
   client2,
   mentionUsers,
   caseInfo,
+  addUsersToCase,
 }) => {
   const location = useLocation();
 
@@ -85,6 +86,7 @@ const ViewerContainer = ({
       client2={client2}
       mentionUsers={mentionUsers}
       caseInfo={caseInfo}
+      addUsersToCase={addUsersToCase}
     />
   );
 };

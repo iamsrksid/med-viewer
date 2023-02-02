@@ -32,8 +32,8 @@ const AnnotationChat = ({
   client,
   chatId,
   mentionUsers,
+  addUsersToCase,
 }) => {
-  console.log(chatId, client, userInfo);
   const [groupMessages, setGroupMessages] = useState([]);
   const [messageInput, setMessageInput] = useState({
     mentionedText: "",
@@ -49,6 +49,11 @@ const AnnotationChat = ({
 
   const sendMessage = async (e) => {
     e.preventDefault();
+    const ids = messageInput?.mentionedUsers?.map((item) => item.toId);
+    const newIds = [...new Set(ids)];
+    const userIds = mentionUsers
+      ?.filter((user) => newIds.includes(user?.id))
+      .map((user) => user.userId);
     const newMessage = messageInput.text.trim();
     if (!newMessage) return;
     setGroupMessages([
@@ -57,15 +62,11 @@ const AnnotationChat = ({
         from: userInfo?._id,
         createdAt: moment(),
         payload: { body: newMessage },
+        mentionedUsers: messageInput.mentionedUsers,
+        fromName: `${userInfo.firstName} ${userInfo.lastName}`,
       },
     ]);
 
-    e.target.reset();
-    setMessageInput({
-      mentionedText: "",
-      text: "",
-      mentionedUsers: [],
-    });
     const { data } = await sendNewMessage({
       variables: {
         body: {
@@ -79,10 +80,22 @@ const AnnotationChat = ({
           to: chatId,
           toName: "",
           fromImage: "",
-          fromName: `${userInfo.firstName}`,
+          fromName: `${userInfo.firstName} ${userInfo.lastName}`,
           mentionedUsers: messageInput.mentionedUsers,
         },
       },
+    });
+    if (messageInput?.mentionedUsers?.length > 0) {
+      addUsersToCase({
+        caseId: chatId,
+        userIds,
+      });
+    }
+    e.target.reset();
+    setMessageInput({
+      mentionedText: "",
+      text: "",
+      mentionedUsers: [],
     });
     onClose();
   };
