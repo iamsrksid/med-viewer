@@ -39,7 +39,7 @@ const ToolbarButton = ({
       <Tooltip
         label={label}
         aria-label={label}
-        placement="left-start"
+        placement="bottom"
         openDelay={0}
         bg="#E4E5E8"
         color="rgba(89, 89, 89, 1)"
