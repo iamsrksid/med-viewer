@@ -32,10 +32,7 @@ const ZoomButton = ({ viewerId }) => {
       console.log("40");
       const value = 40;
       zoomToLevel({ viewer, value });
-    } else {
-      const value = 1;
-      zoomToLevel({ viewer, value });
-    }
+    } 
   });
   console.log(customZoom10,'10');
   console.log(customZoom4,'4');

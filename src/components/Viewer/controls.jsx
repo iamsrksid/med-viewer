@@ -148,6 +148,7 @@ const ViewerControls = ({
       top,
       width,
       height,
+      slideId,
       hash: annotationObject.hash,
       userId: userInfo._id || userInfo.userId,
     };
@@ -168,12 +169,12 @@ const ViewerControls = ({
     } else if (annotationObject.type === "polygon") {
       body = { ...body, points: annotationObject.points };
     }
-
+    // console.log("slideID", slideId);
     console.log("body....", body);
     try {
       // const resp = await onVhutAnalysis(body);
       onVhutAnalysis({
-        variables: { body: { ...body } },
+        variables: { body: { ...body} },
       });
       // toast({
       //   title: resp.data.message,
@@ -344,6 +345,7 @@ const ViewerControls = ({
             annotation.set({ isAnalysed: true, analysedROI });
           }
         }
+        console.log(vhutSubscriptionData.analysisStatus);
         toast({
           title: message,
           status: "success",
