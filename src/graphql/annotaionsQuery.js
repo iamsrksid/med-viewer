@@ -129,6 +129,20 @@ export const SAVE_ANNOTATION = gql`
         belongsToApp
         createdAt
         updatedAt
+        fontSize
+        fontWeight
+        fontFamily
+        fontStyle
+        lineHeight
+        underline
+        overline
+        linethrough
+        textAlign
+        textBackgroundColor
+        charSpacing
+        minWidth
+        splitByGrapheme
+        styles
       }
       message
       success
@@ -362,19 +376,18 @@ export const GET_VHUT_ANALYSIS = gql`
 `;
 
 export const GET_TILS_ANALYSIS = gql`
-query Query($query: GetTilInput) {
-  getTils(query: $query) {
-    data {
-      bucket_name
-      key_name
-      slideId
-      stroma_cords
-      lymphocyte_cords
-      tumor_cords
+  query Query($query: GetTilInput) {
+    getTils(query: $query) {
+      data {
+        bucket_name
+        key_name
+        slideId
+        stroma_cords
+        lymphocyte_cords
+        tumor_cords
+      }
+      message
+      status
     }
-    message
-    status
   }
-}
-
 `;
