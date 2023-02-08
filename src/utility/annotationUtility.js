@@ -562,7 +562,10 @@ export const getAnnotationMetric = (annotation, mpp) => {
     console.log("====================================");
     console.log("annotation", annotation);
     console.log("====================================");
-    let x1, y1, x2, y2;
+    let x1;
+    let y1;
+    let x2;
+    let y2;
     if (annotation.cords) {
       [x1, y1, x2, y2] = annotation.cords;
     } else {

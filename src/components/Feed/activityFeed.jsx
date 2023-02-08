@@ -26,13 +26,13 @@ import { BsCircle, BsSlash } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
 import { FaDrawPolygon } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
+import { useMutation } from "@apollo/client";
 import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
 import { updateAnnotationInDB } from "../../utility";
 import ScrollBar from "../ScrollBar";
 import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 import DeleteConfirmation from "../Annotations/DeleteConfirmation";
-import { useMutation } from "@apollo/client";
 import {
   DELETE_ANNOTATION,
   UPDATE_ANNOTATION,
