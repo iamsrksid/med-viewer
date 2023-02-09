@@ -17,11 +17,12 @@ import IconSize from "../ViewerToolbar/IconSize";
 import { useLazyQuery } from "@apollo/client/react";
 import { useSubscription } from "@apollo/client";
 import { getFileBucketFolder } from "../../utility";
+import { updateTool } from "../../state/actions/fabricOverlayActions";
 
 const Til = ({ viewerId, viewerIds, slide, hideTumor, hideStroma, hideLymphocyte }) => {
   const [ifScreenlessthan1536px] = useMediaQuery("(max-width:1536px)");
   const [TilHover, setTilHover] = useState(false);
-  const { fabricOverlayState } = useFabricOverlayState();
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { fabricOverlay, viewer } = viewerWindow[viewerId];
   const [tilCords, setTilCords] = useState([]);
@@ -49,9 +50,35 @@ const Til = ({ viewerId, viewerIds, slide, hideTumor, hideStroma, hideLymphocyte
       }
     },[])
 
+useEffect(()=>{
+  if(TilHover){
+  setFabricOverlayState(updateTool({ tool: "" }));
+  if(tilSubscriptionData?.tilStatus?.data?.TILS_score || tilSubscriptionData?.tilStatus?.data?.tumor_area || tilSubscriptionData?.tilStatus?.data?.stroma_area ){
+    localStorage.setItem("tilScore", tilSubscriptionData?.tilStatus?.data?.TILS_score);
+    localStorage.setItem("tumorArea", tilSubscriptionData?.tilStatus?.data?.tumor_area);
+    localStorage.setItem("stromaArea", tilSubscriptionData?.tilStatus?.data?.stroma_area);
+    localStorage.setItem("lymphocyteCount", tilSubscriptionData?.tilStatus?.data?.lymphocyte_count);
+  }
+  else if(data?.getTils?.data?.TILS_score || data?.getTils?.data?.tumor_area || data?.getTils?.data?.stroma_area){
+    localStorage.setItem("tilScore", data?.getTils?.data?.TILS_score);
+    localStorage.setItem("tumorArea", data?.getTils?.data?.tumor_area);
+    localStorage.setItem("stromaArea", data?.getTils?.data?.stroma_area);
+    localStorage.setItem("lymphocyteCount", data?.getTils?.data?.lymphocyte_count);
+  }
+  }
+  else{
+    localStorage.removeItem("tumorArea");
+    localStorage.removeItem("stromaArea");
+    localStorage.removeItem("tilScore");
+    localStorage.removeItem("lymphocyteCount");
+  setFabricOverlayState(updateTool({ tool: "Move" }));
+  }
 
+},[TilHover])
+
+console.log(tilSubscriptionData);
     useEffect(()=>{
-      if(!data || !tilSubscriptionData ){
+      if(stromaCords?.length>0 || tumorCords?.length>0 || tilCords?.length> 0 || tilSubscriptionData?.tilStatus?.message === "Til is completed" ){
         toast({
           title: "Tils can be run now",
           description: "",
@@ -60,7 +87,7 @@ const Til = ({ viewerId, viewerIds, slide, hideTumor, hideStroma, hideLymphocyte
           isClosable: true,
         });
       }
-    },[tilSubscriptionData, data])
+    },[stromaCords,tumorCords,tilCords,tilSubscriptionData?.tilStatus?.message]);
     useEffect(()=>{
      if(!tilSubscriptionData){
       getTils({
@@ -76,9 +103,6 @@ const Til = ({ viewerId, viewerIds, slide, hideTumor, hideStroma, hideLymphocyte
         setTilCords(data?.getTils?.data?.lymphocyte_cords);
         setTumorCords(data?.getTils?.data?.tumor_cords);
         setStromaCords(data?.getTils?.data?.stroma_cords);
-        localStorage.setItem("tilScore", data?.getTils?.data?.TILS_score);
-        localStorage.setItem("tilScore", data?.getTils?.data?.TILS_score);
-        localStorage.setItem("tilScore", data?.getTils?.data?.TILS_score);
       }
      }
       console.log(data);
@@ -283,6 +307,8 @@ const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map((stroma_cor
       });
     });
     if(hideTumor){
+      canvas?.clear()?.requestRenderAll();
+
       const t = new fabric.Group([...roi3, ...roi], {
         selectable: false,
         lockMovementX: true,
