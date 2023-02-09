@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Flex, useMediaQuery, IconButton, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, useMediaQuery, IconButton, Text, Tooltip,  useToast, } from "@chakra-ui/react";
 import { GrFormClose } from "react-icons/gr";
 import { BsEye } from "react-icons/bs";
 import { BsEyeSlash } from "react-icons/bs";
@@ -14,6 +14,7 @@ import {
   getScaleFactor,
   saveAnnotationToDB,
 } from "../../utility";
+import { updateTool } from "../../state/actions/fabricOverlayActions";
 
 
 const getDrawCursor = (brushSize, brushColor) => {
@@ -63,13 +64,16 @@ const TILFeedBar = ({
   const [editTumor, setEditTumor] = useState(true);
   const [editStroma, setEditStroma] = useState(true);
   const [editLymphocyte, setEditLymphocyte] = useState(true);
+  const [contours, setContours] = useState("");
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, isViewportAnalysing,color, activeTool } = fabricOverlayState;
+  const toast = useToast();
   const { viewer, fabricOverlay, slideId, originalFileUrl } =
     viewerWindow[viewerId];
+    console.log(activeTool);
     const isActive = activeTool === "DRAW";
 
-    const [path, setPath] = useState(null);
+    const [pathStroma, setPathStroma] = useState(null);
     const [textbox, setTextbox] = useState(false);
   
     const [myState, setState] = useState({
@@ -95,7 +99,7 @@ const handleDrawStroma =()=>{
     const canvas = fabricOverlay.fabricCanvas();
     const pathCreated = (event) => {
       canvas.selection = false;
-      setPath(event.path);
+      setPathStroma(event.path);
     };
 
     function handleMouseDown(event) {
@@ -103,6 +107,8 @@ const handleDrawStroma =()=>{
       viewer.setMouseNavEnabled(false);
       viewer.outerTracker.setTracking(false);
     }
+
+    
     viewer.setMouseNavEnabled(true);
     viewer.outerTracker.setTracking(true);
     const brushWidth = myState.width.pixelWidth;
@@ -113,8 +119,8 @@ const handleDrawStroma =()=>{
     canvas.freeDrawingBrush.width = brushWidth / scaleFactor;
     canvas.renderAll();
 
-    if(editTumor === true){
-    
+    if(editStroma === true){
+  setFabricOverlayState(updateTool({ tool: "DRAW" }));
     // EXAMPLE: of using an image for cursor
     // https://i.stack.imgur.com/fp7eL.png
     // canvas.freeDrawingCursor = `url(${logo}) 0 50, auto`;
@@ -122,6 +128,7 @@ const handleDrawStroma =()=>{
 
     canvas.on("mouse:down", handleMouseDown);
     canvas.on("path:created", pathCreated);
+
   }
   
   if(editStroma === false){
@@ -134,18 +141,59 @@ const handleDrawStroma =()=>{
     canvas.freeDrawingCursor = "";
     }
   }
+  useEffect(()=>{
+    if(editStroma===true){
+    const canvas = fabricOverlay.fabricCanvas();
+      canvas.isDrawingMode = false;
+      canvas.freeDrawingCursor = "";
+  setFabricOverlayState(updateTool({ tool: "Move" }));
 
+    }
+  },[editStroma])
+
+  const closeAllEdit=()=>{
+  setFabricOverlayState(updateTool({ tool: "Move" }));
+    const canvas = fabricOverlay.fabricCanvas();
+    canvas.isDrawingMode = false;
+    canvas.freeDrawingCursor = "";
+  }
 
   useEffect(()=>{
-    if(path){
-      path.fill = "yellow";
-      path.opacity = "0.5";
-      path.selectable = "false";
+    if(pathStroma){
+      pathStroma.fill = "yellow";
+      pathStroma.opacity = "0.5";
+      pathStroma.selectable = false;
+      pathStroma.hasControls = false;
+      pathStroma.hoverCursor = "default";
+      toast({
+        title: "Stroma Contours Added",
+        description: "",
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
     }
-  },[path]);
+  },[pathStroma]);
 
+  useEffect(()=>{
+    if(pathStroma){
+      setContours("stroma");
+    }
+    else{
+      setContours("");
+    }
+  },[pathStroma])
 
-  console.log(path, "path");
+  const message = createAnnotationMessage({ slideId, shape: pathStroma, viewer, maskType:contours});
+   
+  const dataSend = {
+    ...message,
+  }
+
+  console.log(dataSend.object)
+
+ 
+  // console.log(path, "path");
   return (
     <Box
       w="15.88vw"
@@ -153,7 +201,7 @@ const handleDrawStroma =()=>{
       position="fixed"
       right={showReport ? "33.281vw" : synopticType !== "" ? "40vw" : "0"}
       zIndex={2}
-      borderLeft="1px solid black"
+      // borderLeft="1px solid gray"
       background="#FCFCFC"
       height="90%"
     >
@@ -187,6 +235,7 @@ const handleDrawStroma =()=>{
             cursor="pointer"
             onClick={()=>{
               handleFeedBarClose();
+              closeAllEdit();
               setHideLymphocyte(false);
               setHideStroma(false);
               setHideTumor(false);
@@ -266,6 +315,8 @@ const handleDrawStroma =()=>{
             onClick={() => {
               // handleTIL();
               setEditTumor(!editTumor);
+              setEditStroma(true);
+              setEditLymphocyte(true)
             }}
             _hover={{ bgColor: "none" }}
           />
@@ -341,6 +392,8 @@ const handleDrawStroma =()=>{
               // handleTIL();
               handleDrawStroma();
               setEditStroma(!editStroma);
+              setEditTumor(true);
+              setEditLymphocyte(true);
             }}
             _hover={{ bgColor: "none" }}
           />
@@ -415,6 +468,8 @@ const handleDrawStroma =()=>{
             onClick={() => {
               // handleTIL();
               setEditLymphocyte(!editLymphocyte);
+              setEditStroma(true);
+              setEditTumor(true);
             }}
             _hover={{ bgColor: "none" }}
           />
@@ -425,20 +480,20 @@ const handleDrawStroma =()=>{
      <Box mt="45px" w="100%">
       <Text bg="gray.100" mb="35px" w="100%" textAlign="center">TIL Values</Text>
       <Box borderBottom="1px solid gray" mb="10px" py="3px">
-      <Text fontSize="15px">TIL Score : </Text>
+      <Text pl="5px" fontSize="15px">TIL Score : {localStorage.getItem("tilScore")?localStorage.getItem("tilScore") : ""} </Text>
       </Box>
      <Box borderBottom="1px solid gray" mb="10px" py="3px">
-     <Text fontSize="15px">TIL Formula :</Text>
-      <Text as="span" fontSize="15px">(lymphocyte area / stroma area) * 100 </Text>
+     <Text pl="5px" fontSize="15px">TIL Formula :</Text>
+      <Text pl="5px" as="span" fontSize="15px">(lymphocyte area / stroma area) * 100 </Text>
      </Box>
      <Box borderBottom="1px solid gray" mb="10px" py="3px">
-     <Text fontSize="15px">Tumor Area :</Text>
+     <Text pl="5px" fontSize="15px">Tumor Area : {localStorage.getItem("tumorArea")?localStorage.getItem("tumorArea") : ""}</Text>
      </Box>
      <Box borderBottom="1px solid gray" mb="10px" py="3px">
-     <Text fontSize="15px">Stroma Area :</Text>
+     <Text pl="5px" fontSize="15px">Stroma Area : {localStorage.getItem("stromaArea")?localStorage.getItem("stromaArea") : ""}</Text>
      </Box>
      <Box borderBottom="1px solid gray" mb="10px" py="3px">
-     <Text fontSize="15px">Lymphocytes :</Text>
+     <Text pl="5px" fontSize="15px">Lymphocytes count : {localStorage.getItem("lymphocyteCount")?localStorage.getItem("lymphocyteCount") : ""}</Text>
      </Box>
      </Box>
     </Box>

@@ -54,6 +54,7 @@ export const createAnnotationMessage = ({
   viewer,
   user,
   annotation,
+  maskType,
 }) => {
   if (!viewer || !shape) return null;
 
@@ -129,6 +130,7 @@ export const createAnnotationMessage = ({
         slide: slideId,
         zoomLevel: viewer.viewport.getZoom(),
         text: "",
+        maskType: maskType || "",
       };
     } else {
       message.object.set({
@@ -137,6 +139,7 @@ export const createAnnotationMessage = ({
         slide: slideId,
         zoomLevel: viewer.viewport.getZoom(),
         text: "",
+        maskType: maskType || "",
       });
     }
   }
