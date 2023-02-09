@@ -29,7 +29,6 @@ import {
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
 
-
 const getDrawCursor = (brushSize, brushColor) => {
   brushSize = brushSize < 4 ? 8 : brushSize * 3;
   const circle = `
@@ -133,7 +132,6 @@ const TILFeedBar = ({
   //     // canvas.freeDrawingCursor = `url(${logo}) 0 50, auto`;
   //    canvas.freeDrawingCursor = createFreeDrawingCursor(brushWidth, "yellow");
 
-
   //     canvas.on("mouse:down", handleMouseDown);
   //     canvas.on("path:created", pathCreated);
   //   }
@@ -174,7 +172,6 @@ const TILFeedBar = ({
       viewer.outerTracker.setTracking(false);
     }
 
-
     const brushWidth = myState.width.pixelWidth;
     const scaleFactor = getScaleFactor(viewer);
     canvas.isDrawingMode = true;
@@ -182,6 +179,7 @@ const TILFeedBar = ({
     canvas.freeDrawingBrush.color = "yellow";
     canvas.freeDrawingBrush.width = brushWidth / scaleFactor;
     canvas.renderAll();
+    console.log("new changes");
 
     canvas.freeDrawingCursor = createFreeDrawingCursor(brushWidth, "yellow");
     canvas.on("mouse:down", handleMouseDown);
@@ -227,7 +225,6 @@ const TILFeedBar = ({
       setFabricOverlayState(updateTool({ tool: "Move" }));
     }
   };
-
 
   return (
     <Box
@@ -303,7 +300,6 @@ const TILFeedBar = ({
                 !visibleTumor ? (
                   <BsEyeSlash size={IconSize()} color="#151C25" />
                 ) : (
-
                   <BsEye size={IconSize()} color="#3b5d7c" />
                 )
               }
@@ -357,7 +353,6 @@ const TILFeedBar = ({
               _hover={{ bgColor: "none" }}
             />
           </Flex>
-
         </Flex>
         {/* stroma */}
         <Flex
@@ -380,7 +375,6 @@ const TILFeedBar = ({
                 !visibleStroma ? (
                   <BsEyeSlash size={IconSize()} color="#151C25" />
                 ) : (
-
                   <BsEye size={IconSize()} color="#3b5d7c" />
                 )
               }
@@ -433,7 +427,6 @@ const TILFeedBar = ({
               _hover={{ bgColor: "none" }}
             />
           </Flex>
-
         </Flex>
         {/* lymphocyte */}
         <Flex
@@ -456,7 +449,6 @@ const TILFeedBar = ({
                 !visibleLymphocyte ? (
                   <BsEyeSlash size={IconSize()} color="#151C25" />
                 ) : (
-
                   <BsEye size={IconSize()} color="#3b5d7c" />
                 )
               }
@@ -509,10 +501,8 @@ const TILFeedBar = ({
               _hover={{ bgColor: "none" }}
             />
           </Flex>
-
         </Flex>
       </Box>
-
 
       <Box mt="45px" w="100%">
         <Text bg="gray.100" mb="35px" w="100%" textAlign="center">
@@ -537,7 +527,6 @@ const TILFeedBar = ({
           <Text fontSize="15px">Lymphocytes :</Text>
         </Box>
       </Box>
-
     </Box>
   );
 };
