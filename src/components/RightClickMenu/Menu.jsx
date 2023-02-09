@@ -241,6 +241,13 @@ export const CustomMenu = ({
           >
             Delete
           </MenuItem>
+          {localStorage.getItem("til") ?  <MenuItem
+            _hover={{ bgColor: "#DEDEDE" }}
+            // onClick={handleDeleteAnnotation}
+            isDisabled={localStorage.getItem("til")? false : true}
+          >
+            Refetch TIL
+          </MenuItem> : null}
         </MenuList>
       </Menu>
     </Box>

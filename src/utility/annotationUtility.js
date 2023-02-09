@@ -5,9 +5,9 @@ import { normalizeUnits } from "./utility";
 /** Get annotation JSON */
 export const getAnnotationJSON = (annotation) => {
   if (!annotation) return null;
-  // console.log("====================================");
-  // console.log("annotationssss", annotation);
-  // console.log("====================================");
+  console.log("====================================");
+  console.log("annotationssss", annotation);
+  console.log("====================================");
   if (annotation.type === "viewport") return annotation;
   return annotation.toJSON([
     "slide",
@@ -24,7 +24,6 @@ export const getAnnotationJSON = (annotation) => {
     "end_points",
     "isAnalysed",
     "analysedROI",
-    "timeStamp",
   ]);
 };
 
@@ -53,12 +52,13 @@ export const createAnnotationMessage = ({
   slideId,
   shape,
   viewer,
-  userInfo,
+  user,
   annotation,
 }) => {
   if (!viewer || !shape) return null;
+
   const message = {
-    username: userInfo ? `${userInfo.firstName} ${userInfo.lastName}` : "",
+    username: user ? `${user.firstName} ${user.lastName}` : "",
     object: shape,
     image: null,
   };
@@ -136,7 +136,7 @@ export const createAnnotationMessage = ({
         hash,
         slide: slideId,
         zoomLevel: viewer.viewport.getZoom(),
-        text: message.object.text,
+        text: "",
       });
     }
   }
@@ -162,18 +162,6 @@ export const createAnnotation = (annotation) => {
         rx: annotation.rx,
         ry: annotation.ry,
         angle: annotation.angle,
-      });
-      break;
-
-    case "textbox":
-      shape = new fabric.Textbox(`${annotation.text}`, {
-        left: annotation.left,
-        top: annotation.top,
-        width: annotation.width,
-        color: annotation.color,
-        backgroundColor: "#B0C8D6",
-        opacity: annotation.opacity,
-        title: annotation.title,
       });
       break;
 
@@ -254,7 +242,6 @@ export const addAnnotationsToCanvas = ({
   viewer,
   user,
   annotations = [],
-  userInfo,
 }) => {
   if (!canvas || !viewer || annotations.length === 0) return null;
   // remove render on each add annotation
@@ -274,7 +261,6 @@ export const addAnnotationsToCanvas = ({
       viewer,
       annotation,
       user,
-      userInfo,
     });
 
     feed.push(message);
@@ -382,9 +368,9 @@ export const saveAnnotationToDB = async ({
   onSaveAnnotation,
 }) => {
   if (!slideId || !annotation || !onSaveAnnotation) return false;
-
   const annotationJSON = getAnnotationJSON(annotation);
   try {
+    console.log("annotationJson", annotationJSON);
     annotationJSON.strokeWidth = annotationJSON.strokeWidth.toString();
     delete annotationJSON?.strokeDashArray;
     delete annotationJSON?.slide;
@@ -444,7 +430,6 @@ export const loadAnnotationsFromDB = async ({
   // onLoadAnnotations,
   data,
   success,
-  userInfo,
 }) => {
   // if (!slideId || !canvas || !viewer || !onLoadAnnotations)
   if (!slideId || !canvas || !viewer)
@@ -456,7 +441,6 @@ export const loadAnnotationsFromDB = async ({
         canvas,
         viewer,
         annotations: data,
-        userInfo,
       });
 
       return { feed, status: "success" };

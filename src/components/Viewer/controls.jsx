@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
 import { VStack, useToast, useDisclosure, Flex, Text } from "@chakra-ui/react";
@@ -18,7 +18,6 @@ import {
 import Loading from "../Loading/loading";
 import { CustomMenu } from "../RightClickMenu/Menu";
 import ZoomButton from "../ZoomButton/ZoomButton";
-import { debounce } from "lodash";
 import {
   convertToZoomValue,
   getFileBucketFolder,
@@ -51,6 +50,7 @@ const ViewerControls = ({
   client2,
   mentionUsers,
   caseInfo,
+  addUsersToCase,
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
   const { viewerWindow, isViewportAnalysing } = fabricOverlayState;
@@ -70,8 +70,6 @@ const ViewerControls = ({
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
   const [annotationObject, setAnnotationObject] = useState(null);
   const [isMorphometryDisabled, setIsMorphometryDisabled] = useState(true);
-  const [annotationText, setAnnotationText] = useState("");
-  const [annotationShape, setAnnotationShape] = useState(null);
   const slideRef = useRef(null);
 
   const toast = useToast();
@@ -150,6 +148,7 @@ const ViewerControls = ({
       top,
       width,
       height,
+      slideId,
       hash: annotationObject.hash,
       userId: userInfo._id || userInfo.userId,
     };
@@ -170,12 +169,12 @@ const ViewerControls = ({
     } else if (annotationObject.type === "polygon") {
       body = { ...body, points: annotationObject.points };
     }
-
+    // console.log("slideID", slideId);
     console.log("body....", body);
     try {
       // const resp = await onVhutAnalysis(body);
       onVhutAnalysis({
-        variables: { body: { ...body } },
+        variables: { body: { ...body} },
       });
       // toast({
       //   title: resp.data.message,
@@ -346,6 +345,7 @@ const ViewerControls = ({
             annotation.set({ isAnalysed: true, analysedROI });
           }
         }
+        console.log(vhutSubscriptionData.analysisStatus);
         toast({
           title: message,
           status: "success",
@@ -369,6 +369,8 @@ const ViewerControls = ({
   // ################ UPDATING ANNOTATION VIA SUBSCRIPTION #######################
   useEffect(() => {
     if (subscriptionData && data) {
+      console.log("Subscribed Changed Annotation", subscriptionData);
+
       // if annotation has been deleted
       if (subscriptionData.changedAnnotations.status.isDeleted) {
         const received_hash = subscriptionData.changedAnnotations.data.hash;
@@ -441,7 +443,6 @@ const ViewerControls = ({
           // onLoadAnnotations,
           data: data?.loadAnnotation?.data,
           success: data?.loadAnnotation?.success,
-          userInfo: userInfo,
         });
 
         if (status === "success") {
@@ -547,37 +548,6 @@ const ViewerControls = ({
     };
   }, [viewer, fabricOverlay]);
 
-  useEffect(() => {
-    if (!viewer || !fabricOverlay) return;
-    const canvas = fabricOverlay.fabricCanvas();
-
-    const handleMouseDown = (event) => {
-      const annotation = canvas.getActiveObject();
-
-      if (annotation && annotation.type === "textbox") {
-        setAnnotationText(annotation.text);
-        setAnnotationShape("textbox");
-      }
-    };
-
-    canvas.requestRenderAll();
-
-    canvas.on("mouse:down", handleMouseDown);
-    return () => {
-      canvas.on("mouse:down", handleMouseDown);
-    };
-  }, [viewer, fabricOverlay]);
-
-  useEffect(() => {
-    if (annotationShape === "textbox") {
-      updateAnnotation({
-        text: annotationText,
-        title: `${userInfo.firstName} ${userInfo.lastName}`,
-        onUpdateAnnotation,
-      });
-    }
-  }, [annotationText]);
-
   return (
     <>
       {!isAnnotationLoaded || isViewportAnalysing ? (
@@ -647,7 +617,7 @@ const ViewerControls = ({
         right="20px"
         top="25.6vh"
       >
-        <ZoomButton viewerId={viewerId}></ZoomButton>
+        <ZoomButton viewerId={viewerId} />
       </VStack>
       <CustomMenu
         isMenuOpen={isOpen}
@@ -682,6 +652,7 @@ const ViewerControls = ({
         client={client2}
         mentionUsers={mentionUsers}
         chatId={caseInfo?._id}
+        addUsersToCase={addUsersToCase}
       />
       <ShowMetric viewerId={viewerId} slide={slide} />
     </>
