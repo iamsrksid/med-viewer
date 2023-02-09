@@ -565,6 +565,7 @@ const ViewerControls = ({
         right="20px"
         top="20px"
       >
+        
         <FullScreen viewerId={viewerId} />
       </VStack>
       <VStack
