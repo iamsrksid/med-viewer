@@ -56,8 +56,8 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
     canvas.defaultCursor = "crosshair";
 
     // Disable OSD mouseclicks
-    viewer.setMouseNavEnabled(false);
-    viewer.outerTracker.setTracking(false);
+    // viewer.setMouseNavEnabled(false);
+    // viewer.outerTracker.setTracking(false);
 
     return () => {
       // Enable OSD mouseclicks
@@ -198,6 +198,7 @@ const Polygon = ({ viewerId, onSaveAnnotation }) => {
 
     const handleMouseDown = (event) => {
       if (event.button !== 1) return;
+      viewer.setMouseNavEnabled(false);
       if (
         arrayRef.current.pointArray.length !== 0 &&
         event.target &&

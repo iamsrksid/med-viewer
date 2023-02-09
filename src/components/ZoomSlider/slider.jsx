@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
-import { Flex, Input, Text, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Input, Text, useMediaQuery, useToast } from "@chakra-ui/react";
 import { useFabricOverlayState } from "../../state/store";
 import {
   getScaleFactor,
@@ -8,17 +8,33 @@ import {
   zoomToLevel,
 } from "../../utility/utility";
 
-const ZoomSlider = ({ viewerId }) => {
+const ZoomSlider = ({ viewerId , }) => {
   const { fabricOverlayState } = useFabricOverlayState();
   const { viewerWindow } = fabricOverlayState;
   const { viewer, fabricOverlay } = viewerWindow[viewerId];
   const [zoomValue, setZoomValue] = useState(1);
+  const [validationError, setValidationError] = useState(false);
   const inputRef = useRef(null);
+  const toast = useToast();
 
   const handleZoomLevel = (e) => {
     const { value } = e.target;
-    zoomToLevel({ viewer, value });
-    setZoomValue(value);
+    if (value.toString().split(".")[1]?.length >= 2) {
+      setValidationError(true);
+    }
+    if (value > 40 || validationError) {
+      toast({
+        title: "Not Valid Input",
+        description: "Please Provide Me A Valid Input",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      setValidationError(false);
+    } else {
+      zoomToLevel({ viewer, value });
+      setZoomValue(value);
+    }
   };
 
   const handleZoomLevelBlur = () => {
@@ -83,7 +99,7 @@ const ZoomSlider = ({ viewerId }) => {
         onChange={handleZoomLevel}
         onBlur={handleZoomLevelBlur}
         variant="unstyled"
-        w="20px"
+        w={inputRef?.current?.value?.length > 2 ? "45px" : "25px"}
         textAlign="center"
       />
       <Text>x</Text>
