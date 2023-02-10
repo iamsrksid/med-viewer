@@ -13,6 +13,7 @@ import { AnnotationIcon, AnnotationSelectedIcon } from "../Icons/CustomIcons";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
 import FilterAdjustments from "../ImageFilter/FilterAdjustments";
 import Til from "../TIL/Til";
+import CommentBox from "../Comment/Comment";
 const Move = ({
   userInfo,
   viewerId,
@@ -167,7 +168,21 @@ const Move = ({
         ) : null}
 
         {enableFilters ? <FilterAdjustments viewerId={viewerId} /> : null}
-        <Til hideLymphocyte={hideLymphocyte} hideStroma={hideStroma} hideTumor={hideTumor} handleTILFeedBar={handleTILFeedBar} viewerIds={viewerIds} slide={slide} mongoId={mongoId} viewerId={viewerId} />
+        <Til
+          hideLymphocyte={hideLymphocyte}
+          hideStroma={hideStroma}
+          hideTumor={hideTumor}
+          handleTILFeedBar={handleTILFeedBar}
+          viewerIds={viewerIds}
+          slide={slide}
+          mongoId={mongoId}
+          viewerId={viewerId}
+        />
+        <CommentBox
+          userInfo={userInfo}
+          viewerId={viewerId}
+          application={application}
+        />
       </Flex>
       <Flex
         top={
