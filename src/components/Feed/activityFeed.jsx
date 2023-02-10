@@ -25,6 +25,7 @@ import { MdModeEditOutline, MdDelete } from "react-icons/md";
 import { BsCircle, BsSlash } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
 import { FaDrawPolygon } from "react-icons/fa";
+import { MdTextsms } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import EditText from "./editText";
 import { useFabricOverlayState } from "../../state/store";
@@ -165,6 +166,7 @@ const ActivityFeed = ({
   const { activeTool, viewerWindow } = fabricOverlayState;
   const { fabricOverlay, activityFeed, viewer, tile, slideId } =
     viewerWindow[viewerId];
+
   const { deleteAllAnnotations } = useCanvasHelpers(viewerId);
 
   const scrollbar = useRef(null);
@@ -306,7 +308,7 @@ const ActivityFeed = ({
         <ScrollBar>
           <Flex direction="column">
             {activityFeed.map((feed, index) => {
-              return feed?.object ? (
+              return feed?.object && feed?.object?.type !== "textbox" ? (
                 <Flex
                   key={feed.object.hash}
                   pb="0.5vh"
@@ -497,6 +499,7 @@ const ActivityFeed = ({
         isOpen={isDeleteConfirmationOpen}
         onClose={onDeleteConfirmationClose}
         handleConfirmation={deleteAnnotations}
+        type="annotations"
       />
     </Flex>
   );
