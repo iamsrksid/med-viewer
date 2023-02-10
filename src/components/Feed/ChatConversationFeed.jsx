@@ -75,10 +75,36 @@ const RightMessageComponent = ({ data, setQueryChat }) => {
       <Text color="#52585D" fontSize="12px" fontWeight="bold">
         {data.payload.body}
       </Text>
-      <Text color="#212224" fontSize="10px" textAlign="right">
-        {/* {data.sendAt.fromNow()} */}
-        {moment(data.createdAt).format("HH:MM ")}
-      </Text>
+      <Flex alignItems="Center" justifyContent="space-between" w="100%">
+        {data?.annotation && (
+          <Button
+            size="xs"
+            _hover={{ bg: "rgba(176, 200, 214, 0.15)" }}
+            _focus={{ bg: "rgba(176, 200, 214, 0.15)" }}
+            color="#3B5D7C"
+            borderRadius="0"
+            textDecoration="underline"
+            fontSize="12px"
+            fontWeight="400"
+            zIndex="1"
+            onClick={(e) => {
+              e.stopPropagation();
+              zoomIntoAnnotation(data?.annotation);
+            }}
+          >
+            View region in slide
+          </Button>
+        )}
+        <Text
+          color="#212224"
+          fontSize="10px"
+          textAlign="right"
+          w={data?.annotation ? "" : "100%"}
+        >
+          {/* {data.sendAt.fromNow()} */}
+          {moment(data.createdAt).format("HH:mm")}
+        </Text>
+      </Flex>
     </Box>
   ) : (
     <Box
@@ -94,7 +120,7 @@ const RightMessageComponent = ({ data, setQueryChat }) => {
       </Text>
       <Text color="#212224" fontSize="10px" textAlign="right">
         {/* {data.sendAt.fromNow()} */}
-        {moment(data.createdAt).format("HH:MM")}
+        {moment(data.createdAt).format("HH:mm")}
       </Text>
     </Box>
   );
@@ -135,10 +161,36 @@ const LeftMessageComponent = ({ data, setQueryChat }) => {
           <Text color="#52585D" fontSize="12px" fontWeight="bold">
             {data.payload.body}
           </Text>
-          <Text color="#212224" fontSize="10px" textAlign="right">
-            {/* {data.sendAt.fromNow()} */}
-            {moment(data.createdAt).format("HH:MM ")}
-          </Text>
+          <Flex alignItems="Center" justifyContent="space-between" w="100%">
+            {data?.annotation && (
+              <Button
+                size="xs"
+                _hover={{ bg: "rgba(176, 200, 214, 0.15)" }}
+                _focus={{ bg: "rgba(176, 200, 214, 0.15)" }}
+                color="#3B5D7C"
+                borderRadius="0"
+                textDecoration="underline"
+                fontSize="12px"
+                fontWeight="400"
+                zIndex="1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  zoomIntoAnnotation(data?.annotation);
+                }}
+              >
+                View region in slide
+              </Button>
+            )}
+            <Text
+              color="#212224"
+              fontSize="10px"
+              textAlign="right"
+              w={data?.annotation ? "" : "100%"}
+            >
+              {/* {data.sendAt.fromNow()} */}
+              {moment(data.createdAt).format("HH:mm")}
+            </Text>
+          </Flex>
         </Box>
       ) : (
         <Box
