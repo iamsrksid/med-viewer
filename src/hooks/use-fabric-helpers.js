@@ -118,6 +118,7 @@ const useCanvasHelpers = (viewerId) => {
     if (
       !(await deleteAnnotationFromDB({
         slideId,
+        type: [],
         hash: activeObject?.hash,
         onDeleteAnnotation,
       }))
@@ -126,6 +127,14 @@ const useCanvasHelpers = (viewerId) => {
         title: "Annotation could not be deleted",
         description: "server error",
         status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Annotation deleted",
+        description: "Annotation deleted successfully",
+        status: "success",
         duration: 1000,
         isClosable: true,
       });
@@ -157,6 +166,7 @@ const useCanvasHelpers = (viewerId) => {
     if (
       !(await deleteAnnotationFromDB({
         slideId,
+        type: ["ellipse", "rect", "polygon", "path", "line"],
         onDeleteAnnotation,
       }))
     ) {
@@ -165,6 +175,42 @@ const useCanvasHelpers = (viewerId) => {
         description: "server error",
         status: "error",
         duration: 1000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Annotations deleted",
+        description: "Annotations deleted successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const deleteAllComments = async (onDeleteAnnotation) => {
+    if (!canvas || !onDeleteAnnotation) return;
+
+    if (
+      !(await deleteAnnotationFromDB({
+        slideId,
+        type: ["textbox"],
+        onDeleteAnnotation,
+      }))
+    ) {
+      toast({
+        title: "Comments could not be deleted",
+        description: "server error",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Comments deleted",
+        description: "Comments deleted successfully",
+        status: "success",
+        duration: 2000,
         isClosable: true,
       });
     }
@@ -234,6 +280,7 @@ const useCanvasHelpers = (viewerId) => {
     subscriptionClearAnnotations,
     subscriptionDeleteAnnotation,
     subscriptionUpdateAnnotation,
+    deleteAllComments,
   };
 };
 

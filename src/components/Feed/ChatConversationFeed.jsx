@@ -24,6 +24,7 @@ import {
 } from "../../state/graphql/ChatQuery";
 import ScrollBar from "../others/ScrollBar";
 import QueryChat from "./QueryChat";
+import { useFabricOverlayState } from "../../state/store";
 // import AnnotationChat from "../AnnotationChat/AnnotationChat";
 
 const formats = {
@@ -34,6 +35,7 @@ const formats = {
   lastWeek: "[Last] dddd",
   sameElse: "DD/MM/YYYY",
 };
+
 const DateSeperatorComponent = ({ messageSepratorDate }) => {
   return (
     <Text
@@ -47,7 +49,7 @@ const DateSeperatorComponent = ({ messageSepratorDate }) => {
     </Text>
   );
 };
-const RightMessageComponent = ({ data, setQueryChat }) => {
+const RightMessageComponent = ({ data, setQueryChat, zoomIntoAnnotation }) => {
   return data?.mentionedUsers?.length > 0 ? (
     <Box
       key={uuidv4()}
@@ -75,10 +77,36 @@ const RightMessageComponent = ({ data, setQueryChat }) => {
       <Text color="#52585D" fontSize="12px" fontWeight="bold">
         {data.payload.body}
       </Text>
-      <Text color="#212224" fontSize="10px" textAlign="right">
-        {/* {data.sendAt.fromNow()} */}
-        {moment(data.createdAt).format("HH:MM ")}
-      </Text>
+      <Flex alignItems="Center" justifyContent="space-between" w="100%">
+        {data?.annotation && (
+          <Button
+            size="xs"
+            _hover={{ bg: "rgba(176, 200, 214, 0.15)" }}
+            _focus={{ bg: "rgba(176, 200, 214, 0.15)" }}
+            color="#3B5D7C"
+            borderRadius="0"
+            textDecoration="underline"
+            fontSize="12px"
+            fontWeight="400"
+            zIndex="1"
+            onClick={(e) => {
+              e.stopPropagation();
+              zoomIntoAnnotation(data?.annotation);
+            }}
+          >
+            View region in slide
+          </Button>
+        )}
+        <Text
+          color="#212224"
+          fontSize="10px"
+          textAlign="right"
+          w={data?.annotation ? "" : "100%"}
+        >
+          {/* {data.sendAt.fromNow()} */}
+          {moment(data.createdAt).format("HH:MM ")}
+        </Text>
+      </Flex>
     </Box>
   ) : (
     <Box
@@ -100,7 +128,7 @@ const RightMessageComponent = ({ data, setQueryChat }) => {
   );
 };
 
-const LeftMessageComponent = ({ data, setQueryChat }) => {
+const LeftMessageComponent = ({ data, setQueryChat, zoomIntoAnnotation }) => {
   return (
     <Flex>
       <Avatar
@@ -125,6 +153,7 @@ const LeftMessageComponent = ({ data, setQueryChat }) => {
           maxW="506px"
           minW="220px"
           borderRadius="0"
+          ml="0.3rem"
         >
           <Flex color="#3B5D7C" fontSize="12px" justifyContent="space-between">
             <Text color="#3B5D7C" fontSize="12px">
@@ -135,10 +164,36 @@ const LeftMessageComponent = ({ data, setQueryChat }) => {
           <Text color="#52585D" fontSize="12px" fontWeight="bold">
             {data.payload.body}
           </Text>
-          <Text color="#212224" fontSize="10px" textAlign="right">
-            {/* {data.sendAt.fromNow()} */}
-            {moment(data.createdAt).format("HH:MM ")}
-          </Text>
+          <Flex alignItems="Center" justifyContent="space-between" w="100%">
+            {data?.annotation && (
+              <Button
+                size="xs"
+                _hover={{ bg: "rgba(176, 200, 214, 0.15)" }}
+                _focus={{ bg: "rgba(176, 200, 214, 0.15)" }}
+                color="#3B5D7C"
+                borderRadius="0"
+                textDecoration="underline"
+                fontSize="12px"
+                fontWeight="400"
+                zIndex="1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  zoomIntoAnnotation(data?.annotation);
+                }}
+              >
+                View region in slide
+              </Button>
+            )}
+            <Text
+              color="#212224"
+              fontSize="10px"
+              textAlign="right"
+              w={data?.annotation ? "" : "100%"}
+            >
+              {/* {data.sendAt.fromNow()} */}
+              {moment(data.createdAt).format("HH:MM ")}
+            </Text>
+          </Flex>
         </Box>
       ) : (
         <Box
@@ -148,6 +203,7 @@ const LeftMessageComponent = ({ data, setQueryChat }) => {
           alignSelf="flex-start"
           maxW="506px"
           borderRadius=" 0px 14px 14px 14px"
+          ml="0.3rem"
         >
           {/* {index === 0 && <Text marginTop="-10px">user </Text>} */}
           <Text marginTop="-10px" fontSize="14px" textTransform="capitalize">
@@ -175,6 +231,7 @@ const ChatConversationFeed = ({
   mentionUsers,
   client2,
   addUsersToCase,
+  viewerId,
 }) => {
   let lastDate = "1999-01-01";
   const [groupMessages, setGroupMessages] = useState([]);
@@ -189,6 +246,19 @@ const ChatConversationFeed = ({
   const messageRef = useRef(null);
   const bottomRef = useRef(null);
 
+  const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
+  const { activeTool, viewerWindow } = fabricOverlayState;
+  const { fabricOverlay, viewer } = viewerWindow[viewerId];
+  const zoomIntoAnnotation = (annotationDimension) => {
+    // change position to annotation object location
+    const { left, width, top, height, zoomLevel } = annotationDimension;
+    const vpoint = viewer.viewport.imageToViewportRectangle(
+      left + width / 2,
+      top + height / 2
+    );
+    viewer.viewport.zoomTo(zoomLevel * 2);
+    viewer.viewport.panTo(vpoint);
+  };
   // const users = [
   //   {
   //     id: "ASck",
@@ -358,12 +428,16 @@ const ChatConversationFeed = ({
   // 	// );
   // };
 
-  const { data: subscribedMessageData } = useSubscription(CHAT_SUBSCRIPTION, {
-    variables: {
-      toId: groupChatId,
-      fromId: userInfo?._id,
-    },
-  });
+  const { data: subscribedMessageData } = useSubscription(
+    CHAT_SUBSCRIPTION,
+    { client: client2 },
+    {
+      variables: {
+        toId: groupChatId,
+        fromId: userInfo?._id,
+      },
+    }
+  );
 
   useEffect(() => {
     if (subscribedMessageData) {
@@ -474,6 +548,7 @@ const ChatConversationFeed = ({
                         key={uuidv4()}
                         queryChat={queryChat}
                         setQueryChat={setQueryChat}
+                        zoomIntoAnnotation={zoomIntoAnnotation}
                       />
                     ) : (
                       <LeftMessageComponent
@@ -481,6 +556,7 @@ const ChatConversationFeed = ({
                         key={uuidv4()}
                         queryChat={queryChat}
                         setQueryChat={setQueryChat}
+                        zoomIntoAnnotation={zoomIntoAnnotation}
                       />
                     )}
                   </>
@@ -493,6 +569,7 @@ const ChatConversationFeed = ({
                   key={uuidv4()}
                   queryChat={queryChat}
                   setQueryChat={setQueryChat}
+                  zoomIntoAnnotation={zoomIntoAnnotation}
                 />
               ) : (
                 <LeftMessageComponent
@@ -500,6 +577,7 @@ const ChatConversationFeed = ({
                   key={uuidv4()}
                   queryChat={queryChat}
                   setQueryChat={setQueryChat}
+                  zoomIntoAnnotation={zoomIntoAnnotation}
                 />
               );
             })}

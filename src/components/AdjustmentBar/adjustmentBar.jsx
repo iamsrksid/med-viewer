@@ -25,8 +25,6 @@ const AdjustmentBar = ({
   application,
   viewerIds,
   enableAI,
-  hideStroma,
-  hideTumor,
   enableFilters,
   currentViewer,
   annotations,
@@ -42,7 +40,6 @@ const AdjustmentBar = ({
   saveSynopticReport,
   handleTILFeedBar,
   mediaUpload,
-  hideLymphocyte,
   setChatHover,
   slideInfo,
   handleFeedBar,
@@ -136,9 +133,6 @@ const AdjustmentBar = ({
         application={application}
         userInfo={userInfo}
         sidebar={sidebar}
-        hideTumor={hideTumor}
-        hideStroma={hideStroma}
-        hideLymphocyte={hideLymphocyte}
         slide={slide}
         mongoId={mongoId}
         handleTILFeedBar={handleTILFeedBar}

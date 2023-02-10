@@ -180,6 +180,7 @@ const ChatFeed = ({
                 groupChatId={groupData?._id}
                 mentionUsers={mentionUsers}
                 addUsersToCase={addUsersToCase}
+                viewerId={viewerId}
               />
             </>
           ) : (
