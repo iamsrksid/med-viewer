@@ -6,7 +6,11 @@ import {
   useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
-import { GET_TILS_ANALYSIS, TIL_ANALYSIS_SUBSCRIPTION, VHUT_ANALYSIS_SUBSCRIPTION } from "../../graphql/annotaionsQuery";
+import {
+  GET_TILS_ANALYSIS,
+  TIL_ANALYSIS_SUBSCRIPTION,
+  VHUT_ANALYSIS_SUBSCRIPTION,
+} from "../../graphql/annotaionsQuery";
 import axios from "axios";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { useFabricOverlayState } from "../../state/store";
@@ -28,179 +32,107 @@ const Til = ({ viewerId, viewerIds, slide }) => {
   const [tilCords, setTilCords] = useState([]);
   const [tumorCords, setTumorCords] = useState([]);
   const [stromaCords, setStromaCords] = useState([]);
-  const [tilMessage , setTilMessage] = useState('');
+  const [tilMessage, setTilMessage] = useState("");
   const toast = useToast();
-  const [getTils, { data, loading, error, }] = useLazyQuery(GET_TILS_ANALYSIS);
+  const [getTils, { data, loading, error }] = useLazyQuery(GET_TILS_ANALYSIS);
   const { data: tilSubscriptionData, error: vhutSubscription_error } =
-		useSubscription(TIL_ANALYSIS_SUBSCRIPTION, {
-			variables: {
-				body: {
-					slideId : slide?._id,
-				},
-			},
-		});
-    useEffect(()=>{
-      if(!data || !tilSubscriptionData ){
-        toast({
-          title: "Tils is processing",
-          description: "",
-          status: "success",
-          duration: 1500,
-          isClosable: true,
-        });
-      }
-     if(!tilSubscriptionData){
+    useSubscription(TIL_ANALYSIS_SUBSCRIPTION, {
+      variables: {
+        body: {
+          slideId: slide?._id,
+        },
+      },
+    });
+  useEffect(() => {
+    if (!data || !tilSubscriptionData) {
+      toast({
+        title: "Tils is processing",
+        description: "",
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
+    }
+    if (!tilSubscriptionData) {
       getTils({
         variables: {
           query: {
-                    key: `${getFileBucketFolder(viewerIds[0].originalFileUrl)}`,
-                    bucket_name: "med-ai-image-processor",
-                    slideId: `${slide?._id}`,
-                  }
+            key: `${getFileBucketFolder(viewerIds[0].originalFileUrl)}`,
+            bucket_name: "med-ai-image-processor",
+            slideId: `${slide?._id}`,
+          },
         },
       });
-      if(data?.getTils?.data){
-        console.log(data);
+      if (data?.getTils?.data) {
         setTilCords(data?.getTils?.data?.lymphocyte_cords);
         setTumorCords(data?.getTils?.data?.tumor_cords);
         setStromaCords(data?.getTils?.data?.stroma_cords);
       }
-     }
-      console.log(data);
-      // getData();
-    },[data])
+    }
 
+    // getData();
+  }, [data]);
 
   const handleTIL = () => {
-    console.log(tumorCords);
-              if (!fabricOverlay) {
-                   toast({
-                      title: "Something Went Wrong in faric overlay",
-                      description: "",
-                      status: "error",
-                      duration: 1500,
-                      isClosable: true,
-                    });
-                  }
-            if(tumorCords?.length>0 || stromaCords?.length>0 || tilCords?.length>0 && TilHover === false ){
-                console.log("til is setting in canvas");
-                const canvas = fabricOverlay.fabricCanvas();
-                const color = "#2Aff00";
-                const roi = tilCords.flat(2).map((TIL_cord) => {
-                    return new fabric.Rect({
-                        top: TIL_cord[1],
-                        // bottom:TIL_cord[1],
-                        left: TIL_cord[0],
-                        // right:TIL_cord[2],
-                        width: TIL_cord[2] - TIL_cord[0],
-                        height: TIL_cord[3] - TIL_cord[1],
-                        stroke: "red",
-                        fill: "transparent",
-                        strokeWidth: 1,
-                        opacity: 1,
-                        strokeUniform: true,
-                      });
-                    });
-                    const roi2 = tumorCords?.map((tumor_cord) => {
-    // console.log(tumor_cord);
-    const points2 = tumor_cord.map((point2) => ({
-        x: point2[0][0],
-        y: point2[0][1],
-      }));
-      return new fabric.Polygon(points2, {
-      stroke: `${color}83`,
-      strokeWidth: 1.2,
-      fill: "green",
-      opacity: 0.2,
-      strokeUniform: true,
-    });
-  });
-  const roi3 = stromaCords?.map((stroma_cord) => {
-      const points3 = stroma_cord.map((point3) => ({
+    if (!fabricOverlay) {
+      toast({
+        title: "Something Went Wrong in faric overlay",
+        description: "",
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+      });
+    }
+    if (
+      tumorCords?.length > 0 ||
+      stromaCords?.length > 0 ||
+      (tilCords?.length > 0 && TilHover === false)
+    ) {
+      const canvas = fabricOverlay.fabricCanvas();
+      const color = "#2Aff00";
+      const roi = tilCords.flat(2).map((TIL_cord) => {
+        return new fabric.Rect({
+          top: TIL_cord[1],
+          // bottom:TIL_cord[1],
+          left: TIL_cord[0],
+          // right:TIL_cord[2],
+          width: TIL_cord[2] - TIL_cord[0],
+          height: TIL_cord[3] - TIL_cord[1],
+          stroke: "red",
+          fill: "transparent",
+          strokeWidth: 1,
+          opacity: 1,
+          strokeUniform: true,
+        });
+      });
+      const roi2 = tumorCords?.map((tumor_cord) => {
+        // console.log(tumor_cord);
+        const points2 = tumor_cord.map((point2) => ({
+          x: point2[0][0],
+          y: point2[0][1],
+        }));
+        return new fabric.Polygon(points2, {
+          stroke: `${color}83`,
+          strokeWidth: 1.2,
+          fill: "green",
+          opacity: 0.2,
+          strokeUniform: true,
+        });
+      });
+      const roi3 = stromaCords?.map((stroma_cord) => {
+        const points3 = stroma_cord.map((point3) => ({
           x: point3[0][0],
           y: point3[0][1],
         }));
         return new fabric.Polygon(points3, {
-            stroke: `yellow`,
-            strokeWidth: 1.2,
-            fill: color ? `yellow` : "",
-            opacity: 0.5,
-            strokeUniform: true,
-          });
+          stroke: `yellow`,
+          strokeWidth: 1.2,
+          fill: color ? `yellow` : "",
+          opacity: 0.5,
+          strokeUniform: true,
         });
-        const t = new fabric.Group([...roi2, ...roi3, ...roi], {
-            selectable: false,
-            lockMovementX: true,
-            lockMovementY: true,
-            lockRotation: true,
-            lockScalingX: true,
-            lockScalingY: true,
-            lockUniScaling: true,
-            hoverCursor: "auto",
-            evented: false,
-            stroke: "red",
-            strokeWidth: 1,
-            objectCaching: false,
-          });
-          // console.log(roi);
-          canvas.add(t);
-          if(TilHover === false){
-              toast({
-                  title: "TIL Process Done",
-                  description: "",
-                  status: "success",
-                  duration: 2500,
-                  isClosable: true,
-                });
-              }
-            }
-         else if(tilSubscriptionData?.tilStatus?.data?.tumor_cords?.length>0 || tilSubscriptionData?.tilStatus?.data?.stroma_cords?.length>0 || tilSubscriptionData?.tilStatus?.data?.lymphocyte_cords?.length>0) {
-            // console.log("til is setting in canvas");
-            const canvas = fabricOverlay.fabricCanvas();
-            const color = "#2Aff00";
-            const roi = tilSubscriptionData?.tilStatus?.data?.lymphocyte_cords.flat(2).map((TIL_cord) => {
-                return new fabric.Rect({
-                    top: TIL_cord[1],
-                    // bottom:TIL_cord[1],
-                    left: TIL_cord[0],
-                    // right:TIL_cord[2],
-                    width: TIL_cord[2] - TIL_cord[0],
-                    height: TIL_cord[3] - TIL_cord[1],
-                    stroke: "red",
-                    fill: "transparent",
-                    strokeWidth: 1,
-                    opacity: 1,
-                    strokeUniform: true,
-                  });
-                });
-                const roi2 = tilSubscriptionData?.tilStatus?.data?.tumor_cords?.map((tumor_cord) => {
-// console.log(tumor_cord);
-const points2 = tumor_cord.map((point2) => ({
-    x: point2[0][0],
-    y: point2[0][1],
-  }));
-  return new fabric.Polygon(points2, {
-  stroke: `${color}83`,
-  strokeWidth: 1.2,
-  fill: "green",
-  opacity: 0.2,
-  strokeUniform: true,
-});
-});
-const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map((stroma_cord) => {
-  const points3 = stroma_cord.map((point3) => ({
-      x: point3[0][0],
-      y: point3[0][1],
-    }));
-    return new fabric.Polygon(points3, {
-        stroke: `yellow`,
-        strokeWidth: 1.2,
-        fill: color ? `yellow` : "",
-        opacity: 0.5,
-        strokeUniform: true,
       });
-    });
-    const t = new fabric.Group([...roi2, ...roi3, ...roi], {
+      const t = new fabric.Group([...roi2, ...roi3, ...roi], {
         selectable: false,
         lockMovementX: true,
         lockMovementY: true,
@@ -216,23 +148,102 @@ const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map((stroma_cor
       });
       // console.log(roi);
       canvas.add(t);
-      if(TilHover === false){
-          toast({
-              title: "TIL Process Done",
-              description: "",
-              status: "success",
-              duration: 2500,
-              isClosable: true,
-            });
-          }
-      };
-      if (TilHover === true) {
-        const canvas = fabricOverlay?.fabricCanvas();
-        canvas?.clear()?.requestRenderAll();
-        localStorage.removeItem("til", "til");
+      if (TilHover === false) {
+        toast({
+          title: "TIL Process Done",
+          description: "",
+          status: "success",
+          duration: 2500,
+          isClosable: true,
+        });
+      }
+    } else if (
+      tilSubscriptionData?.tilStatus?.data?.tumor_cords?.length > 0 ||
+      tilSubscriptionData?.tilStatus?.data?.stroma_cords?.length > 0 ||
+      tilSubscriptionData?.tilStatus?.data?.lymphocyte_cords?.length > 0
+    ) {
+      const canvas = fabricOverlay.fabricCanvas();
+      const color = "#2Aff00";
+      const roi = tilSubscriptionData?.tilStatus?.data?.lymphocyte_cords
+        .flat(2)
+        .map((TIL_cord) => {
+          return new fabric.Rect({
+            top: TIL_cord[1],
+            // bottom:TIL_cord[1],
+            left: TIL_cord[0],
+            // right:TIL_cord[2],
+            width: TIL_cord[2] - TIL_cord[0],
+            height: TIL_cord[3] - TIL_cord[1],
+            stroke: "red",
+            fill: "transparent",
+            strokeWidth: 1,
+            opacity: 1,
+            strokeUniform: true,
+          });
+        });
+      const roi2 = tilSubscriptionData?.tilStatus?.data?.tumor_cords?.map(
+        (tumor_cord) => {
+          const points2 = tumor_cord.map((point2) => ({
+            x: point2[0][0],
+            y: point2[0][1],
+          }));
+          return new fabric.Polygon(points2, {
+            stroke: `${color}83`,
+            strokeWidth: 1.2,
+            fill: "green",
+            opacity: 0.2,
+            strokeUniform: true,
+          });
+        }
+      );
+      const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map(
+        (stroma_cord) => {
+          const points3 = stroma_cord.map((point3) => ({
+            x: point3[0][0],
+            y: point3[0][1],
+          }));
+          return new fabric.Polygon(points3, {
+            stroke: `yellow`,
+            strokeWidth: 1.2,
+            fill: color ? `yellow` : "",
+            opacity: 0.5,
+            strokeUniform: true,
+          });
+        }
+      );
+      const t = new fabric.Group([...roi2, ...roi3, ...roi], {
+        selectable: false,
+        lockMovementX: true,
+        lockMovementY: true,
+        lockRotation: true,
+        lockScalingX: true,
+        lockScalingY: true,
+        lockUniScaling: true,
+        hoverCursor: "auto",
+        evented: false,
+        stroke: "red",
+        strokeWidth: 1,
+        objectCaching: false,
+      });
+
+      canvas.add(t);
+      if (TilHover === false) {
+        toast({
+          title: "TIL Process Done",
+          description: "",
+          status: "success",
+          duration: 2500,
+          isClosable: true,
+        });
       }
     }
-          return (
+    if (TilHover === true) {
+      const canvas = fabricOverlay?.fabricCanvas();
+      canvas?.clear()?.requestRenderAll();
+      localStorage.removeItem("til", "til");
+    }
+  };
+  return (
     <>
       <Tooltip
         label={<TooltipLabel heading="TIL" />}
@@ -269,7 +280,14 @@ const roi3 = tilSubscriptionData?.tilStatus?.data?.stroma_cords?.map((stroma_cor
           backgroundColor={!TilHover ? "#F8F8F5" : "#E4E5E8"}
           mr="7px"
           borderRadius={0}
-          disabled = {stromaCords?.length>0 || tumorCords?.length>0 || tilCords?.length> 0 || tilSubscriptionData?.tilStatus?.message === "Til is completed" ? false : true}
+          disabled={
+            stromaCords?.length > 0 ||
+            tumorCords?.length > 0 ||
+            tilCords?.length > 0 ||
+            tilSubscriptionData?.tilStatus?.message === "Til is completed"
+              ? false
+              : true
+          }
           onClick={() => {
             handleTIL();
             setTilHover(!TilHover);
