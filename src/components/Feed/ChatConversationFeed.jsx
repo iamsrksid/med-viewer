@@ -104,7 +104,7 @@ const RightMessageComponent = ({ data, setQueryChat, zoomIntoAnnotation }) => {
           w={data?.annotation ? "" : "100%"}
         >
           {/* {data.sendAt.fromNow()} */}
-          {moment(data.createdAt).format("HH:MM ")}
+          {moment(data.createdAt).format("HH:mm")}
         </Text>
       </Flex>
     </Box>
@@ -122,7 +122,7 @@ const RightMessageComponent = ({ data, setQueryChat, zoomIntoAnnotation }) => {
       </Text>
       <Text color="#212224" fontSize="10px" textAlign="right">
         {/* {data.sendAt.fromNow()} */}
-        {moment(data.createdAt).format("HH:MM")}
+        {moment(data.createdAt).format("HH:mm")}
       </Text>
     </Box>
   );
@@ -191,7 +191,7 @@ const LeftMessageComponent = ({ data, setQueryChat, zoomIntoAnnotation }) => {
               w={data?.annotation ? "" : "100%"}
             >
               {/* {data.sendAt.fromNow()} */}
-              {moment(data.createdAt).format("HH:MM ")}
+              {moment(data.createdAt).format("HH:mm")}
             </Text>
           </Flex>
         </Box>
