@@ -129,20 +129,6 @@ export const SAVE_ANNOTATION = gql`
         belongsToApp
         createdAt
         updatedAt
-        fontSize
-        fontWeight
-        fontFamily
-        fontStyle
-        lineHeight
-        underline
-        overline
-        linethrough
-        textAlign
-        textBackgroundColor
-        charSpacing
-        minWidth
-        splitByGrapheme
-        styles
       }
       message
       success
@@ -327,6 +313,10 @@ export const TIL_ANALYSIS_SUBSCRIPTION = gql`
         status
         key_name
         bucket_name
+        TILS_score
+        lymphocyte_count
+        stroma_area
+        tumor_area
       }
       analysisType
     }
@@ -385,6 +375,10 @@ export const GET_TILS_ANALYSIS = gql`
         stroma_cords
         lymphocyte_cords
         tumor_cords
+        TILS_score
+        lymphocyte_count
+        stroma_area
+        tumor_area
       }
       message
       status

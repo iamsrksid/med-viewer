@@ -12,7 +12,6 @@ import { GrFormClose } from "react-icons/gr";
 import KeyPoints from "./KeyPoints";
 import { useFabricOverlayState } from "../../state/store";
 import ActivityFeed from "./activityFeed";
-import CommentFeed from "./CommentFeed";
 
 const SlideFeed = ({
   viewerId,
@@ -74,16 +73,6 @@ const SlideFeed = ({
           >
             Annotations
           </Tab>
-          <Tab
-            fontSize="12px"
-            _focus={{ outline: "none" }}
-            p="0.41vw 0.7vh"
-            h="2.962vh"
-            minH="32px"
-            _selected={{ bg: "#FCFCFC" }}
-          >
-            Comments
-          </Tab>
         </TabList>
         <TabPanels bg="#fff" boxShadow="1px 1px 2px rgba(176, 200, 214, 0.25)">
           <TabPanel p="0">
@@ -91,9 +80,6 @@ const SlideFeed = ({
           </TabPanel>
           <TabPanel p="0">
             <ActivityFeed viewerId={viewerId} showFeedBar={showFeedBar} />
-          </TabPanel>
-          <TabPanel p="0">
-            <CommentFeed viewerId={viewerId} showFeedBar={showFeedBar} />
           </TabPanel>
         </TabPanels>
       </Tabs>

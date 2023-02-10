@@ -119,7 +119,7 @@ const ScreenTools = ({
             </MenuItem>
             <MenuItem onClick={handleFeedBar}>Keypoints</MenuItem>
             <MenuItem onClick={handleAnnotationBar}>
-              Annotation and Comment Details
+              Annotation Details
             </MenuItem>
             <MenuItem>Morphomatery results</MenuItem>
             <MenuItem>Hierarchy</MenuItem>

@@ -14,13 +14,6 @@ export const FETCH_CONVERSATION = gql`
           body
           types
         }
-        annotation {
-          left
-          top
-          width
-          height
-          zoomLevel
-        }
         isDeleted
         createdAt
         updatedAt
@@ -71,13 +64,6 @@ export const SEND_MESSAGE = gql`
           toId
           toName
           message
-        }
-        annotation {
-          left
-          width
-          top
-          height
-          zoomLevel
         }
       }
     }

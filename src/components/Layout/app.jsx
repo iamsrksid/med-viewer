@@ -62,6 +62,9 @@ const LayoutApp = ({
   const [feedTab, setFeedBar] = useState(0);
   const [synopticType, setSynopticType] = useState("");
   const [chatHover, setChatHover] = useState(false);
+  const [hideTumor, setHideTumor] = useState(false);
+  const [hideStroma, setHideStroma] = useState(false);
+  const [hideLymphocyte, setHideLymphocyte] = useState(false);
 
   const showSidebar = () => {
     setSidebar(!sidebar);
@@ -105,6 +108,9 @@ const LayoutApp = ({
       <LayoutOuterBody>
         <AdjustmentBar
           userInfo={userInfo}
+          hideStroma={hideStroma}
+          hideTumor={hideTumor}
+          hideLymphocyte={hideLymphocyte}
           caseInfo={caseInfo}
           slide={viewerIds?.[0]}
           slides={slides}
@@ -216,6 +222,12 @@ const LayoutApp = ({
           {tILFedBar ? (
             <TILFeedBar
               viewerId={currentViewer}
+              hideTumor={hideTumor}
+              setHideTumor={setHideTumor}
+              hideLymphocyte={hideLymphocyte}
+              setHideLymphocyte={setHideLymphocyte}
+              setHideStroma={setHideStroma}
+              hideStroma={hideStroma}
               chatFeedBar={chatFeedBar}
               handleFeedBarClose={handleFeedBarClose}
               showReport={showReport}
