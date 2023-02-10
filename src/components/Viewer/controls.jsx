@@ -1,7 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./zoom-levels";
 import "./openseadragon-scalebar";
-import { VStack, useToast, useDisclosure, Flex, Text } from "@chakra-ui/react";
+import {
+  VStack,
+  useToast,
+  useDisclosure,
+  Flex,
+  Text,
+  Box,
+} from "@chakra-ui/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import ZoomSlider from "../ZoomSlider/slider";
@@ -70,6 +77,8 @@ const ViewerControls = ({
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
   const [annotationObject, setAnnotationObject] = useState(null);
   const [isMorphometryDisabled, setIsMorphometryDisabled] = useState(true);
+  const [annotationText, setAnnotationText] = useState("");
+  const [annotationShape, setAnnotationShape] = useState(null);
   const slideRef = useRef(null);
 
   const toast = useToast();
@@ -174,7 +183,7 @@ const ViewerControls = ({
     try {
       // const resp = await onVhutAnalysis(body);
       onVhutAnalysis({
-        variables: { body: { ...body} },
+        variables: { body: { ...body } },
       });
       // toast({
       //   title: resp.data.message,
@@ -443,6 +452,7 @@ const ViewerControls = ({
           // onLoadAnnotations,
           data: data?.loadAnnotation?.data,
           success: data?.loadAnnotation?.success,
+          userInfo: userInfo,
         });
 
         if (status === "success") {
@@ -522,6 +532,7 @@ const ViewerControls = ({
       }
 
       const annotation = canvas.getActiveObject();
+      console.log(annotation);
 
       // set annotationObject if right click is on annotation
       if (annotation) {
@@ -547,6 +558,35 @@ const ViewerControls = ({
       canvas.on("mouse:down", handleMouseDown);
     };
   }, [viewer, fabricOverlay]);
+
+  useEffect(() => {
+    if (!viewer || !fabricOverlay) return;
+    const canvas = fabricOverlay.fabricCanvas();
+
+    const handleMouseDown = (event) => {
+      const annotation = canvas.getActiveObject();
+
+      if (annotation && annotation.type === "textbox") {
+        setAnnotationText(annotation.text);
+        setAnnotationShape("textbox");
+      }
+    };
+
+    canvas.requestRenderAll();
+
+    canvas.on("mouse:down", handleMouseDown);
+    return () => {
+      canvas.on("mouse:down", handleMouseDown);
+    };
+  }, [viewer, fabricOverlay]);
+
+  useEffect(() => {
+    updateAnnotation({
+      text: annotationText,
+      title: `${userInfo.firstName} ${userInfo.lastName}`,
+      onUpdateAnnotation,
+    });
+  }, [annotationText]);
 
   return (
     <>
