@@ -443,7 +443,7 @@ const TILFeedBar = ({
           TIL Values
         </Text>
         <Box borderBottom="1px solid gray" mb="10px" py="3px">
-          <Text fontSize="15px">TIL Score : </Text>
+          <Text fontSize="15px">TIL Score : {localStorage.getItem("tilScore")? localStorage.getItem("tilScore") : ""} </Text>
         </Box>
         <Box borderBottom="1px solid gray" mb="10px" py="3px">
           <Text fontSize="15px">TIL Formula :</Text>
@@ -452,13 +452,13 @@ const TILFeedBar = ({
           </Text>
         </Box>
         <Box borderBottom="1px solid gray" mb="10px" py="3px">
-          <Text fontSize="15px">Tumor Area :</Text>
+          <Text fontSize="15px">Tumor Area : {localStorage.getItem("tumorArea")? localStorage.getItem("tumorArea") : ""}</Text>
         </Box>
         <Box borderBottom="1px solid gray" mb="10px" py="3px">
-          <Text fontSize="15px">Stroma Area :</Text>
+          <Text fontSize="15px">Stroma Area : {localStorage.getItem("stromaArea")? localStorage.getItem("stromaArea") : ""}</Text>
         </Box>
         <Box borderBottom="1px solid gray" mb="10px" py="3px">
-          <Text fontSize="15px">Lymphocytes :</Text>
+          <Text fontSize="15px">Lymphocytes Count: {localStorage.getItem("lymphocyteCount")? localStorage.getItem("lymphocyteCount") : ""}</Text>
         </Box>
       </Box>
     </Box>
