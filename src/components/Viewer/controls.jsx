@@ -159,7 +159,6 @@ const ViewerControls = ({
       height,
       slideId,
       hash: annotationObject.hash,
-      userId: userInfo._id || userInfo.userId,
     };
 
     // if annoatation is a freehand, send the coordinates of the path
