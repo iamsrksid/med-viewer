@@ -119,14 +119,14 @@ const Rotate = ({ viewerId }) => {
                 <IconButton
                   aria-label="Rotate left"
                   icon={<BiRotateLeft />}
-                  onClick={() => setRotationValue(rotationValue - 1)}
+                  onClick={() => setRotationValue(rotationValue - 90)}
                   borderRadius={0}
                   bgColor="#f5f7fa"
                 />
                 <IconButton
                   aria-label="Rotate right"
                   icon={<BiRotateRight />}
-                  onClick={() => setRotationValue(rotationValue + 1)}
+                  onClick={() => setRotationValue(rotationValue + 90)}
                   borderRadius={0}
                   bgColor="#f5f7fa"
                 />

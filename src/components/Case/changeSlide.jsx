@@ -12,6 +12,9 @@ const ChangeSlide = ({
   slides,
   slideUrl,
   viewerId,
+  setIsMultiview,
+  setIsNavigatorActive,
+  isNavigatorActive,
   ...restProps
 }) => {
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -61,7 +64,10 @@ const ChangeSlide = ({
       disabledLeft={disabledLeft}
       disabledRight={disabledRight}
       clickHandler={clickHandler}
-      {...restProps}
+      setIsMultiview={setIsMultiview}
+      setIsNavigatorActive={setIsNavigatorActive}
+      isNavigatorActive={isNavigatorActive}
+      isAnnotationLoading={isAnnotationLoading}
     />
   );
 };

@@ -94,7 +94,13 @@ const AdjustmentBar = ({
             label={<TooltipLabel heading="Case Info" />}
           />
         ) : null}
-        <Text color="#151C25" ml="12px" fontSize="14px" fontFamily="inter">
+        <Text
+          color="#151C25"
+          ml="12px"
+          fontSize="14px"
+          fontFamily="inter"
+          fontWeight={600}
+        >
           {caseInfo?.caseName || caseInfo?.name}
         </Text>
       </Flex>
@@ -111,9 +117,13 @@ const AdjustmentBar = ({
             slides={slides}
             viewerId={currentViewer}
             slideUrl={tile}
+            setIsMultiview={setIsMultiview}
+            setIsNavigatorActive={setIsNavigatorActive}
+            isAnnotationLoading={isAnnotationLoading}
+            isNavigatorActive={isNavigatorActive}
           />
         )}
-        <ToolbarButton
+        {/* <ToolbarButton
           icon={<SlideNavigatorIcon isNavigatorActive={isNavigatorActive} />}
           label={
             <TooltipLabel
@@ -130,7 +140,7 @@ const AdjustmentBar = ({
             setIsMultiview(false);
             setIsNavigatorActive((state) => !state);
           }}
-        />
+        /> */}
       </Flex>
       <Move
         application={application}
