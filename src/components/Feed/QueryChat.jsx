@@ -91,7 +91,7 @@ const QueryChat = ({ setQueryChat, queryChat, userInfo, client }) => {
     if (subscribedMessageData) {
       const newMessages = [
         ...groupMessages,
-        subscribedMessageData.queryChat.data,
+        subscribedMessageData.newChat.data,
       ];
 
       setGroupMessages(newMessages);

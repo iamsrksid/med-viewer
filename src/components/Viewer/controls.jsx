@@ -452,7 +452,7 @@ const ViewerControls = ({
           // onLoadAnnotations,
           data: data?.loadAnnotation?.data,
           success: data?.loadAnnotation?.success,
-          userInfo: userInfo,
+          userInfo,
         });
 
         if (status === "success") {
@@ -692,6 +692,7 @@ const ViewerControls = ({
         mentionUsers={mentionUsers}
         chatId={caseInfo?._id}
         addUsersToCase={addUsersToCase}
+        annotationObject={annotationObject}
       />
       <ShowMetric viewerId={viewerId} slide={slide} />
     </>
