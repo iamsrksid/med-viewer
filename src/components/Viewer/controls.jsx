@@ -574,12 +574,11 @@ const ViewerControls = ({
 
     canvas.requestRenderAll();
 
-    canvas.on("mouse:down", handleMouseDown);
+    canvas.on("mouse:move", handleMouseDown);
     return () => {
-      canvas.on("mouse:down", handleMouseDown);
+      canvas.on("mouse:move", handleMouseDown);
     };
   }, [viewer, fabricOverlay]);
-
   useEffect(() => {
     updateAnnotation({
       text: annotationText,

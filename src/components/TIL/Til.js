@@ -10,7 +10,6 @@ import {
   GET_TILS_ANALYSIS,
   TIL_ANALYSIS_SUBSCRIPTION,
 } from "../../graphql/annotaionsQuery";
-import axios from "axios";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { useFabricOverlayState } from "../../state/store";
 import TooltipLabel from "../AdjustmentBar/ToolTipLabel";
