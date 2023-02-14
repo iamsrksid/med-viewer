@@ -40,67 +40,74 @@ const ZoomButton = ({ viewerId }) => {
   console.log(customZoom40,'40');
   return (
     <>
-      <Box
-        w="30px"
-        textAlign="center"
-        pb="5px"
-        color={customZoom4 ? "#468" : ""}
-        borderBottom="1px solid black"
-        cursor="pointer"
-        onClick={() =>{ 
-          setCustomZoom10(false);
-          setCustomZoom20(false);
-          setCustomZoom40(false);
-          setCustomZoom4(!customZoom4)}}
-      >
-        4X
-      </Box>
-      <Box
-        w="30px"
-        textAlign="center"
-        pb="5px"
-        color={customZoom10 ? "#468" : ""}
-        borderBottom="1px solid black"
-        cursor="pointer"
-        onClick={() =>{
-          setCustomZoom10(false);
-          setCustomZoom4(false);
-          setCustomZoom20(false);
-          setCustomZoom10(!customZoom10)} }
-      >
-        10X
-      </Box>
-      <Box
-        w="30px"
-        textAlign="center"
-        pb="5px"
-        color={customZoom20 ? "#468" : ""}
-        borderBottom="1px solid black"
-        cursor="pointer"
-        onClick={() =>{
-          setCustomZoom10(false);
-          setCustomZoom4(false);
-          setCustomZoom40(false);
-         setCustomZoom20(!customZoom20)}
-        }
-      >
-        20X
-      </Box>
-      <Box
-        w="30px"
-        textAlign="center"
-        pb="5px"
-        color={customZoom40 ? "#468" : ""}
-        borderBottom="1px solid black"
-        cursor="pointer"
-        onClick={() => {
-          setCustomZoom10(false);
-          setCustomZoom4(false);
-          setCustomZoom20(false);
-          setCustomZoom40(!customZoom40)}
-        }
-      >
-        40x
+ <Box w="35px" display="flex" flexDirection="column" alignItems="center">
+        <Box
+          w="30px"
+          textAlign="center"
+          pb="5px"
+          color={customZoom4 ? "#468" : ""}
+          borderBottom="1px solid black"
+          cursor="pointer"
+          onClick={() => {
+            setCustomZoom10(false);
+            setCustomZoom20(false);
+            setCustomZoom40(false);
+            setCustomZoom4(!customZoom4);
+          }}
+        >
+          4X
+        </Box>
+        <Box
+          w="30px"
+          textAlign="center"
+          pt="3px"
+          pb="5px"
+          color={customZoom10 ? "#468" : ""}
+          borderBottom="1px solid black"
+          cursor="pointer"
+          onClick={() => {
+            setCustomZoom10(false);
+            setCustomZoom4(false);
+            setCustomZoom20(false);
+            setCustomZoom10(!customZoom10);
+          }}
+        >
+          10X
+        </Box>
+        <Box
+          w="30px"
+          textAlign="center"
+          pt="3px"
+          pb="5px"
+          color={customZoom20 ? "#468" : ""}
+          borderBottom="1px solid black"
+          cursor="pointer"
+          onClick={() => {
+            setCustomZoom10(false);
+            setCustomZoom4(false);
+            setCustomZoom40(false);
+            setCustomZoom20(!customZoom20);
+          }}
+        >
+          20X
+        </Box>
+        <Box
+          w="30px"
+          textAlign="center"
+          pt="3px"
+          pb="5px"
+          color={customZoom40 ? "#468" : ""}
+          borderBottom="1px solid black"
+          cursor="pointer"
+          onClick={() => {
+            setCustomZoom10(false);
+            setCustomZoom4(false);
+            setCustomZoom20(false);
+            setCustomZoom40(!customZoom40);
+          }}
+        >
+          40x
+        </Box>
       </Box>
     </>
   );
