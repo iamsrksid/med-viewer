@@ -98,9 +98,10 @@ const ViewerControls = ({
 
   const handleZoomIn = () => {
     try {
-      if (viewer.viewport.getMaxZoom() > viewer.viewport.getZoom()) {
-        viewer.viewport.zoomBy(1.0 / 0.7);
-      }
+      const value1 = Math.ceil(
+        (viewer.viewport.getZoom() * 40) / viewer.viewport.getMaxZoom()
+      );
+      zoomToLevel({ viewer, value: value1 + 0.6 });
     } catch (err) {
       console.error("Error handling Zoom In button click", err);
     }
@@ -108,9 +109,10 @@ const ViewerControls = ({
 
   const handleZoomOut = () => {
     try {
-      if (viewer.viewport.getMinZoom() < viewer.viewport.getZoom()) {
-        viewer.viewport.zoomBy(0.7);
-      }
+      const value2 = Math.ceil(
+        (viewer.viewport.getZoom() * 40) / viewer.viewport.getMaxZoom()
+      );
+      zoomToLevel({ viewer, value: value2 - 1.06 });
     } catch (err) {
       console.error("Error handling Zoom Out button click", err);
     }
@@ -591,109 +593,110 @@ const ViewerControls = ({
       {!isAnnotationLoaded || isViewportAnalysing ? (
         <Loading position="absolute" w="100%" zIndex="3" h="79vh" />
       ) : null}
-      <VStack
-        // w="fit-content"
-        backgroundColor="#F8F8F5"
-        border="1px solid #00153F"
-        // borderRadius="5px"
-        py={2}
-        px={1.5}
-        zIndex="1"
-        position="absolute"
-        right="20px"
-        top="20px"
-      >
-        <FullScreen viewerId={viewerId} />
-      </VStack>
-      <VStack
-        // w="fit-content"
-        backgroundColor="#F8F8F5"
-        border="1px solid #00153F"
-        // borderRadius="5px"
-        py={2}
-        px={1.5}
-        zIndex="1"
-        position="absolute"
-        right="20px"
-        top="10.48vh"
-      >
-        <ToolbarButton
-          icon={<AiOutlinePlus color="#00153F" size={iconSize} />}
-          // border="1px solid #3965C6"
-          backgroundColor="#E4E5E8"
-          onClick={handleZoomIn}
-          label="Zoom In"
-          mr="0px"
-          _hover={{ bgColor: "#ECECEC" }}
-          _active={{
-            outline: "none",
-          }}
-        />
-        <ZoomSlider viewerId={viewerId} />
-        <ToolbarButton
-          icon={<AiOutlineMinus color="#00153F" size={iconSize} />}
-          // border="1px solid #3965C6"
-          backgroundColor="#E4E5E8"
-          onClick={handleZoomOut}
-          label="Zoom Out"
-          mr="0px"
-          _hover={{ bgColor: "#ECECEC" }}
-          _active={{
-            outline: "none",
-          }}
-        />
-      </VStack>
-      <VStack
-        // w="fit-content"
-        backgroundColor="#F8F8F5"
-        border="1px solid #00153F"
-        // borderRadius="5px"
-        py={2}
-        px={1.5}
-        zIndex="1"
-        position="absolute"
-        right="20px"
-        top="25.6vh"
-      >
-        <ZoomButton viewerId={viewerId} />
-      </VStack>
-      <CustomMenu
-        isMenuOpen={isOpen}
-        closeMenu={closeMenu}
-        setIsOpen={setIsRightClickActive}
-        left={menuPosition.left}
-        top={menuPosition.top}
-        onHandleVhutAnalysis={handleVhutAnalysis}
-        setZoom={handleZoomLevel}
-        enableAI={enableAI}
-        isMorphometryDisabled={isMorphometryDisabled}
-        isAnnotationSelected={annotationObject}
-        isAnalysed={annotationObject?.isAnalysed}
-        onHandleShowAnalysis={handleShowAnalysis}
-        handleDeleteAnnotation={handleDeleteAnnotation}
-        handleEditOpen={handleEditOpen}
-        handleAnnotationChat={handleAnnotationChat}
-      />
-      <EditText
-        isOpen={isEditOpen}
-        onClose={closeEdit}
-        handleClose={closeEdit}
-        handleSave={handleSave}
-        textValue={annotationObject?.text ? annotationObject.text : ""}
-        titleValue={annotationObject?.title ? annotationObject.title : ""}
-      />
-      <AnnotationChat
-        isOpen={isAnnotationOpen}
-        onClose={annotationClose}
-        onOpen={annotationChat}
-        userInfo={userInfo}
-        client={client2}
-        mentionUsers={mentionUsers}
-        chatId={caseInfo?._id}
-        addUsersToCase={addUsersToCase}
-        annotationObject={annotationObject}
-      />
-      <ShowMetric viewerId={viewerId} slide={slide} />
+      <Box position="absolute" w="100%" h="100%">
+        <Flex
+          direction="column"
+          gap="1.3vh"
+          alignItems="end"
+          mt="8px"
+          mr="18px"
+        >
+          <VStack
+            // w="fit-content"
+            backgroundColor="#F8F8F5"
+            border="1px solid #00153F"
+            // borderRadius="5px"
+            py={2}
+            px={1.5}
+            zIndex="1"
+          >
+            <FullScreen viewerId={viewerId} />
+          </VStack>
+          <VStack
+            // w="fit-content"
+            backgroundColor="#F8F8F5"
+            border="1px solid #00153F"
+            // borderRadius="5px"
+            py={2}
+            px={1.5}
+            zIndex="1"
+          >
+            <ToolbarButton
+              icon={<AiOutlinePlus color="#00153F" size={iconSize} />}
+              // border="1px solid #3965C6"
+              backgroundColor="#E4E5E8"
+              onClick={handleZoomIn}
+              label="Zoom In"
+              mr="0px"
+              _hover={{ bgColor: "#ECECEC" }}
+              _active={{
+                outline: "none",
+              }}
+            />
+            <ZoomSlider viewerId={viewerId} />
+            <ToolbarButton
+              icon={<AiOutlineMinus color="#00153F" size={iconSize} />}
+              // border="1px solid #3965C6"
+              backgroundColor="#E4E5E8"
+              onClick={handleZoomOut}
+              label="Zoom Out"
+              mr="0px"
+              _hover={{ bgColor: "#ECECEC" }}
+              _active={{
+                outline: "none",
+              }}
+            />
+          </VStack>
+          <VStack
+            // w="fit-content"
+            backgroundColor="#F8F8F5"
+            border="1px solid #00153F"
+            // borderRadius="5px"
+            py={2}
+            px={1.5}
+            zIndex="1"
+          >
+            <ZoomButton viewerId={viewerId} />
+          </VStack>
+          <CustomMenu
+            isMenuOpen={isOpen}
+            closeMenu={closeMenu}
+            setIsOpen={setIsRightClickActive}
+            left={menuPosition.left}
+            top={menuPosition.top}
+            onHandleVhutAnalysis={handleVhutAnalysis}
+            setZoom={handleZoomLevel}
+            enableAI={enableAI}
+            isMorphometryDisabled={isMorphometryDisabled}
+            isAnnotationSelected={annotationObject}
+            isAnalysed={annotationObject?.isAnalysed}
+            onHandleShowAnalysis={handleShowAnalysis}
+            handleDeleteAnnotation={handleDeleteAnnotation}
+            handleEditOpen={handleEditOpen}
+            handleAnnotationChat={handleAnnotationChat}
+          />
+          <EditText
+            isOpen={isEditOpen}
+            onClose={closeEdit}
+            handleClose={closeEdit}
+            handleSave={handleSave}
+            textValue={annotationObject?.text ? annotationObject.text : ""}
+            titleValue={annotationObject?.title ? annotationObject.title : ""}
+          />
+          <AnnotationChat
+            isOpen={isAnnotationOpen}
+            onClose={annotationClose}
+            onOpen={annotationChat}
+            userInfo={userInfo}
+            client={client2}
+            mentionUsers={mentionUsers}
+            chatId={caseInfo?._id}
+            annotationObject={annotationObject}
+            addUsersToCase={addUsersToCase}
+          />
+          <ShowMetric viewerId={viewerId} slide={slide} />
+        </Flex>
+      </Box>
     </>
   );
 };
