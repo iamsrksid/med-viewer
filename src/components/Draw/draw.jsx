@@ -133,7 +133,7 @@ const Draw = ({ viewerId, onSaveAnnotation }) => {
     if (!path) return;
 
     const addToFeed = async () => {
-      const message = createAnnotationMessage({ slideId, shape: path, viewer });
+      const message = createAnnotationMessage({ slideId, shape: path, viewer, type:"path" });
 
       saveAnnotationToDB({
         slideId,

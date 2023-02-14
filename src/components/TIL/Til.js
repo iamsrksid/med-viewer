@@ -17,7 +17,7 @@ import { BiTargetLock } from "react-icons/bi";
 import { ImTarget } from "react-icons/im";
 import IconSize from "../ViewerToolbar/IconSize";
 import { useLazyQuery } from "@apollo/client/react";
-import { useSubscription } from "@apollo/client";
+import { useApolloClient, useSubscription } from "@apollo/client";
 import { getFileBucketFolder } from "../../utility";
 import { updateTool } from "../../state/actions/fabricOverlayActions";
 
@@ -37,8 +37,10 @@ const Til = ({
   const [tilCords, setTilCords] = useState([]);
   const [tumorCords, setTumorCords] = useState([]);
   const [stromaCords, setStromaCords] = useState([]);
+  const [Tilloading, setTilLoading] = useState(true);
   const toast = useToast();
-  const [getTils, { data, loading, error }] = useLazyQuery(GET_TILS_ANALYSIS);
+  const client = useApolloClient();
+  const [getTils, { data, loading, error, refetch }] = useLazyQuery(GET_TILS_ANALYSIS);
   const { data: tilSubscriptionData, error: vhutSubscription_error } =
     useSubscription(TIL_ANALYSIS_SUBSCRIPTION, {
       variables: {
@@ -47,10 +49,12 @@ const Til = ({
         },
       },
     });
+
+    // console.log(TilHover);
   useEffect(() => {
     if (!data || !tilSubscriptionData) {
       toast({
-        title: "Tils is processing",
+        title: "TIL is processing",
         description: "",
         status: "success",
         duration: 1500,
@@ -58,6 +62,19 @@ const Til = ({
       });
     }
   }, []);
+
+
+  useEffect(()=>{
+    if(Tilloading === false){
+      toast({
+        title: "TIL can be run now",
+        description: "",
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
+    }
+  },[Tilloading])
 
   useEffect(() => {
     if (TilHover) {
@@ -105,28 +122,8 @@ const Til = ({
     }
   }, [TilHover]);
 
-  console.log(tilSubscriptionData);
-  useEffect(() => {
-    if (
-      stromaCords?.length > 0 ||
-      tumorCords?.length > 0 ||
-      tilCords?.length > 0 ||
-      tilSubscriptionData?.tilStatus?.message === "Til is completed"
-    ) {
-      toast({
-        title: "Tils can be run now",
-        description: "",
-        status: "success",
-        duration: 1500,
-        isClosable: true,
-      });
-    }
-  }, [
-    stromaCords,
-    tumorCords,
-    tilCords,
-    tilSubscriptionData?.tilStatus?.message,
-  ]);
+
+
   useEffect(() => {
     if (!tilSubscriptionData) {
       getTils({
@@ -142,11 +139,48 @@ const Til = ({
         setTilCords(data?.getTils?.data?.lymphocyte_cords);
         setTumorCords(data?.getTils?.data?.tumor_cords);
         setStromaCords(data?.getTils?.data?.stroma_cords);
+        setTilLoading(false);
       }
     }
-    console.log(data);
+    console.log("data",data);
+    console.log("eror",error);
     // getData();
   }, [data]);
+
+    console.log(tilSubscriptionData?.tilStatus);
+
+
+  useEffect(()=>{
+    if(tilSubscriptionData?.tilStatus?.message=== "Hil is completed"){
+      toast({
+                title: "HIL is processed",
+                description: "",
+                status: "success",
+                duration: 1500,
+                isClosable: true,
+              });
+      client.resetStore();
+     refetch();
+    console.log(tilSubscriptionData?.tilStatus);
+  }
+},[tilSubscriptionData])
+
+useEffect(()=>{
+  if (data?.getTils?.data) {
+    setTilCords(data?.getTils?.data?.lymphocyte_cords);
+    setTumorCords(data?.getTils?.data?.tumor_cords);
+    setStromaCords(data?.getTils?.data?.stroma_cords);
+    setTilLoading(false);
+    localStorage.setItem("tilScore", data?.getTils?.data?.TILS_score);
+        localStorage.setItem("tumorArea", data?.getTils?.data?.tumor_area);
+        localStorage.setItem("stromaArea", data?.getTils?.data?.stroma_area);
+        localStorage.setItem(
+          "lymphocyteCount",
+          data?.getTils?.data?.lymphocyte_count
+        );
+  }
+},[data])
+
 
   useEffect(() => {
     if (TilHover === false) {
@@ -437,13 +471,13 @@ const Til = ({
 
   useEffect(() => {
     handleTIL();
-    console.log(hideStroma);
+    // console.log(hideStroma);
   }, [hideTumor, hideStroma, hideLymphocyte]);
   return (
     <>
       <Tooltip
         label={<TooltipLabel heading="TIL" />}
-        aria-label="Chat"
+        aria-label="TIL"
         placement="bottom"
         openDelay={0}
         bg="#E4E5E8"
@@ -490,6 +524,7 @@ const Til = ({
           }}
           _hover={{ bgColor: "rgba(228, 229, 232, 1)" }}
         />
+       
       </Tooltip>
     </>
   );

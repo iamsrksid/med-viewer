@@ -292,7 +292,6 @@ export const VHUT_ANALYSIS_SUBSCRIPTION = gql`
         analysedROI
         hash
         annotationId
-        userId
         slideId
       }
       analysisType
@@ -334,7 +333,6 @@ export const VHUT_VIEWPORT_ANALYSIS = gql`
     vhutViewportAnalysis(body: $body)
   }
 `;
-
 export const GET_VHUT_ANALYSIS = gql`
   query Query($query: GetAnalysisInput) {
     getVhutAnalysis(query: $query) {

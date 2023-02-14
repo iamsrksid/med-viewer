@@ -219,7 +219,7 @@ const CommentBox = ({ userInfo, viewerId, application }) => {
     };
 
     addToFeed();
-    // setFabricOverlayState(updateTool({ tool: "Move" }));
+    setFabricOverlayState(updateTool({ tool: "Move" }));
   }, [shape]);
 
   const handleClick = () => {

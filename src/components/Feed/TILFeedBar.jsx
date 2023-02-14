@@ -6,6 +6,7 @@ import {
   IconButton,
   Text,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
 import { GrFormClose } from "react-icons/gr";
 import { BsEye } from "react-icons/bs";
@@ -18,6 +19,7 @@ import { useFabricOverlayState } from "../../state/store";
 import { widths } from "../Draw/width";
 import {
   createAnnotationMessage,
+  getFileBucketFolder,
   getScaleFactor,
   saveAnnotationToDB,
 } from "../../utility";
@@ -25,6 +27,7 @@ import {
   addToActivityFeed,
   updateTool,
 } from "../../state/actions/fabricOverlayActions";
+import axios from "axios";
 
 const getDrawCursor = (brushSize, brushColor) => {
   brushSize = brushSize < 4 ? 8 : brushSize * 3;
@@ -58,6 +61,7 @@ const TILFeedBar = ({
   handleFeedBarClose,
   showReport,
   hideTumor,
+  Environment,
   synopticType,
   caseInfo,
   setHideTumor,
@@ -71,6 +75,7 @@ const TILFeedBar = ({
   const [visibleStroma, setVisibleStroma] = useState(true);
   const [visibleLymphocyte, setVisibleLymphocyte] = useState(true);
   const [editTumor, setEditTumor] = useState(true);
+  const toast = useToast();
   const [editStroma, setEditStroma] = useState(true);
   const [editLymphocyte, setEditLymphocyte] = useState(true);
   const { fabricOverlayState, setFabricOverlayState } = useFabricOverlayState();
@@ -80,7 +85,7 @@ const TILFeedBar = ({
     viewerWindow[viewerId];
   const isActive = activeTool === "TILDRAW";
 
-  const [path, setPath] = useState(null);
+  const [pathStroma, setPathStroma] = useState(null);
 
   const [myState, setState] = useState({
     width: widths[0],
@@ -101,7 +106,8 @@ const TILFeedBar = ({
     const canvas = fabricOverlay.fabricCanvas();
     const pathCreated = (event) => {
       canvas.selection = false;
-      setPath(event.path);
+      console.log("event",event.path);
+      setPathStroma(event.path);
     };
     function handleMouseDown(event) {
       canvas.selection = false;
@@ -144,21 +150,65 @@ const TILFeedBar = ({
   useEffect(() => {
     viewer.setMouseNavEnabled(true);
     viewer.outerTracker.setTracking(true);
-    if (path) {
-      path.fill = "yellow";
-      path.opacity = "0.5";
-      path.selectable = "false";
+    if (pathStroma) {
+      pathStroma.fill = "yellow";
+      pathStroma.opacity = "0.5";
+      pathStroma.selectable = false;
+      pathStroma.hoverCursor = "default";
+      const message =  createAnnotationMessage({ slideId, shape: pathStroma, viewer, maskType:"stroma" , type:"path" });
+    const key = getFileBucketFolder(originalFileUrl);
+    const newObject = {
+    hash: message?.object?.hash,
+path:message?.object?.path,
+top:message?.object?.top,
+width:message?.object?.width,
+height:message?.object?.height,
+left:message?.object?.left,
+maskType:message?.object?.maskType,
+slideId:message?.object?.slide,
+type:message?.object?.type,
+ notifyHook : `${Environment.VIEWER_URL}/notify_hil`,
+ key,
     }
-  }, [path]);
+     console.log(message?.object);
+  const resp =  axios.post("https://backup-quantize-vhut.prr.ai/TILS/HIL", newObject,);
+    // console.log(resp);
+    if(resp.status = "Accepted"){
+      toast({
+        title: "HIL is Processing ",
+        status: "success",
+        duration: 500,
+        isClosable: true,
+      });
+    }
+    }
+  }, [pathStroma]);
+
+  useEffect(()=>{
+   
+  },[pathStroma])
 
   const handleDrawStroma = () => {
     setEditStroma(!editStroma);
     if (editStroma === true) {
       setFabricOverlayState(updateTool({ tool: "TILDRAW" }));
+      toast({
+        title: "Stroma Tool Selected ",
+        status: "success",
+        duration: 500,
+        isClosable: true,
+      });
     } else {
       setFabricOverlayState(updateTool({ tool: "Move" }));
     }
   };
+
+
+  const handleClose=  ()=>{
+  if(pathStroma){
+    
+  }
+  }
 
   return (
     <Box
@@ -199,10 +249,13 @@ const TILFeedBar = ({
           <GrFormClose
             size={16}
             cursor="pointer"
-            onClick={() => {
+            onClick={()=>{
               handleFeedBarClose();
-              setHideLymphocyte(false);
+              setEditLymphocyte(false);
+              setEditTumor(false);
+              setEditStroma(false);
               setHideStroma(false);
+              setHideLymphocyte(false);
               setHideTumor(false);
             }}
             _hover={{ cursor: "pointer" }}

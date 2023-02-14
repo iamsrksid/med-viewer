@@ -330,7 +330,6 @@ const ViewerControls = ({
       variables: {
         body: {
           slideId,
-          userId: userInfo._id || userInfo.userId,
         },
       },
     });

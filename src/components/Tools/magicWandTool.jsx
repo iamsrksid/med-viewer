@@ -114,8 +114,7 @@ const MagicWandTool = ({
       width,
       height,
       key,
-      type: "rect",
-      userId: userInfo._id || userInfo.userId,
+      type: "viewport",
       slideId,
     });
 
@@ -123,7 +122,7 @@ const MagicWandTool = ({
     const createContours = async (body) => {
       // get cell data from the clicked position in viewer
       const resp = await axios.post(
-        "https://development-morphometry-api.prr.ai/vhut/click/xy",
+        "https://backup-quantize-vhut.prr.ai/vhut/click/xy",
         body
       );
 
