@@ -79,6 +79,8 @@ const ViewerControls = ({
   const [isMorphometryDisabled, setIsMorphometryDisabled] = useState(true);
   const [annotationText, setAnnotationText] = useState("");
   const [annotationShape, setAnnotationShape] = useState(null);
+  const [activeFeed, setActiveFeed] = useState([]);
+  // console.log("activeFeed", activeFeed);
   const slideRef = useRef(null);
 
   const toast = useToast();
@@ -103,7 +105,7 @@ const ViewerControls = ({
       );
       zoomToLevel({ viewer, value: value1 + 0.6 });
     } catch (err) {
-      console.error("Error handling Zoom In button click", err);
+      // console.error("Error handling Zoom In button click", err);
     }
   };
 
@@ -114,7 +116,7 @@ const ViewerControls = ({
       );
       zoomToLevel({ viewer, value: value2 - 1.06 });
     } catch (err) {
-      console.error("Error handling Zoom Out button click", err);
+      // console.error("Error handling Zoom Out button click", err);
     }
   };
 
@@ -455,11 +457,16 @@ const ViewerControls = ({
           userInfo,
         });
 
+        // console.log(feed);
+
         if (status === "success") {
-          if (feed)
+          if (feed) {
             setFabricOverlayState(
               updateActivityFeed({ id: viewerId, fullFeed: feed })
             );
+            setActiveFeed(feed);
+          }
+
           canvas.requestRenderAll();
           toast({
             title: "Annotations loaded",
@@ -532,7 +539,6 @@ const ViewerControls = ({
       }
 
       const annotation = canvas.getActiveObject();
-      // console.log(annotation);
 
       // set annotationObject if right click is on annotation
       if (annotation) {
