@@ -142,12 +142,12 @@ const Til = ({
         setTilLoading(false);
       }
     }
-    console.log("data",data);
-    console.log("eror",error);
+    // console.log("data",data);
+    // console.log("eror",error);
     // getData();
   }, [data]);
 
-    console.log(tilSubscriptionData?.tilStatus);
+    // console.log(tilSubscriptionData?.tilStatus);
 
 
   useEffect(()=>{
@@ -161,7 +161,7 @@ const Til = ({
               });
       client.resetStore();
      refetch();
-    console.log(tilSubscriptionData?.tilStatus);
+    // console.log(tilSubscriptionData?.tilStatus);
   }
 },[tilSubscriptionData])
 
@@ -206,7 +206,7 @@ useEffect(()=>{
       (tilCords?.length > 0 && TilHover === false)
     ) {
       localStorage.setItem("til", "til");
-      console.log("til is setting in canvas");
+      // console.log("til is setting in canvas");
       const canvas = fabricOverlay.fabricCanvas();
       const color = "#2Aff00";
       const roi = tilCords.flat(2).map((TIL_cord) => {

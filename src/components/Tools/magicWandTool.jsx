@@ -95,7 +95,7 @@ const MagicWandTool = ({
           variables: { body },
         });
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         setFabricOverlayState(updateTool({ tool: "Move" }));
         toast({
           title: "Viewport Analysing",

@@ -140,7 +140,7 @@ const Draw = ({ viewerId, onSaveAnnotation }) => {
         annotation: message.object,
         onSaveAnnotation,
       });
-console.log(message);
+// console.log(message);
       setFabricOverlayState(
         addToActivityFeed({
           id: viewerId,

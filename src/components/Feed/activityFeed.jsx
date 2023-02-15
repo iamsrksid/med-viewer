@@ -136,9 +136,9 @@ const ActivityFeed = ({
   ] = useMutation(UPDATE_ANNOTATION);
 
   const onUpdateAnnotation = (data) => {
-    console.log("====================================");
-    console.log("activity feed update");
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log("activity feed update");
+    // console.log("====================================");
     delete data?.slideId;
     modifyAnnotation({
       variables: { body: { ...data } },
@@ -156,9 +156,9 @@ const ActivityFeed = ({
       isClosable: true,
     });
   const onDeleteAnnotation = (data) => {
-    console.log("====================================");
-    console.log("activity feed delete", data);
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log("activity feed delete", data);
+    // console.log("====================================");
     removeAnnotation({ variables: { body: data } });
   };
 

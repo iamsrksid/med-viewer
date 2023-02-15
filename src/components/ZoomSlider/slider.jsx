@@ -66,7 +66,6 @@ const ZoomSlider = ({ viewerId }) => {
         Math.ceil((e.zoom * 40) / viewer.viewport.getMaxZoom()),
         10
       );
-      setZoomValue(value > 40 ? 40 : value);
       // const bounds = viewer.viewport.getBounds();
       // const { x, y, width, height } = viewer.viewport.viewportToImageRectangle(
       //   bounds.x,
@@ -91,6 +90,7 @@ const ZoomSlider = ({ viewerId }) => {
     };
   }, [viewer]);
 
+   
   return (
     <Flex>
       <Input

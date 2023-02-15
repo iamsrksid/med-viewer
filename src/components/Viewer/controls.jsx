@@ -180,7 +180,7 @@ const ViewerControls = ({
       body = { ...body, points: annotationObject.points };
     }
     // console.log("slideID", slideId);
-    console.log("body....", body);
+    // console.log("body....", body);
     try {
       // const resp = await onVhutAnalysis(body);
       onVhutAnalysis({
@@ -210,9 +210,9 @@ const ViewerControls = ({
 
   useEffect(() => {
     if (responseData) {
-      console.log("====================================");
-      console.log("analysis...", responseData);
-      console.log("====================================");
+      // console.log("====================================");
+      // console.log("analysis...", responseData);
+      // console.log("====================================");
 
       showAnalysisData(responseData);
     }
@@ -336,7 +336,7 @@ const ViewerControls = ({
 
   useEffect(() => {
     if (vhutSubscriptionData) {
-      console.log("subscribed", vhutSubscriptionData);
+      // console.log("subscribed", vhutSubscriptionData);
       const {
         data,
         status,
@@ -354,7 +354,7 @@ const ViewerControls = ({
             annotation.set({ isAnalysed: true, analysedROI });
           }
         }
-        console.log(vhutSubscriptionData.analysisStatus);
+        // console.log(vhutSubscriptionData.analysisStatus);
         toast({
           title: message,
           status: "success",
@@ -378,7 +378,7 @@ const ViewerControls = ({
   // ################ UPDATING ANNOTATION VIA SUBSCRIPTION #######################
   useEffect(() => {
     if (subscriptionData && data) {
-      console.log("Subscribed Changed Annotation", subscriptionData);
+      // console.log("Subscribed Changed Annotation", subscriptionData);
 
       // if annotation has been deleted
       if (subscriptionData.changedAnnotations.status.isDeleted) {
@@ -532,7 +532,7 @@ const ViewerControls = ({
       }
 
       const annotation = canvas.getActiveObject();
-      console.log(annotation);
+      // console.log(annotation);
 
       // set annotationObject if right click is on annotation
       if (annotation) {

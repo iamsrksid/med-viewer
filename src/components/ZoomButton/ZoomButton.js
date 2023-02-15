@@ -17,27 +17,27 @@ const ZoomButton = ({ viewerId }) => {
   const [customZoom40, setCustomZoom40] = useState(false);
   useEffect(() => {
     if (customZoom10) {
-      console.log("10");
+      // console.log("10");
       const value = 10;
       zoomToLevel({ viewer, value });
     } else if (customZoom4) {
-      console.log("4");
+      // console.log("4");
       const value = 4;
       zoomToLevel({ viewer, value });
     } else if (customZoom20) {
-      console.log("20");
+      // console.log("20");
       const value = 20;
       zoomToLevel({ viewer, value });
     } else if (customZoom40) {
-      console.log("40");
+      // console.log("40");
       const value = 40;
       zoomToLevel({ viewer, value });
     } 
   });
-  console.log(customZoom10,'10');
-  console.log(customZoom4,'4');
-  console.log(customZoom20,'20');
-  console.log(customZoom40,'40');
+  // console.log(customZoom10,'10');
+  // console.log(customZoom4,'4');
+  // console.log(customZoom20,'20');
+  // console.log(customZoom40,'40');
   return (
     <>
  <Box w="35px" display="flex" flexDirection="column" alignItems="center">

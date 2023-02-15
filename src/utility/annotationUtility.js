@@ -586,9 +586,9 @@ export const getAnnotationMetric = (annotation, mpp) => {
   let metric = { type: "", value: "", unit: "μm" };
 
   if (annotation.type === "line") {
-    console.log("====================================");
-    console.log("annotation", annotation);
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log("annotation", annotation);
+    // console.log("====================================");
     let x1, y1, x2, y2;
     if (annotation.cords) {
       [x1, y1, x2, y2] = annotation.cords;

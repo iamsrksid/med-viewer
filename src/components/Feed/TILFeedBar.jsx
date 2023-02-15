@@ -106,7 +106,7 @@ const TILFeedBar = ({
     const canvas = fabricOverlay.fabricCanvas();
     const pathCreated = (event) => {
       canvas.selection = false;
-      console.log("event",event.path);
+      // console.log("event",event.path);
       setPathStroma(event.path);
     };
     function handleMouseDown(event) {
@@ -170,7 +170,7 @@ type:message?.object?.type,
  notifyHook : `${Environment.VIEWER_URL}/notify_hil`,
  key,
     }
-     console.log(message?.object);
+    //  console.log(message?.object);
   const resp =  axios.post("https://backup-quantize-vhut.prr.ai/TILS/HIL", newObject,);
     // console.log(resp);
     if(resp.status = "Accepted"){

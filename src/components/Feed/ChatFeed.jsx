@@ -37,7 +37,7 @@ const ChatFeed = ({
   const { activityFeed } = viewerWindow[viewerId];
   const [activeGroup, setActiveGroup] = useState();
   const [groupData, setGroupData] = useState();
-  console.log(caseInfo);
+  // console.log(caseInfo);
   useEffect(() => {
     setGroupData(caseInfo);
     setActiveGroup(caseInfo?._id);
