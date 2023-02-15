@@ -136,7 +136,7 @@ const ZoomSlider = ({ viewerId }) => {
         ref={inputRef}
         maxLength={6}
         onKeyDown={handleKeyDown}
-        value={zoomValue}
+        value={zoomValue > 40 ? 40 : zoomValue}
         onChange={handleZoomLevel}
         onBlur={handleZoomLevelBlur}
         variant="unstyled"
