@@ -122,6 +122,7 @@ const Rotate = ({ viewerId }) => {
                   onClick={() => setRotationValue(rotationValue - 90)}
                   borderRadius={0}
                   bgColor="#f5f7fa"
+                  disabled={rotationValue <= -180}
                 />
                 <IconButton
                   aria-label="Rotate right"
@@ -129,6 +130,7 @@ const Rotate = ({ viewerId }) => {
                   onClick={() => setRotationValue(rotationValue + 90)}
                   borderRadius={0}
                   bgColor="#f5f7fa"
+                  disabled={rotationValue >= 180}
                 />
               </HStack>
               <HStack ml="1vw" spacing={0}>
