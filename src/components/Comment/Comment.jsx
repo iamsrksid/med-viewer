@@ -6,7 +6,6 @@ import ToolbarButton from "../ViewerToolbar/button";
 import IconSize from "../ViewerToolbar/IconSize";
 import { fabric } from "openseadragon-fabricjs-overlay";
 import { useFabricOverlayState } from "../../state/store";
-import useCanvasHelpers from "../../hooks/use-fabric-helpers";
 import {
   createAnnotationMessage,
   getCanvasImage,
@@ -87,29 +86,6 @@ const CommentBox = ({ userInfo, viewerId, application }) => {
      * Mouse down
      */
 
-    var rect = new fabric.Rect({
-      originX: "top",
-      originY: "top",
-      width: 1500,
-      height: 1200,
-      fill: "rgba(255,0,0,0.5)",
-      transparentCorners: true,
-    });
-    var text = new fabric.Text("hello world", {
-      fontSize: 30,
-      originX: "top",
-      originY: "top",
-    });
-
-    var group = new fabric.Group([rect, text], {
-      left: 0,
-      top: 0,
-      selectable: false,
-      visible: false,
-    });
-    canvas.add(group);
-    canvas.renderAll();
-
     function handleMouseDown(event) {
       if (
         event.button !== 1 ||
@@ -127,14 +103,6 @@ const CommentBox = ({ userInfo, viewerId, application }) => {
       const origY = pointer.y;
 
       // Create new Shape instance
-      let newShape = null;
-      const shapeOptions = {
-        color: myStateRef.current.color.hex,
-        left: origX,
-        top: origY,
-        width: 2,
-        height: 2,
-      };
 
       // Stroke fill
       const scaleFactor = getScaleFactor(viewer);
@@ -151,7 +119,7 @@ const CommentBox = ({ userInfo, viewerId, application }) => {
         hasRotatingPoint: false,
       });
 
-      //
+      console.log(text);
       canvas.add(text);
 
       // canvas.add(mousecursor);
@@ -198,12 +166,13 @@ const CommentBox = ({ userInfo, viewerId, application }) => {
   useEffect(() => {
     const addToFeed = async () => {
       if (!shape) return;
-
+      console.log(shape);
       const message = createAnnotationMessage({
         slideId,
         shape,
         viewer,
         userInfo,
+        type: "textbox",
       });
 
       saveAnnotationToDB({
@@ -220,6 +189,7 @@ const CommentBox = ({ userInfo, viewerId, application }) => {
 
     addToFeed();
     setFabricOverlayState(updateTool({ tool: "Move" }));
+    setAddComments(false);
   }, [shape]);
 
   const handleClick = () => {

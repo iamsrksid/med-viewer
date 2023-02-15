@@ -278,7 +278,12 @@ const Circle = ({ viewerId, onSaveAnnotation }) => {
     const addToFeed = async () => {
       if (!shape) return;
 
-      const message = createAnnotationMessage({ slideId, shape, viewer, type:"circle" });
+      const message = createAnnotationMessage({
+        slideId,
+        shape,
+        viewer,
+        type: "ellipse",
+      });
 
       saveAnnotationToDB({
         slideId,

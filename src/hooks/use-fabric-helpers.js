@@ -53,11 +53,16 @@ const useCanvasHelpers = (viewerId) => {
   };
 
   //subscription sync clear annotations from canvas
-  const subscriptionClearAnnotations = () => {
+  const subscriptionClearAnnotations = (typeOfAnnotation) => {
     if (!canvas) return;
 
     setFabricOverlayState(updateActivityFeed({ id: viewerId, fullFeed: [] }));
 
+    // let objects = canvas.getObjects();
+    // for (var i = 0; i < objects.length; i++) {
+    //   //console.log(objects[i]);
+    //   console.log(objects[i].type);
+    // }
     canvas.clear().requestRenderAll();
 
     toast({

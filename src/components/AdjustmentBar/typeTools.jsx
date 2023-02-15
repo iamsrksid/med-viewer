@@ -24,9 +24,9 @@ const TypeTools = ({
   application,
 }) => {
   // save annotation in db
-  console.log("====================================");
-  console.log("application", application);
-  console.log("====================================");
+  // console.log("====================================");
+  // console.log("application", application);
+  // console.log("====================================");
 
   const { fabricOverlayState } = useFabricOverlayState();
   const { fabricOverlay } = fabricOverlayState.viewerWindow[viewerId];

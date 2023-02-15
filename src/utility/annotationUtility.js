@@ -393,8 +393,9 @@ export const saveAnnotationToDB = async ({
   onSaveAnnotation,
 }) => {
   if (!slideId || !annotation || !onSaveAnnotation) return false;
-
+  // console.log(annotation);
   const annotationJSON = getAnnotationJSON(annotation);
+  // console.log(annotationJSON);
   try {
     annotationJSON.strokeWidth = annotationJSON.strokeWidth.toString();
     delete annotationJSON?.strokeDashArray;
@@ -586,9 +587,6 @@ export const getAnnotationMetric = (annotation, mpp) => {
   let metric = { type: "", value: "", unit: "μm" };
 
   if (annotation.type === "line") {
-    console.log("====================================");
-    console.log("annotation", annotation);
-    console.log("====================================");
     let x1, y1, x2, y2;
     if (annotation.cords) {
       [x1, y1, x2, y2] = annotation.cords;
