@@ -17,9 +17,13 @@ import CommentBox from "../Comment/Comment";
 const Move = ({
   userInfo,
   viewerId,
+  refreshHil,
   annotations,
   enableAI,
   enableFilters,
+  pathStroma,
+  hideModification,
+  setNewHilData,
   sidebar,
   isMultiview,
   hideStroma,
@@ -174,9 +178,13 @@ const Move = ({
           hideTumor={hideTumor}
           handleTILFeedBar={handleTILFeedBar}
           viewerIds={viewerIds}
+          hideModification={hideModification}
           slide={slide}
           mongoId={mongoId}
+          setNewHilData={setNewHilData}
+          refreshHil={refreshHil}
           viewerId={viewerId}
+          pathStroma={pathStroma}
         />
         <CommentBox
           userInfo={userInfo}
