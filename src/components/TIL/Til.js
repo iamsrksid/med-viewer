@@ -144,7 +144,7 @@ const Til = ({
       });
       if (data?.getTils?.data) {
   client.resetStore();
-        console.log(data);
+        // console.log(data);
         setTilCords(data?.getTils?.data?.lymphocyte_cords);
         setTumorCords(data?.getTils?.data?.tumor_cords);
         setStromaCords(data?.getTils?.data?.stroma_cords);
@@ -250,7 +250,7 @@ useEffect(()=>{
 
 useEffect(()=>{
 if(hideModification !== 0 && hideModification % 2 === 0){
-  console.log("1st");
+  // console.log("1st");
   getTils({
     variables: {
       query: {
@@ -263,7 +263,7 @@ if(hideModification !== 0 && hideModification % 2 === 0){
     },
   });
   if (data?.getTils?.data) {
-    console.log(data);
+    // console.log(data);
     setTilCords(data?.getTils?.data?.lymphocyte_cords);
     setTumorCords(data?.getTils?.data?.tumor_cords);
     setStromaCords(data?.getTils?.data?.stroma_cords);
@@ -364,7 +364,7 @@ else if(hideModification !== 0 && hideModification % 2 !== 0){
     },
   });
   if (data?.getTils?.data) {
-    console.log(data);
+    // console.log(data);
     setTilCords(data?.getTils?.data?.lymphocyte_cords);
     setTumorCords(data?.getTils?.data?.tumor_cords);
     setStromaCords(data?.getTils?.data?.stroma_cords);
