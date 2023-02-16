@@ -21,7 +21,9 @@ const AdjustmentBar = ({
   caseInfo,
   slides,
   slide,
+  refreshHil,
   report,
+  setNewHilData,
   application,
   viewerIds,
   enableAI,
@@ -40,6 +42,7 @@ const AdjustmentBar = ({
   handleAnnotationBar,
   saveReport,
   saveSynopticReport,
+  pathStroma,
   handleTILFeedBar,
   mediaUpload,
   hideLymphocyte,
@@ -51,6 +54,7 @@ const AdjustmentBar = ({
   setShowReport,
   clinicalStudy,
   questions,
+  hideModification,
   app,
   setSlideId,
   responseHandler,
@@ -151,11 +155,15 @@ const AdjustmentBar = ({
         hideLymphocyte={hideLymphocyte}
         slide={slide}
         mongoId={mongoId}
+        refreshHil={refreshHil}
+        hideModification={hideModification}
         handleTILFeedBar={handleTILFeedBar}
         annotations={annotations}
         enableAI={enableAI}
         enableFilters={enableFilters}
+        pathStroma={pathStroma}
         viewerId={currentViewer}
+        setNewHilData={setNewHilData}
         viewerIds={viewerIds}
         isMultiview={isMultiview}
         setIsMultiview={setIsMultiview}

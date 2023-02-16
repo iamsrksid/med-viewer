@@ -7,6 +7,7 @@ import {
   Text,
   Tooltip,
   useToast,
+  Button,
 } from "@chakra-ui/react";
 import { GrFormClose } from "react-icons/gr";
 import { BsEye } from "react-icons/bs";
@@ -63,8 +64,15 @@ const TILFeedBar = ({
   hideTumor,
   Environment,
   synopticType,
+  newHilData,
+  setRefreshHil,
+  refreshHil,
   caseInfo,
   setHideTumor,
+  setPathStroma,
+  hideModification,
+  setHideModification,
+  pathStroma,
   setHideLymphocyte,
   hideLymphocyte,
   setHideStroma,
@@ -84,8 +92,6 @@ const TILFeedBar = ({
   const { viewer, fabricOverlay, slideId, originalFileUrl } =
     viewerWindow[viewerId];
   const isActive = activeTool === "TILDRAW";
-
-  const [pathStroma, setPathStroma] = useState(null);
 
   const [myState, setState] = useState({
     width: widths[0],
@@ -151,42 +157,61 @@ const TILFeedBar = ({
     viewer.setMouseNavEnabled(true);
     viewer.outerTracker.setTracking(true);
     if (pathStroma) {
+      // console.log( typeof pathStroma.path);
       pathStroma.fill = "yellow";
       pathStroma.opacity = "0.5";
       pathStroma.selectable = false;
       pathStroma.hoverCursor = "default";
-      const message =  createAnnotationMessage({ slideId, shape: pathStroma, viewer, maskType:"stroma" , type:"path" });
-    const key = getFileBucketFolder(originalFileUrl);
-    const newObject = {
-    hash: message?.object?.hash,
-path:message?.object?.path,
-top:message?.object?.top,
-width:message?.object?.width,
-height:message?.object?.height,
-left:message?.object?.left,
-maskType:message?.object?.maskType,
-slideId:message?.object?.slide,
-type:message?.object?.type,
- notifyHook : `${Environment.VIEWER_URL}/notify_hil`,
- key,
+      if(pathStroma?.path.length >2){
+        const message = createAnnotationMessage({
+          slideId,
+          shape: pathStroma,
+          viewer,
+          maskType: "stroma",
+          type: "path",
+        });
+          const key = getFileBucketFolder(originalFileUrl);
+      const newObject = {
+        hash: message?.object?.hash,
+        path: message?.object?.path,
+        top: message?.object?.top,
+        width: message?.object?.width,
+        height: message?.object?.height,
+        left: message?.object?.left,
+        maskType: message?.object?.maskType,
+        slideId: message?.object?.slide,
+        type: message?.object?.type,
+        notifyHook: `${Environment.VIEWER_URL}/notify_hil`,
+        key,
+      };
+      const resp = axios.post(
+        "https://backup-quantize-vhut.prr.ai/TILS/HIL",
+        newObject
+      );
+      // console.log(resp);
+      if ((resp.status = "Accepted")) {
+        toast({
+          title: "HIL is Processing ",
+          status: "success",
+          duration: 500,
+          isClosable: true,
+        });
+      }
+       }
+       else if (pathStroma?.path?.length <= 2){
+        // console.log("object23");
+        toast({
+              title: "Please Draw Again",
+              status: "error",
+              duration: 500,
+              isClosable: true,
+            });
+       }
+     
     }
-    //  console.log(message?.object);
-  const resp =  axios.post("https://backup-quantize-vhut.prr.ai/TILS/HIL", newObject,);
-    // console.log(resp);
-    if(resp.status = "Accepted"){
-      toast({
-        title: "HIL is Processing ",
-        status: "success",
-        duration: 500,
-        isClosable: true,
-      });
-    }
-    }
-  }, [pathStroma]);
 
-  useEffect(()=>{
    
-  },[pathStroma])
+  }, [pathStroma]);
 
   const handleDrawStroma = () => {
     setEditStroma(!editStroma);
@@ -202,13 +227,6 @@ type:message?.object?.type,
       setFabricOverlayState(updateTool({ tool: "Move" }));
     }
   };
-
-
-  const handleClose=  ()=>{
-  if(pathStroma){
-    
-  }
-  }
 
   return (
     <Box
@@ -249,7 +267,7 @@ type:message?.object?.type,
           <GrFormClose
             size={16}
             cursor="pointer"
-            onClick={()=>{
+            onClick={() => {
               handleFeedBarClose();
               setEditLymphocyte(false);
               setEditTumor(false);
@@ -335,6 +353,8 @@ type:message?.object?.type,
               onClick={() => {
                 // handleTIL();
                 setEditTumor(!editTumor);
+                setEditStroma(true);
+                setEditLymphocyte(true);
               }}
               _hover={{ bgColor: "none" }}
             />
@@ -409,6 +429,8 @@ type:message?.object?.type,
               onClick={() => {
                 // handleTIL();
                 handleDrawStroma();
+                setEditLymphocyte(true);
+                setEditTumor(true);
               }}
               _hover={{ bgColor: "none" }}
             />
@@ -483,6 +505,8 @@ type:message?.object?.type,
               onClick={() => {
                 // handleTIL();
                 setEditLymphocyte(!editLymphocyte);
+                setEditStroma(true);
+                setEditTumor(true);
               }}
               _hover={{ bgColor: "none" }}
             />
@@ -491,10 +515,55 @@ type:message?.object?.type,
       </Box>
 
       <Box mt="45px" w="100%">
-        <Text bg="gray.100" mb="35px" w="100%" textAlign="center">
+        <Text bg="gray.100" mb="15px" w="100%" textAlign="center">
           TIL Values
         </Text>
-        <Box borderBottom="1px solid gray" mb="10px" py="3px">
+        <Flex
+          px="5px"
+          mb="15px"
+          w="100%"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Button
+            bgColor="white"
+            _hover="none"
+            color="#00153f"
+            w="48%"
+            fontWeight="normal"
+            letterSpacing="wide"
+            _active="bg:red"
+            border="1px solid"
+            borderColor="#00153f"
+            borderRadius="none"
+            size="sm"
+            disabled={newHilData? false : true}
+            onClick={()=>{
+              setRefreshHil(refreshHil+1);
+            }}
+          >
+            Refresh
+          </Button>
+          <Button
+            bgColor="white"
+            _hover="none"
+            color="#00153f"
+            w="48%"
+            fontWeight="normal"
+            letterSpacing="wide"
+            _active="bg:red"
+            border="1px solid"
+            borderColor="#00153f"
+            borderRadius="none"
+            size="sm"
+            onClick={()=>{
+              setHideModification(hideModification +1);
+            }}
+          >
+           {hideModification % 2 === 0 ? "Show Modification" : "Hide Modification"}
+          </Button>
+        </Flex>
+        <Box borderBottom="1px solid gray" px="5px" mb="10px" py="3px">
           <Text fontSize="15px">
             TIL Score :{" "}
             {localStorage.getItem("tilScore")
@@ -502,13 +571,13 @@ type:message?.object?.type,
               : ""}{" "}
           </Text>
         </Box>
-        <Box borderBottom="1px solid gray" mb="10px" py="3px">
+        <Box borderBottom="1px solid gray" px="5px" mb="10px" py="3px">
           <Text fontSize="15px">TIL Formula :</Text>
           <Text as="span" fontSize="15px">
             (lymphocyte area / stroma area) * 100{" "}
           </Text>
         </Box>
-        <Box borderBottom="1px solid gray" mb="10px" py="3px">
+        <Box borderBottom="1px solid gray" px="5px" mb="10px" py="3px">
           <Text fontSize="15px">
             Tumor Area :{" "}
             {localStorage.getItem("tumorArea")
@@ -516,7 +585,7 @@ type:message?.object?.type,
               : ""}
           </Text>
         </Box>
-        <Box borderBottom="1px solid gray" mb="10px" py="3px">
+        <Box borderBottom="1px solid gray" px="5px" mb="10px" py="3px">
           <Text fontSize="15px">
             Stroma Area :{" "}
             {localStorage.getItem("stromaArea")
@@ -524,7 +593,7 @@ type:message?.object?.type,
               : ""}
           </Text>
         </Box>
-        <Box borderBottom="1px solid gray" mb="10px" py="3px">
+        <Box borderBottom="1px solid gray" px="5px" mb="10px" py="3px">
           <Text fontSize="15px">
             Lymphocytes Count:{" "}
             {localStorage.getItem("lymphocyteCount")
