@@ -119,8 +119,8 @@ const CommentBox = ({ userInfo, viewerId, application }) => {
         hasRotatingPoint: false,
       });
 
-      console.log(text);
-      canvas.add(text);
+      // console.log(text);
+      // canvas.add(text);
 
       // canvas.add(mousecursor);
       setMyState({
